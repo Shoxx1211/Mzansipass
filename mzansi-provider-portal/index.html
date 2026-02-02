@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MzansiPass - Provider Management Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'rea-black': '#0A0A0A',
+              'rea-gray-dark': '#141414',
+              'rea-red': '#E50914',
+              'rea-white': '#FFFFFF',
+              'rea-gray-light': '#94A3B8',
+              'admin-accent': '#3B82F6',
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            animation: {
+              'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+              'pulse': 'pulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'scene-in': 'sceneIn 0.5s ease-out forwards',
+              'glow': 'glow 1.5s ease-in-out infinite alternate',
+            },
+            keyframes: {
+              'fadeInUp': {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              'sceneIn': {
+                '0%': { opacity: '0', transform: 'scale(0.98)' },
+                '100%': { opacity: '1', transform: 'scale(1)' },
+              },
+              'glow': {
+                '0%': { boxShadow: '0 0 5px rgba(59, 130, 246, 0.2)' },
+                '100%': { boxShadow: '0 0 20px rgba(59, 130, 246, 0.6)' }
+              }
+            }
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.0"
+  }
+}
+</script>
+</head>
+  <body class="bg-rea-black text-rea-white font-sans overflow-hidden">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
