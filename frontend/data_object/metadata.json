@@ -1,0 +1,7 @@
+{
+  "name": "MzansiPass",
+  "description": "A premium South African commuter app for bus and train users featuring smart trip tracking and AI-driven route intelligence.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

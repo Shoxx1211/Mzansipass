@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    /* ============================= */
+    /* Language and Environment      */
+    /* ============================= */
+    "target": "ES2021",
+    "lib": ["ES2021"],
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+
+    /* ============================= */
+    /* Project Structure             */
+    /* ============================= */
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    /* ============================= */
+    /* Interop & Compatibility       */
+    /* ============================= */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+
+    /* ============================= */
+    /* Type Safety                   */
+    /* ============================= */
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* ============================= */
+    /* Performance & Clean Builds    */
+    /* ============================= */
+    "skipLibCheck": true,
+    "sourceMap": true,
+
+    /* ============================= */
+    /* Node Types                    */
+    /* ============================= */
+    "types": ["node"]
+  },
+
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
