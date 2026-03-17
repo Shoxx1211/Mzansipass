@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mzansi
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ./backend/.env.example
+    volumes:
+      - ./backend:/app
+    ports:
+      - "5000:5000"
+    entrypoint: ["gunicorn", "--bind", "0.0.0.0:5000", "wsgi:app"]
+
+  frontend:
+    # Change this line depending on environment
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev   # ⬅ DEV MODE
+      # dockerfile: Dockerfile     # ⬅ PROD MODE
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:

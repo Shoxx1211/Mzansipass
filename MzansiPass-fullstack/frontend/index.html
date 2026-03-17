@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mzansi Transit Pass</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'rea-black': '#121212',
+              'rea-gray-dark': '#1E1E1E',
+              'rea-red': '#E50914',
+              'rea-white': '#FFFFFF',
+              'rea-gray-light': '#A0A0A0',
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            animation: {
+              'shimmer': 'shimmer 2s infinite linear',
+              'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+              'pulse': 'pulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'scene-in': 'sceneIn 0.5s ease-out forwards',
+              'progress-fill': 'progressFill 18s linear forwards',
+              'hand-tap': 'handTap 1.5s ease-in-out infinite',
+              'glow': 'glow 1.5s ease-in-out infinite alternate',
+              'travel-horizontal': 'travel-horizontal 2s ease-in-out infinite',
+              'nfc-pulse': 'nfc-pulse 1.5s infinite ease-in-out',
+              'draw-check': 'draw-check 0.8s ease-in-out forwards',
+              'shake': 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both',
+            },
+            keyframes: {
+              'travel-horizontal': {
+                '0%, 100%': { transform: 'translateX(-15px)', opacity: '0.7' },
+                '50%': { transform: 'translateX(15px)', opacity: '1' },
+              },
+              'shimmer': {
+                '0%': { 'background-position': '-1000px 0' },
+                '100%': { 'background-position': '1000px 0' },
+              },
+              'fadeInUp': {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              'pulse': {
+                '50%': { opacity: '0.6' },
+              },
+              'sceneIn': {
+                '0%': { opacity: '0', transform: 'scale(0.95)' },
+                '100%': { opacity: '1', transform: 'scale(1)' },
+              },
+              'progressFill': {
+                '0%': { width: '0%' },
+                '100%': { width: '100%' },
+              },
+              'handTap': {
+                '0%, 100%': { transform: 'scale(1) rotate(-15deg)' },
+                '50%': { transform: 'scale(0.9) rotate(-15deg) translateY(5px)' },
+              },
+              'glow': {
+                '0%, 100%': { boxShadow: '0 0 5px rgba(229, 9, 20, 0.7)', transform: 'scale(1.02)' },
+                '50%': { boxShadow: '0 0 20px rgba(229, 9, 20, 1)', transform: 'scale(1.05)' }
+              },
+              'nfc-pulse': {
+                '0%, 100%': { transform: 'scale(0.95)', opacity: '0.7' },
+                '50%': { transform: 'scale(1.1)', opacity: '1' },
+              },
+              'draw-check': {
+                'to': { 'stroke-dashoffset': '0' },
+              },
+              'shake': {
+                '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+                '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+                '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+                '40%, 60%': { transform: 'translate3d(4px, 0, 0)' },
+              }
+            }
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-rea-black text-rea-white font-sans">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

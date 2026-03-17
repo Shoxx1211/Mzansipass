@@ -1,0 +1,8 @@
+{
+  "requestFramePermissions": [
+    "geolocation",
+    "camera"
+  ],
+  "name": "MzansiPass Provider Portal",
+  "description": "Enterprise management suite for South African public transport operators within the MzansiPass ecosystem."
+}
