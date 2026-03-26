@@ -39,36 +39,162 @@ const PulseView = React.memo(({ searchQuery, setSearchQuery }: any) => {
     return matchNet && matchSearch;
   }), [filterNet, searchQuery]);
 
-  return (
-    <div className="space-y-6 pb-24 animate-in fade-in duration-300">
-      <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-        {['All', ...TRANSIT_NETWORKS].map(n => (
-          <button key={n} onClick={() => setFilterNet(n as any)} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${filterNet === n ? 'bg-blue-600 border-blue-400' : 'bg-white/5 border-white/5 text-white/40'}`}>{n}</button>
-        ))}
+return (
+  <Layout activeTab={activeTab} onNavClick={setActiveTab}>
+    <div className="w-full max-w-md mx-auto space-y-6">
+
+      {/* HEADER */}
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-extrabold tracking-tight">
+          MzansiPass
+        </h1>
+        <div className="text-xs text-white/40 uppercase tracking-widest">
+          {network}
+        </div>
       </div>
-      <input 
-        type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-        placeholder="Search route..." className="w-full h-14 glass rounded-2xl px-6 text-xs outline-none border-white/10"
-      />
-      <div className="space-y-3">
-        {routes.map(r => (
-          <div key={r.id} className="glass rounded-[1.8rem] p-5 border-white/5 flex flex-col gap-3">
-            <div className="flex justify-between">
-              <div className="flex gap-3">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs ${getSeverityColor(r.severity)}`}>{r.code}</div>
-                <div>
-                  <p className="font-bold text-sm">{r.name}</p>
-                  <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">{r.type} • {r.status}</p>
-                </div>
-              </div>
-              {r.estResolution && <span className="text-[10px] bg-white/5 px-2 py-1 rounded-md text-white/40 font-bold uppercase">ETA: {r.estResolution}</span>}
-            </div>
+
+      {/* NETWORK SELECT */}
+      {tripState === TripState.IDLE && (
+        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+          {TRANSIT_NETWORKS.map(n => (
+            <button
+              key={n}
+              onClick={() => setNetwork(n)}
+              className={`px-5 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all ${
+                network === n
+                  ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg scale-105'
+                  : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10'
+              }`}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* MAIN CARD */}
+      <div className="glass rounded-[2rem] p-6 space-y-4 shadow-xl border border-white/10">
+
+        <VirtualCard
+          state={tripState}
+          network={network}
+          distance={currentTrip.distance || 0}
+          duration={seconds}
+          lastTrip={history[0]}
+        />
+
+        <div
+          className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 hover:bg-white/10 transition cursor-pointer"
+          onClick={() => setActiveTab('pulse')}
+        >
+          <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+            📡
           </div>
-        ))}
+          <p className="text-xs italic text-white/80">
+            "{pulseSummary}"
+          </p>
+        </div>
       </div>
+
+      {/* ACTION BUTTON */}
+      <div>
+        {tripState === TripState.IDLE && (
+          <button
+            onClick={handleStart}
+            className="w-full h-16 rounded-[2rem] font-black tracking-widest uppercase bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg transition-all duration-300 hover:scale-105 active:scale-95"
+          >
+            START TRIP
+          </button>
+        )}
+
+        {tripState === TripState.ACTIVE && (
+          <button
+            onClick={handleEnd}
+            className="w-full h-16 rounded-[2rem] font-black tracking-widest uppercase bg-red-600 text-white shadow-lg transition-all duration-300 hover:scale-105 active:scale-95"
+          >
+            END TRIP
+          </button>
+        )}
+
+        {tripState === TripState.COMPLETED && (
+          <button
+            onClick={() => setTripState(TripState.IDLE)}
+            className="w-full h-16 rounded-[2rem] font-black tracking-widest uppercase bg-white/10 text-white backdrop-blur-xl border border-white/20 transition-all hover:bg-white/20"
+          >
+            READY
+          </button>
+        )}
+      </div>
+
+      {/* STATS PREVIEW */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="glass p-5 rounded-3xl text-center">
+          <p className="text-[10px] text-white/40 uppercase tracking-widest">
+            Trips
+          </p>
+          <p className="text-2xl font-extrabold">
+            {history.length}
+          </p>
+        </div>
+
+        <div className="glass p-5 rounded-3xl text-center">
+          <p className="text-[10px] text-white/40 uppercase tracking-widest">
+            Spend
+          </p>
+          <p className="text-2xl font-extrabold">
+            R{history.reduce((a,b)=>a+b.fare,0).toFixed(0)}
+          </p>
+        </div>
+      </div>
+
     </div>
-  );
-});
+
+    {/* TRIP MODAL */}
+    {showSummary && currentTrip && (
+      <div className="fixed inset-0 z-[200] flex items-center justify-center px-6 animate-in fade-in duration-300">
+        <div
+          className="absolute inset-0 bg-black/90 backdrop-blur-xl"
+          onClick={() => setShowSummary(false)}
+        />
+
+        <div className="relative glass rounded-[3rem] p-8 w-full max-w-sm space-y-6 border-white/10 shadow-2xl animate-in zoom-in duration-300">
+
+          <h3 className="text-2xl font-extrabold text-center">
+            Trip Summary
+          </h3>
+
+          <div className="bg-white/5 p-5 rounded-2xl flex justify-between">
+            <span className="text-xs text-white/40 uppercase">
+              Cost
+            </span>
+            <span className="text-2xl font-extrabold">
+              R{currentTrip.fare?.toFixed(2)}
+            </span>
+          </div>
+
+          {currentTrip.isAnalyzing ? (
+            <div className="flex justify-center py-4">
+              <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : (
+            <div className="bg-emerald-500/10 p-4 rounded-2xl text-sm italic text-white/80">
+              "{currentTrip.aiFeedback}"
+            </div>
+          )}
+
+          <button
+            onClick={() => setShowSummary(false)}
+            className="w-full h-14 rounded-2xl font-black uppercase bg-white text-black tracking-widest hover:scale-105 transition"
+          >
+            CONTINUE
+          </button>
+
+        </div>
+      </div>
+    )}
+
+  </Layout>
+);
 
 const getSeverityColor = (s: Severity) => {
   if (s === 'Operational') return 'bg-emerald-500/10 text-emerald-400';
