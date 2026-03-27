@@ -60,8 +60,8 @@ export const VirtualCard: React.FC<VirtualCardProps> = React.memo(
           ${-rotation.y * 2}px ${rotation.x * 2}px 60px rgba(0,0,0,0.6),
           0 0 40px ${
             state === TripState.ACTIVE
-              ? 'rgba(16, 185, 129, 0.2)'
-              : 'rgba(59, 130, 246, 0.1)'
+              ? 'rgba(16, 185, 129, 0.25)'
+              : 'rgba(59, 130, 246, 0.15)'
           }
         `
       }),
@@ -70,27 +70,45 @@ export const VirtualCard: React.FC<VirtualCardProps> = React.memo(
 
     return (
       <div
-        className="relative w-full aspect-[1.6/1] mb-8 select-none cursor-pointer"
+        className="relative w-full aspect-[1.6/1] mb-8 select-none cursor-pointer group"
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        style={{ perspective: '1200px' }}
+        style={{ perspective: '1400px' }}
       >
+        {/* GLOW AURA */}
         <div
-          className="w-full h-full rounded-[2.5rem] transition-transform duration-150 ease-out preserve-3d relative overflow-hidden shadow-2xl border border-white/10"
+          className={`absolute inset-0 rounded-[2.5rem] blur-2xl opacity-40 transition-all duration-700 ${
+            state === TripState.ACTIVE
+              ? 'bg-emerald-500/20 animate-pulse'
+              : 'bg-blue-500/10'
+          }`}
+        />
+
+        <div
+          className="w-full h-full rounded-[2.5rem] transition-transform duration-200 ease-out preserve-3d relative overflow-hidden border border-white/10"
           style={cardStyle}
         >
+          {/* BASE GRADIENT */}
           <div
-            className={`absolute inset-0 bg-gradient-to-br transition-colors duration-700 ${
+            className={`absolute inset-0 transition-all duration-700 ${
               state === TripState.ACTIVE
-                ? 'from-emerald-900/50 via-neutral-900 to-black'
-                : 'from-blue-900/50 via-neutral-900 to-black'
+                ? 'bg-gradient-to-br from-emerald-900/60 via-black to-black'
+                : 'bg-gradient-to-br from-blue-900/60 via-black to-black'
             }`}
           />
 
-          <div className="absolute inset-0 card-gloss pointer-events-none opacity-80" />
-          <div className="reflection opacity-30" />
+          {/* LIGHT SWEEP */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute w-[200%] h-full bg-gradient-to-r from-transparent via-white/10 to-transparent rotate-12 translate-x-[-50%] group-hover:translate-x-[50%] transition-transform duration-1000" />
+          </div>
 
+          {/* GLASS OVERLAY */}
+          <div className="absolute inset-0 backdrop-blur-xl bg-white/5" />
+
+          {/* CONTENT */}
           <div className="absolute inset-0 p-8 flex flex-col justify-between z-10">
+            
+            {/* TOP */}
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-[10px] uppercase font-black tracking-[0.2em] text-white/30 mb-1">
@@ -100,7 +118,7 @@ export const VirtualCard: React.FC<VirtualCardProps> = React.memo(
                   {network}
                   {pulseStatus && (
                     <span
-                      className={`text-[10px] bg-black/40 px-2 py-0.5 rounded-full border border-white/5 ${getStatusColor(
+                      className={`text-[10px] px-2 py-0.5 rounded-full border border-white/10 ${getStatusColor(
                         pulseStatus
                       )}`}
                     >
@@ -109,17 +127,19 @@ export const VirtualCard: React.FC<VirtualCardProps> = React.memo(
                   )}
                 </h2>
               </div>
+
               <div
-                className={`px-4 py-1.5 rounded-2xl text-[10px] font-black uppercase tracking-widest glass border-white/5 shadow-lg ${
+                className={`px-4 py-1.5 rounded-2xl text-[10px] font-black uppercase tracking-widest glass ${
                   state === TripState.ACTIVE
-                    ? 'text-emerald-400 border-emerald-500/30'
-                    : 'text-blue-400 border-blue-500/30'
+                    ? 'text-emerald-400'
+                    : 'text-blue-400'
                 }`}
               >
-                {state === TripState.ACTIVE ? '• LIVE TRACKING' : 'IDLE'}
+                {state === TripState.ACTIVE ? '• LIVE' : 'IDLE'}
               </div>
             </div>
 
+            {/* CENTER */}
             <div className="flex justify-between items-end">
               <div className="flex-1">
                 {state === TripState.IDLE ? (
@@ -140,9 +160,9 @@ export const VirtualCard: React.FC<VirtualCardProps> = React.memo(
                   <div className="flex gap-10">
                     <div>
                       <p className="text-[10px] uppercase font-black tracking-[0.2em] text-white/30 mb-1">
-                        Time Elapsed
+                        Time
                       </p>
-                      <p className="text-2xl font-mono font-black">
+                      <p className="text-2xl font-mono font-black tracking-wider">
                         {formatTime(duration)}
                       </p>
                     </div>
@@ -150,9 +170,9 @@ export const VirtualCard: React.FC<VirtualCardProps> = React.memo(
                       <p className="text-[10px] uppercase font-black tracking-[0.2em] text-white/30 mb-1">
                         Distance
                       </p>
-                      <p className="text-2xl font-mono font-black">
+                      <p className="text-2xl font-mono font-black tracking-wider">
                         {distance.toFixed(2)}
-                        <span className="text-xs ml-1 text-white/30 font-sans uppercase tracking-widest">
+                        <span className="text-xs ml-1 text-white/30">
                           km
                         </span>
                       </p>
@@ -160,6 +180,8 @@ export const VirtualCard: React.FC<VirtualCardProps> = React.memo(
                   </div>
                 )}
               </div>
+
+              {/* BRAND */}
               <div className="text-right">
                 <p className="text-[10px] uppercase font-black tracking-[0.2em] text-white/30 mb-1">
                   MzansiPass
