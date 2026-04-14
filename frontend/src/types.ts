@@ -1,15 +1,21 @@
-// Trip State
+// ===============================
+// TRIP STATE
+// ===============================
 export const TripState = {
   IDLE: "IDLE",
   ACTIVE: "ACTIVE",
   COMPLETED: "COMPLETED"
 } as const;
 
-export type TripState = typeof TripState[keyof typeof TripState];
+export type TripState =
+  typeof TripState[keyof typeof TripState];
 
 
-// Transit Networks (must match constants.ts exactly)
+// ===============================
+// TRANSIT NETWORKS
+// ===============================
 export const TransitNetwork = {
+  Taxi: "Taxi",
   Gautrain: "Gautrain",
   ReaVaya: "Rea Vaya",
   AReYeng: "A Re Yeng",
@@ -21,22 +27,29 @@ export type TransitNetwork =
   typeof TransitNetwork[keyof typeof TransitNetwork];
 
 
-// Route types used in ROUTE_REGISTRY
+// ===============================
+// ROUTE TYPES
+// ===============================
 export type RouteType =
   | "Rail"
   | "Trunk"
   | "Feeder"
-  | "Complementary";
+  | "Complementary"
+  | "TaxiRoute";
 
 
-// Network severity
+// ===============================
+// SEVERITY
+// ===============================
 export type Severity =
   | "Operational"
   | "Moderate"
   | "Severe";
 
 
-// Pulse report types
+// ===============================
+// PULSE REPORT TYPES
+// ===============================
 export const ReportType = {
   Smooth: "Smooth",
   Delayed: "Delayed",
@@ -49,81 +62,147 @@ export type ReportType =
   typeof ReportType[keyof typeof ReportType];
 
 
-// Transit route structure (must match constants.ts)
-export interface TransitRoute {
-  id: string;
-  network: TransitNetwork;
-  code: string;
-  name: string;
-  type: RouteType;
-  status: string;
-  severity: Severity;
-  lastUpdated: number;
-  startTerminal: string;
-  endTerminal: string;
-  estResolution?: string;
+// ===============================
+// LOCATION (CORE SENSOR DATA)
+// ===============================
+export interface Location {
+  lat: number;
+  lng: number;
+
+  accuracy?: number;
+  timestamp?: number;
+
+  // 🔥 CRITICAL FOR TRANSPORT ENGINE
+  speed?: number; // km/h
 }
 
 
-// Trip data
-export interface TripData {
+// ===============================
+// TRANSIT ROUTE
+// ===============================
+export interface TransitRoute {
   id: string;
   network: TransitNetwork;
+
+  code: string;
+  name: string;
+
+  type: RouteType;
+
+  status: string;
+  severity: Severity;
+
+  lastUpdated: number;
+
+  startTerminal: string;
+  endTerminal: string;
+
+  estResolution?: string;
+
+  // 🔥 TAXI + FUTURE DYNAMIC ROUTES
+  isDynamic?: boolean;
+}
+
+
+// ===============================
+// TRANSPORT DETECTION RESULT
+// ===============================
+export interface DetectionResult {
+  mode: TransitNetwork | "Walking" | "Unknown";
+  confidence: number;
+
+  speed: number;
+
+  // 🔥 KEY FOR FARE ENGINE
+  matchedRoute?: string;
+}
+
+
+// ===============================
+// TRIP DATA (CORE ENGINE)
+// ===============================
+export interface TripData {
+  id: string;
+
+  network: TransitNetwork;
+
   startTime: number;
   endTime?: number;
-  distance: number;
+
+  distance: number; // km
+  duration?: number; // seconds
+
   fare: number;
-  startLocation?: {
-    lat: number;
-    lng: number;
-  };
-  endLocation?: {
-    lat: number;
-    lng: number;
-  };
+
+  startLocation?: Location;
+  endLocation?: Location;
+
+  // 🔥 ROUTE INTELLIGENCE
+  matchedRoute?: string;
+
+  // 🔥 SPEED INTELLIGENCE
+  avgSpeed?: number;
+  maxSpeed?: number;
+
+  // 🔥 AI LAYER
   aiFeedback?: string;
+  aiTransportGuess?: TransitNetwork;
+
+  // 🔥 CONFIDENCE ENGINE
+  confidenceScore?: number;
+
+  // 🔥 UI / STATE
   isAnalyzing?: boolean;
 }
 
 
-// User profile
+// ===============================
+// USER PROFILE
+// ===============================
 export interface UserProfile {
   email: string;
   name?: string;
 }
 
 
-// Privacy settings
+// ===============================
+// PRIVACY SETTINGS
+// ===============================
 export interface PrivacySettings {
   shareLocation: boolean;
   shareTrips: boolean;
 }
 
 
-// Travel statistics
+// ===============================
+// TRAVEL STATS
+// ===============================
 export interface TravelStats {
   totalTrips: number;
   totalDistance: number;
   totalSpend: number;
+
+  avgCostPerKm?: number;
+  avgTripDuration?: number;
 }
 
-export interface Location {
-  lat: number;
-  lng: number;
-  accuracy?: number;
-  timestamp?: number;
-}
 
-// Issue reports for commuter pulse
+// ===============================
+// PULSE REPORT (CROWD DATA)
+// ===============================
 export interface IssueReport {
   id: string;
+
   network: TransitNetwork;
   routeCode?: string;
+
   type: ReportType;
   description?: string;
+
   timestamp: number;
-  location?: {
-    lat: number;
-    lng: number;
-  };
+
+  location?: Location;
+
+  // 🔥 TRUST / CROWD RELIABILITY
+  confidence?: number;
 }

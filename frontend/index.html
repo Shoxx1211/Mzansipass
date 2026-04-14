@@ -2,14 +2,33 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- MOBILE -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- iOS -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="MzansiPass" />
+
+    <!-- ICONS -->
+    <link rel="icon" href="/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+
+    <!-- SEO -->
+    <meta name="description" content="MzansiPass - Smart commuter tracking across South Africa" />
+
     <title>MzansiPass</title>
   </head>
 
-  <body>
+  <body class="bg-black text-white">
     <div id="root"></div>
 
-    <script type="module" src="/src/index.tsx"></script>
+    <!-- ✅ CORRECT ENTRY -->
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

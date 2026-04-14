@@ -1,286 +1,413 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Layout } from './components/Layout';
 import { AuthView } from './components/Auth';
 import { VirtualCard } from './components/VirtualCard';
 import { TripState, TransitNetwork } from './types';
-
-import type {
-  TripData,
-  Severity
-} from './types';
+import type { TripData } from './types';
 
 import { TRANSIT_NETWORKS, ROUTE_REGISTRY } from './constants';
-import { getCurrentLocation } from './services/location';
-import { getDetailedTripAnalysis, getNetworkPulseSummary } from './services/geminiService';
 import { FareEngine } from './services/fareService';
 
-// --- DATA SERVICE LAYER ---
+// ---------------- STORAGE ----------------
 const Persistence = {
-  save: (userEmail: string, key: string, data: any) =>
-    localStorage.setItem(`mzansi_${key}_${userEmail}`, JSON.stringify(data)),
+  save: (userEmail: string, key: string, data: any) => {
+    try {
+      localStorage.setItem(`mzansi_${key}_${userEmail}`, JSON.stringify(data));
+    } catch {}
+  },
   load: (userEmail: string, key: string) => {
-    const raw = localStorage.getItem(`mzansi_${key}_${userEmail}`);
-    return raw ? JSON.parse(raw) : null;
+    try {
+      const raw = localStorage.getItem(`mzansi_${key}_${userEmail}`);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
   }
 };
 
-// --- VIEWS ---
-const PulseView = React.memo(({ searchQuery, setSearchQuery }: any) => {
-  const [filterNet, setFilterNet] = useState<TransitNetwork | 'All'>('All');
+// ---------------- DISTANCE ----------------
+const calculateDistance = (a: any, b: any) => {
+  const R = 6371;
 
-  const routes = useMemo(() => ROUTE_REGISTRY.filter(r => {
-    const matchNet = filterNet === 'All' || r.network === filterNet;
-    const matchSearch =
-      r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      r.code.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchNet && matchSearch;
-  }), [filterNet, searchQuery]);
+  const dLat = (b.lat - a.lat) * (Math.PI / 180);
+  const dLon = (b.lng - a.lng) * (Math.PI / 180);
+
+  const lat1 = a.lat * (Math.PI / 180);
+  const lat2 = b.lat * (Math.PI / 180);
+
+  const x =
+    Math.sin(dLat / 2) ** 2 +
+    Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
+
+  return R * (2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x)));
+};
+
+// ---------------- PULSE ----------------
+const PulseView = ({
+  searchQuery,
+  setSearchQuery,
+  pulseReports,
+  setPulseReports
+}: any) => {
+  const [selectedRoute, setSelectedRoute] = useState<any>(null);
+  const [reportType, setReportType] = useState('Delayed');
+
+  const routes = useMemo(() => {
+    return ROUTE_REGISTRY.filter(
+      (r) =>
+        r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        r.code.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [searchQuery]);
+
+  const submitReport = () => {
+    if (!selectedRoute) return;
+
+    const newReport = {
+      id: Date.now(),
+      routeId: selectedRoute.id,
+      type: reportType
+    };
+
+    setPulseReports((prev: any) => [newReport, ...prev]);
+    setSelectedRoute(null);
+  };
+
+  const getLiveStatus = (routeId: string) => {
+    const reports = pulseReports.filter((r: any) => r.routeId === routeId);
+    return reports.length ? reports[0].type : 'Operational';
+  };
 
   return (
-    <div className="space-y-6 pb-24 animate-in fade-in duration-300 px-4">
-      
-      <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-        {['All', ...TRANSIT_NETWORKS].map(n => (
-          <button
-            key={n}
-            onClick={() => setFilterNet(n as any)}
-            className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${
-              filterNet === n
-                ? 'bg-blue-600 border-blue-400 text-white shadow-lg'
-                : 'bg-white/5 border-white/10 text-white/40'
-            }`}
-          >
-            {n}
-          </button>
-        ))}
-      </div>
-
+    <div className="space-y-6 pb-24 px-4">
       <input
-        type="text"
         value={searchQuery}
-        onChange={e => setSearchQuery(e.target.value)}
+        onChange={(e) => setSearchQuery(e.target.value)}
         placeholder="Search route..."
-        className="w-full h-14 glass rounded-2xl px-6 text-xs outline-none border-white/10"
+        className="w-full h-14 glass rounded-2xl px-6 text-xs"
       />
 
       <div className="space-y-3">
-        {routes.map(r => (
-          <div key={r.id} className="glass rounded-[1.8rem] p-5 border-white/5 flex flex-col gap-3 card-hover">
-            <div className="flex justify-between">
+        {routes.map((r) => {
+          const status = getLiveStatus(r.id);
+
+          return (
+            <div
+              key={r.id}
+              onClick={() => setSelectedRoute(r)}
+              className="glass p-5 rounded-2xl flex justify-between cursor-pointer"
+            >
               <div className="flex gap-3">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs ${getSeverityColor(r.severity)}`}>
+                <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10">
                   {r.code}
                 </div>
                 <div>
-                  <p className="font-bold text-sm">{r.name}</p>
-                  <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">
-                    {r.type} • {r.status}
-                  </p>
+                  <p className="font-bold">{r.name}</p>
+                  <p className="text-xs text-white/60">{status}</p>
                 </div>
               </div>
-              {r.estResolution && (
-                <span className="text-[10px] bg-white/5 px-2 py-1 rounded-md text-white/40 font-bold uppercase">
-                  ETA: {r.estResolution}
-                </span>
-              )}
+              <span className="text-xs text-white/40">Report</span>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
-    </div>
-  );
-});
 
-const getSeverityColor = (s: Severity) => {
-  if (s === 'Operational') return 'bg-emerald-500/10 text-emerald-400';
-  if (s === 'Moderate') return 'bg-amber-500/10 text-amber-400';
-  return 'bg-red-500/10 text-red-400';
-};
+      {selectedRoute && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div
+            className="absolute inset-0 bg-black/80"
+            onClick={() => setSelectedRoute(null)}
+          />
+          <div className="glass p-6 rounded-3xl z-10 space-y-4 w-full max-w-sm">
+            <h3 className="font-black">{selectedRoute.name}</h3>
 
-// --- APP COMPONENT ---
-const App: React.FC = () => {
-  const [user, setUser] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState('home');
-
-  const [tripState, setTripState] = useState<TripState>(TripState.IDLE);
-  const [network, setNetwork] = useState<TransitNetwork>('Gautrain');
-
-  const [currentTrip, setCurrentTrip] = useState<Partial<TripData>>({ distance: 0 });
-  const [seconds, setSeconds] = useState(0);
-  const [history, setHistory] = useState<TripData[]>([]);
-
-  const [pulseSummary, setPulseSummary] = useState("Status check pending...");
-  const [searchQuery, setSearchQuery] = useState('');
-  const [showSummary, setShowSummary] = useState(false);
-
-  useEffect(() => {
-    if (user) {
-      const savedHistory = Persistence.load(user.email, 'history');
-      if (savedHistory) setHistory(savedHistory);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    const fetchPulse = async () => {
-      const summary = await getNetworkPulseSummary(network, []);
-      setPulseSummary(summary);
-    };
-    fetchPulse();
-  }, [network]);
-
-  useEffect(() => {
-    let timer: any;
-    if (tripState === TripState.ACTIVE) {
-      timer = setInterval(() => {
-        setSeconds(s => s + 1);
-        setCurrentTrip(p => ({ ...p, distance: (p.distance || 0) + 0.015 }));
-      }, 1000);
-    }
-    return () => clearInterval(timer);
-  }, [tripState]);
-
-  const handleStart = useCallback(async () => {
-    setTripState(TripState.ACTIVE);
-    setSeconds(0);
-    const loc = await getCurrentLocation().catch(() => ({ lat: 0, lng: 0 }));
-    setCurrentTrip({
-      id: Date.now().toString(),
-      network,
-      startTime: Date.now(),
-      distance: 0,
-      startLocation: loc
-    });
-  }, [network]);
-
-  const handleEnd = useCallback(async () => {
-    const endLoc = await getCurrentLocation().catch(() => ({ lat: 0, lng: 0 }));
-    const fare = await FareEngine.computeFinalFare(network, currentTrip.distance || 0);
-
-    const finalTrip = {
-      ...currentTrip,
-      endTime: Date.now(),
-      endLocation: endLoc,
-      fare,
-      isAnalyzing: true
-    } as TripData;
-
-    setTripState(TripState.COMPLETED);
-    setShowSummary(true);
-    setCurrentTrip(finalTrip);
-
-    setTimeout(async () => {
-      const analysis = await getDetailedTripAnalysis(finalTrip);
-      const fullyProcessed = { ...finalTrip, ...analysis, isAnalyzing: false };
-
-      setCurrentTrip(fullyProcessed);
-
-      setHistory(prev => {
-        const h = [fullyProcessed, ...prev];
-        Persistence.save(user.email, 'history', h);
-        return h;
-      });
-    }, 400);
-  }, [currentTrip, network, user]);
-
-  if (!user) return <AuthView onLogin={setUser} />;
-
-  return (
-    <Layout activeTab={activeTab} onNavClick={setActiveTab}>
-      <div className="w-full max-w-md mx-auto space-y-6 px-4 pb-24">
-
-        {activeTab === 'home' && (
-          <div className="animate-in fade-in duration-500">
-
-            {tripState === TripState.IDLE && (
-              <div className="flex gap-2 overflow-x-auto pb-4 scrollbar-hide">
-                {TRANSIT_NETWORKS.map(n => (
+            <div className="grid grid-cols-2 gap-3">
+              {['Smooth', 'Delayed', 'Overcrowded', 'Breakdown'].map(
+                (type) => (
                   <button
-                    key={n}
-                    onClick={() => setNetwork(n)}
-                    className={`px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all ${
-                      network === n
-                        ? 'bg-blue-600 border-blue-400 text-white shadow-lg'
-                        : 'bg-white/5 border-white/10 text-white/40'
-                    }`}
+                    key={type}
+                    onClick={() => setReportType(type)}
+                    className="p-2 rounded-xl bg-white/5"
                   >
-                    {n}
+                    {type}
                   </button>
-                ))}
-              </div>
-            )}
-
-            <VirtualCard
-              state={tripState}
-              network={network}
-              distance={currentTrip.distance || 0}
-              duration={seconds}
-              lastTrip={history[0]}
-            />
-
-            <div
-              className="glass rounded-3xl p-5 flex items-center gap-4 cursor-pointer card-hover"
-              onClick={() => setActiveTab('pulse')}
-            >
-              <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">📡</div>
-              <p className="text-xs italic text-white/80">"{pulseSummary}"</p>
-            </div>
-
-            <div className="mt-8">
-              {tripState === TripState.IDLE ? (
-                <button onClick={handleStart} className="w-full h-16 btn-primary uppercase tracking-widest">
-                  START TRIP
-                </button>
-              ) : tripState === TripState.ACTIVE ? (
-                <button onClick={handleEnd} className="w-full h-16 bg-gradient-to-r from-red-600 to-red-800 rounded-2xl font-black tracking-widest hover:scale-105 active:scale-95 transition-all uppercase">
-                  END TRIP
-                </button>
-              ) : (
-                <button onClick={() => setTripState(TripState.IDLE)} className="w-full h-16 glass rounded-2xl font-black tracking-widest uppercase">
-                  READY
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'pulse' && (
-          <PulseView searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-        )}
-
-      </div>
-
-      {showSummary && currentTrip && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center px-6 animate-in fade-in zoom-in duration-300">
-          <div className="absolute inset-0 bg-black/90 backdrop-blur-xl" onClick={() => setShowSummary(false)} />
-          <div className="relative glass rounded-[3rem] p-8 w-full max-w-sm space-y-6 border-white/10 shadow-2xl">
-            <h3 className="text-2xl font-black tracking-tighter text-center">Trip Digest</h3>
-
-            <div className="space-y-4">
-              <div className="bg-white/5 p-5 rounded-2xl flex justify-between items-center">
-                <span className="text-xs font-bold text-white/40 uppercase">Cost</span>
-                <span className="text-2xl font-black">R{currentTrip.fare?.toFixed(2)}</span>
-              </div>
-
-              {currentTrip.isAnalyzing ? (
-                <div className="py-4 flex justify-center">
-                  <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-                </div>
-              ) : (
-                <div className="bg-emerald-500/5 p-5 rounded-2xl border border-emerald-500/10 text-xs text-white/80 italic leading-relaxed">
-                  "{currentTrip.aiFeedback}"
-                </div>
+                )
               )}
             </div>
 
             <button
-              onClick={() => setShowSummary(false)}
-              className="w-full h-14 btn-primary uppercase tracking-widest"
+              onClick={submitReport}
+              className="btn-primary w-full h-12"
             >
-              CONTINUE
+              Submit
             </button>
           </div>
         </div>
       )}
+    </div>
+  );
+};
+
+// ---------------- APP ----------------
+const App = () => {
+  const [user, setUser] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState('home');
+
+  const [tripState, setTripState] = useState<TripState>(TripState.IDLE);
+  const [network, setNetwork] = useState<TransitNetwork | null>(null);
+
+  const [currentTrip, setCurrentTrip] = useState<Partial<TripData>>({
+    distance: 0
+  });
+
+  const [duration, setDuration] = useState(0);
+  const [history, setHistory] = useState<TripData[]>([]);
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [pulseReports, setPulseReports] = useState<any[]>([]);
+
+  const [locationEnabled, setLocationEnabled] = useState(true);
+  const [lastLocation, setLastLocation] = useState<any>(null);
+
+  const [awaitingTransportConfirm, setAwaitingTransportConfirm] =
+    useState(false);
+
+  const [lastPromptTime, setLastPromptTime] = useState(0);
+
+  // ---------------- LOAD ----------------
+  useEffect(() => {
+    if (user) {
+      const saved = Persistence.load(user.email, 'history');
+      if (saved) setHistory(saved);
+    }
+  }, [user]);
+
+  // ---------------- TIMER ----------------
+  useEffect(() => {
+    let interval: any;
+
+    if (tripState === TripState.ACTIVE) {
+      interval = setInterval(() => {
+        setDuration((d) => d + 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(interval);
+  }, [tripState]);
+
+  // ---------------- GPS ----------------
+  useEffect(() => {
+    if (!locationEnabled || !navigator.geolocation) return;
+
+    const watchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        const loc = {
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude
+        };
+
+        if (lastLocation) {
+          const dist = calculateDistance(lastLocation, loc);
+          const now = Date.now();
+
+          // 🚀 Movement detection
+          if (
+            dist > 0.05 &&
+            tripState === TripState.IDLE &&
+            !awaitingTransportConfirm &&
+            now - lastPromptTime > 10000
+          ) {
+            setAwaitingTransportConfirm(true);
+            setLastPromptTime(now);
+
+            // 🔔 vibration
+            navigator.vibrate?.([200, 100, 200]);
+          }
+
+          // 📍 Track distance
+          if (tripState === TripState.ACTIVE) {
+            setCurrentTrip((prev) => ({
+              ...prev,
+              distance: (prev.distance || 0) + dist
+            }));
+          }
+        }
+
+        setLastLocation(loc);
+      },
+      (err) => console.warn('GPS error:', err),
+      { enableHighAccuracy: true }
+    );
+
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, [lastLocation, tripState, locationEnabled, awaitingTransportConfirm, lastPromptTime]);
+
+  // ---------------- START ----------------
+  const handleStart = (selectedNetwork: TransitNetwork) => {
+    setNetwork(selectedNetwork);
+    setTripState(TripState.ACTIVE);
+    setDuration(0);
+
+    setCurrentTrip({
+      id: Date.now().toString(),
+      network: selectedNetwork,
+      startTime: Date.now(),
+      distance: 0,
+      startLocation: lastLocation
+    });
+
+    setAwaitingTransportConfirm(false);
+  };
+
+  // ---------------- END ----------------
+  const handleEnd = async () => {
+    if (!network) return;
+
+    const fare = await FareEngine.computeFinalFare({
+      network,
+      distance: currentTrip.distance || 0,
+      matchedRoute: currentTrip.matchedRoute
+    });
+
+    const finalTrip: TripData = {
+      ...(currentTrip as TripData),
+      endTime: Date.now(),
+      fare,
+      endLocation: lastLocation
+    };
+
+    setTripState(TripState.IDLE);
+    setDuration(0);
+
+    setHistory((prev) => {
+      const updated = [finalTrip, ...prev];
+      Persistence.save(user.email, 'history', updated);
+      return updated;
+    });
+
+    // ✅ Proper reset
+    setNetwork(null);
+  };
+
+  // ---------------- AUTH ----------------
+  if (!user) return <AuthView onLogin={setUser} />;
+
+  return (
+    <Layout activeTab={activeTab} onNavClick={setActiveTab}>
+      <div className="space-y-6 px-4 pb-24 max-w-md mx-auto">
+
+        {activeTab === 'home' && (
+          <>
+            <VirtualCard
+              state={tripState}
+              network={network}
+              distance={currentTrip.distance || 0}
+              duration={duration}
+              lastTrip={history[0]}
+            />
+
+            {awaitingTransportConfirm && tripState === TripState.IDLE && (
+              <div className="glass p-5 rounded-3xl border border-blue-500/30 space-y-4">
+                <p className="text-sm font-bold">Movement detected 🚦</p>
+
+                <div className="grid grid-cols-2 gap-2">
+                  {TRANSIT_NETWORKS.map((n) => (
+                    <button
+                      key={n}
+                      onClick={() => handleStart(n)}
+                      className="px-3 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold"
+                    >
+                      {n}
+                    </button>
+                  ))}
+
+                  <button
+                    onClick={() => setAwaitingTransportConfirm(false)}
+                    className="px-3 py-2 rounded-xl bg-white/10 text-white/60 text-xs"
+                  >
+                    Ignore
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <button
+              onClick={
+                tripState === TripState.ACTIVE
+                  ? handleEnd
+                  : () => setAwaitingTransportConfirm(true)
+              }
+              className="btn-primary w-full h-16"
+            >
+              {tripState === TripState.ACTIVE
+                ? 'END TRIP'
+                : 'START TRIP'}
+            </button>
+          </>
+        )}
+
+        {activeTab === 'settings' && (
+  <div className="space-y-4 px-4 pb-24 max-w-md mx-auto">
+
+    <div className="glass p-5 rounded-2xl flex justify-between items-center">
+      <span className="text-sm font-medium">Location Tracking</span>
+
+      <button
+        onClick={() => setLocationEnabled(prev => !prev)}
+        className={`px-4 py-2 rounded-xl text-xs font-bold ${
+          locationEnabled
+            ? 'bg-green-500/20 text-green-400'
+            : 'bg-red-500/20 text-red-400'
+        }`}
+      >
+        {locationEnabled ? 'ON' : 'OFF'}
+      </button>
+    </div>
+
+    <div
+      onClick={() => setUser(null)}
+      className="glass p-5 rounded-2xl text-red-400 text-center cursor-pointer"
+    >
+      Sign Out
+    </div>
+
+  </div>
+)}
+
+{activeTab === 'stats' && (
+  <div className="space-y-4">
+
+    <div className="glass p-6 rounded-3xl">
+      <p className="text-xs text-white/40">Total Trips</p>
+      <h2 className="text-3xl font-black">{history.length}</h2>
+    </div>
+
+    <div className="glass p-6 rounded-3xl">
+      <p className="text-xs text-white/40">Total Spend</p>
+      <h2 className="text-3xl font-black">
+        R{history.reduce((a, b) => a + b.fare, 0).toFixed(2)}
+      </h2>
+    </div>
+
+    <div className="glass p-6 rounded-3xl">
+      <p className="text-xs text-white/40">Total Distance</p>
+      <h2 className="text-3xl font-black">
+        {history.reduce((a, b) => a + (b.distance || 0), 0).toFixed(2)} km
+      </h2>
+    </div>
+
+  </div>
+)}
+
+        {activeTab === 'pulse' && (
+          <PulseView
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            pulseReports={pulseReports}
+            setPulseReports={setPulseReports}
+          />
+        )}
+      </div>
     </Layout>
   );
 };
