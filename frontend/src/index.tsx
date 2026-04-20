@@ -1,34 +1,53 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Layout } from './components/Layout';
 import { AuthView } from './components/Auth';
 import { VirtualCard } from './components/VirtualCard';
+
 import { TripState, TransitNetwork } from './types';
-import type { TripData, Severity } from './types';
+import type { TripData, Severity, Location } from './types';
 
 import { TRANSIT_NETWORKS, ROUTE_REGISTRY } from './constants';
 import { FareEngine } from './services/fareService';
+import type { TabType } from "./types";
 
-// ---------------- STORAGE ----------------
+// ===============================
+// STORAGE (SAFE + NAMESPACED)
+// ===============================
 const Persistence = {
-  save: (userEmail: string, key: string, data: any) =>
-    localStorage.setItem(`mzansi_${key}_${userEmail}`, JSON.stringify(data)),
+  save: (userEmail: string, key: string, data: unknown) => {
+    try {
+      localStorage.setItem(
+        `mzansi_${key}_${userEmail}`,
+        JSON.stringify(data)
+      );
+    } catch {
+      console.warn('⚠️ Storage save failed');
+    }
+  },
 
   load: (userEmail: string, key: string) => {
-    const raw = localStorage.getItem(`mzansi_${key}_${userEmail}`);
-    return raw ? JSON.parse(raw) : null;
+    try {
+      const raw = localStorage.getItem(`mzansi_${key}_${userEmail}`);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
   }
 };
 
-// ---------------- HELPERS ----------------
+// ===============================
+// HELPERS
+// ===============================
 const getSeverityColor = (s: Severity) => {
   if (s === 'Operational') return 'bg-emerald-500/10 text-emerald-400';
   if (s === 'Moderate') return 'bg-amber-500/10 text-amber-400';
   return 'bg-red-500/10 text-red-400';
 };
 
-// Haversine distance (REAL distance in KM)
-const calculateDistance = (a: any, b: any) => {
+// Accurate Haversine
+const calculateDistance = (a: Location, b: Location) => {
   const R = 6371;
+
   const dLat = (b.lat - a.lat) * (Math.PI / 180);
   const dLon = (b.lng - a.lng) * (Math.PI / 180);
 
@@ -36,9 +55,8 @@ const calculateDistance = (a: any, b: any) => {
   const lat2 = b.lat * (Math.PI / 180);
 
   const x =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.sin(dLon / 2) *
-      Math.sin(dLon / 2) *
+    Math.sin(dLat / 2) ** 2 +
+    Math.sin(dLon / 2) ** 2 *
       Math.cos(lat1) *
       Math.cos(lat2);
 
@@ -47,8 +65,15 @@ const calculateDistance = (a: any, b: any) => {
   return R * y;
 };
 
-// ---------------- PULSE ----------------
-const PulseView = ({ searchQuery, setSearchQuery, pulseReports, setPulseReports }: any) => {
+// ===============================
+// PULSE VIEW (ISOLATED)
+// ===============================
+const PulseView: React.FC<any> = ({
+  searchQuery,
+  setSearchQuery,
+  pulseReports,
+  setPulseReports
+}) => {
   const [selectedRoute, setSelectedRoute] = useState<any>(null);
   const [reportType, setReportType] = useState('Delayed');
 
@@ -140,10 +165,12 @@ const PulseView = ({ searchQuery, setSearchQuery, pulseReports, setPulseReports 
   );
 };
 
-// ---------------- APP ----------------
+// ===============================
+// MAIN APP
+// ===============================
 const App: React.FC = () => {
   const [user, setUser] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState('home');
+  const [activeTab, setActiveTab] = useState<TabType>('home');
 
   const [tripState, setTripState] = useState<TripState>(TripState.IDLE);
   const [network, setNetwork] = useState<TransitNetwork>('Taxi');
@@ -155,54 +182,73 @@ const App: React.FC = () => {
   const [pulseReports, setPulseReports] = useState<any[]>([]);
 
   const [locationEnabled, setLocationEnabled] = useState(true);
-
-  // SMART TRACKING
-  const [lastLocation, setLastLocation] = useState<any>(null);
+  const [lastLocation, setLastLocation] = useState<Location | null>(null);
   const [awaitingTransportConfirm, setAwaitingTransportConfirm] = useState(false);
 
-  // ---------------- LOAD ----------------
+  // ===============================
+  // LOAD USER DATA
+  // ===============================
   useEffect(() => {
-    if (user) {
-      const saved = Persistence.load(user.email, 'history');
-      if (saved) setHistory(saved);
-    }
+    if (!user) return;
+
+    const saved = Persistence.load(user.email, 'history');
+    if (saved) setHistory(saved);
   }, [user]);
 
-  // ---------------- GPS TRACKING ----------------
+  // ===============================
+  // GPS TRACKING (OPTIMIZED)
+  // ===============================
   useEffect(() => {
     if (!locationEnabled) return;
 
-    const watchId = navigator.geolocation.watchPosition(pos => {
-      const loc = {
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude
-      };
+    const watchId = navigator.geolocation.watchPosition(
+      pos => {
+        const loc: Location = {
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+          timestamp: pos.timestamp
+        };
 
-      if (lastLocation) {
-        const dist = calculateDistance(lastLocation, loc);
+        if (lastLocation) {
+          const dist = calculateDistance(lastLocation, loc);
 
-        // movement detected (~100m)
-        if (dist > 0.1 && tripState === TripState.IDLE && !awaitingTransportConfirm) {
-          setAwaitingTransportConfirm(true);
+          // 🚨 movement trigger
+          if (
+            dist > 0.1 &&
+            tripState === TripState.IDLE &&
+            !awaitingTransportConfirm
+          ) {
+            setAwaitingTransportConfirm(true);
+          }
+
+          // 📏 active trip accumulation
+          if (tripState === TripState.ACTIVE) {
+            setCurrentTrip(p => ({
+              ...p,
+              distance: (p.distance || 0) + dist
+            }));
+          }
         }
 
-        // active trip distance update
-        if (tripState === TripState.ACTIVE) {
-          setCurrentTrip(p => ({
-            ...p,
-            distance: (p.distance || 0) + dist
-          }));
-        }
+        setLastLocation(loc);
+      },
+      () => {},
+      {
+        enableHighAccuracy: true,
+        maximumAge: 2000,
+        timeout: 10000
       }
-
-      setLastLocation(loc);
-    });
+    );
 
     return () => navigator.geolocation.clearWatch(watchId);
-  }, [lastLocation, tripState, locationEnabled]);
+  }, [lastLocation, tripState, locationEnabled, awaitingTransportConfirm]);
 
-  // ---------------- START ----------------
-  const handleStart = () => {
+  // ===============================
+  // START TRIP
+  // ===============================
+  const handleStart = useCallback(() => {
+    if (!lastLocation) return;
+
     setTripState(TripState.ACTIVE);
 
     setCurrentTrip({
@@ -212,21 +258,25 @@ const App: React.FC = () => {
       distance: 0,
       startLocation: lastLocation
     });
-  };
+  }, [network, lastLocation]);
 
-  // ---------------- END ----------------
-  const handleEnd = async () => {
-    const fare = await FareEngine.computeFinalFare(
+  // ===============================
+  // END TRIP
+  // ===============================
+  const handleEnd = useCallback(async () => {
+    if (!currentTrip.distance) return;
+
+    const fare = await FareEngine.computeFinalFare({
       network,
-      currentTrip.distance || 0
-    );
+      distance: currentTrip.distance
+    });
 
-    const finalTrip = {
-      ...currentTrip,
+    const finalTrip: TripData = {
+      ...(currentTrip as TripData),
       endTime: Date.now(),
       fare,
-      endLocation: lastLocation
-    } as TripData;
+      endLocation: lastLocation || undefined
+    };
 
     setTripState(TripState.IDLE);
 
@@ -235,9 +285,11 @@ const App: React.FC = () => {
       Persistence.save(user.email, 'history', updated);
       return updated;
     });
-  };
+  }, [currentTrip, network, lastLocation, user]);
 
-  // ---------------- STATS ----------------
+  // ===============================
+  // STATS
+  // ===============================
   const stats = useMemo(() => {
     if (!history.length) return null;
 
@@ -268,7 +320,6 @@ const App: React.FC = () => {
               lastTrip={history[0]}
             />
 
-            {/* SMART PROMPT */}
             {awaitingTransportConfirm && tripState === TripState.IDLE && (
               <div className="glass p-5 rounded-3xl border border-blue-500/30 space-y-4">
                 <p className="text-sm font-bold">Are you commuting? 🚦</p>
@@ -347,7 +398,6 @@ const App: React.FC = () => {
             </div>
           </div>
         )}
-
       </div>
     </Layout>
   );

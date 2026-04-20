@@ -1,5 +1,5 @@
 // ===============================
-// TRIP STATE
+// TRIP STATE (STRICT + SAFE)
 // ===============================
 export const TripState = {
   IDLE: "IDLE",
@@ -10,9 +10,22 @@ export const TripState = {
 export type TripState =
   typeof TripState[keyof typeof TripState];
 
-
 // ===============================
-// TRANSIT NETWORKS
+// APP NAVIGATION TABS (🔥 REQUIRED)
+// ===============================
+export const TabType = {
+  home: 'home',
+  pulse: 'pulse',
+  stats: 'stats',
+  settings: 'settings'
+} as const;
+
+export type TabType =
+  typeof TabType[keyof typeof TabType];
+  
+// ===============================
+// TRANSIT NETWORKS (SINGLE SOURCE OF TRUTH)
+// ⚠️ MUST MATCH constants.ts EXACTLY
 // ===============================
 export const TransitNetwork = {
   Taxi: "Taxi",
@@ -39,7 +52,7 @@ export type RouteType =
 
 
 // ===============================
-// SEVERITY
+// SEVERITY (SYSTEM HEALTH)
 // ===============================
 export type Severity =
   | "Operational"
@@ -69,16 +82,16 @@ export interface Location {
   lat: number;
   lng: number;
 
-  accuracy?: number;
-  timestamp?: number;
+  accuracy?: number;     // meters
+  timestamp?: number;    // ms
 
-  // 🔥 CRITICAL FOR TRANSPORT ENGINE
-  speed?: number; // km/h
+  // 🔥 derived / optional
+  speed?: number;        // km/h
 }
 
 
 // ===============================
-// TRANSIT ROUTE
+// TRANSIT ROUTE (BASE MODEL)
 // ===============================
 export interface TransitRoute {
   id: string;
@@ -99,8 +112,23 @@ export interface TransitRoute {
 
   estResolution?: string;
 
-  // 🔥 TAXI + FUTURE DYNAMIC ROUTES
+  // 🔥 dynamic systems (taxis, future routing)
   isDynamic?: boolean;
+}
+
+
+// ===============================
+// EXTENDED ROUTE (INTELLIGENCE LAYER)
+// ===============================
+export interface IntelligentRoute extends TransitRoute {
+  coordinates?: {
+    lat: number;
+    lng: number;
+  }[];
+
+  avgSpeed?: number;           // km/h
+  reliabilityScore?: number;   // 0–1
+  peakHours?: number[];        // 0–23
 }
 
 
@@ -113,13 +141,12 @@ export interface DetectionResult {
 
   speed: number;
 
-  // 🔥 KEY FOR FARE ENGINE
   matchedRoute?: string;
 }
 
 
 // ===============================
-// TRIP DATA (CORE ENGINE)
+// TRIP DATA (CORE DOMAIN OBJECT)
 // ===============================
 export interface TripData {
   id: string;
@@ -129,30 +156,44 @@ export interface TripData {
   startTime: number;
   endTime?: number;
 
-  distance: number; // km
-  duration?: number; // seconds
+  distance: number;     // km
+  duration?: number;    // seconds
 
   fare: number;
 
   startLocation?: Location;
   endLocation?: Location;
 
-  // 🔥 ROUTE INTELLIGENCE
   matchedRoute?: string;
 
-  // 🔥 SPEED INTELLIGENCE
+  // 🔥 movement intelligence
   avgSpeed?: number;
   maxSpeed?: number;
 
-  // 🔥 AI LAYER
+  // 🔥 AI layer
   aiFeedback?: string;
   aiTransportGuess?: TransitNetwork;
 
-  // 🔥 CONFIDENCE ENGINE
+  // 🔥 confidence scoring
   confidenceScore?: number;
 
-  // 🔥 UI / STATE
+  // 🔥 UI helpers
   isAnalyzing?: boolean;
+}
+
+
+// ===============================
+// TRIP SUMMARY (ENGINE OUTPUT)
+// ===============================
+export interface TripSummary {
+  fare: number;
+  distance: number;
+  duration: number;
+
+  network: TransitNetwork | string;
+  route: string;
+
+  confidence?: number;
 }
 
 
@@ -188,7 +229,7 @@ export interface TravelStats {
 
 
 // ===============================
-// PULSE REPORT (CROWD DATA)
+// PULSE REPORT (CROWD INTELLIGENCE)
 // ===============================
 export interface IssueReport {
   id: string;
@@ -203,6 +244,16 @@ export interface IssueReport {
 
   location?: Location;
 
-  // 🔥 TRUST / CROWD RELIABILITY
   confidence?: number;
+}
+
+
+// ===============================
+// MOVEMENT META (LOCATION ENGINE)
+// ===============================
+export interface MovementMeta {
+  speed: number;
+  isMoving: boolean;
+  isWalking: boolean;
+  confidence: number;
 }

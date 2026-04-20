@@ -1,25 +1,59 @@
 @import "tailwindcss";
 
 /* ===============================
+   ROOT DESIGN TOKENS (SYSTEM)
+================================ */
+:root {
+  --bg: #000;
+  --fg: #fff;
+
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.08);
+
+  --blue: #3b82f6;
+  --purple: #a855f7;
+  --emerald: #10b981;
+
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+
+  --blur-xl: 24px;
+
+  --shadow-soft: 0 10px 30px rgba(0,0,0,0.4);
+  --shadow-deep: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+/* ===============================
    GLOBAL BASE (PERFORMANCE + UX)
 ================================ */
 html, body {
   margin: 0;
   padding: 0;
-  background-color: #000;
-  color: #fff;
+
+  background-color: var(--bg);
+  color: var(--fg);
+
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 
-  /* PWA smoothness */
   overscroll-behavior: none;
   touch-action: manipulation;
+
+  height: 100%;
 }
 
-/* Prevent highlight flash on mobile */
+/* Prevent tap highlight */
 * {
   -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+/* Improve rendering */
+img, video {
+  max-width: 100%;
+  display: block;
 }
 
 /* ===============================
@@ -31,7 +65,7 @@ html, body {
   background:
     radial-gradient(circle at 20% 20%, rgba(59,130,246,0.15), transparent 40%),
     radial-gradient(circle at 80% 0%, rgba(168,85,247,0.12), transparent 40%),
-    #000;
+    var(--bg);
 
   background-attachment: fixed;
 }
@@ -40,16 +74,18 @@ html, body {
    GLASS SYSTEM (CORE DESIGN)
 ================================ */
 .glass {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--glass-bg);
 
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(var(--blur-xl));
+  -webkit-backdrop-filter: blur(var(--blur-xl));
 
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid var(--glass-border);
 
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  box-shadow: var(--shadow-deep);
 
-  transition: all 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  will-change: transform;
 }
 
 .glass:hover {
@@ -57,22 +93,20 @@ html, body {
 }
 
 /* ===============================
-   PREMIUM BUTTON SYSTEM
+   BUTTON SYSTEM (PREMIUM)
 ================================ */
 .btn-primary {
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  background: linear-gradient(135deg, var(--blue), #6366f1);
   color: white;
   font-weight: 700;
 
-  border-radius: 1.2rem;
+  border-radius: var(--radius-xl);
 
   box-shadow: 0 10px 30px rgba(59,130,246,0.25);
 
   transition: all 0.25s ease;
-}
 
-.btn-primary:active {
-  transform: scale(0.97);
+  will-change: transform;
 }
 
 .btn-primary:hover {
@@ -80,11 +114,16 @@ html, body {
   box-shadow: 0 20px 40px rgba(59,130,246,0.35);
 }
 
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
 /* ===============================
    CARD SYSTEM (HIGH-END UI)
 ================================ */
 .card-glow {
   position: relative;
+  isolation: isolate;
 }
 
 .card-glow::before {
@@ -93,7 +132,12 @@ html, body {
   inset: -2px;
   border-radius: inherit;
 
-  background: linear-gradient(120deg, #3b82f6, #a855f7, #06b6d4);
+  background: linear-gradient(
+    120deg,
+    var(--blue),
+    var(--purple),
+    #06b6d4
+  );
 
   filter: blur(20px);
   opacity: 0.35;
@@ -133,29 +177,37 @@ html, body {
 }
 
 /* ===============================
-   INPUTS (CLEAN + MODERN)
+   INPUT SYSTEM (CLEAN)
 ================================ */
 input {
   outline: none;
   border: none;
   color: white;
+
+  background: transparent;
 }
 
 input::placeholder {
   color: rgba(255,255,255,0.4);
 }
 
+/* Autofill fix */
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 100px black inset;
+  -webkit-text-fill-color: white;
+}
+
 /* ===============================
-   ANIMATIONS (SMOOTH + FAST)
+   ANIMATIONS (OPTIMIZED)
 ================================ */
 .fade-in {
-  animation: fadeIn 0.5s ease forwards;
+  animation: fadeIn 0.4s ease forwards;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -174,10 +226,10 @@ input::placeholder {
 }
 
 /* ===============================
-   LIVE PULSE GLOW (SIGNATURE UX)
+   LIVE PULSE GLOW (SIGNATURE)
 ================================ */
 .pulse-glow {
-  animation: pulseGlow 2.2s infinite ease-in-out;
+  animation: pulseGlow 2s infinite ease-in-out;
 }
 
 @keyframes pulseGlow {
@@ -190,11 +242,11 @@ input::placeholder {
 }
 
 /* ===============================
-   INSTALL PROMPT (PWA UI)
+   PWA INSTALL UI
 ================================ */
 .install-banner {
   position: fixed;
-  bottom: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%);
 
@@ -203,7 +255,7 @@ input::placeholder {
 
   padding: 14px 18px;
 
-  border-radius: 1.2rem;
+  border-radius: var(--radius-xl);
 
   background: rgba(20, 20, 20, 0.85);
   backdrop-filter: blur(20px);
@@ -218,7 +270,7 @@ input::placeholder {
 }
 
 .install-btn {
-  background: #3b82f6;
+  background: var(--blue);
   padding: 8px 14px;
   border-radius: 999px;
   font-size: 12px;
@@ -226,10 +278,15 @@ input::placeholder {
 }
 
 /* ===============================
-   SCROLLBAR (CLEAN UI)
+   SCROLL SYSTEM
 ================================ */
 ::-webkit-scrollbar {
   display: none;
+}
+
+/* Enable smooth scroll where needed */
+html {
+  scroll-behavior: smooth;
 }
 
 /* ===============================
@@ -238,5 +295,18 @@ input::placeholder {
 .glass,
 .btn-primary,
 .card-glow {
-  will-change: transform;
+  will-change: transform, opacity;
+}
+
+/* Prevent layout thrashing */
+* {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* ===============================
+   MOBILE SAFE AREA SUPPORT
+================================ */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
 }

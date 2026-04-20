@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react';
+// components/Layout.tsx
+
+import React, { useEffect, useState, useMemo } from "react";
+import { TabType } from "../types"; // ✅ SINGLE SOURCE OF TRUTH
 
 interface LayoutProps {
   children: React.ReactNode;
-  activeTab: string;
-  onNavClick: (tab: string) => void;
+  activeTab: TabType;
+  onNavClick: (tab: TabType) => void;
 }
 
 export const Layout: React.FC<LayoutProps> = ({
   children,
   activeTab,
-  onNavClick
+  onNavClick,
 }) => {
-
   // ---------------- PWA INSTALL ----------------
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
@@ -21,8 +23,9 @@ export const Layout: React.FC<LayoutProps> = ({
       setDeferredPrompt(e);
     };
 
-    window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
+    window.addEventListener("beforeinstallprompt", handler);
+    return () =>
+      window.removeEventListener("beforeinstallprompt", handler);
   }, []);
 
   const handleInstall = async () => {
@@ -33,85 +36,136 @@ export const Layout: React.FC<LayoutProps> = ({
     setDeferredPrompt(null);
   };
 
-  // ---------------- DYNAMIC HEADER ----------------
-  const getHeaderTitle = () => {
-    switch (activeTab) {
-      case 'home': return 'Your Journey';
-      case 'pulse': return 'Live Pulse';
-      case 'stats': return 'Your Insights';
-      case 'settings': return 'Settings';
-      default: return 'MzansiPass';
-    }
-  };
+  // ---------------- TAB PERSISTENCE ----------------
+  useEffect(() => {
+    localStorage.setItem("mzansi_active_tab", activeTab);
+  }, [activeTab]);
 
-  const getHeaderSubtitle = () => {
+  // ---------------- HEADER ----------------
+  const header = useMemo(() => {
     switch (activeTab) {
-      case 'home': return 'Track movement in real-time';
-      case 'pulse': return 'Community-powered updates';
-      case 'stats': return 'Smart travel analytics';
-      case 'settings': return 'Control your experience';
-      default: return 'Smart Transit Intelligence';
+      case TabType.home:
+        return {
+          title: "Your Journey",
+          subtitle: "Real-time movement intelligence",
+        };
+      case TabType.pulse:
+        return {
+          title: "Live Pulse",
+          subtitle: "Community-powered transport data",
+        };
+      case TabType.stats:
+        return {
+          title: "Your Insights",
+          subtitle: "AI-driven travel analytics",
+        };
+      case TabType.settings:
+        return {
+          title: "Settings",
+          subtitle: "Control your experience",
+        };
+      default:
+        return {
+          title: "MzansiPass",
+          subtitle: "Smart Transit Intelligence",
+        };
     }
-  };
+  }, [activeTab]);
+
+  // ---------------- ONLINE STATUS ----------------
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const goOnline = () => setIsOnline(true);
+    const goOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", goOnline);
+    window.addEventListener("offline", goOffline);
+
+    return () => {
+      window.removeEventListener("online", goOnline);
+      window.removeEventListener("offline", goOffline);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen app-bg text-white flex flex-col items-center relative overflow-hidden">
 
-      {/* 🌌 BACKGROUND ORBS */}
+      {/* BACKGROUND */}
       <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-blue-500/20 blur-3xl rounded-full animate-pulse" />
       <div className="absolute bottom-[-120px] right-[-100px] w-[300px] h-[300px] bg-purple-500/20 blur-3xl rounded-full animate-pulse" />
 
-      {/* ---------------- HEADER ---------------- */}
+      {/* HEADER */}
       <header className="w-full max-w-md px-6 py-8 flex justify-between items-center z-10">
-
-        <div className="fade-in">
-          <h1 className="text-xl font-black tracking-tight text-white">
-            {getHeaderTitle()}
-          </h1>
-
+        <div>
+          <h1 className="text-xl font-black">{header.title}</h1>
           <p className="text-[10px] text-white/40 uppercase tracking-[0.25em] mt-1">
-            {getHeaderSubtitle()}
+            {header.subtitle}
           </p>
+
+          {!isOnline && (
+            <p className="text-[10px] text-red-400 mt-1">
+              Offline mode
+            </p>
+          )}
         </div>
 
-        {/* RIGHT SIDE */}
         <div className="flex items-center gap-3">
-
-          {/* INSTALL BUTTON */}
           {deferredPrompt && (
             <button
               onClick={handleInstall}
-              className="glass px-3 py-2 rounded-xl text-[10px] font-bold border border-blue-400/30 text-blue-300 hover:scale-105 transition"
+              className="glass px-3 py-2 rounded-xl text-[10px] font-bold border border-blue-400/30 text-blue-300"
             >
               Install
             </button>
           )}
 
-          {/* AVATAR */}
-          <div className="w-11 h-11 rounded-full glass flex items-center justify-center border border-white/10 overflow-hidden shadow-inner hover:scale-105 transition">
+          <div className="w-11 h-11 rounded-full glass overflow-hidden">
             <img
               src="https://picsum.photos/seed/mzansi/100/100"
-              alt="Avatar"
+              alt="User avatar"
               className="w-full h-full object-cover"
             />
           </div>
         </div>
       </header>
 
-      {/* ---------------- MAIN ---------------- */}
-      <main className="flex-1 w-full max-w-md px-6 pb-28 z-10 fade-in">
+      {/* MAIN */}
+      <main className="flex-1 w-full max-w-md px-6 pb-28 z-10">
         {children}
       </main>
 
-      {/* ---------------- NAV ---------------- */}
+      {/* NAV */}
       <nav className="fixed bottom-6 w-full max-w-md px-6 z-50">
-        <div className="glass border border-white/10 rounded-3xl px-6 py-4 flex justify-between items-center shadow-2xl backdrop-blur-xl">
+        <div className="glass border border-white/10 rounded-3xl px-6 py-4 flex justify-between">
 
-          <NavItem icon="🏠" label="Home" active={activeTab === 'home'} onClick={() => onNavClick('home')} />
-          <NavItem icon="📡" label="Pulse" active={activeTab === 'pulse'} onClick={() => onNavClick('pulse')} />
-          <NavItem icon="📊" label="Stats" active={activeTab === 'stats'} onClick={() => onNavClick('stats')} />
-          <NavItem icon="⚙️" label="Settings" active={activeTab === 'settings'} onClick={() => onNavClick('settings')} />
+          <NavItem
+            icon="🏠"
+            label="Home"
+            active={activeTab === TabType.home}
+            onClick={() => onNavClick(TabType.home)}
+          />
 
+          <NavItem
+            icon="📡"
+            label="Pulse"
+            active={activeTab === TabType.pulse}
+            onClick={() => onNavClick(TabType.pulse)}
+          />
+
+          <NavItem
+            icon="📊"
+            label="Stats"
+            active={activeTab === TabType.stats}
+            onClick={() => onNavClick(TabType.stats)}
+          />
+
+          <NavItem
+            icon="⚙️"
+            label="Settings"
+            active={activeTab === TabType.settings}
+            onClick={() => onNavClick(TabType.settings)}
+          />
         </div>
       </nav>
     </div>
@@ -125,46 +179,12 @@ const NavItem: React.FC<{
   active?: boolean;
   onClick: () => void;
 }> = ({ icon, label, active, onClick }) => {
-
   return (
-    <button
-      onClick={onClick}
-      className="relative flex flex-col items-center justify-center group transition-all duration-300"
-    >
-
-      {/* ICON */}
-      <span
-        className={`text-xl transition-all duration-300 ${
-          active
-            ? 'scale-110 text-white'
-            : 'text-white/40 group-hover:text-white/70'
-        }`}
-      >
+    <button onClick={onClick} className="flex flex-col items-center">
+      <span className={active ? "text-white" : "text-white/40"}>
         {icon}
       </span>
-
-      {/* LABEL */}
-      <span
-        className={`text-[9px] uppercase tracking-widest mt-1 transition-all duration-300 ${
-          active ? 'text-white' : 'text-white/30'
-        }`}
-      >
-        {label}
-      </span>
-
-      {/* ACTIVE DOT */}
-      <div
-        className={`absolute -bottom-1 w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-          active
-            ? 'bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.9)] scale-100'
-            : 'scale-0'
-        }`}
-      />
-
-      {/* SUBTLE HOVER GLOW */}
-      {active && (
-        <div className="absolute inset-0 rounded-xl bg-blue-500/5 blur-xl -z-10" />
-      )}
+      <span className="text-[9px]">{label}</span>
     </button>
   );
 };

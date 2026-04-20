@@ -1,94 +1,133 @@
-import type { Location } from '../types';
+// services/location.ts
+
+import type { Location } from "../types";
 
 // ===============================
-// GET CURRENT LOCATION (ROBUST)
+// CONFIG (TUNABLE FOR PRODUCTION)
+// ===============================
+const CONFIG = {
+  MIN_DISTANCE_KM: 0.01,        // 10m → ignore GPS jitter
+  MAX_ACCURACY_METERS: 50,      // discard bad GPS
+  VEHICLE_SPEED_THRESHOLD: 10,  // km/h
+  WALKING_MAX_SPEED: 6,
+  SMOOTHING_WINDOW: 5           // rolling average size
+};
+
+// ===============================
+// INTERNAL STATE (SMOOTHING)
+// ===============================
+let history: Location[] = [];
+
+// ===============================
+// GET CURRENT LOCATION (ROBUST + SAFE)
 // ===============================
 export const getCurrentLocation = (): Promise<Location> => {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
-      return reject(new Error('Geolocation not supported'));
+      return reject(new Error("Geolocation not supported"));
     }
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        resolve({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-          accuracy: position.coords.accuracy,
-          timestamp: position.timestamp
-        });
-      },
-      (error) => {
-        let message = 'Location error';
+        const loc = formatLocation(position);
 
-        switch (error.code) {
-          case error.PERMISSION_DENIED:
-            message = 'User denied location access';
-            break;
-          case error.POSITION_UNAVAILABLE:
-            message = 'Location unavailable';
-            break;
-          case error.TIMEOUT:
-            message = 'Location request timed out';
-            break;
+        // 🚫 Reject bad GPS
+        if (!isAccurate(loc)) {
+          return reject(new Error("Low GPS accuracy"));
         }
 
-        reject(new Error(message));
+        resolve(loc);
+      },
+      (error) => {
+        reject(new Error(parseError(error)));
       },
       {
         enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 5000
+        timeout: 12000,
+        maximumAge: 3000
       }
     );
   });
 };
 
 // ===============================
-// WATCH LOCATION (REAL-TIME TRACKING)
+// WATCH LOCATION (SMART STREAM)
 // ===============================
 export const watchLocation = (
-  onUpdate: (loc: Location) => void,
+  onUpdate: (loc: Location, meta: MovementMeta) => void,
   onError?: (err: any) => void
 ): number => {
   if (!navigator.geolocation) {
-    throw new Error('Geolocation not supported');
+    throw new Error("Geolocation not supported");
   }
 
   return navigator.geolocation.watchPosition(
     (position) => {
-      const loc: Location = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-        accuracy: position.coords.accuracy,
-        timestamp: position.timestamp
+      const loc = formatLocation(position);
+
+      // 🚫 Reject bad GPS
+      if (!isAccurate(loc)) return;
+
+      // 🚫 Reject noise
+      const last = history[history.length - 1];
+      if (last && !isValidMovement(last, loc)) return;
+
+      // ✅ Add to history
+      history.push(loc);
+      if (history.length > CONFIG.SMOOTHING_WINDOW) {
+        history.shift();
+      }
+
+      // 🔥 Smoothed speed
+      const speed = getSmoothedSpeed();
+
+      const meta: MovementMeta = {
+        speed,
+        isMoving: speed > CONFIG.VEHICLE_SPEED_THRESHOLD,
+        isWalking:
+          speed >= 2 && speed <= CONFIG.WALKING_MAX_SPEED,
+        confidence: calculateConfidence(loc)
       };
 
-      onUpdate(loc);
+      onUpdate(loc, meta);
     },
     (error) => {
-      if (onError) onError(error);
+      if (onError) onError(parseError(error));
     },
     {
       enableHighAccuracy: true,
-      maximumAge: 3000,
+      maximumAge: 2000,
       timeout: 15000
     }
   );
 };
 
 // ===============================
-// STOP WATCHING LOCATION
+// STOP WATCHING
 // ===============================
 export const clearLocationWatch = (watchId: number) => {
   navigator.geolocation.clearWatch(watchId);
+  history = []; // 🔥 reset smoothing
 };
 
 // ===============================
-// DISTANCE CALCULATION (HAVERSINE)
+// MOVEMENT META TYPE
 // ===============================
-export const calculateDistance = (loc1: Location, loc2: Location): number => {
-  const R = 6371; // Earth radius in km
+export type MovementMeta = {
+  speed: number;
+  isMoving: boolean;
+  isWalking: boolean;
+  confidence: number;
+};
+
+// ===============================
+// DISTANCE (HAVERSINE)
+// ===============================
+export const calculateDistance = (
+  loc1: Location,
+  loc2: Location
+): number => {
+  const R = 6371;
 
   const dLat = deg2rad(loc2.lat - loc1.lat);
   const dLon = deg2rad(loc2.lng - loc1.lng);
@@ -99,13 +138,11 @@ export const calculateDistance = (loc1: Location, loc2: Location): number => {
       Math.cos(deg2rad(loc2.lat)) *
       Math.sin(dLon / 2) ** 2;
 
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  return R * c;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 };
 
 // ===============================
-// SPEED CALCULATION (km/h)
+// SPEED (PAIR)
 // ===============================
 export const calculateSpeed = (
   loc1: Location,
@@ -113,44 +150,97 @@ export const calculateSpeed = (
 ): number => {
   if (!loc1.timestamp || !loc2.timestamp) return 0;
 
-  const distance = calculateDistance(loc1, loc2); // km
-  const timeDiff = (loc2.timestamp - loc1.timestamp) / 1000 / 3600; // hours
+  const distance = calculateDistance(loc1, loc2);
+  const time = (loc2.timestamp - loc1.timestamp) / 3600000;
 
-  if (timeDiff === 0) return 0;
+  if (time <= 0) return 0;
 
-  return distance / timeDiff;
+  return distance / time;
 };
 
 // ===============================
-// SMART MOVEMENT DETECTION
+// 🔥 SMOOTHED SPEED (CRITICAL)
 // ===============================
-export const isUserMoving = (
-  loc1: Location,
-  loc2: Location
-): boolean => {
-  const speed = calculateSpeed(loc1, loc2);
+const getSmoothedSpeed = (): number => {
+  if (history.length < 2) return 0;
 
-  // 🚶 walking ≈ 3–6 km/h
-  // 🚗 transport > 10 km/h
-  return speed > 8;
+  let total = 0;
+  let count = 0;
+
+  for (let i = 1; i < history.length; i++) {
+    const speed = calculateSpeed(history[i - 1], history[i]);
+
+    // 🚫 filter insane GPS spikes
+    if (speed > 0 && speed < 180) {
+      total += speed;
+      count++;
+    }
+  }
+
+  return count === 0 ? 0 : total / count;
 };
 
 // ===============================
-// FILTER GPS NOISE (VERY IMPORTANT)
+// GPS QUALITY CHECK (FIXED ✅)
+// ===============================
+const isAccurate = (loc: Location): boolean => {
+  const accuracy = loc.accuracy ?? 999; // 🔥 fallback if undefined
+  return accuracy <= CONFIG.MAX_ACCURACY_METERS;
+};
+
+// ===============================
+// FILTER GPS NOISE
 // ===============================
 export const isValidMovement = (
   loc1: Location,
   loc2: Location
 ): boolean => {
   const distance = calculateDistance(loc1, loc2);
-
-  // Ignore tiny GPS jumps (< 10 meters)
-  return distance > 0.01;
+  return distance >= CONFIG.MIN_DISTANCE_KM;
 };
 
 // ===============================
-// HELPER
+// CONFIDENCE SCORE (FIXED ✅)
 // ===============================
-const deg2rad = (deg: number): number => {
-  return deg * (Math.PI / 180);
+const calculateConfidence = (loc: Location): number => {
+  const accuracy = loc.accuracy ?? 100; // 🔥 safe fallback
+
+  if (accuracy <= 10) return 0.95;
+  if (accuracy <= 25) return 0.8;
+  if (accuracy <= 50) return 0.6;
+  return 0.3;
 };
+
+// ===============================
+// FORMAT LOCATION (NORMALIZED ✅)
+// ===============================
+const formatLocation = (
+  position: GeolocationPosition
+): Location => ({
+  lat: position.coords.latitude,
+  lng: position.coords.longitude,
+  accuracy: position.coords.accuracy ?? 100, // 🔥 ALWAYS DEFINED
+  timestamp: position.timestamp
+});
+
+// ===============================
+// ERROR PARSER
+// ===============================
+const parseError = (error: GeolocationPositionError): string => {
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      return "Location permission denied";
+    case error.POSITION_UNAVAILABLE:
+      return "Location unavailable";
+    case error.TIMEOUT:
+      return "Location timeout";
+    default:
+      return "Unknown location error";
+  }
+};
+
+// ===============================
+// HELPERS
+// ===============================
+const deg2rad = (deg: number): number =>
+  deg * (Math.PI / 180);

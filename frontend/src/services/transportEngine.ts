@@ -18,18 +18,32 @@ type DetectionCore = {
 export type DetectionResult = DetectionCore & {
   speed: number;
   matchedRoute?: string;
+  isVehicular: boolean; // 🔥 CORE PRODUCT SIGNAL
 };
 
 // ---------------- ENGINE ----------------
 export class TransportEngine {
   private static history: Location[] = [];
-  private static MAX_HISTORY = 8;
+  private static MAX_HISTORY = 10;
 
   // ---------------- MAIN ENTRY ----------------
   static updateLocation(lat: number, lng: number): DetectionResult {
     const now = Date.now();
 
-    this.history.push({ lat, lng, timestamp: now });
+    const newPoint: Location = { lat, lng, timestamp: now };
+
+    // 🔥 Ignore GPS jitter (very small movement)
+    if (this.history.length > 0) {
+      const last = this.history[this.history.length - 1];
+      const jitterDistance = this.distance(last, newPoint);
+
+      if (jitterDistance < 0.01) {
+        // < 10 meters → ignore noise
+        return this.buildIdleResult();
+      }
+    }
+
+    this.history.push(newPoint);
 
     if (this.history.length > this.MAX_HISTORY) {
       this.history.shift();
@@ -44,13 +58,24 @@ export class TransportEngine {
     return {
       ...detection,
       speed,
-      matchedRoute: routeMatch?.name
+      matchedRoute: routeMatch?.name,
+      isVehicular: speed > 10 // 🔥 KEY TRIGGER (when to prompt user)
+    };
+  }
+
+  // ---------------- IDLE RESULT ----------------
+  private static buildIdleResult(): DetectionResult {
+    return {
+      mode: "Walking",
+      confidence: 0.6,
+      speed: 0,
+      isVehicular: false
     };
   }
 
   // ---------------- DISTANCE ----------------
   private static distance(a: Location, b: Location): number {
-    const R = 6371;
+    const R = 6371; // km
 
     const dLat = (b.lat - a.lat) * (Math.PI / 180);
     const dLon = (b.lng - a.lng) * (Math.PI / 180);
@@ -81,7 +106,7 @@ export class TransportEngine {
       const b = this.history[i];
 
       const d = this.distance(a, b);
-      const t = (b.timestamp - a.timestamp) / 3600000;
+      const t = (b.timestamp - a.timestamp) / 3600000; // hours
 
       if (t > 0) {
         totalDistance += d;
@@ -91,7 +116,7 @@ export class TransportEngine {
 
     if (totalTime === 0) return 0;
 
-    return totalDistance / totalTime;
+    return totalDistance / totalTime; // km/h
   }
 
   private static instantSpeed(a: Location, b: Location): number {
@@ -113,14 +138,14 @@ export class TransportEngine {
         this.history[i]
       );
 
-      if (speed < 3) stops++;
+      if (speed < 3) stops++; // near standstill
     }
 
     return stops / this.history.length;
   }
 
-  // ---------------- ROUTE MATCHING (IMPROVED SAFE VERSION) ----------------
-  private static matchRoute() {
+  // ---------------- ROUTE MATCHING (SAFE + FUTURE READY) ----------------
+  private static matchRoute(): { name: string; network: TransitNetwork } | null {
     if (this.history.length < 2) return null;
 
     const start = this.history[0];
@@ -130,18 +155,18 @@ export class TransportEngine {
       Math.abs(end.lat - start.lat) +
       Math.abs(end.lng - start.lng);
 
-    // 🚫 If barely moved → no route
-    if (totalMovement < 0.001) return null;
+    // 🚫 Not enough movement → ignore
+    if (totalMovement < 0.002) return null;
 
-    // ✅ TEMP: Return ANY known route (placeholder until GPS mapping)
-    return ROUTE_REGISTRY[0] || null;
+    // 🔥 Placeholder (future: GPS corridor matching)
+    return ROUTE_REGISTRY.length > 0 ? ROUTE_REGISTRY[0] : null;
   }
 
   // ---------------- DETECTION ----------------
   private static detectMode(
     speed: number,
     stopRate: number,
-    routeMatch: any
+    routeMatch: { name: string; network: TransitNetwork } | null
   ): DetectionCore {
 
     // 🚶 WALKING
@@ -154,25 +179,25 @@ export class TransportEngine {
       return { mode: "Gautrain", confidence: 0.92 };
     }
 
-    // 🚆 METRORAIL (moderate speed + stops)
+    // 🚆 METRORAIL
     if (speed >= 30 && speed <= 90 && stopRate > 0.25) {
-      return { mode: "Metrorail", confidence: 0.75 };
+      return { mode: "Metrorail", confidence: 0.8 };
     }
 
-    // 🚌 BRT SYSTEMS
-    if (speed >= 15 && speed <= 50 && stopRate > 0.35) {
+    // 🚌 BRT (Rea Vaya / A Re Yeng)
+    if (speed >= 15 && speed <= 50 && stopRate > 0.3) {
       return {
         mode: routeMatch?.network || "Rea Vaya",
-        confidence: 0.85
+        confidence: 0.88
       };
     }
 
-    // 🚖 TAXI (fallback vehicle logic)
+    // 🚖 TAXI (fallback vehicle)
     if (speed >= 20 && speed <= 100) {
-      return { mode: "Taxi", confidence: 0.7 };
+      return { mode: "Taxi", confidence: 0.75 };
     }
 
-    return { mode: "Unknown", confidence: 0.4 };
+    return { mode: "Unknown", confidence: 0.5 };
   }
 
   // ---------------- RESET ----------------

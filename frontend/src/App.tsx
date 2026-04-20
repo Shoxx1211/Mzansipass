@@ -2,19 +2,28 @@ import { useState, useEffect, useMemo } from 'react';
 import { Layout } from './components/Layout';
 import { AuthView } from './components/Auth';
 import { VirtualCard } from './components/VirtualCard';
-import { TripState, TransitNetwork } from './types';
-import type { TripData } from './types';
+
+import {
+  TripState,
+  TransitNetwork,
+  type TripData,
+  type TabType
+} from './types';
 
 import { TRANSIT_NETWORKS, ROUTE_REGISTRY } from './constants';
 import { FareEngine } from './services/fareService';
 
 // ---------------- STORAGE ----------------
 const Persistence = {
-  save: (userEmail: string, key: string, data: any) => {
+  save: (userEmail: string, key: string, data: unknown) => {
     try {
-      localStorage.setItem(`mzansi_${key}_${userEmail}`, JSON.stringify(data));
+      localStorage.setItem(
+        `mzansi_${key}_${userEmail}`,
+        JSON.stringify(data)
+      );
     } catch {}
   },
+
   load: (userEmail: string, key: string) => {
     try {
       const raw = localStorage.getItem(`mzansi_${key}_${userEmail}`);
@@ -26,7 +35,7 @@ const Persistence = {
 };
 
 // ---------------- DISTANCE ----------------
-const calculateDistance = (a: any, b: any) => {
+const calculateDistance = (a: { lat: number; lng: number }, b: { lat: number; lng: number }) => {
   const R = 6371;
 
   const dLat = (b.lat - a.lat) * (Math.PI / 180);
@@ -151,7 +160,9 @@ const PulseView = ({
 // ---------------- APP ----------------
 const App = () => {
   const [user, setUser] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState('home');
+
+  // ✅ FIXED: strict tab typing
+  const [activeTab, setActiveTab] = useState<TabType>('home');
 
   const [tripState, setTripState] = useState<TripState>(TripState.IDLE);
   const [network, setNetwork] = useState<TransitNetwork | null>(null);
@@ -167,7 +178,7 @@ const App = () => {
   const [pulseReports, setPulseReports] = useState<any[]>([]);
 
   const [locationEnabled, setLocationEnabled] = useState(true);
-  const [lastLocation, setLastLocation] = useState<any>(null);
+  const [lastLocation, setLastLocation] = useState<{ lat: number; lng: number } | null>(null);
 
   const [awaitingTransportConfirm, setAwaitingTransportConfirm] =
     useState(false);
@@ -210,7 +221,6 @@ const App = () => {
           const dist = calculateDistance(lastLocation, loc);
           const now = Date.now();
 
-          // 🚀 Movement detection
           if (
             dist > 0.05 &&
             tripState === TripState.IDLE &&
@@ -219,12 +229,9 @@ const App = () => {
           ) {
             setAwaitingTransportConfirm(true);
             setLastPromptTime(now);
-
-            // 🔔 vibration
             navigator.vibrate?.([200, 100, 200]);
           }
 
-          // 📍 Track distance
           if (tripState === TripState.ACTIVE) {
             setCurrentTrip((prev) => ({
               ...prev,
@@ -253,7 +260,7 @@ const App = () => {
       network: selectedNetwork,
       startTime: Date.now(),
       distance: 0,
-      startLocation: lastLocation
+      startLocation: lastLocation || undefined
     });
 
     setAwaitingTransportConfirm(false);
@@ -273,7 +280,7 @@ const App = () => {
       ...(currentTrip as TripData),
       endTime: Date.now(),
       fare,
-      endLocation: lastLocation
+      endLocation: lastLocation || undefined
     };
 
     setTripState(TripState.IDLE);
@@ -285,7 +292,6 @@ const App = () => {
       return updated;
     });
 
-    // ✅ Proper reset
     setNetwork(null);
   };
 
@@ -296,6 +302,7 @@ const App = () => {
     <Layout activeTab={activeTab} onNavClick={setActiveTab}>
       <div className="space-y-6 px-4 pb-24 max-w-md mx-auto">
 
+        {/* HOME */}
         {activeTab === 'home' && (
           <>
             <VirtualCard
@@ -346,59 +353,60 @@ const App = () => {
           </>
         )}
 
+        {/* SETTINGS */}
         {activeTab === 'settings' && (
-  <div className="space-y-4 px-4 pb-24 max-w-md mx-auto">
+          <div className="space-y-4">
+            <div className="glass p-5 rounded-2xl flex justify-between items-center">
+              <span className="text-sm font-medium">Location Tracking</span>
 
-    <div className="glass p-5 rounded-2xl flex justify-between items-center">
-      <span className="text-sm font-medium">Location Tracking</span>
+              <button
+                onClick={() => setLocationEnabled((p) => !p)}
+                className={`px-4 py-2 rounded-xl text-xs font-bold ${
+                  locationEnabled
+                    ? 'bg-green-500/20 text-green-400'
+                    : 'bg-red-500/20 text-red-400'
+                }`}
+              >
+                {locationEnabled ? 'ON' : 'OFF'}
+              </button>
+            </div>
 
-      <button
-        onClick={() => setLocationEnabled(prev => !prev)}
-        className={`px-4 py-2 rounded-xl text-xs font-bold ${
-          locationEnabled
-            ? 'bg-green-500/20 text-green-400'
-            : 'bg-red-500/20 text-red-400'
-        }`}
-      >
-        {locationEnabled ? 'ON' : 'OFF'}
-      </button>
-    </div>
+            <div
+              onClick={() => setUser(null)}
+              className="glass p-5 rounded-2xl text-red-400 text-center cursor-pointer"
+            >
+              Sign Out
+            </div>
+          </div>
+        )}
 
-    <div
-      onClick={() => setUser(null)}
-      className="glass p-5 rounded-2xl text-red-400 text-center cursor-pointer"
-    >
-      Sign Out
-    </div>
+        {/* STATS */}
+        {activeTab === 'stats' && (
+          <div className="space-y-4">
+            <div className="glass p-6 rounded-3xl">
+              <p className="text-xs text-white/40">Total Trips</p>
+              <h2 className="text-3xl font-black">{history.length}</h2>
+            </div>
 
-  </div>
-)}
+            <div className="glass p-6 rounded-3xl">
+              <p className="text-xs text-white/40">Total Spend</p>
+              <h2 className="text-3xl font-black">
+                R{history.reduce((a, b) => a + b.fare, 0).toFixed(2)}
+              </h2>
+            </div>
 
-{activeTab === 'stats' && (
-  <div className="space-y-4">
+            <div className="glass p-6 rounded-3xl">
+              <p className="text-xs text-white/40">Total Distance</p>
+              <h2 className="text-3xl font-black">
+                {history
+                  .reduce((a, b) => a + (b.distance || 0), 0)
+                  .toFixed(2)} km
+              </h2>
+            </div>
+          </div>
+        )}
 
-    <div className="glass p-6 rounded-3xl">
-      <p className="text-xs text-white/40">Total Trips</p>
-      <h2 className="text-3xl font-black">{history.length}</h2>
-    </div>
-
-    <div className="glass p-6 rounded-3xl">
-      <p className="text-xs text-white/40">Total Spend</p>
-      <h2 className="text-3xl font-black">
-        R{history.reduce((a, b) => a + b.fare, 0).toFixed(2)}
-      </h2>
-    </div>
-
-    <div className="glass p-6 rounded-3xl">
-      <p className="text-xs text-white/40">Total Distance</p>
-      <h2 className="text-3xl font-black">
-        {history.reduce((a, b) => a + (b.distance || 0), 0).toFixed(2)} km
-      </h2>
-    </div>
-
-  </div>
-)}
-
+        {/* PULSE */}
         {activeTab === 'pulse' && (
           <PulseView
             searchQuery={searchQuery}

@@ -2,7 +2,9 @@
 
 import { TransitNetwork } from '../types';
 
-// ---------------- TYPES ----------------
+// ===============================
+// TYPES
+// ===============================
 interface FareContext {
   isPeak: boolean;
   isNight: boolean;
@@ -13,11 +15,20 @@ export interface FareInput {
   network: TransitNetwork;
   distance: number;
   matchedRoute?: string;
-  userReportedFare?: number; // 🔥 for taxi override later
+  userReportedFare?: number;
 }
 
-// ---------------- ROUTE FARE TABLE ----------------
-// 🔥 Intelligence layer (expand over time)
+// ===============================
+// CONFIG (PRODUCTION SAFETY)
+// ===============================
+const CONFIG = {
+  MIN_FARE: 5,
+  MAX_FARE: 150
+};
+
+// ===============================
+// ROUTE FARE TABLE (EXPANDABLE)
+// ===============================
 const ROUTE_FARES: Record<string, number> = {
   // Rea Vaya
   'rv-t1': 21,
@@ -27,7 +38,7 @@ const ROUTE_FARES: Record<string, number> = {
   'ary-t1': 18,
   'ary-f1': 12,
 
-  // Taxi (baseline estimates)
+  // Taxi (baseline)
   'tx-cbd-randburg': 20,
   'tx-cbd-soweto': 18,
   'tx-pta-mamelodi': 16,
@@ -40,10 +51,14 @@ const ROUTE_FARES: Record<string, number> = {
   'mr-soweto': 10
 };
 
-// ---------------- ENGINE ----------------
+// ===============================
+// FARE ENGINE
+// ===============================
 export class FareEngine {
 
-  // ---------------- TIME CONTEXT ----------------
+  // ===============================
+  // TIME CONTEXT
+  // ===============================
   static getTimeContext(): FareContext {
     const now = new Date();
     const hour = now.getHours();
@@ -56,37 +71,74 @@ export class FareEngine {
     };
   }
 
-  // ---------------- MAIN ENTRY (FIXED ✅) ----------------
+  // ===============================
+  // MAIN ENTRY (PRODUCTION)
+  // ===============================
   static async computeFinalFare(input: FareInput): Promise<number> {
     const { network, distance, matchedRoute, userReportedFare } = input;
 
-    // simulate async (smooth UX)
-    await new Promise(r => setTimeout(r, 120));
+    // 🔒 VALIDATION
+    const safeDistance = Math.max(0, distance || 0);
+
+    // simulate async UX
+    await new Promise(r => setTimeout(r, 80));
 
     const ctx = this.getTimeContext();
 
-    // 🚖 TAXI REAL-WORLD OVERRIDE (MOST IMPORTANT)
-    if (network === 'Taxi' && userReportedFare) {
-      return this.roundFare(userReportedFare);
-    }
-
-    // 🧠 ROUTE-BASED PRICING (PRIMARY ENGINE)
-    if (matchedRoute && ROUTE_FARES[matchedRoute]) {
-      return this.applyModifiers(
-        ROUTE_FARES[matchedRoute],
-        network,
+    // 🚖 TAXI — REAL WORLD PRIORITY
+    if (network === 'Taxi') {
+      return this.computeTaxiFare(
+        safeDistance,
+        userReportedFare,
         ctx
       );
     }
 
-    // 📏 DISTANCE FALLBACK
-    const base = this.distanceFare(network, distance);
+    // 🧠 ROUTE-BASED PRICING (PRIMARY)
+    if (matchedRoute && ROUTE_FARES[matchedRoute]) {
+      const base = ROUTE_FARES[matchedRoute];
+      return this.finalizeFare(
+        this.applyModifiers(base, network, ctx)
+      );
+    }
 
-    return this.applyModifiers(base, network, ctx);
+    // 📏 DISTANCE FALLBACK
+    const base = this.distanceFare(network, safeDistance);
+
+    return this.finalizeFare(
+      this.applyModifiers(base, network, ctx)
+    );
   }
 
-  // ---------------- DISTANCE FALLBACK ----------------
+  // ===============================
+  // TAXI ENGINE (SMARTER)
+  // ===============================
+  private static computeTaxiFare(
+    distance: number,
+    userReportedFare: number | undefined,
+    ctx: FareContext
+  ): number {
+
+    // 🔥 If user provides fare → TRUST IT (crowdsourced truth)
+    if (userReportedFare && userReportedFare > 0) {
+      return this.finalizeFare(userReportedFare);
+    }
+
+    // fallback estimation
+    let base = 12 + distance * 2.2;
+
+    // taxi behaves like surge pricing in SA
+    if (ctx.isPeak) base *= 1.25;
+    if (ctx.isNight) base *= 1.15;
+
+    return this.finalizeFare(base);
+  }
+
+  // ===============================
+  // DISTANCE PRICING
+  // ===============================
   static distanceFare(network: TransitNetwork, distance: number): number {
+
     switch (network) {
 
       case 'Gautrain':
@@ -105,14 +157,16 @@ export class FareEngine {
         return 9.5;
 
       case 'Taxi':
-        return 12 + distance * 2; // fallback ONLY
+        return 12 + distance * 2.2;
 
       default:
         return distance * 2;
     }
   }
 
-  // ---------------- APPLY REAL-WORLD MODIFIERS ----------------
+  // ===============================
+  // APPLY MODIFIERS (REAL-WORLD)
+  // ===============================
   static applyModifiers(
     fare: number,
     network: TransitNetwork,
@@ -121,16 +175,10 @@ export class FareEngine {
 
     let adjusted = fare;
 
-    // 🚆 Gautrain pricing dynamics
+    // 🚆 Gautrain dynamics
     if (network === 'Gautrain') {
       if (ctx.isPeak) adjusted *= 1.15;
       if (ctx.isWeekend) adjusted *= 0.9;
-    }
-
-    // 🚖 Taxi behavior
-    if (network === 'Taxi') {
-      if (ctx.isPeak) adjusted *= 1.2;
-      if (ctx.isNight) adjusted *= 1.15;
     }
 
     // 🚌 BRT systems
@@ -138,10 +186,31 @@ export class FareEngine {
       if (ctx.isPeak) adjusted *= 1.05;
     }
 
-    return this.roundFare(adjusted);
+    // 🚆 Metrorail stays flat (cheap system)
+    if (network === 'Metrorail') {
+      adjusted *= 1;
+    }
+
+    return adjusted;
   }
 
-  // ---------------- HELPERS ----------------
+  // ===============================
+  // FINALIZE FARE (PROTECTION LAYER)
+  // ===============================
+  private static finalizeFare(value: number): number {
+
+    let safe = value;
+
+    // clamp to realistic bounds
+    safe = Math.max(CONFIG.MIN_FARE, safe);
+    safe = Math.min(CONFIG.MAX_FARE, safe);
+
+    return this.roundFare(safe);
+  }
+
+  // ===============================
+  // ROUNDING
+  // ===============================
   static roundFare(value: number): number {
     return Math.round(value * 100) / 100;
   }
