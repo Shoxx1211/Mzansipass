@@ -15,7 +15,7 @@ export const TRANSIT_NETWORKS: readonly TransitNetwork[] = [
 ] as const;
 
 // ===============================
-// 🧭 GEO TYPES
+// 📍 GEO TYPES
 // ===============================
 export type GeoPoint = {
   lat: number;
@@ -23,19 +23,23 @@ export type GeoPoint = {
 };
 
 // ===============================
-// 🧠 EXTENDED ROUTE TYPE (CORE)
+// 🧠 EXTENDED ROUTE TYPE
 // ===============================
 export type IntelligentRoute = TransitRoute & {
   coordinates?: GeoPoint[];
 
-  // AI ENRICHMENTS
-  avgSpeed?: number;           // km/h
-  reliabilityScore?: number;   // 0–1
+  avgSpeed?: number;
+  reliabilityScore?: number;
   peakHours?: number[];
 
-  // FUTURE BACKEND HOOKS
-  fareOverride?: number;       // static fare override
-  lastVerified?: number;       // timestamp for freshness
+  demandScore?: number;
+  fareOverride?: number;
+  lastVerified?: number;
+
+  crowdLevel?: "Low" | "Medium" | "High";
+
+  // 🔥 NEW: SEARCH + UX
+  keywords?: string[];
 };
 
 // ===============================
@@ -44,7 +48,12 @@ export type IntelligentRoute = TransitRoute & {
 const TAXI_TYPE: RouteType = "Complementary";
 
 // ===============================
-// 🗺️ ROUTE REGISTRY (CORE ENGINE)
+// 🧠 HELPER
+// ===============================
+const NOW = () => Date.now();
+
+// ===============================
+// 🗺️ ROUTE REGISTRY (PULSE CORE)
 // ===============================
 export const ROUTE_REGISTRY: IntelligentRoute[] = [
 
@@ -55,11 +64,12 @@ export const ROUTE_REGISTRY: IntelligentRoute[] = [
     id: "gt-ns",
     network: "Gautrain",
     code: "NS",
-    name: "North-South Rail",
+    name: "Hatfield ↔ Park Station",
     type: "Rail",
     status: "Operational",
     severity: "Operational",
-    lastUpdated: Date.now(),
+    lastUpdated: NOW(),
+
     startTerminal: "Hatfield",
     endTerminal: "Park Station",
 
@@ -67,29 +77,41 @@ export const ROUTE_REGISTRY: IntelligentRoute[] = [
       { lat: -25.7479, lng: 28.2293 },
       { lat: -26.2041, lng: 28.0473 }
     ],
+
     avgSpeed: 80,
-    reliabilityScore: 0.95,
-    peakHours: [6, 7, 8, 16, 17, 18]
+    reliabilityScore: 0.96,
+    demandScore: 0.9,
+    peakHours: [6, 7, 8, 16, 17, 18],
+    crowdLevel: "High",
+
+    keywords: ["hatfield", "park", "gautrain", "pta", "jhb"]
   },
 
   {
-    id: "gt-h3",
-    network: "Gautrain",
-    code: "H3",
-    name: "Arcadia Feeder",
-    type: "Feeder",
+    id: "ary-cbd-hatfield",
+    network: "A Re Yeng",
+    code: "L1",
+    name: "Pretoria CBD ↔ Hatfield",
+    type: "Trunk",
     status: "Operational",
     severity: "Operational",
-    lastUpdated: Date.now(),
-    startTerminal: "Hatfield Station",
-    endTerminal: "Arcadia",
+    lastUpdated: NOW(),
+
+    startTerminal: "CBD",
+    endTerminal: "Hatfield",
 
     coordinates: [
-      { lat: -25.7479, lng: 28.2293 },
-      { lat: -25.7390, lng: 28.2100 }
+      { lat: -25.746, lng: 28.188 },
+      { lat: -25.7479, lng: 28.2293 }
     ],
-    avgSpeed: 40,
-    reliabilityScore: 0.9
+
+    avgSpeed: 34,
+    reliabilityScore: 0.86,
+    demandScore: 0.8,
+    peakHours: [6, 7, 8, 16, 17],
+    crowdLevel: "High",
+
+    keywords: ["pretoria", "hatfield", "areyeng", "bus"]
   },
 
   // ===============================
@@ -99,12 +121,12 @@ export const ROUTE_REGISTRY: IntelligentRoute[] = [
     id: "rv-t1",
     network: "Rea Vaya",
     code: "T1",
-    name: "Soweto Trunk",
+    name: "Thokoza Park ↔ Ellis Park",
     type: "Trunk",
     status: "Delayed",
     severity: "Moderate",
-    lastUpdated: Date.now(),
-    estResolution: "15m",
+    lastUpdated: NOW(),
+
     startTerminal: "Thokoza Park",
     endTerminal: "Ellis Park",
 
@@ -112,71 +134,14 @@ export const ROUTE_REGISTRY: IntelligentRoute[] = [
       { lat: -26.267, lng: 27.858 },
       { lat: -26.204, lng: 28.047 }
     ],
-    avgSpeed: 35,
-    reliabilityScore: 0.75,
-    peakHours: [6, 7, 8, 15, 16, 17]
-  },
 
-  {
-    id: "rv-c1",
-    network: "Rea Vaya",
-    code: "C1",
-    name: "Dobsonville Complementary",
-    type: "Complementary",
-    status: "Operational",
-    severity: "Operational",
-    lastUpdated: Date.now(),
-    startTerminal: "Dobsonville",
-    endTerminal: "CBD",
+    avgSpeed: 32,
+    reliabilityScore: 0.72,
+    demandScore: 0.85,
+    peakHours: [6, 7, 8, 15, 16, 17],
+    crowdLevel: "High",
 
-    coordinates: [
-      { lat: -26.260, lng: 27.850 },
-      { lat: -26.204, lng: 28.047 }
-    ],
-    avgSpeed: 30,
-    reliabilityScore: 0.8
-  },
-
-  // ===============================
-  // 🚌 A RE YENG
-  // ===============================
-  {
-    id: "ary-t1",
-    network: "A Re Yeng",
-    code: "L1",
-    name: "Pretoria Trunk",
-    type: "Trunk",
-    status: "Operational",
-    severity: "Operational",
-    lastUpdated: Date.now(),
-    startTerminal: "CBD",
-    endTerminal: "Hatfield",
-
-    coordinates: [
-      { lat: -25.746, lng: 28.188 },
-      { lat: -25.7479, lng: 28.2293 }
-    ],
-    avgSpeed: 35,
-    reliabilityScore: 0.85
-  },
-
-  {
-    id: "ary-f1",
-    network: "A Re Yeng",
-    code: "F1",
-    name: "Hatfield Loop",
-    type: "Feeder",
-    status: "Operational",
-    severity: "Operational",
-    lastUpdated: Date.now(),
-    startTerminal: "Hatfield",
-    endTerminal: "Hatfield",
-
-    coordinates: [
-      { lat: -25.7479, lng: 28.2293 }
-    ],
-    avgSpeed: 25,
-    reliabilityScore: 0.9
+    keywords: ["soweto", "ellis park", "rea vaya"]
   },
 
   // ===============================
@@ -186,11 +151,12 @@ export const ROUTE_REGISTRY: IntelligentRoute[] = [
     id: "mr-soweto",
     network: "Metrorail",
     code: "SOW",
-    name: "Soweto Line",
+    name: "Naledi ↔ Park Station",
     type: "Rail",
     status: "Disrupted",
     severity: "Severe",
-    lastUpdated: Date.now(),
+    lastUpdated: NOW(),
+
     startTerminal: "Naledi",
     endTerminal: "Park Station",
 
@@ -198,32 +164,42 @@ export const ROUTE_REGISTRY: IntelligentRoute[] = [
       { lat: -26.267, lng: 27.858 },
       { lat: -26.204, lng: 28.047 }
     ],
-    avgSpeed: 50,
-    reliabilityScore: 0.5
+
+    avgSpeed: 45,
+    reliabilityScore: 0.45,
+    demandScore: 0.7,
+    crowdLevel: "High",
+
+    keywords: ["soweto", "train", "metro"]
   },
 
   // ===============================
-  // 🚖 TAXI CORRIDORS (CORE EDGE)
+  // 🚖 TAXI (🔥 CORE TO YOUR PRODUCT)
   // ===============================
   {
-    id: "tx-cbd-randburg",
+    id: "tx-pta-mamelodi",
     network: "Taxi",
-    code: "RB",
-    name: "CBD ↔ Randburg",
+    code: "MM",
+    name: "Pretoria CBD ↔ Mamelodi",
     type: TAXI_TYPE,
     status: "Operational",
     severity: "Operational",
-    lastUpdated: Date.now(),
-    startTerminal: "Bree Rank",
-    endTerminal: "Randburg Rank",
+    lastUpdated: NOW(),
+
+    startTerminal: "CBD",
+    endTerminal: "Mamelodi",
 
     coordinates: [
-      { lat: -26.204, lng: 28.047 },
-      { lat: -26.093, lng: 27.998 }
+      { lat: -25.746, lng: 28.188 },
+      { lat: -25.725, lng: 28.350 }
     ],
+
     avgSpeed: 45,
     reliabilityScore: 0.85,
-    peakHours: [6, 7, 8, 16, 17, 18]
+    demandScore: 0.95,
+    crowdLevel: "High",
+
+    keywords: ["pta", "mamelodi", "taxi"]
   },
 
   {
@@ -234,41 +210,27 @@ export const ROUTE_REGISTRY: IntelligentRoute[] = [
     type: TAXI_TYPE,
     status: "Operational",
     severity: "Moderate",
-    lastUpdated: Date.now(),
-    startTerminal: "Bree Rank",
+    lastUpdated: NOW(),
+
+    startTerminal: "CBD",
     endTerminal: "Soweto",
 
     coordinates: [
       { lat: -26.204, lng: 28.047 },
       { lat: -26.267, lng: 27.858 }
     ],
-    avgSpeed: 40,
-    reliabilityScore: 0.8
-  },
 
-  {
-    id: "tx-pta-mamelodi",
-    network: "Taxi",
-    code: "MM",
-    name: "Pretoria CBD ↔ Mamelodi",
-    type: TAXI_TYPE,
-    status: "Operational",
-    severity: "Operational",
-    lastUpdated: Date.now(),
-    startTerminal: "Pretoria Rank",
-    endTerminal: "Mamelodi",
+    avgSpeed: 42,
+    reliabilityScore: 0.8,
+    demandScore: 0.88,
+    crowdLevel: "High",
 
-    coordinates: [
-      { lat: -25.746, lng: 28.188 },
-      { lat: -25.725, lng: 28.350 }
-    ],
-    avgSpeed: 45,
-    reliabilityScore: 0.85
+    keywords: ["jhb", "soweto", "taxi"]
   }
 ];
 
 // ===============================
-// 💰 NETWORK BASE RATES (FARE ENGINE)
+// 💰 NETWORK BASE RATES
 // ===============================
 export const NETWORK_RATES: Record<TransitNetwork, number> = {
   Gautrain: 4.5,
@@ -280,17 +242,18 @@ export const NETWORK_RATES: Record<TransitNetwork, number> = {
 };
 
 // ===============================
-// 🚖 TAXI CONFIG (REAL-WORLD MODEL)
+// 🚖 TAXI MODEL (REALISTIC)
 // ===============================
 export const TAXI_CONFIG = {
   BASE_FARE: 12,
-  PER_KM: 2.5,
-  PEAK_MULTIPLIER: 1.2,
-  OFF_PEAK_MULTIPLIER: 1.0
+  PER_KM: 2.4,
+  PEAK_MULTIPLIER: 1.25,
+  NIGHT_MULTIPLIER: 1.15,
+  MIN_FARE: 10
 } as const;
 
 // ===============================
-// 🧠 DETECTION CONFIG (TRANSPORT ENGINE)
+// 🧠 DETECTION CONFIG
 // ===============================
 export const DETECTION_CONFIG = {
   WALKING_MAX_SPEED: 6,
@@ -298,10 +261,32 @@ export const DETECTION_CONFIG = {
 
   TAXI_MIN_SPEED: 20,
   BUS_MIN_SPEED: 15,
-  BUS_MAX_SPEED: 50,
+  BUS_MAX_SPEED: 55,
 
-  TRAIN_MIN_SPEED: 55,
+  TRAIN_MIN_SPEED: 60,
 
-  ROUTE_MATCH_RADIUS_KM: 0.5,
-  STOP_SPEED_THRESHOLD: 5
+  ROUTE_MATCH_RADIUS_KM: 0.35,
+  STRONG_ROUTE_MATCH_KM: 0.12,
+
+  STOP_SPEED_THRESHOLD: 4
 } as const;
+
+// ===============================
+// 📡 PULSE CONFIG (NEW 🔥)
+// ===============================
+export const PULSE_CONFIG = {
+  REPORT_TTL: 1000 * 60 * 60, // 1 hour
+  MAX_REPORTS_PER_ROUTE: 50,
+
+  WEIGHT_RECENCY: 0.6,
+  WEIGHT_VOLUME: 0.4
+};
+
+// ===============================
+// 🤖 AI CONFIG (FUTURE READY)
+// ===============================
+export const AI_CONFIG = {
+  ROUTE_CONFIDENCE_THRESHOLD: 0.65,
+  HABIT_CONFIDENCE_THRESHOLD: 0.6,
+  MAX_PREDICTIONS: 3
+};

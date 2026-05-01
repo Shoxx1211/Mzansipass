@@ -1,26 +1,39 @@
 // services/habitEngine.ts
 
-import type { TransitNetwork } from "../types";
+import type { TransitNetwork, Location } from "../types";
 
 // ===============================
 // TYPES
 // ===============================
 type Habit = {
   hour: number;
+
+  startCluster: string;   // 🔥 location grouping
+  endCluster: string;
+
   network: TransitNetwork;
+
   count: number;
-  lastUsed: number; // 🔥 recency tracking
+  lastUsed: number;
+};
+
+type Prediction = {
+  network: TransitNetwork | null;
+  startCluster?: string;
+  endCluster?: string;
+  confidence: number;
 };
 
 // ===============================
 // CONFIG
 // ===============================
-const STORAGE_KEY = "mzansi_habits_v2";
+const STORAGE_KEY = "mzansi_habits_v3";
 
 const CONFIG = {
-  MAX_ENTRIES: 100,
-  DECAY_FACTOR: 0.98, // 🔥 older habits slowly lose weight
-  MIN_CONFIDENCE: 0.6
+  MAX_ENTRIES: 150,
+  DECAY_FACTOR: 0.97,
+  MIN_CONFIDENCE: 0.55,
+  CLUSTER_PRECISION: 0.01 // ~1km grid
 };
 
 // ===============================
@@ -31,7 +44,7 @@ export class HabitEngine {
   private static loaded = false;
 
   // ===============================
-  // INIT (SAFE LOAD)
+  // INIT
   // ===============================
   private static ensureLoaded() {
     if (this.loaded) return;
@@ -52,30 +65,38 @@ export class HabitEngine {
   }
 
   // ===============================
-  // SAVE (SAFE)
+  // SAVE
   // ===============================
   private static persist() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(this.habits));
-    } catch {
-      // silent fail (storage full / blocked)
-    }
+    } catch {}
   }
 
   // ===============================
-  // LEARN (IMPROVED)
+  // 🔥 LEARN (UPGRADED)
   // ===============================
-  static learn(network: TransitNetwork) {
+  static learn(
+    network: TransitNetwork,
+    start: Location,
+    end: Location
+  ) {
     this.ensureLoaded();
 
     const now = Date.now();
     const hour = new Date().getHours();
 
-    // apply decay first (important 🔥)
+    const startCluster = this.cluster(start);
+    const endCluster = this.cluster(end);
+
     this.applyDecay();
 
     const existing = this.habits.find(
-      h => h.hour === hour && h.network === network
+      h =>
+        h.hour === hour &&
+        h.network === network &&
+        h.startCluster === startCluster &&
+        h.endCluster === endCluster
     );
 
     if (existing) {
@@ -85,38 +106,49 @@ export class HabitEngine {
       this.habits.push({
         hour,
         network,
+        startCluster,
+        endCluster,
         count: 1,
         lastUsed: now
       });
     }
 
-    // 🔥 keep dataset clean
     this.trim();
-
     this.persist();
   }
 
   // ===============================
-  // PREDICT (WITH CONFIDENCE)
+  // 🔮 PREDICT (NEXT LEVEL)
   // ===============================
-  static predict(): {
-    network: TransitNetwork | null;
-    confidence: number;
-  } {
+  static predict(currentLocation?: Location): Prediction {
     this.ensureLoaded();
 
     const hour = new Date().getHours();
 
-    const matches = this.habits.filter(h => h.hour === hour);
+    let candidates = this.habits.filter(h => h.hour === hour);
 
-    if (!matches.length) {
+    if (!candidates.length) {
       return { network: null, confidence: 0 };
     }
 
-    // weighted score = count + recency boost
-    const scored = matches.map(h => {
+    // 🔥 If we know current location → filter by proximity
+    if (currentLocation) {
+      const currentCluster = this.cluster(currentLocation);
+
+      const nearby = candidates.filter(
+        h => h.startCluster === currentCluster
+      );
+
+      if (nearby.length) {
+        candidates = nearby;
+      }
+    }
+
+    const scored = candidates.map(h => {
       const recencyBoost =
-        1 + (Date.now() - h.lastUsed < 24 * 60 * 60 * 1000 ? 0.3 : 0);
+        Date.now() - h.lastUsed < 24 * 60 * 60 * 1000
+          ? 1.3
+          : 1;
 
       return {
         ...h,
@@ -137,12 +169,24 @@ export class HabitEngine {
 
     return {
       network: top.network,
+      startCluster: top.startCluster,
+      endCluster: top.endCluster,
       confidence
     };
   }
 
   // ===============================
-  // DECAY OLD HABITS
+  // 🔥 CLUSTERING (CRITICAL)
+  // ===============================
+  private static cluster(loc: Location): string {
+    const lat = Math.round(loc.lat / CONFIG.CLUSTER_PRECISION) * CONFIG.CLUSTER_PRECISION;
+    const lng = Math.round(loc.lng / CONFIG.CLUSTER_PRECISION) * CONFIG.CLUSTER_PRECISION;
+
+    return `${lat.toFixed(2)},${lng.toFixed(2)}`;
+  }
+
+  // ===============================
+  // DECAY
   // ===============================
   private static applyDecay() {
     this.habits.forEach(h => {
@@ -151,7 +195,7 @@ export class HabitEngine {
   }
 
   // ===============================
-  // TRIM DATASET
+  // TRIM
   // ===============================
   private static trim() {
     if (this.habits.length <= CONFIG.MAX_ENTRIES) return;
@@ -161,7 +205,7 @@ export class HabitEngine {
   }
 
   // ===============================
-  // RESET (DEV TOOL)
+  // RESET
   // ===============================
   static reset() {
     this.habits = [];

@@ -1,4 +1,4 @@
-// components/auth.tsx
+// components/Auth.tsx
 
 import React, { useState } from "react";
 
@@ -6,11 +6,33 @@ import React, { useState } from "react";
 interface User {
   email: string;
   name: string;
+
+  preferredModes: string[];
+  commuteTime: string;
+
+  homeArea: string;
+  workArea: string;
+  isRoutine: boolean;
 }
 
 interface AuthProps {
   onLogin: (user: User) => void;
 }
+
+// ---------------- CONSTANTS ----------------
+const TRANSPORT_OPTIONS = [
+  "Taxi",
+  "Gautrain",
+  "Rea Vaya",
+  "A Re Yeng",
+  "Metrorail"
+];
+
+const COMMUTE_TIMES = [
+  "Morning (5am - 9am)",
+  "Afternoon (3pm - 7pm)",
+  "Flexible"
+];
 
 // ---------------- COMPONENT ----------------
 export const AuthView: React.FC<AuthProps> = ({ onLogin }) => {
@@ -18,53 +40,74 @@ export const AuthView: React.FC<AuthProps> = ({ onLogin }) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+
+  // 🔥 KYC
+  const [preferredModes, setPreferredModes] = useState<string[]>([]);
+  const [commuteTime, setCommuteTime] = useState("");
+  const [homeArea, setHomeArea] = useState("");
+  const [workArea, setWorkArea] = useState("");
+  const [isRoutine, setIsRoutine] = useState(true);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // ---------------- VALIDATION ----------------
   const validate = (): string | null => {
-    if (!email || !password) {
-      return "Please fill in all fields";
-    }
+    if (!email || !password) return "Fill in all fields";
+    if (!/\S+@\S+\.\S+/.test(email)) return "Invalid email";
+    if (password.length < 6) return "Password too short";
 
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      return "Enter a valid email address";
-    }
-
-    if (password.length < 6) {
-      return "Password must be at least 6 characters";
+    if (isRegister) {
+      if (!name) return "Enter your name";
+      if (!preferredModes.length) return "Select transport";
+      if (!commuteTime) return "Select commute time";
+      if (!homeArea) return "Enter starting area";
+      if (!workArea) return "Enter destination area";
     }
 
     return null;
   };
 
+  // ---------------- TOGGLE MODE ----------------
+  const toggleMode = (mode: string) => {
+    setPreferredModes((prev) =>
+      prev.includes(mode)
+        ? prev.filter((m) => m !== mode)
+        : [...prev, mode]
+    );
+  };
+
   // ---------------- SUBMIT ----------------
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setError(null);
 
     const validationError = validate();
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
+    if (validationError) return setError(validationError);
 
     try {
       setLoading(true);
-
-      // 🔥 Simulate API call (replace later)
       await new Promise((res) => setTimeout(res, 800));
 
       const user: User = {
         email,
-        name: email.split("@")[0],
+        name: name || email.split("@")[0],
+        preferredModes,
+        commuteTime,
+        homeArea,
+        workArea,
+        isRoutine
       };
 
+      localStorage.setItem(
+        `mzansi_user_${email}`,
+        JSON.stringify(user)
+      );
+
       onLogin(user);
-    } catch (err) {
-      setError("Something went wrong. Please try again.");
+    } catch {
+      setError("Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -72,82 +115,116 @@ export const AuthView: React.FC<AuthProps> = ({ onLogin }) => {
 
   // ---------------- UI ----------------
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center px-6">
-      <div className="w-full max-w-md space-y-10">
+    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-6">
+      <div className="w-full max-w-md space-y-8">
 
-        {/* HEADER */}
         <div className="text-center">
-          <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-emerald-400 rounded-3xl mx-auto flex items-center justify-center shadow-2xl mb-6">
-            <span className="text-4xl">🇿🇦</span>
-          </div>
-
-          <h1 className="text-4xl font-black tracking-tight text-white">
+          <h1 className="text-4xl font-black text-white">
             MzansiPass
           </h1>
-
           <p className="text-white/40 text-sm mt-2">
-            Experience the future of mobility
+            Smarter commuting starts here
           </p>
         </div>
 
-        {/* FORM */}
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
 
-          {/* INPUTS */}
-          <div className="space-y-3">
+          {isRegister && (
             <input
-              type="email"
-              placeholder="Email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={loading}
-              className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl px-5 text-white placeholder-white/30 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/40 transition-all disabled:opacity-50"
+              placeholder="Full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="input"
             />
-
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={loading}
-              className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl px-5 text-white placeholder-white/30 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/40 transition-all disabled:opacity-50"
-            />
-          </div>
-
-          {/* ERROR */}
-          {error && (
-            <div className="text-red-400 text-sm text-center">
-              {error}
-            </div>
           )}
 
-          {/* BUTTON */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full h-14 bg-white text-black rounded-2xl font-bold text-lg active:scale-95 transition-transform disabled:opacity-60 disabled:cursor-not-allowed"
-          >
-            {loading
-              ? "Please wait..."
-              : isRegister
-              ? "CREATE ACCOUNT"
-              : "LOG IN"}
+          <input
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="input"
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="input"
+          />
+
+          {isRegister && (
+            <>
+              {/* TRANSPORT */}
+              <div className="flex flex-wrap gap-2">
+                {TRANSPORT_OPTIONS.map((mode) => (
+                  <button
+                    type="button"
+                    key={mode}
+                    onClick={() => toggleMode(mode)}
+                    className={`px-3 py-2 rounded-xl text-xs ${
+                      preferredModes.includes(mode)
+                        ? "bg-blue-500"
+                        : "bg-white/5"
+                    }`}
+                  >
+                    {mode}
+                  </button>
+                ))}
+              </div>
+
+              {/* COMMUTE */}
+              <select
+                value={commuteTime}
+                onChange={(e) => setCommuteTime(e.target.value)}
+                className="input"
+              >
+                <option value="">Select commute time</option>
+                {COMMUTE_TIMES.map((t) => (
+                  <option key={t}>{t}</option>
+                ))}
+              </select>
+
+              {/* 🔥 ROUTE CONTEXT */}
+              <input
+                placeholder="Where do you usually start? (e.g. Soweto)"
+                value={homeArea}
+                onChange={(e) => setHomeArea(e.target.value)}
+                className="input"
+              />
+
+              <input
+                placeholder="Where do you usually go? (e.g. Sandton)"
+                value={workArea}
+                onChange={(e) => setWorkArea(e.target.value)}
+                className="input"
+              />
+
+              {/* ROUTINE */}
+              <label className="flex items-center gap-2 text-xs text-white/60">
+                <input
+                  type="checkbox"
+                  checked={isRoutine}
+                  onChange={() => setIsRoutine(!isRoutine)}
+                />
+                I use the same route most days
+              </label>
+            </>
+          )}
+
+          {error && <p className="text-red-400 text-sm">{error}</p>}
+
+          <button className="btn-primary w-full h-14">
+            {isRegister ? "Create Account" : "Login"}
           </button>
         </form>
 
-        {/* TOGGLE */}
-        <p className="text-center text-white/30 text-sm">
-          {isRegister
-            ? "Already have an account?"
-            : "Don't have an account?"}{" "}
+        <p className="text-center text-white/40 text-sm">
           <button
-            onClick={() => {
-              setIsRegister(!isRegister);
-              setError(null);
-            }}
-            className="text-white font-semibold hover:underline"
+            onClick={() => setIsRegister(!isRegister)}
+            className="text-white"
           >
-            {isRegister ? "Sign in" : "Register now"}
+            {isRegister ? "Sign in" : "Register"}
           </button>
         </p>
       </div>

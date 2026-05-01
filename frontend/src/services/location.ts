@@ -3,23 +3,26 @@
 import type { Location } from "../types";
 
 // ===============================
-// CONFIG (TUNABLE FOR PRODUCTION)
+// CONFIG (TUNED FOR REAL WORLD)
 // ===============================
 const CONFIG = {
-  MIN_DISTANCE_KM: 0.01,        // 10m → ignore GPS jitter
-  MAX_ACCURACY_METERS: 50,      // discard bad GPS
-  VEHICLE_SPEED_THRESHOLD: 10,  // km/h
+  MIN_DISTANCE_KM: 0.01,
+  MAX_ACCURACY_METERS: 50,
+  VEHICLE_SPEED_THRESHOLD: 10,
   WALKING_MAX_SPEED: 6,
-  SMOOTHING_WINDOW: 5           // rolling average size
+  SMOOTHING_WINDOW: 5,
+  STALE_LOCATION_MS: 15000 // 🔥 detect GPS freeze
 };
 
 // ===============================
-// INTERNAL STATE (SMOOTHING)
+// INTERNAL STATE
 // ===============================
 let history: Location[] = [];
+let lastKnownLocation: Location | null = null;
+let lastUpdateTime = 0;
 
 // ===============================
-// GET CURRENT LOCATION (ROBUST + SAFE)
+// GET CURRENT LOCATION (RESILIENT)
 // ===============================
 export const getCurrentLocation = (): Promise<Location> => {
   return new Promise((resolve, reject) => {
@@ -31,14 +34,26 @@ export const getCurrentLocation = (): Promise<Location> => {
       (position) => {
         const loc = formatLocation(position);
 
-        // 🚫 Reject bad GPS
         if (!isAccurate(loc)) {
+          // 🔥 fallback to last known location
+          if (lastKnownLocation) {
+            console.warn("⚠️ Using last known location");
+            return resolve(lastKnownLocation);
+          }
+
           return reject(new Error("Low GPS accuracy"));
         }
 
+        updateState(loc);
         resolve(loc);
       },
       (error) => {
+        // 🔥 fallback if GPS fails
+        if (lastKnownLocation) {
+          console.warn("⚠️ GPS failed, using cached location");
+          return resolve(lastKnownLocation);
+        }
+
         reject(new Error(parseError(error)));
       },
       {
@@ -51,7 +66,7 @@ export const getCurrentLocation = (): Promise<Location> => {
 };
 
 // ===============================
-// WATCH LOCATION (SMART STREAM)
+// WATCH LOCATION (PRODUCTION READY)
 // ===============================
 export const watchLocation = (
   onUpdate: (loc: Location, meta: MovementMeta) => void,
@@ -65,28 +80,30 @@ export const watchLocation = (
     (position) => {
       const loc = formatLocation(position);
 
-      // 🚫 Reject bad GPS
+      // 🚫 Accuracy filter
       if (!isAccurate(loc)) return;
 
-      // 🚫 Reject noise
       const last = history[history.length - 1];
+
+      // 🚫 Ignore noise
       if (last && !isValidMovement(last, loc)) return;
 
-      // ✅ Add to history
-      history.push(loc);
-      if (history.length > CONFIG.SMOOTHING_WINDOW) {
-        history.shift();
-      }
+      updateState(loc);
 
-      // 🔥 Smoothed speed
       const speed = getSmoothedSpeed();
+
+      const now = Date.now();
+
+      // 🔥 Detect GPS freeze
+      const isStale = now - lastUpdateTime > CONFIG.STALE_LOCATION_MS;
 
       const meta: MovementMeta = {
         speed,
         isMoving: speed > CONFIG.VEHICLE_SPEED_THRESHOLD,
         isWalking:
           speed >= 2 && speed <= CONFIG.WALKING_MAX_SPEED,
-        confidence: calculateConfidence(loc)
+        confidence: calculateConfidence(loc),
+        isStale
       };
 
       onUpdate(loc, meta);
@@ -107,21 +124,22 @@ export const watchLocation = (
 // ===============================
 export const clearLocationWatch = (watchId: number) => {
   navigator.geolocation.clearWatch(watchId);
-  history = []; // 🔥 reset smoothing
+  resetLocationState();
 };
 
 // ===============================
-// MOVEMENT META TYPE
+// MOVEMENT META
 // ===============================
 export type MovementMeta = {
   speed: number;
   isMoving: boolean;
   isWalking: boolean;
   confidence: number;
+  isStale: boolean; // 🔥 NEW
 };
 
 // ===============================
-// DISTANCE (HAVERSINE)
+// DISTANCE
 // ===============================
 export const calculateDistance = (
   loc1: Location,
@@ -142,7 +160,7 @@ export const calculateDistance = (
 };
 
 // ===============================
-// SPEED (PAIR)
+// SPEED
 // ===============================
 export const calculateSpeed = (
   loc1: Location,
@@ -159,7 +177,7 @@ export const calculateSpeed = (
 };
 
 // ===============================
-// 🔥 SMOOTHED SPEED (CRITICAL)
+// 🔥 SMOOTHED SPEED
 // ===============================
 const getSmoothedSpeed = (): number => {
   if (history.length < 2) return 0;
@@ -170,7 +188,6 @@ const getSmoothedSpeed = (): number => {
   for (let i = 1; i < history.length; i++) {
     const speed = calculateSpeed(history[i - 1], history[i]);
 
-    // 🚫 filter insane GPS spikes
     if (speed > 0 && speed < 180) {
       total += speed;
       count++;
@@ -181,15 +198,35 @@ const getSmoothedSpeed = (): number => {
 };
 
 // ===============================
-// GPS QUALITY CHECK (FIXED ✅)
+// 🔥 STATE MANAGEMENT
+// ===============================
+const updateState = (loc: Location) => {
+  history.push(loc);
+
+  if (history.length > CONFIG.SMOOTHING_WINDOW) {
+    history.shift();
+  }
+
+  lastKnownLocation = loc;
+  lastUpdateTime = Date.now();
+};
+
+const resetLocationState = () => {
+  history = [];
+  lastKnownLocation = null;
+  lastUpdateTime = 0;
+};
+
+// ===============================
+// GPS QUALITY
 // ===============================
 const isAccurate = (loc: Location): boolean => {
-  const accuracy = loc.accuracy ?? 999; // 🔥 fallback if undefined
+  const accuracy = loc.accuracy ?? 999;
   return accuracy <= CONFIG.MAX_ACCURACY_METERS;
 };
 
 // ===============================
-// FILTER GPS NOISE
+// MOVEMENT FILTER
 // ===============================
 export const isValidMovement = (
   loc1: Location,
@@ -200,10 +237,10 @@ export const isValidMovement = (
 };
 
 // ===============================
-// CONFIDENCE SCORE (FIXED ✅)
+// CONFIDENCE
 // ===============================
 const calculateConfidence = (loc: Location): number => {
-  const accuracy = loc.accuracy ?? 100; // 🔥 safe fallback
+  const accuracy = loc.accuracy ?? 100;
 
   if (accuracy <= 10) return 0.95;
   if (accuracy <= 25) return 0.8;
@@ -212,19 +249,19 @@ const calculateConfidence = (loc: Location): number => {
 };
 
 // ===============================
-// FORMAT LOCATION (NORMALIZED ✅)
+// FORMAT LOCATION
 // ===============================
 const formatLocation = (
   position: GeolocationPosition
 ): Location => ({
   lat: position.coords.latitude,
   lng: position.coords.longitude,
-  accuracy: position.coords.accuracy ?? 100, // 🔥 ALWAYS DEFINED
+  accuracy: position.coords.accuracy ?? 100,
   timestamp: position.timestamp
 });
 
 // ===============================
-// ERROR PARSER
+// ERROR HANDLING
 // ===============================
 const parseError = (error: GeolocationPositionError): string => {
   switch (error.code) {

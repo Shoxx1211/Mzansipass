@@ -1,33 +1,38 @@
 {
-  "name": "mzansipass",
+  "name": "pulse",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
+  "private": true,
+  "description": "Pulse - Smart mobility and fare intelligence system",
   "license": "ISC",
-  "description": "",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "ts-node-dev --respawn --transpile-only server/index.ts",
+    "build": "cd frontend && npm run build",
+    "start": "node dist/server/index.js",
+    "cap:sync": "npx cap sync",
+    "cap:android": "npx cap open android"
+  },
   "dependencies": {
+    "@capacitor-community/background-geolocation": "^1.2.26",
+    "@capacitor/android": "^8.3.1",
+    "@capacitor/core": "^8.3.1",
     "@prisma/client": "^6.19.2",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3",
-    "prisma": "^6.19.2",
-    "vite-plugin-pwa": "^1.2.0"
+    "jsonwebtoken": "^9.0.3"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.3.1",
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^25.2.3",
-    "autoprefixer": "^10.4.27",
-    "postcss": "^8.5.8",
-    "tailwindcss": "^4.2.2",
+    "@types/node": "^20.0.0",
+    "concurrently": "^8.2.2",
+    "prisma": "^6.19.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.3"
   }

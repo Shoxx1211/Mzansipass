@@ -1,36 +1,47 @@
 @import "tailwindcss";
 
 /* ===============================
-   ROOT DESIGN TOKENS (SYSTEM)
+   🌍 ROOT DESIGN TOKENS (PULSE)
 ================================ */
 :root {
-  --bg: #000;
-  --fg: #fff;
+  --bg: #000000;
+  --fg: #ffffff;
 
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --surface: rgba(255,255,255,0.04);
+  --surface-strong: rgba(255,255,255,0.08);
 
-  --blue: #3b82f6;
-  --purple: #a855f7;
+  --glass-bg: rgba(255,255,255,0.05);
+  --glass-border: rgba(255,255,255,0.08);
+
+  /* 🔥 PULSE BRAND */
+  --pulse-blue: #3b82f6;
+  --pulse-purple: #a855f7;
+  --pulse-glow: #60a5fa;
+
   --emerald: #10b981;
+  --amber: #f59e0b;
+  --red: #ef4444;
 
   --radius-xl: 1.5rem;
   --radius-2xl: 2rem;
 
-  --blur-xl: 24px;
+  --blur-xl: 18px;
 
-  --shadow-soft: 0 10px 30px rgba(0,0,0,0.4);
-  --shadow-deep: 0 20px 60px rgba(0,0,0,0.6);
+  --shadow-soft: 0 10px 30px rgba(0,0,0,0.35);
+  --shadow-deep: 0 20px 60px rgba(0,0,0,0.55);
+
+  --transition-fast: 120ms ease;
+  --transition-base: 220ms ease;
 }
 
 /* ===============================
-   GLOBAL BASE (PERFORMANCE + UX)
+   ⚙️ GLOBAL BASE
 ================================ */
 html, body {
   margin: 0;
   padding: 0;
 
-  background-color: var(--bg);
+  background: var(--bg);
   color: var(--fg);
 
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -44,34 +55,32 @@ html, body {
   height: 100%;
 }
 
-/* Prevent tap highlight */
 * {
   -webkit-tap-highlight-color: transparent;
   box-sizing: border-box;
 }
 
-/* Improve rendering */
 img, video {
   max-width: 100%;
   display: block;
 }
 
 /* ===============================
-   APP BACKGROUND (DEPTH SYSTEM)
+   🌌 APP BACKGROUND (PULSE DEPTH)
 ================================ */
 .app-bg {
   min-height: 100vh;
 
   background:
-    radial-gradient(circle at 20% 20%, rgba(59,130,246,0.15), transparent 40%),
-    radial-gradient(circle at 80% 0%, rgba(168,85,247,0.12), transparent 40%),
+    radial-gradient(circle at 20% 20%, rgba(59,130,246,0.12), transparent 40%),
+    radial-gradient(circle at 80% 0%, rgba(168,85,247,0.10), transparent 45%),
     var(--bg);
 
   background-attachment: fixed;
 }
 
 /* ===============================
-   GLASS SYSTEM (CORE DESIGN)
+   🧊 GLASS SYSTEM
 ================================ */
 .glass {
   background: var(--glass-bg);
@@ -81,32 +90,39 @@ img, video {
 
   border: 1px solid var(--glass-border);
 
-  box-shadow: var(--shadow-deep);
+  box-shadow: var(--shadow-soft);
 
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform var(--transition-base),
+              box-shadow var(--transition-base);
 
   will-change: transform;
 }
 
 .glass:hover {
   transform: translateY(-2px);
+  box-shadow: var(--shadow-deep);
+}
+
+/* fallback */
+@supports not (backdrop-filter: blur(10px)) {
+  .glass {
+    background: rgba(20,20,20,0.9);
+  }
 }
 
 /* ===============================
-   BUTTON SYSTEM (PREMIUM)
+   🔘 BUTTON SYSTEM
 ================================ */
 .btn-primary {
-  background: linear-gradient(135deg, var(--blue), #6366f1);
+  background: linear-gradient(135deg, var(--pulse-blue), #6366f1);
   color: white;
   font-weight: 700;
 
   border-radius: var(--radius-xl);
 
-  box-shadow: 0 10px 30px rgba(59,130,246,0.25);
+  box-shadow: 0 10px 25px rgba(59,130,246,0.25);
 
-  transition: all 0.25s ease;
-
-  will-change: transform;
+  transition: all var(--transition-base);
 }
 
 .btn-primary:hover {
@@ -115,11 +131,11 @@ img, video {
 }
 
 .btn-primary:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
 }
 
 /* ===============================
-   CARD SYSTEM (HIGH-END UI)
+   🧠 CARD SYSTEM (PULSE IDENTITY)
 ================================ */
 .card-glow {
   position: relative;
@@ -134,19 +150,43 @@ img, video {
 
   background: linear-gradient(
     120deg,
-    var(--blue),
-    var(--purple),
+    var(--pulse-blue),
+    var(--pulse-purple),
     #06b6d4
   );
 
-  filter: blur(20px);
-  opacity: 0.35;
+  filter: blur(18px);
+  opacity: 0.25;
 
   z-index: -1;
 }
 
 /* ===============================
-   CARD GLOSS (APPLE STYLE)
+   🔥 ACTIVE TRIP STATE
+================================ */
+.trip-active {
+  border: 1px solid rgba(59,130,246,0.4);
+  box-shadow: 0 0 25px rgba(59,130,246,0.25);
+}
+
+/* ===============================
+   💓 PULSE ANIMATION (BRAND CORE)
+================================ */
+.pulse-rhythm {
+  animation: pulseRhythm 2.2s infinite ease-in-out;
+}
+
+@keyframes pulseRhythm {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(96,165,250,0.15);
+  }
+  50% {
+    box-shadow: 0 0 35px rgba(96,165,250,0.45);
+  }
+}
+
+/* ===============================
+   ✨ GLOSS
 ================================ */
 .card-gloss {
   position: absolute;
@@ -155,7 +195,7 @@ img, video {
   background: linear-gradient(
     120deg,
     transparent 40%,
-    rgba(255, 255, 255, 0.15),
+    rgba(255,255,255,0.12),
     transparent 60%
   );
 
@@ -163,27 +203,12 @@ img, video {
 }
 
 /* ===============================
-   REFLECTION EFFECT
-================================ */
-.reflection {
-  position: absolute;
-  inset: 0;
-
-  background: radial-gradient(
-    circle at top,
-    rgba(255,255,255,0.15),
-    transparent 60%
-  );
-}
-
-/* ===============================
-   INPUT SYSTEM (CLEAN)
+   ✍️ INPUT SYSTEM
 ================================ */
 input {
   outline: none;
   border: none;
   color: white;
-
   background: transparent;
 }
 
@@ -191,23 +216,22 @@ input::placeholder {
   color: rgba(255,255,255,0.4);
 }
 
-/* Autofill fix */
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 100px black inset;
   -webkit-text-fill-color: white;
 }
 
 /* ===============================
-   ANIMATIONS (OPTIMIZED)
+   🎬 MICRO-INTERACTIONS
 ================================ */
 .fade-in {
-  animation: fadeIn 0.4s ease forwards;
+  animation: fadeIn 0.35s ease forwards;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -215,52 +239,41 @@ input:-webkit-autofill {
   }
 }
 
-/* FLOATING CARD */
-.float {
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
 /* ===============================
-   LIVE PULSE GLOW (SIGNATURE)
+   🔥 STATUS COLORS
 ================================ */
-.pulse-glow {
-  animation: pulseGlow 2s infinite ease-in-out;
+.status-live {
+  color: var(--emerald);
 }
 
-@keyframes pulseGlow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(59,130,246,0.2);
-  }
-  50% {
-    box-shadow: 0 0 60px rgba(59,130,246,0.55);
-  }
+.status-warning {
+  color: var(--amber);
+}
+
+.status-danger {
+  color: var(--red);
 }
 
 /* ===============================
-   PWA INSTALL UI
+   📲 INSTALL BANNER (PULSE)
 ================================ */
 .install-banner {
   position: fixed;
-  bottom: calc(20px + env(safe-area-inset-bottom));
+  bottom: calc(16px + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%);
 
-  width: calc(100% - 40px);
+  width: calc(100% - 32px);
   max-width: 420px;
 
   padding: 14px 18px;
 
   border-radius: var(--radius-xl);
 
-  background: rgba(20, 20, 20, 0.85);
-  backdrop-filter: blur(20px);
+  background: rgba(20,20,20,0.95);
+  backdrop-filter: blur(16px);
 
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.08);
 
   display: flex;
   justify-content: space-between;
@@ -270,7 +283,7 @@ input:-webkit-autofill {
 }
 
 .install-btn {
-  background: var(--blue);
+  background: var(--pulse-blue);
   padding: 8px 14px;
   border-radius: 999px;
   font-size: 12px;
@@ -278,19 +291,18 @@ input:-webkit-autofill {
 }
 
 /* ===============================
-   SCROLL SYSTEM
+   📜 SCROLL
 ================================ */
 ::-webkit-scrollbar {
   display: none;
 }
 
-/* Enable smooth scroll where needed */
 html {
   scroll-behavior: smooth;
 }
 
 /* ===============================
-   PERFORMANCE OPTIMIZATIONS
+   ⚡ PERFORMANCE LAYER
 ================================ */
 .glass,
 .btn-primary,
@@ -298,15 +310,28 @@ html {
   will-change: transform, opacity;
 }
 
-/* Prevent layout thrashing */
 * {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
 
 /* ===============================
-   MOBILE SAFE AREA SUPPORT
+   📱 SAFE AREA
 ================================ */
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ===============================
+   🔋 LOW POWER MODE
+================================ */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .glass {
+    backdrop-filter: none;
+  }
 }

@@ -1,10 +1,10 @@
 // services/geminiService.ts
 
 import { GoogleGenAI, Type } from "@google/genai";
-import type { TripData, TransitNetwork, IssueReport } from "../types";
+import type { TripData, TransitNetwork, IssueReport, Location } from "../types";
 
 // ===============================
-// INIT (SAFE)
+// INIT
 // ===============================
 const ai = new GoogleGenAI({
   apiKey: import.meta.env.VITE_API_KEY
@@ -15,11 +15,12 @@ const ai = new GoogleGenAI({
 // ===============================
 const CONFIG = {
   TIMEOUT_MS: 5000,
-  RETRIES: 2
+  RETRIES: 2,
+  ENABLE_AI: true // 🔥 kill switch for production safety
 };
 
 // ===============================
-// GENERIC RETRY + TIMEOUT WRAPPER
+// UTILS
 // ===============================
 const withTimeout = async <T>(
   promise: Promise<T>,
@@ -49,9 +50,6 @@ const withRetry = async <T>(
   throw lastError;
 };
 
-// ===============================
-// SAFE JSON PARSER
-// ===============================
 const safeParse = (text: string) => {
   try {
     return JSON.parse(text);
@@ -61,147 +59,134 @@ const safeParse = (text: string) => {
 };
 
 // ===============================
-// FALLBACK LOGIC (VERY IMPORTANT)
+// 🔥 PRE-TRIP ASSISTANT (NEW CORE)
 // ===============================
-const basicTripHeuristics = (trip: TripData) => {
-  const duration =
-    ((trip.endTime || Date.now()) - trip.startTime) / 60000;
-
-  return {
-    isFastest: duration < 30,
-    isCheapest: trip.fare < 20,
-    isBest: true,
-    isIntegrated: false,
-    integratedNetworks: [trip.network as TransitNetwork]
-  };
-};
-
-// ===============================
-// TRIP ANALYSIS (PRODUCTION)
-// ===============================
-export const getDetailedTripAnalysis = async (
-  trip: TripData
+export const getTripRecommendation = async (
+  start: Location,
+  end: Location,
+  estimatedDistance: number
 ) => {
-  const duration = Math.floor(
-    ((trip.endTime || Date.now()) - trip.startTime) / 60000
-  );
+  if (!CONFIG.ENABLE_AI) return null;
 
   const prompt = `
-You are MzansiPass AI — a South African transport intelligence system.
+You are MzansiPass AI — a South African commuter assistant.
 
-Analyze this trip realistically:
+User trip:
+Start: (${start.lat}, ${start.lng})
+End: (${end.lat}, ${end.lng})
+Distance: ${estimatedDistance.toFixed(2)} km
 
-Trip:
-- Network: ${trip.network}
-- Cost: R${trip.fare.toFixed(2)}
-- Distance: ${trip.distance.toFixed(2)} km
-- Duration: ${duration} minutes
+Decide:
+- Best transport mode
+- Estimated fare range (ZAR)
+- Short reasoning
 
-Context:
-- Taxi = flexible, often fastest in traffic
-- Gautrain = fastest long-distance, expensive
-- Metrorail = cheapest, unreliable
-- BRT = structured but slower
+Rules:
+- Taxi: flexible, common
+- Gautrain: fastest but expensive
+- Metrorail: cheapest, unreliable
+- BRT: structured
 
-Return STRICT JSON ONLY:
+Return STRICT JSON:
 {
-  "feedback": "max 12 words",
-  "isCheapest": boolean,
-  "isFastest": boolean,
-  "isBest": boolean,
-  "isIntegrated": boolean,
-  "integratedNetworks": string[],
-  "gautrainSubMode": "Train" | "Bus" | "Train + Feeder Bus" | null,
-  "alternatives": {
-    "faster": { "network": "string", "diffMinutes": number } | null,
-    "cheaper": { "network": "string", "diffFare": number } | null
-  }
+  "mode": "Taxi" | "Gautrain" | "Metrorail" | "Rea Vaya",
+  "estimatedFare": number,
+  "reason": "max 10 words"
 }
 `;
 
   try {
-    const response = await withRetry(() =>
+    const res = await withRetry(() =>
       withTimeout(
         ai.models.generateContent({
           model: "gemini-3-flash-preview",
           contents: prompt,
-          config: {
-            responseMimeType: "application/json",
-            responseSchema: {
-              type: Type.OBJECT,
-              properties: {
-                feedback: { type: Type.STRING },
-                isCheapest: { type: Type.BOOLEAN },
-                isFastest: { type: Type.BOOLEAN },
-                isBest: { type: Type.BOOLEAN },
-                isIntegrated: { type: Type.BOOLEAN },
-                integratedNetworks: {
-                  type: Type.ARRAY,
-                  items: { type: Type.STRING }
-                },
-                gautrainSubMode: {
-                  type: Type.STRING,
-                  nullable: true
-                },
-                alternatives: {
-                  type: Type.OBJECT,
-                  properties: {
-                    faster: {
-                      type: Type.OBJECT,
-                      nullable: true,
-                      properties: {
-                        network: { type: Type.STRING },
-                        diffMinutes: { type: Type.NUMBER }
-                      }
-                    },
-                    cheaper: {
-                      type: Type.OBJECT,
-                      nullable: true,
-                      properties: {
-                        network: { type: Type.STRING },
-                        diffFare: { type: Type.NUMBER }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
+          config: { responseMimeType: "application/json" }
         })
       )
     );
 
-    const result = safeParse(response.text || "");
+    const parsed = safeParse(res.text || "");
 
-    if (!result) throw new Error("Invalid AI JSON");
+    if (!parsed) throw new Error("Invalid JSON");
 
+    return parsed;
+  } catch {
+    // 🔥 fallback logic (VERY IMPORTANT)
     return {
-      feedback:
-        result.feedback ||
-        "Efficient commute. Minor optimizations possible.",
-      isCheapest: !!result.isCheapest,
-      isFastest: !!result.isFastest,
-      isBest: !!result.isBest,
-      isIntegrated: !!result.isIntegrated,
-      integratedNetworks:
-        result.integratedNetworks || [trip.network],
-      gautrainSubMode: result.gautrainSubMode || undefined,
-      alternatives: result.alternatives || {}
-    };
-  } catch (error) {
-    console.warn("⚠️ AI Trip Analysis Failed:", error);
-
-    const fallback = basicTripHeuristics(trip);
-
-    return {
-      feedback: "AI offline. Using smart fallback insights.",
-      ...fallback
+      mode: estimatedDistance > 20 ? "Gautrain" : "Taxi",
+      estimatedFare: estimatedDistance * 1.5,
+      reason: "Fallback estimate"
     };
   }
 };
 
 // ===============================
-// NETWORK PULSE SUMMARY
+// TRIP ANALYSIS (UPGRADED)
+// ===============================
+export const getDetailedTripAnalysis = async (
+  trip: TripData
+) => {
+  const duration =
+    ((trip.endTime || Date.now()) - trip.startTime) / 60000;
+
+  // 🔥 Skip AI if trip too small (cost control)
+  if (trip.distance < 1) {
+    return {
+      feedback: "Short trip. Minimal optimisation needed.",
+      isBest: true,
+      isFastest: true,
+      isCheapest: true,
+      isIntegrated: false,
+      integratedNetworks: [trip.network]
+    };
+  }
+
+  const prompt = `
+Analyze this South African commute:
+
+Network: ${trip.network}
+Cost: R${trip.fare}
+Distance: ${trip.distance} km
+Duration: ${duration} min
+
+Return STRICT JSON:
+{
+  "feedback": "max 12 words",
+  "isBest": boolean,
+  "isFastest": boolean,
+  "isCheapest": boolean
+}
+`;
+
+  try {
+    const res = await withRetry(() =>
+      withTimeout(
+        ai.models.generateContent({
+          model: "gemini-3-flash-preview",
+          contents: prompt,
+          config: { responseMimeType: "application/json" }
+        })
+      )
+    );
+
+    const parsed = safeParse(res.text || "");
+
+    if (!parsed) throw new Error();
+
+    return parsed;
+  } catch {
+    return {
+      feedback: "Smart fallback analysis applied.",
+      isBest: true,
+      isFastest: false,
+      isCheapest: false
+    };
+  }
+};
+
+// ===============================
+// NETWORK PULSE
 // ===============================
 export const getNetworkPulseSummary = async (
   network: string,
@@ -209,78 +194,52 @@ export const getNetworkPulseSummary = async (
 ): Promise<string> => {
   if (!reports.length) return "No recent commuter reports.";
 
-  const recentReports = reports.filter(
-    r => Date.now() - r.timestamp < 60 * 60 * 1000
+  const recent = reports.filter(
+    r => Date.now() - r.timestamp < 3600000
   );
 
-  if (!recentReports.length)
-    return "Operating normally according to commuters.";
-
-  const prompt = `
-Summarize commuter reports for ${network} in South Africa.
-
-Data:
-${JSON.stringify(recentReports)}
-
-Rules:
-- Max 10 words
-- Human-friendly
-- Realistic
-
-Return ONLY text.
-`;
+  if (!recent.length) return "Operating normally.";
 
   try {
-    const response = await withRetry(() =>
-      withTimeout(
-        ai.models.generateContent({
-          model: "gemini-3-flash-preview",
-          contents: prompt
-        })
-      )
+    const res = await withTimeout(
+      ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: `Summarise issues for ${network} in 10 words max`
+      })
     );
 
-    return response.text?.trim() || "Live data updated.";
+    return res.text?.trim() || "Live updates available.";
   } catch {
-    return "Live commuter data updated.";
+    return "Live commuter updates available.";
   }
 };
 
 // ===============================
-// LIGHTWEIGHT MODE CLASSIFIER
+// MODE REFINEMENT (SMART GATING)
 // ===============================
 export const refineTransportDetection = async (
   speed: number,
   distance: number
 ): Promise<string | null> => {
-  // 🚀 First use local logic (FASTER + FREE)
+
+  // 🔥 Strong local logic first
   if (speed < 6) return "Walking";
   if (speed > 70) return "Train";
-  if (speed > 20 && speed <= 70) return "Taxi";
+  if (speed > 20) return "Taxi";
 
-  // 🔥 Only fallback to AI if uncertain
+  // 🚫 Avoid AI spam
+  if (distance < 1) return null;
+
   try {
-    const prompt = `
-Classify transport mode in South Africa.
-
-Speed: ${speed} km/h
-Distance: ${distance} km
-
-Options:
-Taxi, Bus, Train, Walking
-
-Return ONE word only.
-`;
-
-    const response = await withTimeout(
+    const res = await withTimeout(
       ai.models.generateContent({
         model: "gemini-3-flash-preview",
-        contents: prompt
+        contents: `Classify transport for speed ${speed}`
       }),
       3000
     );
 
-    return response.text?.trim() || null;
+    return res.text?.trim() || null;
   } catch {
     return null;
   }

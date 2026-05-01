@@ -1,69 +1,117 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-
-// 👇 IMPORTANT: import WITHOUT types conflict
 import { VitePWA } from "vite-plugin-pwa";
+import basicSsl from "@vitejs/plugin-basic-ssl";
 
-export default defineConfig(() => {
-  return {
-    plugins: [
-      react(),
+export default defineConfig({
+  plugins: [
+    react(),
 
-      // 💎 PWA (typed safely)
-      VitePWA({
-        registerType: "autoUpdate",
+    // 🔐 Enables HTTPS (REQUIRED for GPS)
+    basicSsl(),
 
-        manifest: {
-          name: "MzansiPass",
-          short_name: "Mzansi",
-          description: "Smart commuter tracking for South Africa",
-          theme_color: "#2563eb",
-          background_color: "#0f172a",
-          display: "standalone",
+    VitePWA({
+      registerType: "autoUpdate",
 
-          icons: [
-            {
-              src: "/icon-192.png",
-              sizes: "192x192",
-              type: "image/png"
-            },
-            {
-              src: "/icon-512.png",
-              sizes: "512x512",
-              type: "image/png"
-            }
-          ]
-        },
+      devOptions: {
+        enabled: true
+      },
 
-        workbox: {
-          runtimeCaching: [
-            {
-              urlPattern: /^https:\/\/.*/,
-              handler: "NetworkFirst",
-              options: {
-                cacheName: "api-cache",
-                expiration: {
-                  maxEntries: 50,
-                  maxAgeSeconds: 60 * 60 * 24
-                }
+      manifest: {
+        id: "/",
+        name: "MzansiPass",
+        short_name: "Mzansi",
+        description: "AI-powered commuter intelligence",
+
+        theme_color: "#0f172a",
+        background_color: "#000000",
+
+        display: "standalone",
+        orientation: "portrait",
+
+        scope: "/",
+        start_url: "/",
+
+        icons: [
+          {
+            src: "/icon-192.png",
+            sizes: "192x192",
+            type: "image/png"
+          },
+          {
+            src: "/icon-512.png",
+            sizes: "512x512",
+            type: "image/png"
+          },
+          {
+            src: "/icon-512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any maskable"
+          }
+        ]
+      },
+
+      workbox: {
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
+
+        globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
+
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/.*/i,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "api-cache",
+              networkTimeoutSeconds: 5,
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
               }
             }
-          ]
-        }
-      }) as any // 🔥 FORCE FIX TYPE CONFLICT
-    ],
+          },
+          {
+            urlPattern: /\.(png|jpg|jpeg|svg|gif|webp)$/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "image-cache",
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 7
+              }
+            }
+          }
+        ]
+      },
 
-    resolve: {
-      dedupe: ["react", "react-dom"]
-    },
+      injectRegister: "auto"
+    })
+  ],
 
-    server: {
-      port: 5173,
-      strictPort: true
-    },
+  resolve: {
+    dedupe: ["react", "react-dom"]
+  },
 
-    preview: {
-      port: 4173
-    }
-  };
+  // 🔥 THIS IS THE IMPORTANT FIX
+  server: {
+    port: 5173,
+    strictPort: true,
+    https: {} // ✅ FIXED (was `true`)
+  },
+
+  preview: {
+    port: 4173,
+    https: {} // ✅ also needed for preview
+  },
+
+  build: {
+    target: "esnext",
+    sourcemap: false,
+    chunkSizeWarningLimit: 1000
+  }
 });

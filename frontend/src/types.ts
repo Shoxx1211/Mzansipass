@@ -1,32 +1,33 @@
 // ===============================
-// TRIP STATE (STRICT + SAFE)
+// 🧠 CORE ENUM-LIKE CONSTANTS
 // ===============================
+
+// ---------------- TRIP STATE ----------------
 export const TripState = {
   IDLE: "IDLE",
+  PLANNING: "PLANNING",
   ACTIVE: "ACTIVE",
-  COMPLETED: "COMPLETED"
+  COMPLETED: "COMPLETED",
+  VERIFIED: "VERIFIED"
 } as const;
 
 export type TripState =
   typeof TripState[keyof typeof TripState];
 
-// ===============================
-// APP NAVIGATION TABS (🔥 REQUIRED)
-// ===============================
+
+// ---------------- NAVIGATION ----------------
 export const TabType = {
-  home: 'home',
-  pulse: 'pulse',
-  stats: 'stats',
-  settings: 'settings'
+  home: "home",
+  pulse: "pulse",
+  stats: "stats",
+  settings: "settings"
 } as const;
 
 export type TabType =
   typeof TabType[keyof typeof TabType];
-  
-// ===============================
-// TRANSIT NETWORKS (SINGLE SOURCE OF TRUTH)
-// ⚠️ MUST MATCH constants.ts EXACTLY
-// ===============================
+
+
+// ---------------- TRANSIT NETWORKS ----------------
 export const TransitNetwork = {
   Taxi: "Taxi",
   Gautrain: "Gautrain",
@@ -41,7 +42,7 @@ export type TransitNetwork =
 
 
 // ===============================
-// ROUTE TYPES
+// 🚦 ROUTE SYSTEM
 // ===============================
 export type RouteType =
   | "Rail"
@@ -52,7 +53,7 @@ export type RouteType =
 
 
 // ===============================
-// SEVERITY (SYSTEM HEALTH)
+// 🚨 SYSTEM HEALTH / STATUS
 // ===============================
 export type Severity =
   | "Operational"
@@ -61,7 +62,7 @@ export type Severity =
 
 
 // ===============================
-// PULSE REPORT TYPES
+// 📡 CROWD REPORT TYPES (PULSE)
 // ===============================
 export const ReportType = {
   Smooth: "Smooth",
@@ -76,25 +77,28 @@ export type ReportType =
 
 
 // ===============================
-// LOCATION (CORE SENSOR DATA)
+// 📍 LOCATION (SENSOR LAYER)
 // ===============================
 export interface Location {
   lat: number;
   lng: number;
 
-  accuracy?: number;     // meters
-  timestamp?: number;    // ms
+  accuracy?: number;
 
-  // 🔥 derived / optional
-  speed?: number;        // km/h
+  timestamp?: number;
+
+  // 🔥 MOVEMENT INTELLIGENCE
+  speed?: number;
+  heading?: number;
 }
 
 
 // ===============================
-// TRANSIT ROUTE (BASE MODEL)
+// 🗺️ TRANSIT ROUTE (BASE MODEL)
 // ===============================
 export interface TransitRoute {
   id: string;
+
   network: TransitNetwork;
 
   code: string;
@@ -112,13 +116,12 @@ export interface TransitRoute {
 
   estResolution?: string;
 
-  // 🔥 dynamic systems (taxis, future routing)
   isDynamic?: boolean;
 }
 
 
 // ===============================
-// EXTENDED ROUTE (INTELLIGENCE LAYER)
+// 🧠 INTELLIGENT ROUTE (AI LAYER)
 // ===============================
 export interface IntelligentRoute extends TransitRoute {
   coordinates?: {
@@ -126,71 +129,135 @@ export interface IntelligentRoute extends TransitRoute {
     lng: number;
   }[];
 
-  avgSpeed?: number;           // km/h
-  reliabilityScore?: number;   // 0–1
-  peakHours?: number[];        // 0–23
+  avgSpeed?: number;
+
+  reliabilityScore?: number;
+
+  peakHours?: number[];
+
+  // 🔥 AI EXTENSIONS
+  demandScore?: number;
+  congestionLevel?: number;
+  lastVerified?: number;
 }
 
 
 // ===============================
-// TRANSPORT DETECTION RESULT
+// 🚶‍♂️ TRANSPORT DETECTION ENGINE
 // ===============================
 export interface DetectionResult {
   mode: TransitNetwork | "Walking" | "Unknown";
+
   confidence: number;
 
   speed: number;
 
   matchedRoute?: string;
+
+  stopFrequency?: number;
+  accelerationPattern?: number;
 }
 
 
 // ===============================
-// TRIP DATA (CORE DOMAIN OBJECT)
+// 🎯 PLANNED TRIP
+// ===============================
+export interface PlannedTrip {
+  id: string;
+
+  startLocation?: Location;
+
+  destination: string;
+
+  network: TransitNetwork;
+
+  estimatedDistance?: number;
+
+  estimatedDuration?: number;
+
+  estimatedFare: number;
+
+  createdAt: number;
+}
+
+
+// ===============================
+// 🚕 TRIP DATA (CORE DOMAIN)
 // ===============================
 export interface TripData {
   id: string;
 
   network: TransitNetwork;
 
+  // ---------------- TIMING ----------------
   startTime: number;
+
   endTime?: number;
 
-  distance: number;     // km
-  duration?: number;    // seconds
+  duration?: number;
+
+  // ---------------- DISTANCE ----------------
+  distance: number;
+
+  // ---------------- FARE SYSTEM ----------------
+  estimatedFare?: number;
+
+  actualFare?: number;
 
   fare: number;
 
+  fareAccuracy?: number;
+
+  // ---------------- LOCATIONS ----------------
   startLocation?: Location;
+
   endLocation?: Location;
+
+  // 🔥 PREMIUM ELITE BACKGROUND TRACKING
+  lastTrackedLocation?: Location;
+
+  destination?: string;
 
   matchedRoute?: string;
 
-  // 🔥 movement intelligence
+  // ---------------- MOVEMENT ----------------
   avgSpeed?: number;
+
   maxSpeed?: number;
 
-  // 🔥 AI layer
-  aiFeedback?: string;
+  stopsDetected?: number;
+
+  // ---------------- AI LAYER ----------------
   aiTransportGuess?: TransitNetwork;
 
-  // 🔥 confidence scoring
-  confidenceScore?: number;
+  aiConfidence?: number;
 
-  // 🔥 UI helpers
-  isAnalyzing?: boolean;
+  aiInsights?: string;
+
+  // ---------------- BEHAVIOUR ----------------
+  isRecurring?: boolean;
+
+  tripPatternId?: string;
+
+  // ---------------- UX ----------------
+  isVerified?: boolean;
+
+  needsVerification?: boolean;
 }
 
 
 // ===============================
-// TRIP SUMMARY (ENGINE OUTPUT)
+// 📊 TRIP SUMMARY
 // ===============================
 export interface TripSummary {
   fare: number;
+
   distance: number;
+
   duration: number;
 
   network: TransitNetwork | string;
+
   route: string;
 
   confidence?: number;
@@ -198,46 +265,87 @@ export interface TripSummary {
 
 
 // ===============================
-// USER PROFILE
+// 👤 USER PROFILE
 // ===============================
 export interface UserProfile {
   email: string;
+
   name?: string;
+
+  // 🔥 COMMUTER INTELLIGENCE
+  homeArea?: string;
+
+  workArea?: string;
+
+  primaryTransport?: TransitNetwork;
+
+  commuteStartTime?: string;
+
+  commuteEndTime?: string;
+
+  workDays?: number[];
+
+  monthlyTransportBudget?: number;
+
+  prefersCheapest?: boolean;
+
+  prefersFastest?: boolean;
 }
 
 
 // ===============================
-// PRIVACY SETTINGS
+// 🔐 PRIVACY SETTINGS
 // ===============================
 export interface PrivacySettings {
   shareLocation: boolean;
+
   shareTrips: boolean;
+
+  shareAnalytics?: boolean;
+
+  acceptedTerms?: boolean;
 }
 
 
 // ===============================
-// TRAVEL STATS
+// 📈 TRAVEL STATS
 // ===============================
 export interface TravelStats {
   totalTrips: number;
+
   totalDistance: number;
+
   totalSpend: number;
 
   avgCostPerKm?: number;
+
   avgTripDuration?: number;
+
+  mostUsedNetwork?: TransitNetwork;
+
+  // 🔥 INSIGHTS
+  mostCommonRoute?: string;
+
+  monthlySpend?: number;
+
+  fareAccuracyAvg?: number;
 }
 
 
 // ===============================
-// PULSE REPORT (CROWD INTELLIGENCE)
+// 📡 PULSE REPORT
 // ===============================
 export interface IssueReport {
   id: string;
 
   network: TransitNetwork;
+
+  routeId?: string;
+
   routeCode?: string;
 
   type: ReportType;
+
   description?: string;
 
   timestamp: number;
@@ -245,15 +353,25 @@ export interface IssueReport {
   location?: Location;
 
   confidence?: number;
+
+  // 🔥 SOCIAL SIGNALS
+  upvotes?: number;
+
+  downvotes?: number;
 }
 
 
 // ===============================
-// MOVEMENT META (LOCATION ENGINE)
+// 🧠 MOVEMENT META
 // ===============================
 export interface MovementMeta {
   speed: number;
+
   isMoving: boolean;
+
   isWalking: boolean;
+
   confidence: number;
+
+  likelyTransport?: TransitNetwork | "Walking";
 }

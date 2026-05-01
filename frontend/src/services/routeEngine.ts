@@ -17,19 +17,25 @@ type Route = {
 
 export type RouteMatchResult = {
   route: Route | null;
-  distance: number;        // km
-  confidence: number;      // 0 → 1
-  isOnRoute: boolean;      // 🔥 KEY SIGNAL
+  distance: number;
+  confidence: number;
+  isOnRoute: boolean;
+};
+
+export type RouteEstimateResult = {
+  distance: number;     // km
+  method: "api" | "route" | "straight"; // 🔥 transparency
 };
 
 // ---------------- ENGINE ----------------
 export class RouteEngine {
 
-  // 🔥 Tunable thresholds (VERY IMPORTANT)
-  private static MAX_MATCH_DISTANCE_KM = 0.3;   // 300m
-  private static STRONG_MATCH_DISTANCE_KM = 0.1; // 100m
+  private static MAX_MATCH_DISTANCE_KM = 0.3;
+  private static STRONG_MATCH_DISTANCE_KM = 0.1;
 
-  // ---------------- MAIN ----------------
+  // ===============================
+  // 🔍 ROUTE MATCHING (UNCHANGED CORE)
+  // ===============================
   static findClosestRoute(userLoc: Location): RouteMatchResult {
     let bestMatch: Route | null = null;
     let bestDistance = Infinity;
@@ -45,7 +51,6 @@ export class RouteEngine {
       }
     }
 
-    // 🚫 No route nearby
     if (!bestMatch || bestDistance > this.MAX_MATCH_DISTANCE_KM) {
       return {
         route: null,
@@ -65,15 +70,132 @@ export class RouteEngine {
     };
   }
 
-  // ---------------- CORE DISTANCE ----------------
+  // ===============================
+  // 🔥 ROUTE DISTANCE ESTIMATION (CRITICAL FEATURE)
+  // ===============================
+  static async estimateRouteDistance(
+    start: Location,
+    end: Location
+  ): Promise<number> {
+
+    // 1️⃣ Try API (future)
+    const apiDistance = await this.tryApiDistance(start, end);
+    if (apiDistance) {
+      return apiDistance;
+    }
+
+    // 2️⃣ Try route-based estimation
+    const routeDistance = this.estimateUsingRoute(start, end);
+    if (routeDistance) {
+      return routeDistance;
+    }
+
+    // 3️⃣ Final fallback (straight line)
+    return this.distance(start, end);
+  }
+
+  // ===============================
+  // 🌐 API DISTANCE (FUTURE READY)
+  // ===============================
+  private static async tryApiDistance(
+    start: Location,
+    end: Location
+  ): Promise<number | null> {
+    try {
+      // 🔥 Placeholder — you plug backend later
+      const res = await fetch(
+        `/api/route?start=${start.lat},${start.lng}&end=${end.lat},${end.lng}`
+      );
+
+      if (!res.ok) return null;
+
+      const data = await res.json();
+
+      if (data?.distance) {
+        console.log("🌐 API route distance:", data.distance);
+        return data.distance;
+      }
+
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  // ===============================
+  // 🛣️ ROUTE-BASED ESTIMATION
+  // ===============================
+  private static estimateUsingRoute(
+    start: Location,
+    end: Location
+  ): number | null {
+
+    const startMatch = this.findClosestRoute(start);
+    const endMatch = this.findClosestRoute(end);
+
+    // Must be on same route
+    if (
+      !startMatch.route ||
+      !endMatch.route ||
+      startMatch.route.name !== endMatch.route.name
+    ) {
+      return null;
+    }
+
+    const coords = startMatch.route.coordinates;
+    if (!coords || coords.length < 2) return null;
+
+    // 🔥 Find closest indices
+    let startIdx = 0;
+    let endIdx = 0;
+
+    let minStartDist = Infinity;
+    let minEndDist = Infinity;
+
+    coords.forEach((point, i) => {
+      const dStart = this.distance(start, point);
+      const dEnd = this.distance(end, point);
+
+      if (dStart < minStartDist) {
+        minStartDist = dStart;
+        startIdx = i;
+      }
+
+      if (dEnd < minEndDist) {
+        minEndDist = dEnd;
+        endIdx = i;
+      }
+    });
+
+    // 🔥 Sum route segment distance
+    let distance = 0;
+
+    const step = startIdx < endIdx ? 1 : -1;
+
+    for (let i = startIdx; i !== endIdx; i += step) {
+      const a = coords[i];
+      const b = coords[i + step];
+
+      if (!b) break;
+
+      distance += this.distance(a, b);
+    }
+
+    console.log("🛣️ Route-based distance:", distance);
+
+    return distance > 0 ? distance : null;
+  }
+
+  // ===============================
+  // 📍 MIN DISTANCE TO ROUTE
+  // ===============================
   private static findMinDistanceToRoute(
     user: Location,
     coordinates: Location[]
   ): number {
     let minDist = Infinity;
 
-    // 🔥 Optimization: skip points (reduce CPU)
-    const STEP = Math.ceil(coordinates.length / 25); // max 25 checks
+    const STEP = Math.ceil(coordinates.length / 25);
 
     for (let i = 0; i < coordinates.length; i += STEP) {
       const dist = this.distance(user, coordinates[i]);
@@ -83,12 +205,13 @@ export class RouteEngine {
     return minDist;
   }
 
-  // ---------------- CONFIDENCE ----------------
+  // ===============================
+  // 🎯 CONFIDENCE
+  // ===============================
   private static calculateConfidence(distance: number): number {
     if (distance <= this.STRONG_MATCH_DISTANCE_KM) return 0.95;
 
     if (distance <= this.MAX_MATCH_DISTANCE_KM) {
-      // Linear decay
       return (
         1 -
         (distance - this.STRONG_MATCH_DISTANCE_KM) /
@@ -99,9 +222,11 @@ export class RouteEngine {
     return 0;
   }
 
-  // ---------------- DISTANCE (HAVERSINE) ----------------
+  // ===============================
+  // 📏 HAVERSINE
+  // ===============================
   private static distance(a: Location, b: Location): number {
-    const R = 6371; // km
+    const R = 6371;
 
     const dLat = (b.lat - a.lat) * (Math.PI / 180);
     const dLon = (b.lng - a.lng) * (Math.PI / 180);

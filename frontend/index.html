@@ -3,32 +3,49 @@
   <head>
     <meta charset="UTF-8" />
 
-    <!-- MOBILE -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- 📱 MOBILE -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
 
-    <!-- PWA -->
+    <!-- 🔥 PWA CORE -->
     <link rel="manifest" href="/manifest.webmanifest" />
-    <meta name="theme-color" content="#2563eb" />
+    <meta name="theme-color" content="#3b82f6" />
     <meta name="mobile-web-app-capable" content="yes" />
 
-    <!-- iOS -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="MzansiPass" />
+    <!-- 🍏 iOS APP MODE -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Pulse" />
 
-    <!-- ICONS -->
-    <link rel="icon" href="/icon-192.png" />
-    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <!-- 🧠 SEO -->
+    <meta
+      name="description"
+      content="Pulse – Feel the rhythm of your journey. Real-time transport intelligence across South Africa."
+    />
 
-    <!-- SEO -->
-    <meta name="description" content="MzansiPass - Smart commuter tracking across South Africa" />
+    <!-- 🔗 ICONS (UPDATED STRUCTURE) -->
+    <link rel="icon" href="/icons/pulse-192.png" />
+    <link rel="apple-touch-icon" href="/icons/pulse-192.png" />
 
-    <title>MzansiPass</title>
+    <!-- 🔥 SPLASH (iOS fallback experience) -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    <!-- 🧾 TITLE -->
+    <title>Pulse</title>
+
+    <!-- ⚡ PERFORMANCE -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
   </head>
 
   <body class="bg-black text-white">
     <div id="root"></div>
 
-    <!-- ✅ CORRECT ENTRY -->
+    <!-- ✅ ENTRY -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
