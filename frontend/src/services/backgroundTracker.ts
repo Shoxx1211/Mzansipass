@@ -3,22 +3,28 @@
 import { Geolocation } from "@capacitor/geolocation";
 import { Capacitor } from "@capacitor/core";
 
-// ===============================
+// ======================================================
 // 📍 LOCATION MODEL
-// ===============================
+// ======================================================
 export interface TrackerLocation {
   lat: number;
   lng: number;
+
   accuracy: number;
+
+  // 🔥 km/h
   speed: number;
+
   heading: number;
+
   altitude: number;
+
   timestamp: number;
 }
 
-// ===============================
-// 🚗 TRIP SESSION
-// ===============================
+// ======================================================
+// 🚗 ACTIVE SESSION
+// ======================================================
 export interface ActiveTripSession {
   active: boolean;
 
@@ -39,22 +45,23 @@ export interface ActiveTripSession {
   points: TrackerLocation[];
 }
 
-// ===============================
-// 💾 STORAGE KEYS
-// ===============================
+// ======================================================
+// 💾 STORAGE
+// ======================================================
 const STORAGE = {
   activeTrip: "pulse_active_trip",
   lastLocation: "pulse_last_location",
   trackingState: "pulse_tracking_state",
 };
 
-// ===============================
+// ======================================================
 // 🧠 TRACKER ENGINE
-// ===============================
+// ======================================================
 class BackgroundTrackerService {
-  // ===============================
+
+  // ======================================================
   // INTERNALS
-  // ===============================
+  // ======================================================
   private watchId: string | null = null;
 
   private subscribers: ((
@@ -68,93 +75,126 @@ class BackgroundTrackerService {
 
   private isTracking = false;
 
-  private currentTrip: ActiveTripSession | null = null;
+  private currentTrip:
+    ActiveTripSession | null = null;
 
-  private heartbeatInterval: number | null = null;
+  private heartbeatInterval:
+    number | null = null;
 
-  // ===============================
-  // 🚀 START TRACKING
-  // ===============================
+  // ======================================================
+  // 🚀 START
+  // ======================================================
   async start() {
+
+    // 🚫 PREVENT DOUBLE START
     if (this.isTracking) {
-      console.log("⚠️ Tracker already active");
+      console.log(
+        "⚠️ Tracker already running"
+      );
       return;
     }
 
     try {
-      console.log("🚀 Initializing premium tracker...");
 
-      // ===============================
-      // 🔐 REQUEST PERMISSIONS
-      // ===============================
-      const permissions = await Geolocation.requestPermissions();
+      console.log(
+        "🚀 Starting premium tracker..."
+      );
+
+      // ======================================================
+      // 🔐 PERMISSIONS
+      // ======================================================
+      const permissions =
+        await Geolocation.requestPermissions();
 
       if (
         permissions.location !== "granted" &&
         permissions.coarseLocation !== "granted"
       ) {
-        throw new Error("Location permission denied");
+        throw new Error(
+          "Location permission denied"
+        );
       }
 
-      // ===============================
-      // 🧠 RESTORE EXISTING SESSION
-      // ===============================
-      const restored = this.restoreTrip();
+      // ======================================================
+      // 🚗 ALWAYS START CLEAN SESSION
+      // ======================================================
+      this.initializeNewTrip();
 
-      if (restored) {
-        console.log("♻️ Restored previous trip session");
-      } else {
-        this.initializeNewTrip();
-      }
+      // ======================================================
+      // 📡 GPS WATCH
+      // ======================================================
+      this.watchId =
+        await Geolocation.watchPosition(
+          {
+            enableHighAccuracy: true,
 
-      // ===============================
-      // 📡 START GPS WATCHER
-      // ===============================
-      this.watchId = await Geolocation.watchPosition(
-        {
-          enableHighAccuracy: true,
+            timeout: 15000,
 
-          timeout: 15000,
+            maximumAge: 0,
 
-          maximumAge: 0,
+            minimumUpdateInterval: 3000,
+          },
 
-          minimumUpdateInterval: 3000,
-        },
+          (position, err) => {
 
-        async (position, err) => {
-          if (err) {
-            console.error("❌ GPS ERROR:", err);
-            return;
+            if (err) {
+              console.error(
+                "❌ GPS ERROR:",
+                err
+              );
+              return;
+            }
+
+            if (
+              !position ||
+              !this.currentTrip
+            ) {
+              return;
+            }
+
+            // ======================================================
+            // 🚫 INVALID GPS
+            // ======================================================
+            if (
+              !position.coords.latitude ||
+              !position.coords.longitude
+            ) {
+              return;
+            }
+
+            // ======================================================
+            // 🚀 SPEED FIX ENGINE
+            // ======================================================
+
+            // Native speed from GPS is VERY unreliable.
+            // We compute our own speed from distance/time.
+
+            const payload: TrackerLocation = {
+              lat: position.coords.latitude,
+
+              lng: position.coords.longitude,
+
+              accuracy:
+                position.coords.accuracy || 0,
+
+              speed: 0,
+
+              heading:
+                position.coords.heading || 0,
+
+              altitude:
+                position.coords.altitude || 0,
+
+              timestamp: position.timestamp,
+            };
+
+            this.processLocation(payload);
           }
+        );
 
-          if (!position || !this.currentTrip) return;
-
-          const payload: TrackerLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-
-            accuracy: position.coords.accuracy || 0,
-
-            speed: Math.max(
-              0,
-              (position.coords.speed || 0) * 3.6
-            ), // m/s → km/h
-
-            heading: position.coords.heading || 0,
-
-            altitude: position.coords.altitude || 0,
-
-            timestamp: position.timestamp,
-          };
-
-          this.processLocation(payload);
-        }
-      );
-
-      // ===============================
-      // ⏱️ HEARTBEAT ENGINE
-      // Keeps duration alive
-      // ===============================
+      // ======================================================
+      // ⏱️ HEARTBEAT
+      // ======================================================
       this.startHeartbeat();
 
       this.isTracking = true;
@@ -164,24 +204,37 @@ class BackgroundTrackerService {
         "true"
       );
 
-      console.log("✅ Premium background tracking active");
+      console.log(
+        "✅ Premium tracker active"
+      );
 
     } catch (error) {
-      console.error("❌ Tracker failed:", error);
+
+      console.error(
+        "❌ Tracker failed:",
+        error
+      );
+
     }
   }
 
-  // ===============================
-  // 🛑 STOP TRACKING
-  // ===============================
+  // ======================================================
+  // 🛑 STOP
+  // ======================================================
   async stop() {
+
     try {
-      console.log("🛑 Stopping tracker...");
+
+      console.log(
+        "🛑 Stopping tracker..."
+      );
 
       if (this.watchId) {
+
         await Geolocation.clearWatch({
           id: this.watchId,
         });
+
       }
 
       this.stopHeartbeat();
@@ -194,17 +247,27 @@ class BackgroundTrackerService {
         STORAGE.trackingState
       );
 
-      console.log("✅ Tracking stopped");
+      console.log(
+        "✅ Tracker stopped"
+      );
 
     } catch (error) {
-      console.error("❌ Stop tracking failed:", error);
+
+      console.error(
+        "❌ Stop failed:",
+        error
+      );
+
     }
   }
 
-  // ===============================
+  // ======================================================
   // 🧠 PROCESS LOCATION
-  // ===============================
-  private processLocation(location: TrackerLocation) {
+  // ======================================================
+  private processLocation(
+    location: TrackerLocation
+  ) {
+
     if (!this.currentTrip) return;
 
     const previous =
@@ -212,50 +275,117 @@ class BackgroundTrackerService {
         this.currentTrip.points.length - 1
       ];
 
-    // ===============================
-    // 📏 DISTANCE CALCULATION
-    // ===============================
-    if (previous) {
-      const distance = this.calculateDistance(
+    // ======================================================
+    // 📍 FIRST LOCATION
+    // ======================================================
+    if (!previous) {
+
+      this.currentTrip.points.push({
+        ...location,
+        speed: 0
+      });
+
+      this.persistTrip();
+
+      return;
+    }
+
+    // ======================================================
+    // ⏱️ TIME DELTA
+    // ======================================================
+    const timeSeconds =
+      (location.timestamp -
+        previous.timestamp) / 1000;
+
+    // 🚫 INVALID TIME
+    if (
+      timeSeconds <= 0 ||
+      timeSeconds > 120
+    ) {
+      return;
+    }
+
+    // ======================================================
+    // 📏 DISTANCE
+    // ======================================================
+    const distanceMeters =
+      this.calculateDistance(
         previous.lat,
         previous.lng,
         location.lat,
         location.lng
       );
 
-      // Ignore GPS drift
-      if (distance > 3) {
-        this.currentTrip.totalDistance += distance;
-      }
+    // ======================================================
+    // 🚫 GPS DRIFT FILTER
+    // ======================================================
+
+    // Ignore tiny jumps
+    if (distanceMeters < 5) {
+      return;
     }
 
-    // ===============================
-    // 🚀 SPEED ENGINE
-    // ===============================
+    // Ignore impossible jumps
+    if (distanceMeters > 500) {
+      return;
+    }
+
+    // ======================================================
+    // 🚀 TRUE SPEED ENGINE
+    // ======================================================
+    const calculatedSpeed =
+      (distanceMeters / timeSeconds) * 3.6;
+
+    // 🚫 IMPOSSIBLE SPEEDS
+    if (
+      calculatedSpeed > 180 ||
+      !Number.isFinite(calculatedSpeed)
+    ) {
+      return;
+    }
+
+    // ======================================================
+    // 📏 ACCUMULATE DISTANCE
+    // ======================================================
+    this.currentTrip.totalDistance +=
+      distanceMeters;
+
+    // ======================================================
+    // 🚀 SPEED STATE
+    // ======================================================
     this.currentTrip.currentSpeed =
-      location.speed;
+      calculatedSpeed;
 
     if (
-      location.speed >
+      calculatedSpeed >
       this.currentTrip.maxSpeed
     ) {
       this.currentTrip.maxSpeed =
-        location.speed;
+        calculatedSpeed;
     }
 
-    // ===============================
+    // ======================================================
     // 📍 STORE POINT
-    // ===============================
-    this.currentTrip.points.push(location);
+    // ======================================================
+    const processedPoint = {
+      ...location,
+      speed: calculatedSpeed
+    };
+
+    this.currentTrip.points.push(
+      processedPoint
+    );
 
     // Prevent memory explosion
-    if (this.currentTrip.points.length > 500) {
+    if (
+      this.currentTrip.points.length > 500
+    ) {
       this.currentTrip.points.shift();
     }
 
-    // ===============================
+    // ======================================================
     // ⏱️ DURATION
-    // ===============================
+    // ======================================================
     this.currentTrip.duration =
       Date.now() -
       this.currentTrip.startedAt;
@@ -263,9 +393,9 @@ class BackgroundTrackerService {
     this.currentTrip.lastUpdate =
       Date.now();
 
-    // ===============================
+    // ======================================================
     // 📊 AVERAGE SPEED
-    // ===============================
+    // ======================================================
     const hours =
       this.currentTrip.duration /
       1000 /
@@ -273,26 +403,30 @@ class BackgroundTrackerService {
       60;
 
     if (hours > 0) {
+
       this.currentTrip.averageSpeed =
-        (this.currentTrip.totalDistance / 1000) /
-        hours;
+        (
+          this.currentTrip.totalDistance /
+          1000
+        ) / hours;
+
     }
 
-    // ===============================
+    // ======================================================
     // 💾 SAVE
-    // ===============================
+    // ======================================================
     this.persistTrip();
 
     localStorage.setItem(
       STORAGE.lastLocation,
-      JSON.stringify(location)
+      JSON.stringify(processedPoint)
     );
 
-    // ===============================
+    // ======================================================
     // 📡 BROADCAST
-    // ===============================
+    // ======================================================
     this.subscribers.forEach((cb) =>
-      cb(location, this.currentTrip!)
+      cb(processedPoint, this.currentTrip!)
     );
 
     this.tripSubscribers.forEach((cb) =>
@@ -300,24 +434,28 @@ class BackgroundTrackerService {
     );
 
     console.log("📍 TRACK:", {
-      lat: location.lat,
-      lng: location.lng,
-      speed: location.speed.toFixed(1),
       distance:
         (
-          this.currentTrip.totalDistance / 1000
+          this.currentTrip.totalDistance /
+          1000
         ).toFixed(2) + " km",
+
+      speed:
+        calculatedSpeed.toFixed(1) +
+        " km/h"
     });
   }
 
-  // ===============================
+  // ======================================================
   // ⏱️ HEARTBEAT
-  // ===============================
+  // ======================================================
   private startHeartbeat() {
+
     this.stopHeartbeat();
 
     this.heartbeatInterval =
       window.setInterval(() => {
+
         if (!this.currentTrip) return;
 
         this.currentTrip.duration =
@@ -326,24 +464,35 @@ class BackgroundTrackerService {
 
         this.persistTrip();
 
-        this.tripSubscribers.forEach((cb) =>
-          cb(this.currentTrip!)
+        this.tripSubscribers.forEach(
+          (cb) => cb(this.currentTrip!)
         );
 
       }, 1000);
   }
 
   private stopHeartbeat() {
+
     if (this.heartbeatInterval) {
-      clearInterval(this.heartbeatInterval);
+
+      clearInterval(
+        this.heartbeatInterval
+      );
+
       this.heartbeatInterval = null;
     }
   }
 
-  // ===============================
+  // ======================================================
   // 🚗 NEW SESSION
-  // ===============================
+  // ======================================================
   private initializeNewTrip() {
+
+    // 🔥 HARD RESET
+    localStorage.removeItem(
+      STORAGE.activeTrip
+    );
+
     this.currentTrip = {
       active: true,
 
@@ -366,39 +515,16 @@ class BackgroundTrackerService {
 
     this.persistTrip();
 
-    console.log("🚗 New trip initialized");
+    console.log(
+      "🚗 Fresh trip session started"
+    );
   }
 
-  // ===============================
-  // ♻️ RESTORE SESSION
-  // ===============================
-  private restoreTrip(): boolean {
-    try {
-      const raw =
-        localStorage.getItem(
-          STORAGE.activeTrip
-        );
-
-      if (!raw) return false;
-
-      const parsed =
-        JSON.parse(raw) as ActiveTripSession;
-
-      if (!parsed.active) return false;
-
-      this.currentTrip = parsed;
-
-      return true;
-
-    } catch {
-      return false;
-    }
-  }
-
-  // ===============================
-  // 💾 SAVE TRIP
-  // ===============================
+  // ======================================================
+  // 💾 SAVE
+  // ======================================================
   private persistTrip() {
+
     if (!this.currentTrip) return;
 
     localStorage.setItem(
@@ -407,19 +533,23 @@ class BackgroundTrackerService {
     );
   }
 
-  // ===============================
+  // ======================================================
   // 📏 DISTANCE ENGINE
-  // ===============================
+  // ======================================================
   private calculateDistance(
     lat1: number,
     lon1: number,
     lat2: number,
     lon2: number
   ) {
+
     const R = 6371e3;
 
-    const φ1 = (lat1 * Math.PI) / 180;
-    const φ2 = (lat2 * Math.PI) / 180;
+    const φ1 =
+      (lat1 * Math.PI) / 180;
+
+    const φ2 =
+      (lat2 * Math.PI) / 180;
 
     const Δφ =
       ((lat2 - lat1) * Math.PI) / 180;
@@ -445,50 +575,60 @@ class BackgroundTrackerService {
     return R * c;
   }
 
-  // ===============================
+  // ======================================================
   // 📡 LOCATION SUBSCRIBE
-  // ===============================
+  // ======================================================
   subscribe(
     callback: (
       location: TrackerLocation,
       trip: ActiveTripSession
     ) => void
   ) {
+
     this.subscribers.push(callback);
 
     return () => {
+
       this.subscribers =
         this.subscribers.filter(
           (cb) => cb !== callback
         );
+
     };
   }
 
-  // ===============================
+  // ======================================================
   // 🚗 TRIP SUBSCRIBE
-  // ===============================
+  // ======================================================
   subscribeToTrip(
     callback: (
       trip: ActiveTripSession
     ) => void
   ) {
-    this.tripSubscribers.push(callback);
+
+    this.tripSubscribers.push(
+      callback
+    );
 
     return () => {
+
       this.tripSubscribers =
         this.tripSubscribers.filter(
           (cb) => cb !== callback
         );
+
     };
   }
 
-  // ===============================
+  // ======================================================
   // 📍 LAST LOCATION
-  // ===============================
+  // ======================================================
   getLastKnownLocation():
     | TrackerLocation
     | null {
+
     try {
+
       const raw =
         localStorage.getItem(
           STORAGE.lastLocation
@@ -499,20 +639,22 @@ class BackgroundTrackerService {
       return JSON.parse(raw);
 
     } catch {
+
       return null;
+
     }
   }
 
-  // ===============================
-  // 🚗 CURRENT TRIP
-  // ===============================
+  // ======================================================
+  // 🚗 GET TRIP
+  // ======================================================
   getTrip() {
     return this.currentTrip;
   }
 
-  // ===============================
+  // ======================================================
   // 🔋 STATUS
-  // ===============================
+  // ======================================================
   get tracking() {
     return this.isTracking;
   }
@@ -522,8 +664,8 @@ class BackgroundTrackerService {
   }
 }
 
-// ===============================
-// 🌍 SINGLETON EXPORT
-// ===============================
+// ======================================================
+// 🌍 SINGLETON
+// ======================================================
 export const BackgroundTracker =
   new BackgroundTrackerService();

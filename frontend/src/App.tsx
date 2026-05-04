@@ -1,6 +1,7 @@
 // src/App.tsx
 
 import { useState, useEffect, useRef } from "react";
+
 import { Layout } from "./components/Layout";
 import { AuthView } from "./components/Auth";
 import { VirtualCard } from "./components/VirtualCard";
@@ -14,6 +15,7 @@ import {
 } from "./types";
 
 import { TRANSIT_NETWORKS } from "./constants";
+
 import { FareEngine } from "./services/fareService";
 import { DestinationEngine } from "./services/destinationEngine";
 
@@ -23,7 +25,6 @@ import {
   calculateDistance
 } from "./services/location";
 
-// 🔥 PREMIUM ELITE BACKGROUND TRACKER
 import {
   BackgroundTracker,
   type TrackerLocation
@@ -31,12 +32,22 @@ import {
 
 // ================= STORAGE =================
 const Storage = {
-  save: (user: string, key: string, data: unknown) => {
-    localStorage.setItem(`pulse_${key}_${user}`, JSON.stringify(data));
+  save: (
+    user: string,
+    key: string,
+    data: unknown
+  ) => {
+    localStorage.setItem(
+      `pulse_${key}_${user}`,
+      JSON.stringify(data)
+    );
   },
 
   load: (user: string, key: string) => {
-    const raw = localStorage.getItem(`pulse_${key}_${user}`);
+    const raw = localStorage.getItem(
+      `pulse_${key}_${user}`
+    );
+
     return raw ? JSON.parse(raw) : null;
   }
 };
@@ -44,34 +55,51 @@ const Storage = {
 // ================= SESSION =================
 const Session = {
   save: (key: string, data: unknown) => {
-    localStorage.setItem(`pulse_session_${key}`, JSON.stringify(data));
+    localStorage.setItem(
+      `pulse_session_${key}`,
+      JSON.stringify(data)
+    );
   },
 
   load: (key: string) => {
-    const raw = localStorage.getItem(`pulse_session_${key}`);
+    const raw = localStorage.getItem(
+      `pulse_session_${key}`
+    );
+
     return raw ? JSON.parse(raw) : null;
   },
 
   clear: (key: string) => {
-    localStorage.removeItem(`pulse_session_${key}`);
+    localStorage.removeItem(
+      `pulse_session_${key}`
+    );
   }
 };
 
 // ================= APP =================
 const App = () => {
+
   // ================= AUTH =================
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] =
+    useState<any>(null);
 
   // ================= UI =================
-  const [activeTab, setActiveTab] = useState<TabType>("home");
+  const [activeTab, setActiveTab] =
+    useState<TabType>("home");
 
   // ================= TRIP =================
-  const [tripState, setTripState] = useState<TripState>(TripState.IDLE);
+  const [tripState, setTripState] =
+    useState<TripState>(
+      TripState.IDLE
+    );
 
   const [network, setNetwork] =
-    useState<TransitNetwork | null>(null);
+    useState<TransitNetwork | null>(
+      null
+    );
 
-  const [destination, setDestination] = useState("");
+  const [destination, setDestination] =
+    useState("");
 
   const [estimatedFare, setEstimatedFare] =
     useState<number | null>(null);
@@ -82,7 +110,8 @@ const App = () => {
   const [currentTrip, setCurrentTrip] =
     useState<Partial<TripData>>({});
 
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] =
+    useState(0);
 
   const [history, setHistory] =
     useState<TripData[]>([]);
@@ -94,7 +123,18 @@ const App = () => {
   const lastLocationRef =
     useRef<Location | null>(null);
 
-  const tripStartRef = useRef<number | null>(null);
+  const tripStartRef =
+    useRef<number | null>(null);
+
+  // ================= ROUTE CACHE =================
+  const lastPlannedRouteRef =
+    useRef<{
+      destination: string;
+      originLat: number;
+      originLng: number;
+      distance: number;
+      network: TransitNetwork;
+    } | null>(null);
 
   // ================= VERIFY =================
   const [verifyTrip, setVerifyTrip] =
@@ -113,190 +153,322 @@ const App = () => {
   const [locationReady, setLocationReady] =
     useState(false);
 
-  const [fareLocked, setFareLocked] =
-    useState(false);
-
-  // ================= LOAD USER =================
+  // ====================================================
+  // 🔐 LOAD USER
+  // ====================================================
   useEffect(() => {
-    const savedUser = Session.load("user");
+
+    const savedUser =
+      Session.load("user");
 
     if (savedUser) {
       setUser(savedUser);
     }
+
   }, []);
 
-  // ================= RESTORE SESSION =================
+  // ====================================================
+  // ♻️ RESTORE SESSION
+  // ====================================================
   useEffect(() => {
+
     if (!user) return;
 
     Session.save("user", user);
 
     const savedHistory =
-      Storage.load(user.email, "history");
+      Storage.load(
+        user.email,
+        "history"
+      );
 
     if (savedHistory) {
       setHistory(savedHistory);
     }
 
-    // 🔥 RESTORE ACTIVE TRIP
     const savedTrip =
       Session.load("active_trip");
 
     if (savedTrip) {
-      setCurrentTrip(savedTrip.currentTrip);
-      setTripState(savedTrip.tripState);
-      setNetwork(savedTrip.network);
-      setDuration(savedTrip.duration || 0);
-      setEstimatedFare(savedTrip.estimatedFare);
-      setFareLocked(true);
 
-      if (savedTrip.tripStartTime) {
+      setCurrentTrip(
+        savedTrip.currentTrip
+      );
+
+      setTripState(
+        savedTrip.tripState
+      );
+
+      setNetwork(
+        savedTrip.network
+      );
+
+      setDuration(
+        savedTrip.duration || 0
+      );
+
+      setEstimatedFare(
+        savedTrip.estimatedFare
+      );
+
+      if (
+        savedTrip.tripStartTime
+      ) {
         tripStartRef.current =
           savedTrip.tripStartTime;
       }
     }
+
   }, [user]);
 
   // ====================================================
-  // 🔥 PREMIUM ELITE LIVE GPS
+  // 📍 FOREGROUND GPS
   // ====================================================
   useEffect(() => {
+
     let watchId: number;
 
     watchId = watchLocation(
+
       (loc) => {
+
         setLocationReady(true);
+
         setError(null);
 
         setLastLocation(loc);
-        lastLocationRef.current = loc;
 
-        // 🔥 LIVE DISTANCE
-        if (
-          tripState === TripState.ACTIVE &&
-          currentTrip.startLocation &&
-          lastLocationRef.current
-        ) {
-          setCurrentTrip((prev) => {
-            if (!prev.distance) {
-              return {
-                ...prev,
-                distance: 0
-              };
-            }
-
-            const dist = calculateDistance(
-              lastLocationRef.current as Location,
-              loc
-            );
-
-            return {
-              ...prev,
-              distance: (prev.distance || 0) + dist
-            };
-          });
-        }
+        lastLocationRef.current =
+          loc;
       },
 
       (err) => {
+
         setError(err);
+
         setLocationReady(false);
+
       }
     );
 
     return () => {
+
       if (watchId) {
-        clearLocationWatch(watchId);
+        clearLocationWatch(
+          watchId
+        );
       }
+
     };
-  }, [tripState]);
+
+  }, []);
 
   // ====================================================
-  // 🚀 BACKGROUND TRACKER ENGINE
+  // 🚀 BACKGROUND TRACKING
   // ====================================================
   useEffect(() => {
-    if (tripState !== TripState.ACTIVE) return;
 
-    // 🔥 START BACKGROUND TRACKING
+    if (
+      tripState !==
+      TripState.ACTIVE
+    ) {
+      return;
+    }
+
     BackgroundTracker.start();
 
     const unsubscribe =
       BackgroundTracker.subscribe(
-        (location: TrackerLocation) => {
+        (
+          location: TrackerLocation
+        ) => {
+
           const mappedLocation: Location = {
             lat: location.lat,
-            lng: location.lng
+            lng: location.lng,
+            accuracy:
+              location.accuracy,
+            speed: location.speed,
+            timestamp:
+              location.timestamp
           };
 
-          // 🔥 UPDATE LAST LOCATION
-          setLastLocation(mappedLocation);
-          lastLocationRef.current = mappedLocation;
+          setLastLocation(
+            mappedLocation
+          );
 
-          // 🔥 DISTANCE ACCUMULATION
+          lastLocationRef.current =
+            mappedLocation;
+
+          // ====================================================
+          // 📏 SAFE DISTANCE ENGINE
+          // ====================================================
           setCurrentTrip((prev) => {
-            if (!prev.lastTrackedLocation) {
+
+            if (
+              !prev.lastTrackedLocation
+            ) {
               return {
                 ...prev,
-                lastTrackedLocation: mappedLocation
-              } as Partial<TripData>;
+                lastTrackedLocation:
+                  mappedLocation,
+                distance: 0,
+                avgSpeed: 0
+              };
             }
 
-            const prevLoc = prev.lastTrackedLocation as Location;
+            const prevLoc =
+              prev.lastTrackedLocation;
 
-            const dist = calculateDistance(
-              prevLoc,
-              mappedLocation
-            );
+            const dist =
+              calculateDistance(
+                prevLoc,
+                mappedLocation
+              );
+
+            // 🚨 SPIKE FILTER
+            if (
+              !Number.isFinite(
+                dist
+              ) ||
+              dist < 0 ||
+              dist > 2
+            ) {
+
+              console.log(
+                "⚠️ GPS spike ignored:",
+                dist
+              );
+
+              return prev;
+            }
+
+            // ====================================================
+            // ⏱ TIME DELTA
+            // ====================================================
+            const prevTime =
+              prevLoc.timestamp ||
+              Date.now();
+
+            const currentTime =
+              mappedLocation.timestamp ||
+              Date.now();
+
+            const hours =
+              (
+                currentTime -
+                prevTime
+              ) / 3600000;
+
+            // ====================================================
+            // ⚡ SPEED
+            // ====================================================
+            let speed = 0;
+
+            if (hours > 0) {
+              speed =
+                dist / hours;
+            }
+
+            // 🚨 SPEED FILTER
+            if (
+              !Number.isFinite(
+                speed
+              ) ||
+              speed < 0 ||
+              speed > 180
+            ) {
+              speed =
+                prev.avgSpeed || 0;
+            }
 
             return {
+
               ...prev,
-              distance: (prev.distance || 0) + dist,
-              lastTrackedLocation: mappedLocation
-            } as Partial<TripData>;
+
+              distance:
+                (
+                  prev.distance || 0
+                ) + dist,
+
+              avgSpeed: speed,
+
+              lastTrackedLocation:
+                mappedLocation
+
+            };
+
           });
+
         }
       );
 
     return () => {
       unsubscribe();
     };
+
   }, [tripState]);
 
   // ====================================================
-  // ⏱️ PREMIUM ELITE TIMER
+  // ⏱️ TIMER
   // ====================================================
   useEffect(() => {
-    if (tripState !== TripState.ACTIVE) return;
 
-    // 🔥 ACCURATE TIME
-    const interval = setInterval(() => {
-      if (!tripStartRef.current) return;
-
-      const elapsed =
-        Math.floor(
-          (Date.now() - tripStartRef.current) / 1000
-        );
-
-      setDuration(elapsed);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [tripState]);
-
-  // ====================================================
-  // 💾 PERSIST ACTIVE TRIP
-  // ====================================================
-  useEffect(() => {
-    if (tripState === TripState.ACTIVE) {
-      Session.save("active_trip", {
-        currentTrip,
-        tripState,
-        network,
-        duration,
-        estimatedFare,
-        tripStartTime: tripStartRef.current
-      });
+    if (
+      tripState !==
+      TripState.ACTIVE
+    ) {
+      return;
     }
+
+    const interval =
+      setInterval(() => {
+
+        if (
+          !tripStartRef.current
+        ) return;
+
+        const elapsed =
+          Math.floor(
+            (
+              Date.now() -
+              tripStartRef.current
+            ) / 1000
+          );
+
+        setDuration(elapsed);
+
+      }, 1000);
+
+    return () =>
+      clearInterval(interval);
+
+  }, [tripState]);
+
+  // ====================================================
+  // 💾 SAVE ACTIVE SESSION
+  // ====================================================
+  useEffect(() => {
+
+    if (
+      tripState ===
+      TripState.ACTIVE
+    ) {
+
+      Session.save(
+        "active_trip",
+        {
+          currentTrip,
+          tripState,
+          network,
+          duration,
+          estimatedFare,
+          tripStartTime:
+            tripStartRef.current
+        }
+      );
+    }
+
   }, [
     currentTrip,
     tripState,
@@ -309,146 +481,328 @@ const App = () => {
   // 🗺️ PLAN TRIP
   // ====================================================
   const planTrip = async (
-    n: TransitNetwork
+    selectedNetwork: TransitNetwork
   ) => {
-    if (isPlanning || fareLocked) return;
+
+    if (isPlanning) return;
 
     if (!lastLocation) {
-      setError("Waiting for GPS...");
+
+      setError(
+        "Waiting for GPS..."
+      );
+
       return;
     }
 
-    if (!destination.trim()) {
-      setError("Enter destination");
+    if (
+      !destination.trim()
+    ) {
+
+      setError(
+        "Enter destination"
+      );
+
       return;
     }
 
-    setNetwork(n);
+    // 🚫 BLOCK DURING ACTIVE TRIP
+    if (
+      tripState ===
+      TripState.ACTIVE
+    ) {
+      return;
+    }
+
     setError(null);
+
     setIsPlanning(true);
 
     try {
+
+      const cleanDestination =
+        destination
+          .trim()
+          .toLowerCase();
+
+      const cached =
+        lastPlannedRouteRef.current;
+
+      const sameDestination =
+        cached?.destination ===
+        cleanDestination;
+
+      const sameNetwork =
+        cached?.network ===
+        selectedNetwork;
+
+      const sameOrigin =
+        cached &&
+        Math.abs(
+          cached.originLat -
+          lastLocation.lat
+        ) < 0.0005 &&
+        Math.abs(
+          cached.originLng -
+          lastLocation.lng
+        ) < 0.0005;
+
+      // 🚫 PREVENT DUPLICATE RECALCULATION
+      if (
+        sameDestination &&
+        sameNetwork &&
+        sameOrigin
+      ) {
+
+        console.log(
+          "⚠️ Duplicate fare request ignored"
+        );
+
+        return;
+      }
+
+      // ====================================================
+      // 🗺️ ROUTE ENGINE
+      // ====================================================
       const result =
         await DestinationEngine.plan({
-          origin: lastLocation,
-          destination
+          origin:
+            lastLocation,
+          destination:
+            cleanDestination
         });
 
-      setPlannedDistance(result.distance);
+      const safeDistance =
+        Math.max(
+          0,
+          Number(
+            result.distance.toFixed(
+              2
+            )
+          )
+        );
 
+      // ====================================================
+      // 💰 FARE ENGINE
+      // ====================================================
       const fareResult =
-        await FareEngine.computeFinalFare({
-          network: n,
-          distance: result.distance
-        });
+        await FareEngine.computeFinalFare(
+          {
+            network:
+              selectedNetwork,
+            distance:
+              safeDistance
+          }
+        );
 
-      setEstimatedFare(fareResult.fare);
+      // ====================================================
+      // 💾 CACHE
+      // ====================================================
+      lastPlannedRouteRef.current =
+        {
+          destination:
+            cleanDestination,
 
-      setFareLocked(true);
-    } catch {
-      setError("Trip planning failed");
+          originLat:
+            lastLocation.lat,
+
+          originLng:
+            lastLocation.lng,
+
+          distance:
+            safeDistance,
+
+          network:
+            selectedNetwork
+        };
+
+      // ====================================================
+      // 🎯 APPLY
+      // ====================================================
+      setNetwork(
+        selectedNetwork
+      );
+
+      setPlannedDistance(
+        safeDistance
+      );
+
+      setEstimatedFare(
+        fareResult.fare
+      );
+
+      console.log(
+        "✅ Trip planned",
+        {
+          network:
+            selectedNetwork,
+          distance:
+            safeDistance,
+          fare:
+            fareResult.fare
+        }
+      );
+
+    } catch (err) {
+
+      console.error(err);
+
+      setError(
+        "Trip planning failed"
+      );
+
     } finally {
+
       setIsPlanning(false);
+
     }
+
   };
 
   // ====================================================
   // 🚀 START TRIP
   // ====================================================
   const startTrip = async () => {
-    if (!network || !lastLocation) return;
 
-    tripStartRef.current = Date.now();
+    if (
+      !network ||
+      !lastLocation
+    ) {
+      return;
+    }
 
-    setTripState(TripState.ACTIVE);
+    tripStartRef.current =
+      Date.now();
+
+    setTripState(
+      TripState.ACTIVE
+    );
 
     setDuration(0);
 
-    // 🔥 START BACKGROUND ENGINE
     await BackgroundTracker.start();
 
     const trip: Partial<TripData> = {
-      id: Date.now().toString(),
+
+      id:
+        Date.now().toString(),
+
       network,
-      startTime: Date.now(),
+
+      startTime:
+        Date.now(),
+
       distance: 0,
-      startLocation: lastLocation,
-      lastTrackedLocation: lastLocation
+
+      avgSpeed: 0,
+
+      startLocation:
+        lastLocation,
+
+      lastTrackedLocation:
+        lastLocation
     };
 
     setCurrentTrip(trip);
+
   };
 
   // ====================================================
   // 🛑 END TRIP
   // ====================================================
   const endTrip = async () => {
-    if (!network || !currentTrip.startTime) return;
 
-    // 🔥 STOP BACKGROUND ENGINE
+    if (
+      !network ||
+      !currentTrip.startTime
+    ) {
+      return;
+    }
+
     await BackgroundTracker.stop();
 
     const dist =
-      currentTrip.distance || plannedDistance;
+      currentTrip.distance || 0;
 
     const fareResult =
-      await FareEngine.computeFinalFare({
-        network,
-        distance: dist
-      });
+      await FareEngine.computeFinalFare(
+        {
+          network,
+          distance: dist
+        }
+      );
 
     const avgSpeed =
       duration > 0
-        ? dist / (duration / 3600)
+        ? dist /
+          (duration / 3600)
         : 0;
 
     const trip: TripData = {
+
       ...(currentTrip as TripData),
 
-      endTime: Date.now(),
+      endTime:
+        Date.now(),
 
       duration,
 
       distance: dist,
 
-      fare: fareResult.fare,
+      fare:
+        fareResult.fare,
 
       avgSpeed
+
     };
 
     setVerifyTrip(trip);
 
-    setTripState(TripState.IDLE);
+    setTripState(
+      TripState.IDLE
+    );
 
     setDuration(0);
 
     setNetwork(null);
 
-    tripStartRef.current = null;
+    tripStartRef.current =
+      null;
 
-    Session.clear("active_trip");
+    Session.clear(
+      "active_trip"
+    );
 
-    setFareLocked(false);
   };
 
   // ====================================================
   // ✅ CONFIRM TRIP
   // ====================================================
   const confirmTrip = () => {
+
     if (!verifyTrip) return;
 
     const finalFare =
       actualFare.trim()
-        ? parseFloat(actualFare)
+        ? parseFloat(
+            actualFare
+          )
         : verifyTrip.fare;
 
     const finalTrip: TripData = {
+
       ...verifyTrip,
+
       fare: finalFare
+
     };
 
     setHistory((prev) => {
-      const updated = [finalTrip, ...prev];
+
+      const updated = [
+        finalTrip,
+        ...prev
+      ];
 
       Storage.save(
         user.email,
@@ -457,39 +811,58 @@ const App = () => {
       );
 
       return updated;
+
     });
 
     setVerifyTrip(null);
+
     setActualFare("");
+
     setCurrentTrip({});
+
+    setEstimatedFare(null);
+
+    setPlannedDistance(0);
+
+    setDestination("");
+
   };
 
   // ====================================================
   // 🔐 AUTH
   // ====================================================
   if (!user) {
-    return <AuthView onLogin={setUser} />;
+    return (
+      <AuthView
+        onLogin={setUser}
+      />
+    );
   }
 
   // ====================================================
   // 🎨 UI
   // ====================================================
   return (
+
     <Layout
       activeTab={activeTab}
       onNavClick={setActiveTab}
     >
+
       <div className="space-y-6 px-4 pb-28">
 
-        {/* ================= HOME ================= */}
+        {/* HOME */}
         {activeTab === "home" && (
           <>
+
             <VirtualCard
               state={tripState}
               network={network}
               distance={
-                currentTrip.distance ||
-                plannedDistance
+                tripState ===
+                TripState.ACTIVE
+                  ? currentTrip.distance || 0
+                  : plannedDistance
               }
               duration={duration}
               destination={destination}
@@ -499,11 +872,12 @@ const App = () => {
               lastTrip={history[0]}
             />
 
-            {/* ================= CONTROL PANEL ================= */}
+            {/* CONTROL */}
             <div className="glass p-5 rounded-3xl space-y-4">
 
               {/* STATUS */}
               <div className="flex items-center justify-between">
+
                 <div className="text-xs">
                   {locationReady
                     ? "🟢 Live GPS Active"
@@ -515,17 +889,18 @@ const App = () => {
                     ? "Native Tracking"
                     : "Browser Tracking"}
                 </div>
+
               </div>
 
-              {/* INPUT */}
+              {/* DESTINATION */}
               <input
                 value={destination}
                 onChange={(e) => {
+
                   setDestination(
                     e.target.value
                   );
 
-                  setFareLocked(false);
                 }}
                 placeholder="Enter destination"
                 className="w-full h-12 px-4 bg-white/5 rounded-2xl"
@@ -540,12 +915,16 @@ const App = () => {
 
               {/* NETWORKS */}
               <div className="grid grid-cols-2 gap-2">
+
                 {TRANSIT_NETWORKS.map((n) => (
+
                   <button
                     key={n}
-                    onClick={() => planTrip(n)}
+                    onClick={() =>
+                      planTrip(n)
+                    }
                     disabled={
-                      isPlanning || fareLocked
+                      isPlanning
                     }
                     className={`text-xs py-3 rounded-2xl transition-all ${
                       network === n
@@ -555,55 +934,74 @@ const App = () => {
                   >
                     {n}
                   </button>
+
                 ))}
+
               </div>
 
               {/* ESTIMATE */}
               {estimatedFare !== null && (
+
                 <div className="text-center">
+
                   <p className="text-xs text-white/40">
                     Estimated Fare
                   </p>
 
                   <p className="text-3xl font-black">
                     R
-                    {estimatedFare.toFixed(2)}
+                    {estimatedFare.toFixed(
+                      2
+                    )}
                   </p>
+
                 </div>
+
               )}
+
             </div>
 
             {/* START */}
             {estimatedFare !== null &&
-              tripState === TripState.IDLE && (
-                <button
-                  onClick={startTrip}
-                  className="btn-primary w-full h-14"
-                >
-                  Start Trip
-                </button>
-              )}
+              tripState ===
+                TripState.IDLE && (
+
+              <button
+                onClick={startTrip}
+                className="btn-primary w-full h-14"
+              >
+                Start Trip
+              </button>
+
+            )}
 
             {/* END */}
-            {tripState === TripState.ACTIVE && (
+            {tripState ===
+              TripState.ACTIVE && (
+
               <button
                 onClick={endTrip}
                 className="btn-primary w-full h-14 pulse-glow"
               >
                 End Trip
               </button>
+
             )}
 
             {/* VERIFY */}
             {verifyTrip && (
+
               <div className="glass p-5 rounded-3xl space-y-3">
+
                 <p className="font-bold">
                   Confirm your fare
                 </p>
 
                 <p className="text-2xl font-black">
                   R
-                  {verifyTrip.fare.toFixed(2)}
+                  {verifyTrip.fare.toFixed(
+                    2
+                  )}
                 </p>
 
                 <input
@@ -623,19 +1021,26 @@ const App = () => {
                 >
                   Confirm Trip
                 </button>
+
               </div>
+
             )}
+
           </>
         )}
 
-        {/* ================= STATS ================= */}
+        {/* STATS */}
         {activeTab === "stats" && (
+
           <div className="space-y-4">
+
             {history.map((t) => (
+
               <div
                 key={t.id}
                 className="glass p-4 rounded-3xl"
               >
+
                 <p className="font-bold">
                   {t.network}
                 </p>
@@ -647,14 +1052,19 @@ const App = () => {
                 </p>
 
                 <div className="mt-2 text-xs space-y-1">
+
                   <p>
                     📏{" "}
-                    {(t.distance || 0).toFixed(2)} km
+                    {(t.distance || 0).toFixed(
+                      2
+                    )} km
                   </p>
 
                   <p>
                     💰 R
-                    {(t.fare || 0).toFixed(2)}
+                    {(t.fare || 0).toFixed(
+                      2
+                    )}
                   </p>
 
                   <p>
@@ -663,17 +1073,27 @@ const App = () => {
 
                   <p>
                     ⚡{" "}
-                    {(t.avgSpeed || 0).toFixed(1)} km/h
+                    {(t.avgSpeed || 0).toFixed(
+                      1
+                    )} km/h
                   </p>
+
                 </div>
+
               </div>
+
             ))}
+
           </div>
+
         )}
 
       </div>
+
     </Layout>
+
   );
+
 };
 
 export default App;
