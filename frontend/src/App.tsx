@@ -161,12 +161,39 @@ const App = () => {
 
   }, [tripState]);
 
+  // ================= TIMER (UNCHANGED + WORKING) =================
+  useEffect(() => {
+
+    if (tripState !== TripState.ACTIVE) return;
+
+    const interval = setInterval(() => {
+
+      if (!tripStartRef.current) return;
+
+      const elapsed = Math.floor(
+        (Date.now() - tripStartRef.current) / 1000
+      );
+
+      setDuration(elapsed);
+
+    }, 1000);
+
+    return () => clearInterval(interval);
+
+  }, [tripState]);
+
   // ================= PLAN TRIP =================
   const planTrip = async (selectedNetwork: TransitNetwork) => {
 
     if (isPlanning) return;
     if (!lastLocation) return setError("Waiting for GPS...");
     if (!destination.trim()) return setError("Enter destination");
+
+    // 🔥 PREVENT RE-CALCULATING SAME SELECTION
+    if (network === selectedNetwork && estimatedFare !== null) {
+      console.log("🛑 Fare locked");
+      return;
+    }
 
     setError(null);
     setIsPlanning(true);
@@ -190,10 +217,8 @@ const App = () => {
 
       let fare: number;
 
-      // 🔥 CACHE HIT
       if (fareCacheRef.current.has(cacheKey)) {
         fare = fareCacheRef.current.get(cacheKey)!;
-        console.log("⚡ Using cached fare");
       } else {
         const result = await FareEngine.computeFinalFare({
           network: selectedNetwork,
@@ -201,9 +226,7 @@ const App = () => {
         });
 
         fare = result.fare;
-
         fareCacheRef.current.set(cacheKey, fare);
-        console.log("💾 Fare cached");
       }
 
       setNetwork(selectedNetwork);
@@ -265,7 +288,6 @@ const App = () => {
 
     setVerifyTrip(trip);
 
-    // 🔥 RESET EVERYTHING CLEAN
     setTripState(TripState.IDLE);
     setDuration(0);
     setNetwork(null);
@@ -273,7 +295,7 @@ const App = () => {
     setPlannedDistance(0);
     setDestination("");
 
-    fareCacheRef.current.clear(); // 🔥 IMPORTANT FIX
+    fareCacheRef.current.clear();
 
     tripStartRef.current = null;
     Session.clear("active_trip");
@@ -379,36 +401,27 @@ const App = () => {
             )}
 
             {verifyTrip && (
+              <div className="glass p-5 rounded-3xl space-y-3">
+                <p className="font-bold">Confirm your fare</p>
+                <p className="text-2xl font-black">
+                  R{verifyTrip.fare.toFixed(2)}
+                </p>
 
-  <div className="glass p-5 rounded-3xl space-y-3">
+                <input
+                  placeholder="Actual fare (optional)"
+                  value={actualFare}
+                  onChange={(e) => setActualFare(e.target.value)}
+                  className="w-full p-3 bg-white/5 rounded-2xl"
+                />
 
-    <p className="font-bold">
-      Confirm your fare
-    </p>
-
-    <p className="text-2xl font-black">
-      R{verifyTrip.fare.toFixed(2)}
-    </p>
-
-    <input
-      placeholder="Actual fare (optional)"
-      value={actualFare}
-      onChange={(e) =>
-        setActualFare(e.target.value)
-      }
-      className="w-full p-3 bg-white/5 rounded-2xl"
-    />
-
-    <button
-      onClick={confirmTrip}
-      className="btn-primary w-full h-12"
-    >
-      Confirm Trip
-    </button>
-
-  </div>
-
-)}
+                <button
+                  onClick={confirmTrip}
+                  className="btn-primary w-full h-12"
+                >
+                  Confirm Trip
+                </button>
+              </div>
+            )}
 
           </>
         )}
