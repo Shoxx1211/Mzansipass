@@ -143,6 +143,26 @@ const App = () => {
     useRef<number | null>(null);
 
   // ======================================================
+  // FARE CACHE
+  // ======================================================
+  const fareCacheRef =
+    useRef<Map<string, number>>(
+      new Map()
+    );
+
+  const buildCacheKey = (
+    network: TransitNetwork,
+    destination: string,
+    origin: Location
+  ) => {
+
+    return `${network}_${destination}_${origin.lat.toFixed(
+      3
+    )}_${origin.lng.toFixed(3)}`;
+
+  };
+
+  // ======================================================
   // VERIFY
   // ======================================================
   const [verifyTrip, setVerifyTrip] =
@@ -218,20 +238,25 @@ const App = () => {
 
             setCurrentTrip((prev) => {
 
-              // ============================================
-              // FIRST POINT
-              // ============================================
+              // ======================================================
+              // FIRST GPS POINT
+              // ======================================================
               if (
                 !prev.lastTrackedLocation
               ) {
 
                 return {
+
                   ...prev,
+
                   lastTrackedLocation:
                     loc,
+
                   distance: 0,
+
                   avgSpeed:
                     meta.speed || 0
+
                 };
 
               }
@@ -239,18 +264,18 @@ const App = () => {
               const previous =
                 prev.lastTrackedLocation;
 
-              // ============================================
+              // ======================================================
               // DISTANCE
-              // ============================================
+              // ======================================================
               const distance =
                 calculateDistance(
                   previous,
                   loc
                 );
 
-              // ============================================
+              // ======================================================
               // FILTER BAD GPS JUMPS
-              // ============================================
+              // ======================================================
               if (
                 !Number.isFinite(
                   distance
@@ -260,24 +285,27 @@ const App = () => {
               ) {
 
                 return {
+
                   ...prev,
+
                   lastTrackedLocation:
                     loc
+
                 };
 
               }
 
-              // ============================================
+              // ======================================================
               // TOTAL DISTANCE
-              // ============================================
+              // ======================================================
               const totalDistance =
                 (
                   prev.distance || 0
                 ) + distance;
 
-              // ============================================
+              // ======================================================
               // SPEED
-              // ============================================
+              // ======================================================
               let speed =
                 meta.speed || 0;
 
@@ -302,9 +330,9 @@ const App = () => {
 
               }
 
-              // ============================================
+              // ======================================================
               // FILTER BAD SPEEDS
-              // ============================================
+              // ======================================================
               if (
                 !Number.isFinite(
                   speed
@@ -323,8 +351,10 @@ const App = () => {
                 {
                   added:
                     distance.toFixed(3),
+
                   total:
                     totalDistance.toFixed(3),
+
                   speed:
                     speed.toFixed(1)
                 }
@@ -471,16 +501,21 @@ const App = () => {
 
     try {
 
-      // ============================================
+      const cleanDestination =
+        destination
+          .trim()
+          .toLowerCase();
+
+      // ======================================================
       // DESTINATION ENGINE
-      // ============================================
+      // ======================================================
       const result =
         await DestinationEngine.plan({
           origin:
             lastLocation,
 
           destination:
-            destination.trim()
+            cleanDestination
         });
 
       const distance =
@@ -490,22 +525,68 @@ const App = () => {
           )
         );
 
-      // ============================================
-      // FARE ENGINE
-      // ============================================
-      const fareResult =
-        await FareEngine.computeFinalFare(
-          {
-            network:
-              selectedNetwork,
-
-            distance
-          }
+      // ======================================================
+      // CACHE KEY
+      // ======================================================
+      const cacheKey =
+        buildCacheKey(
+          selectedNetwork,
+          cleanDestination,
+          lastLocation
         );
 
-      // ============================================
+      let fare: number;
+
+      // ======================================================
+      // CACHE HIT
+      // ======================================================
+      if (
+        fareCacheRef.current.has(
+          cacheKey
+        )
+      ) {
+
+        fare =
+          fareCacheRef.current.get(
+            cacheKey
+          )!;
+
+        console.log(
+          "⚡ Using cached fare"
+        );
+
+      } else {
+
+        // ======================================================
+        // FARE ENGINE
+        // ======================================================
+        const fareResult =
+          await FareEngine.computeFinalFare(
+            {
+              network:
+                selectedNetwork,
+
+              distance
+            }
+          );
+
+        fare =
+          fareResult.fare;
+
+        fareCacheRef.current.set(
+          cacheKey,
+          fare
+        );
+
+        console.log(
+          "💾 Fare cached"
+        );
+
+      }
+
+      // ======================================================
       // APPLY
-      // ============================================
+      // ======================================================
       setNetwork(
         selectedNetwork
       );
@@ -515,7 +596,7 @@ const App = () => {
       );
 
       setEstimatedFare(
-        fareResult.fare
+        fare
       );
 
       console.log(
@@ -523,9 +604,10 @@ const App = () => {
         {
           network:
             selectedNetwork,
+
           distance,
-          fare:
-            fareResult.fare
+
+          fare
         }
       );
 
@@ -609,6 +691,9 @@ const App = () => {
     const distance =
       currentTrip.distance || 0;
 
+    // ======================================================
+    // FARE ENGINE
+    // ======================================================
     const fareResult =
       await FareEngine.computeFinalFare(
         {
@@ -638,9 +723,9 @@ const App = () => {
 
     setVerifyTrip(trip);
 
-    // ============================================
+    // ======================================================
     // RESET UI
-    // ============================================
+    // ======================================================
     setTripState(
       TripState.IDLE
     );
@@ -654,6 +739,8 @@ const App = () => {
     setPlannedDistance(0);
 
     setDestination("");
+
+    fareCacheRef.current.clear();
 
     tripStartRef.current =
       null;
@@ -703,9 +790,9 @@ const App = () => {
 
     });
 
-    // ============================================
+    // ======================================================
     // FULL RESET
-    // ============================================
+    // ======================================================
     setVerifyTrip(null);
 
     setActualFare("");
@@ -749,73 +836,172 @@ const App = () => {
 
         {/* HOME */}
         {activeTab === "home" && (
-          <>
+  <>
 
-            <VirtualCard
-              state={tripState}
-              network={network}
+    {/* ====================================================== */}
+    {/* HERO */}
+    {/* ====================================================== */}
+    <div className="pt-4 space-y-2">
 
-              distance={
-                tripState ===
-                TripState.ACTIVE
-                  ? currentTrip.distance || 0
-                  : plannedDistance
+      <div className="flex items-center justify-between">
+
+        <div>
+
+          <p className="text-white/40 text-sm">
+            Welcome back
+          </p>
+
+          <h1 className="text-3xl font-black tracking-tight">
+            Where are you going?
+          </h1>
+
+        </div>
+
+        <div className="flex items-center gap-2 text-xs text-white/50">
+
+          <span>
+            {locationReady ? "🟢" : "🔴"}
+          </span>
+
+          <span>
+            {locationReady
+              ? "GPS Active"
+              : "Searching GPS"}
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    {/* ====================================================== */}
+    {/* ACTIVE TRIP CARD */}
+    {/* ====================================================== */}
+    {tripState === TripState.ACTIVE && (
+
+      <div className="glass rounded-3xl p-5 space-y-4 border border-emerald-500/20">
+
+        <div className="flex items-center justify-between">
+
+          <div>
+
+            <p className="text-xs text-emerald-400">
+              LIVE TRIP
+            </p>
+
+            <h2 className="text-2xl font-black">
+              {network}
+            </h2>
+
+          </div>
+
+          <div className="h-3 w-3 rounded-full bg-emerald-400 pulse-glow" />
+
+        </div>
+
+        <div className="grid grid-cols-3 gap-3">
+
+          <div className="bg-white/5 rounded-2xl p-3">
+
+            <p className="text-[10px] text-white/40">
+              Distance
+            </p>
+
+            <p className="text-lg font-bold">
+              {(currentTrip.distance || 0).toFixed(2)} km
+            </p>
+
+          </div>
+
+          <div className="bg-white/5 rounded-2xl p-3">
+
+            <p className="text-[10px] text-white/40">
+              Duration
+            </p>
+
+            <p className="text-lg font-bold">
+              {Math.floor(duration / 60)}m
+            </p>
+
+          </div>
+
+          <div className="bg-white/5 rounded-2xl p-3">
+
+            <p className="text-[10px] text-white/40">
+              Speed
+            </p>
+
+            <p className="text-lg font-bold">
+              {(currentTrip.avgSpeed || 0).toFixed(1)}
+            </p>
+
+          </div>
+
+        </div>
+
+        <button
+          onClick={endTrip}
+          className="btn-primary w-full h-14 pulse-glow"
+        >
+          End Trip
+        </button>
+
+      </div>
+
+    )}
+
+    {/* ====================================================== */}
+    {/* PLANNING UI */}
+    {/* ====================================================== */}
+    {tripState !== TripState.ACTIVE && (
+
+      <div className="space-y-5">
+
+        {/* SEARCH CARD */}
+        <div className="glass rounded-3xl p-5 space-y-5">
+
+          {/* DESTINATION */}
+          <div className="space-y-2">
+
+            <p className="text-xs uppercase tracking-widest text-white/40">
+              Destination
+            </p>
+
+            <input
+              value={destination}
+              onChange={(e) =>
+                setDestination(e.target.value)
               }
-
-              duration={duration}
-
-              destination={destination}
-
-              estimatedFare={
-                estimatedFare || undefined
-              }
-
-              lastTrip={history[0]}
+              placeholder="Braamfontein, Sandton, Pretoria..."
+              className="w-full h-16 px-5 text-lg bg-white/5 rounded-3xl outline-none border border-white/5 focus:border-cyan-400/40 transition-all"
             />
 
-            {/* CONTROL PANEL */}
-            <div className="glass p-5 rounded-3xl space-y-4">
+          </div>
 
-              {/* GPS STATUS */}
-              <div className="flex items-center justify-between">
+          {/* ERROR */}
+          {error && (
 
-                <div className="text-xs">
-                  {locationReady
-                    ? "🟢 Live GPS Active"
-                    : "🔴 Searching GPS"}
-                </div>
+            <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-3">
 
-                <div className="text-[10px] text-white/40">
-                  {BackgroundTracker.native
-                    ? "Native Tracking"
-                    : "Browser Tracking"}
-                </div>
+              <p className="text-red-400 text-sm">
+                {error}
+              </p>
 
-              </div>
+            </div>
 
-              {/* DESTINATION */}
-              <input
-                value={destination}
-                onChange={(e) =>
-                  setDestination(
-                    e.target.value
-                  )
-                }
-                placeholder="Enter destination"
-                className="w-full h-12 px-4 bg-white/5 rounded-2xl"
-              />
+          )}
 
-              {/* ERROR */}
-              {error && (
+          {/* NETWORKS */}
+          {destination.trim() && (
 
-                <div className="text-red-400 text-xs">
-                  {error}
-                </div>
+            <div className="space-y-3">
 
-              )}
+              <p className="text-xs uppercase tracking-widest text-white/40">
+                Choose Transport
+              </p>
 
-              {/* NETWORK BUTTONS */}
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-3">
 
                 {TRANSIT_NETWORKS.map((n) => (
 
@@ -825,108 +1011,136 @@ const App = () => {
                       planTrip(n)
                     }
                     disabled={isPlanning}
-                    className={`text-xs py-3 rounded-2xl transition-all ${
+                    className={`rounded-2xl p-4 text-left transition-all border ${
                       network === n
-                        ? "bg-emerald-500"
-                        : "bg-blue-600"
+                        ? "bg-emerald-500 border-emerald-400"
+                        : "bg-white/5 border-white/5 hover:border-cyan-400/20"
                     }`}
                   >
-                    {n}
+
+                    <p className="font-bold text-sm">
+                      {n}
+                    </p>
+
+                    <p className="text-[10px] text-white/50 mt-1">
+                      Calculate fare
+                    </p>
+
                   </button>
 
                 ))}
 
               </div>
 
-              {/* ESTIMATED FARE */}
-              {estimatedFare !== null && (
-
-                <div className="text-center">
-
-                  <p className="text-xs text-white/40">
-                    Estimated Fare
-                  </p>
-
-                  <p className="text-3xl font-black">
-                    R
-                    {estimatedFare.toFixed(
-                      2
-                    )}
-                  </p>
-
-                </div>
-
-              )}
-
             </div>
 
-            {/* START */}
-            {estimatedFare !== null &&
-              tripState ===
-                TripState.IDLE && (
+          )}
 
-              <button
-                onClick={startTrip}
-                className="btn-primary w-full h-14"
-              >
-                Start Trip
-              </button>
+        </div>
 
-            )}
+        {/* ESTIMATED FARE */}
+        {estimatedFare !== null && (
 
-            {/* END */}
-            {tripState ===
-              TripState.ACTIVE && (
+          <div className="glass rounded-3xl p-6 text-center space-y-2">
 
-              <button
-                onClick={endTrip}
-                className="btn-primary w-full h-14 pulse-glow"
-              >
-                End Trip
-              </button>
+            <p className="text-xs uppercase tracking-widest text-white/40">
+              Estimated Fare
+            </p>
 
-            )}
+            <h2 className="text-5xl font-black tracking-tight">
 
-            {/* VERIFY */}
-            {verifyTrip && (
+              R{estimatedFare.toFixed(2)}
 
-              <div className="glass p-5 rounded-3xl space-y-3">
+            </h2>
 
-                <p className="font-bold">
-                  Confirm your fare
-                </p>
+            <p className="text-sm text-white/40">
 
-                <p className="text-2xl font-black">
-                  R
-                  {verifyTrip.fare.toFixed(
-                    2
-                  )}
-                </p>
+              {plannedDistance.toFixed(2)} km trip
 
-                <input
-                  placeholder="Actual fare (optional)"
-                  value={actualFare}
-                  onChange={(e) =>
-                    setActualFare(
-                      e.target.value
-                    )
-                  }
-                  className="w-full p-3 bg-white/5 rounded-2xl"
-                />
+            </p>
 
-                <button
-                  onClick={confirmTrip}
-                  className="btn-primary w-full h-12"
-                >
-                  Confirm Trip
-                </button>
+          </div>
 
-              </div>
-
-            )}
-
-          </>
         )}
+
+        {/* START BUTTON */}
+        {estimatedFare !== null && (
+
+          <button
+            onClick={startTrip}
+            className="btn-primary w-full h-16 text-lg font-bold rounded-3xl"
+          >
+            Start Journey
+          </button>
+
+        )}
+
+        {/* LAST TRIP */}
+        {history.length > 0 && (
+
+          <VirtualCard
+            state={tripState}
+            network={history[0]?.network || null}
+            distance={history[0]?.distance || 0}
+            duration={history[0]?.duration || 0}
+            destination={
+              history[0]?.destination || ""
+            }
+            estimatedFare={
+              history[0]?.fare || undefined
+            }
+            lastTrip={history[0]}
+          />
+
+        )}
+
+      </div>
+
+    )}
+
+    {/* ====================================================== */}
+    {/* VERIFY */}
+    {/* ====================================================== */}
+    {verifyTrip && (
+
+      <div className="glass p-5 rounded-3xl space-y-4">
+
+        <div>
+
+          <p className="text-sm text-white/50">
+            Trip Complete
+          </p>
+
+          <p className="text-4xl font-black mt-1">
+            R{verifyTrip.fare.toFixed(2)}
+          </p>
+
+        </div>
+
+        <input
+          placeholder="Actual fare (optional)"
+          value={actualFare}
+          onChange={(e) =>
+            setActualFare(
+              e.target.value
+            )
+          }
+          className="w-full p-4 bg-white/5 rounded-2xl outline-none"
+        />
+
+        <button
+          onClick={confirmTrip}
+          className="btn-primary w-full h-14"
+        >
+          Confirm Trip
+        </button>
+
+      </div>
+
+    )}
+
+  </>
+)}
 
         {/* STATS */}
         {activeTab === "stats" && (
@@ -995,4 +1209,4 @@ const App = () => {
 
 };
 
-export default App;
+export default App; 

@@ -1,8 +1,8 @@
 import React, {
-  useState,
+  useEffect,
   useMemo,
   useRef,
-  useEffect
+  useState
 } from "react";
 
 import { TripState } from "../types";
@@ -11,21 +11,22 @@ import type {
   TransitNetwork
 } from "../types";
 
-// ================= TYPES =================
+// ======================================================
+// TYPES
+// ======================================================
+
 interface VirtualCardProps {
+
   state: TripState;
 
   network: TransitNetwork | null;
 
-  // 🔥 LIVE DISTANCE ONLY
   distance: number;
 
-  // 🔥 LIVE DURATION ONLY
   duration: number;
 
   destination?: string;
 
-  // 🔥 LOCKED ESTIMATED FARE
   estimatedFare?: number;
 
   lastTrip?: {
@@ -34,11 +35,42 @@ interface VirtualCardProps {
     fare: number;
     date?: number;
   };
+
 }
 
-// ================= COMPONENT =================
+// ======================================================
+// NETWORK COLORS
+// ======================================================
+
+const NETWORK_THEME = {
+
+  Taxi:
+    "from-amber-500/30 to-orange-500/10",
+
+  Gautrain:
+    "from-blue-500/30 to-cyan-500/10",
+
+  "Rea Vaya":
+    "from-emerald-500/30 to-green-500/10",
+
+  "A Re Yeng":
+    "from-purple-500/30 to-fuchsia-500/10",
+
+  "Tshwane Bus Service":
+    "from-sky-500/30 to-indigo-500/10",
+
+  Metrorail:
+    "from-zinc-500/30 to-zinc-800/10"
+
+} as const;
+
+// ======================================================
+// COMPONENT
+// ======================================================
+
 export const VirtualCard: React.FC<VirtualCardProps> =
 React.memo(({
+
   state,
   network,
 
@@ -46,14 +78,17 @@ React.memo(({
   duration = 0,
 
   destination,
+
   estimatedFare,
 
   lastTrip
+
 }) => {
 
-  // ==================================================
-  // 🎯 PREMIUM TILT ENGINE
-  // ==================================================
+  // ======================================================
+  // TILT ENGINE
+  // ======================================================
+
   const [rotation, setRotation] =
     useState({ x: 0, y: 0 });
 
@@ -61,29 +96,39 @@ React.memo(({
     useRef<number | null>(null);
 
   useEffect(() => {
+
     return () => {
+
       if (rafRef.current) {
         cancelAnimationFrame(
           rafRef.current
         );
       }
+
     };
+
   }, []);
 
   const updateRotation = (
     x: number,
     y: number
   ) => {
+
     if (rafRef.current) {
+
       cancelAnimationFrame(
         rafRef.current
       );
+
     }
 
     rafRef.current =
       requestAnimationFrame(() => {
+
         setRotation({ x, y });
+
       });
+
   };
 
   const handleMove = (
@@ -91,404 +136,511 @@ React.memo(({
     clientY: number,
     rect: DOMRect
   ) => {
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
 
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
+    const x =
+      clientX - rect.left;
+
+    const y =
+      clientY - rect.top;
+
+    const centerX =
+      rect.width / 2;
+
+    const centerY =
+      rect.height / 2;
 
     updateRotation(
-      (centerY - y) / 18,
-      (x - centerX) / 18
+      (centerY - y) / 30,
+      (x - centerX) / 30
     );
+
   };
 
   const handleMouseMove = (
     e: React.MouseEvent<HTMLDivElement>
   ) => {
+
     handleMove(
       e.clientX,
       e.clientY,
       e.currentTarget.getBoundingClientRect()
     );
+
   };
 
   const handleTouchMove = (
     e: React.TouchEvent<HTMLDivElement>
   ) => {
-    const t = e.touches[0];
 
-    if (!t) return;
+    const touch =
+      e.touches[0];
+
+    if (!touch) return;
 
     handleMove(
-      t.clientX,
-      t.clientY,
+      touch.clientX,
+      touch.clientY,
       e.currentTarget.getBoundingClientRect()
     );
+
   };
 
-  const handleLeave = () => {
-    setRotation({ x: 0, y: 0 });
+  const resetTilt = () => {
+
+    setRotation({
+      x: 0,
+      y: 0
+    });
+
   };
 
-  // ==================================================
-  // ⏱ FORMATTERS
-  // ==================================================
-  const formatTime = (seconds: number) => {
-    if (!seconds) return "0:00";
+  // ======================================================
+  // FORMATTERS
+  // ======================================================
+
+  const formatTime = (
+    seconds: number
+  ) => {
+
+    if (!seconds) {
+      return "0m";
+    }
 
     const h =
       Math.floor(seconds / 3600);
 
     const m =
-      Math.floor((seconds % 3600) / 60);
-
-    const s =
-      Math.floor(seconds % 60);
+      Math.floor(
+        (seconds % 3600) / 60
+      );
 
     if (h > 0) {
-      return `${h}:${m
-        .toString()
-        .padStart(2, "0")}:${s
-        .toString()
-        .padStart(2, "0")}`;
+      return `${h}h ${m}m`;
     }
 
-    return `${m}:${s
-      .toString()
-      .padStart(2, "0")}`;
+    return `${m}m`;
+
   };
 
-  const formatDate = (ts?: number) => {
-    if (!ts) return "";
-
-    return new Date(ts)
-      .toLocaleDateString();
-  };
-
-  // ==================================================
-  // 🚀 STABLE SPEED ENGINE
-  // ==================================================
   const speed = useMemo(() => {
 
-    // 🚫 NO DURATION
-    if (!duration || duration < 5) {
-      return 0;
-    }
-
-    // 🚫 INVALID DISTANCE
-    if (!distance || distance <= 0) {
-      return 0;
-    }
-
-    const calculatedSpeed =
-      distance / (duration / 3600);
-
-    // 🚫 IMPOSSIBLE SPEEDS
     if (
-      !Number.isFinite(calculatedSpeed) ||
-      calculatedSpeed < 0 ||
-      calculatedSpeed > 180
+      !distance ||
+      !duration ||
+      duration < 10
     ) {
+
       return 0;
+
     }
 
-    return calculatedSpeed;
+    const calculated =
+      distance /
+      (duration / 3600);
+
+    if (
+      !Number.isFinite(calculated) ||
+      calculated < 0 ||
+      calculated > 180
+    ) {
+
+      return 0;
+
+    }
+
+    return calculated;
 
   }, [distance, duration]);
 
-  // ==================================================
-  // 🔒 LOCKED FARE DISPLAY
-  // ==================================================
-  const displayFare = useMemo(() => {
-    return estimatedFare ?? null;
-  }, [estimatedFare]);
+  // ======================================================
+  // STATUS
+  // ======================================================
 
-  // ==================================================
-  // 🧠 QUALITY ENGINE
-  // ==================================================
-  const quality = useMemo(() => {
+  const statusText = useMemo(() => {
 
-    if (speed >= 70) {
-      return {
-        label: "Express",
-        color: "text-red-400"
-      };
+    switch (state) {
+
+      case TripState.ACTIVE:
+        return "Journey Active";
+
+      case TripState.PLANNING:
+        return "Ready To Travel";
+
+      default:
+        return "Ready";
+
     }
 
-    if (speed >= 30) {
-      return {
-        label: "Efficient",
-        color: "text-emerald-400"
-      };
-    }
+  }, [state]);
 
-    if (speed >= 10) {
-      return {
-        label: "Moderate",
-        color: "text-amber-400"
-      };
-    }
+  // ======================================================
+  // THEME
+  // ======================================================
 
-    return {
-      label: "Slow",
-      color: "text-white/40"
-    };
+  const theme =
+    network &&
+    network in NETWORK_THEME
+      ? NETWORK_THEME[network]
+      : "from-blue-500/20 to-cyan-500/5";
 
-  }, [speed]);
+  // ======================================================
+  // STYLE
+  // ======================================================
 
-  // ==================================================
-  // 🎨 CARD STYLING
-  // ==================================================
-  const cardStyle = {
+  const style = {
+
     transform:
       `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`
+
   };
 
-  const displayNetwork =
-    network ?? "Select mode";
-
-  // ==================================================
+  // ======================================================
   // UI
-  // ==================================================
+  // ======================================================
+
   return (
+
     <div
-      className="relative w-full aspect-[1.6/1] mb-8"
+      className="
+        relative
+        w-full
+        aspect-[1.65/1]
+      "
+      style={{
+        perspective: "1600px"
+      }}
       onMouseMove={handleMouseMove}
       onTouchMove={handleTouchMove}
-      onMouseLeave={handleLeave}
-      onTouchEnd={handleLeave}
-      style={{
-        perspective: "1400px"
-      }}
+      onMouseLeave={resetTilt}
+      onTouchEnd={resetTilt}
     >
 
       {/* GLOW */}
-      <div className="
-        absolute inset-0
-        rounded-[2.5rem]
-        blur-2xl
-        bg-blue-500/20
-        opacity-40
-      " />
+      <div
+        className={`
+          absolute inset-0
+          rounded-[2.5rem]
+          blur-3xl
+          opacity-50
+          bg-gradient-to-br
+          ${theme}
+        `}
+      />
 
       {/* CARD */}
       <div
+        style={style}
         className="
-          w-full h-full
+          relative
+          overflow-hidden
+          w-full
+          h-full
           rounded-[2.5rem]
-          relative overflow-hidden
           border border-white/10
+          transition-transform
+          duration-200
+          will-change-transform
         "
-        style={cardStyle}
       >
 
-        {/* BACKGROUND */}
-        <div className="
-          absolute inset-0
-          bg-gradient-to-br
-          from-blue-900/60
-          via-black
-          to-black
-        " />
+        {/* BG */}
+        <div
+          className={`
+            absolute inset-0
+            bg-gradient-to-br
+            ${theme}
+          `}
+        />
 
         {/* GLASS */}
-        <div className="
-          absolute inset-0
-          backdrop-blur-xl
-          bg-white/5
-        " />
+        <div
+          className="
+            absolute inset-0
+            bg-black/50
+            backdrop-blur-2xl
+          "
+        />
+
+        {/* SHINE */}
+        <div
+          className="
+            absolute
+            top-0
+            left-[-30%]
+            h-full
+            w-[40%]
+            rotate-12
+            bg-white/10
+            blur-2xl
+          "
+        />
 
         {/* CONTENT */}
-        <div className="
-          absolute inset-0
-          p-6
-          flex flex-col justify-between
-          z-10
-        ">
+        <div
+          className="
+            relative
+            z-10
+            h-full
+            p-6
+            flex
+            flex-col
+            justify-between
+          "
+        >
 
-          {/* ================= TOP ================= */}
-          <div className="flex justify-between">
+          {/* HEADER */}
+          <div
+            className="
+              flex
+              items-start
+              justify-between
+            "
+          >
 
             <div>
-              <p className="
-                text-[10px]
-                text-white/30
-                uppercase
-              ">
-                Mode
+
+              <p
+                className="
+                  text-[11px]
+                  uppercase
+                  tracking-[0.25em]
+                  text-white/40
+                "
+              >
+                Pulse Transit
               </p>
 
-              <h2 className="
-                text-xl
-                font-black
-              ">
-                {displayNetwork}
+              <h2
+                className="
+                  mt-2
+                  text-3xl
+                  font-black
+                  leading-none
+                "
+              >
+                {network || "Start Journey"}
               </h2>
+
             </div>
 
-            <div className="
-              text-[10px]
-              text-blue-400
-              font-bold
-            ">
-              PULSE
+            <div
+              className="
+                px-3
+                py-1
+                rounded-full
+                bg-white/10
+                text-[10px]
+                uppercase
+                tracking-wider
+                text-white/70
+              "
+            >
+              {statusText}
             </div>
 
           </div>
 
-          {/* ================= CENTER ================= */}
-          {state === TripState.IDLE ? (
+          {/* CENTER */}
+          {state === TripState.ACTIVE ? (
 
-            <div>
+            <div
+              className="
+                grid
+                grid-cols-2
+                gap-4
+              "
+            >
 
-              <p className="
-                text-lg
-                font-semibold
-              ">
-                Where are we going?
-              </p>
+              <Metric
+                label="Distance"
+                value={`${distance.toFixed(2)} km`}
+              />
 
-              {destination && (
-                <p className="
-                  text-sm
-                  text-white/60
-                  mt-1
-                ">
-                  → {destination}
-                </p>
-              )}
+              <Metric
+                label="Duration"
+                value={formatTime(duration)}
+              />
 
-              {/* 🔥 ESTIMATE */}
-              {estimatedFare !== undefined && (
-                <p className="
-                  text-xl
-                  font-bold
-                  text-emerald-400
-                  mt-2
-                ">
-                  Est: R
-                  {estimatedFare.toFixed(2)}
-                </p>
-              )}
+              <Metric
+                label="Speed"
+                value={`${speed.toFixed(0)} km/h`}
+              />
 
-              {/* LAST TRIP */}
-              {lastTrip && (
-                <p className="
-                  text-xs
-                  text-white/30
-                  mt-2
-                ">
-                  Last:{" "}
-                  {(lastTrip.distance ?? 0)
-                    .toFixed(1)}km
-                  {" • "}
-                  R
-                  {(lastTrip.fare ?? 0)
-                    .toFixed(2)}
-                  {" • "}
-                  {formatDate(lastTrip.date)}
-                </p>
-              )}
+              <Metric
+                label="Estimated"
+                value={
+                  estimatedFare !== undefined
+                    ? `R${estimatedFare.toFixed(2)}`
+                    : "--"
+                }
+                highlight
+              />
 
             </div>
 
           ) : (
 
-            <div className="
-              flex justify-between
-              text-sm
-            ">
+            <div>
 
-              {/* TIME */}
-              <div>
-                <p className="
-                  text-white/40
-                  text-xs
-                ">
-                  Time
-                </p>
+              <p
+                className="
+                  text-white/50
+                  text-sm
+                "
+              >
+                Destination
+              </p>
 
-                <p className="font-mono">
-                  {formatTime(duration)}
-                </p>
-              </div>
-
-              {/* DISTANCE */}
-              <div>
-                <p className="
-                  text-white/40
-                  text-xs
-                ">
-                  Distance
-                </p>
-
-                <p>
-                  {distance.toFixed(2)} km
-                </p>
-              </div>
-
-              {/* SPEED */}
-              <div>
-                <p className="
-                  text-white/40
-                  text-xs
-                ">
-                  Speed
-                </p>
-
-                <p>
-                  {speed.toFixed(0)} km/h
-                </p>
-              </div>
-
-              {/* FARE */}
-              <div>
-                <p className="
-                  text-white/40
-                  text-xs
-                ">
-                  Fare
-                </p>
-
-                <p className="
-                  text-emerald-400
+              <h3
+                className="
+                  mt-1
+                  text-2xl
                   font-bold
-                ">
-                  {displayFare !== null
-                    ? `R${displayFare.toFixed(2)}`
-                    : "--"}
-                </p>
-              </div>
+                  truncate
+                "
+              >
+                {destination ||
+                  "Where are you going?"}
+              </h3>
+
+              {estimatedFare !== undefined && (
+
+                <div className="mt-5">
+
+                  <p
+                    className="
+                      text-white/40
+                      text-xs
+                    "
+                  >
+                    Estimated Fare
+                  </p>
+
+                  <p
+                    className="
+                      text-4xl
+                      font-black
+                      text-emerald-400
+                    "
+                  >
+                    R
+                    {estimatedFare.toFixed(2)}
+                  </p>
+
+                </div>
+
+              )}
 
             </div>
 
           )}
 
-          {/* ================= FOOTER ================= */}
-          <div className="
-            flex justify-between
-            items-end
-            text-xs
-          ">
+          {/* FOOTER */}
+          <div
+            className="
+              flex
+              items-end
+              justify-between
+            "
+          >
 
-            {state === TripState.ACTIVE && (
-              <span className={quality.color}>
-                {quality.label}
-              </span>
-            )}
+            <div>
 
-            <span className="
-              text-white/30
-              italic
-            ">
-              Feel the rhythm of your journey
-            </span>
+              {lastTrip && (
+                <p
+                  className="
+                    text-[11px]
+                    text-white/35
+                  "
+                >
+                  Last Trip • R
+                  {lastTrip.fare.toFixed(2)}
+                </p>
+              )}
+
+            </div>
+
+            <p
+              className="
+                text-[11px]
+                text-white/25
+                italic
+              "
+            >
+              Feel the rhythm
+            </p>
 
           </div>
 
         </div>
+
       </div>
+
     </div>
+
   );
+
 });
+
+// ======================================================
+// METRIC
+// ======================================================
+
+interface MetricProps {
+
+  label: string;
+
+  value: string;
+
+  highlight?: boolean;
+
+}
+
+const Metric: React.FC<MetricProps> = ({
+  label,
+  value,
+  highlight
+}) => {
+
+  return (
+
+    <div
+      className="
+        rounded-2xl
+        bg-white/5
+        border border-white/5
+        p-4
+      "
+    >
+
+      <p
+        className="
+          text-[11px]
+          uppercase
+          tracking-wide
+          text-white/40
+        "
+      >
+        {label}
+      </p>
+
+      <p
+        className={`
+          mt-1
+          text-lg
+          font-bold
+          ${
+            highlight
+              ? "text-emerald-400"
+              : "text-white"
+          }
+        `}
+      >
+        {value}
+      </p>
+
+    </div>
+
+  );
+
+};

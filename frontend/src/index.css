@@ -1,50 +1,68 @@
 @import "tailwindcss";
 
-/* ===============================
-   🌍 ROOT DESIGN TOKENS (PULSE)
-================================ */
+/* ======================================================
+   🌍 PULSE DESIGN SYSTEM
+====================================================== */
 :root {
-  --bg: #000000;
-  --fg: #ffffff;
+  --bg: #050816;
+  --bg-secondary: #0b1023;
 
   --surface: rgba(255,255,255,0.04);
   --surface-strong: rgba(255,255,255,0.08);
 
-  --glass-bg: rgba(255,255,255,0.05);
+  --glass-bg: rgba(255,255,255,0.06);
   --glass-border: rgba(255,255,255,0.08);
 
-  /* 🔥 PULSE BRAND */
-  --pulse-blue: #3b82f6;
-  --pulse-purple: #a855f7;
-  --pulse-glow: #60a5fa;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255,255,255,0.72);
+  --text-muted: rgba(255,255,255,0.42);
 
-  --emerald: #10b981;
-  --amber: #f59e0b;
-  --red: #ef4444;
+  --pulse-blue: #3b82f6;
+  --pulse-cyan: #06b6d4;
+  --pulse-purple: #8b5cf6;
+  --pulse-emerald: #10b981;
+  --pulse-red: #ef4444;
+  --pulse-amber: #f59e0b;
 
   --radius-xl: 1.5rem;
   --radius-2xl: 2rem;
+  --radius-3xl: 2.5rem;
+
+  --shadow-soft:
+    0 10px 30px rgba(0,0,0,0.25);
+
+  --shadow-deep:
+    0 25px 70px rgba(0,0,0,0.45);
 
   --blur-xl: 18px;
 
-  --shadow-soft: 0 10px 30px rgba(0,0,0,0.35);
-  --shadow-deep: 0 20px 60px rgba(0,0,0,0.55);
-
-  --transition-fast: 120ms ease;
+  --transition-fast: 140ms ease;
   --transition-base: 220ms ease;
 }
 
-/* ===============================
-   ⚙️ GLOBAL BASE
-================================ */
-html, body {
+/* ======================================================
+   🌍 GLOBAL RESET
+====================================================== */
+html,
+body,
+#root {
   margin: 0;
   padding: 0;
 
-  background: var(--bg);
-  color: var(--fg);
+  min-height: 100%;
+  width: 100%;
 
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+
+  color: var(--text-primary);
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -52,36 +70,63 @@ html, body {
   overscroll-behavior: none;
   touch-action: manipulation;
 
-  height: 100%;
+  overflow-x: hidden;
 }
 
 * {
-  -webkit-tap-highlight-color: transparent;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
-img, video {
-  max-width: 100%;
+img,
+video {
   display: block;
+  max-width: 100%;
 }
 
-/* ===============================
-   🌌 APP BACKGROUND (PULSE DEPTH)
-================================ */
+button,
+input {
+  font: inherit;
+}
+
+/* ======================================================
+   🌌 APP BACKGROUND
+====================================================== */
 .app-bg {
   min-height: 100vh;
 
   background:
-    radial-gradient(circle at 20% 20%, rgba(59,130,246,0.12), transparent 40%),
-    radial-gradient(circle at 80% 0%, rgba(168,85,247,0.10), transparent 45%),
-    var(--bg);
+    radial-gradient(
+      circle at top left,
+      rgba(59,130,246,0.18),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(139,92,246,0.12),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at bottom,
+      rgba(6,182,212,0.10),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      #050816 0%,
+      #060b1d 35%,
+      #04070f 100%
+    );
 
   background-attachment: fixed;
 }
 
-/* ===============================
+/* ======================================================
    🧊 GLASS SYSTEM
-================================ */
+====================================================== */
 .glass {
   background: var(--glass-bg);
 
@@ -92,51 +137,90 @@ img, video {
 
   box-shadow: var(--shadow-soft);
 
-  transition: transform var(--transition-base),
-              box-shadow var(--transition-base);
+  transition:
+    transform var(--transition-base),
+    border-color var(--transition-base),
+    box-shadow var(--transition-base);
 
   will-change: transform;
 }
 
 .glass:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-deep);
+  border-color: rgba(255,255,255,0.12);
 }
 
-/* fallback */
 @supports not (backdrop-filter: blur(10px)) {
   .glass {
-    background: rgba(20,20,20,0.9);
+    background: rgba(15,15,20,0.92);
   }
 }
 
-/* ===============================
-   🔘 BUTTON SYSTEM
-================================ */
+/* ======================================================
+   🔘 BUTTONS
+====================================================== */
 .btn-primary {
-  background: linear-gradient(135deg, var(--pulse-blue), #6366f1);
+  height: 56px;
+
+  border: none;
+
+  border-radius: 1.4rem;
+
   color: white;
-  font-weight: 700;
 
-  border-radius: var(--radius-xl);
+  font-weight: 800;
+  letter-spacing: -0.02em;
 
-  box-shadow: 0 10px 25px rgba(59,130,246,0.25);
+  background:
+    linear-gradient(
+      135deg,
+      var(--pulse-blue),
+      var(--pulse-purple)
+    );
 
-  transition: all var(--transition-base);
+  box-shadow:
+    0 10px 30px rgba(59,130,246,0.35);
+
+  transition:
+    transform var(--transition-fast),
+    opacity var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(59,130,246,0.35);
+  transform: translateY(-1px);
 }
 
 .btn-primary:active {
-  transform: scale(0.96);
+  transform: scale(0.97);
 }
 
-/* ===============================
-   🧠 CARD SYSTEM (PULSE IDENTITY)
-================================ */
+.btn-primary:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* ======================================================
+   🔳 SECONDARY BUTTON
+====================================================== */
+.btn-secondary {
+  background: rgba(255,255,255,0.05);
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  color: white;
+
+  border-radius: 1.2rem;
+
+  transition: all var(--transition-fast);
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+/* ======================================================
+   🧠 PREMIUM CARD GLOW
+====================================================== */
 .card-glow {
   position: relative;
   isolation: isolate;
@@ -144,155 +228,302 @@ img, video {
 
 .card-glow::before {
   content: "";
+
   position: absolute;
-  inset: -2px;
+  inset: -1px;
+
   border-radius: inherit;
 
-  background: linear-gradient(
-    120deg,
-    var(--pulse-blue),
-    var(--pulse-purple),
-    #06b6d4
-  );
+  background:
+    linear-gradient(
+      135deg,
+      rgba(59,130,246,0.6),
+      rgba(139,92,246,0.4),
+      rgba(6,182,212,0.4)
+    );
 
-  filter: blur(18px);
-  opacity: 0.25;
+  filter: blur(24px);
+
+  opacity: 0.22;
 
   z-index: -1;
 }
 
-/* ===============================
-   🔥 ACTIVE TRIP STATE
-================================ */
-.trip-active {
-  border: 1px solid rgba(59,130,246,0.4);
-  box-shadow: 0 0 25px rgba(59,130,246,0.25);
+/* ======================================================
+   📦 PREMIUM CARD
+====================================================== */
+.premium-card {
+  border-radius: var(--radius-3xl);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.08),
+      rgba(255,255,255,0.03)
+    );
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  overflow: hidden;
+
+  position: relative;
 }
 
-/* ===============================
-   💓 PULSE ANIMATION (BRAND CORE)
-================================ */
-.pulse-rhythm {
-  animation: pulseRhythm 2.2s infinite ease-in-out;
-}
+/* ======================================================
+   ✨ CARD SHIMMER
+====================================================== */
+.card-shimmer::after {
+  content: "";
 
-@keyframes pulseRhythm {
-  0%, 100% {
-    box-shadow: 0 0 10px rgba(96,165,250,0.15);
-  }
-  50% {
-    box-shadow: 0 0 35px rgba(96,165,250,0.45);
-  }
-}
-
-/* ===============================
-   ✨ GLOSS
-================================ */
-.card-gloss {
   position: absolute;
   inset: 0;
 
-  background: linear-gradient(
-    120deg,
-    transparent 40%,
-    rgba(255,255,255,0.12),
-    transparent 60%
-  );
+  background:
+    linear-gradient(
+      120deg,
+      transparent 20%,
+      rgba(255,255,255,0.08) 50%,
+      transparent 80%
+    );
+
+  transform: translateX(-120%);
+
+  animation: shimmer 5s infinite;
 
   pointer-events: none;
 }
 
-/* ===============================
-   ✍️ INPUT SYSTEM
-================================ */
-input {
-  outline: none;
-  border: none;
+@keyframes shimmer {
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+/* ======================================================
+   💓 ACTIVE TRIP STATE
+====================================================== */
+.trip-active {
+  border-color:
+    rgba(59,130,246,0.25);
+
+  box-shadow:
+    0 0 0 1px rgba(59,130,246,0.15),
+    0 0 40px rgba(59,130,246,0.18);
+}
+
+/* ======================================================
+   🔵 LIVE DOT
+====================================================== */
+.live-dot {
+  width: 8px;
+  height: 8px;
+
+  border-radius: 999px;
+
+  background: var(--pulse-emerald);
+
+  box-shadow:
+    0 0 10px rgba(16,185,129,0.8);
+
+  animation: livePulse 1.6s infinite;
+}
+
+@keyframes livePulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.4);
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ======================================================
+   🧠 INPUT SYSTEM
+====================================================== */
+.input-primary {
+  width: 100%;
+  height: 56px;
+
+  padding: 0 1rem;
+
+  border-radius: 1.2rem;
+
+  border: 1px solid rgba(255,255,255,0.06);
+
+  background:
+    rgba(255,255,255,0.05);
+
   color: white;
-  background: transparent;
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
 }
 
-input::placeholder {
-  color: rgba(255,255,255,0.4);
+.input-primary:focus {
+  border-color:
+    rgba(59,130,246,0.4);
+
+  background:
+    rgba(255,255,255,0.08);
 }
 
-input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 100px black inset;
-  -webkit-text-fill-color: white;
+.input-primary::placeholder {
+  color: rgba(255,255,255,0.34);
 }
 
-/* ===============================
-   🎬 MICRO-INTERACTIONS
-================================ */
+/* ======================================================
+   🎯 NETWORK CHIPS
+====================================================== */
+.network-chip {
+  min-height: 52px;
+
+  border-radius: 1.2rem;
+
+  background:
+    rgba(255,255,255,0.05);
+
+  border:
+    1px solid rgba(255,255,255,0.06);
+
+  color: white;
+
+  font-weight: 700;
+  font-size: 0.8rem;
+
+  transition:
+    transform var(--transition-fast),
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.network-chip:hover {
+  transform: translateY(-1px);
+}
+
+.network-chip.active {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(59,130,246,0.22),
+      rgba(139,92,246,0.18)
+    );
+
+  border-color:
+    rgba(59,130,246,0.45);
+}
+
+/* ======================================================
+   📊 STAT CARD
+====================================================== */
+.stat-card {
+  border-radius: 1.5rem;
+
+  padding: 1rem;
+
+  background:
+    rgba(255,255,255,0.05);
+
+  border:
+    1px solid rgba(255,255,255,0.06);
+}
+
+/* ======================================================
+   📱 BOTTOM NAV
+====================================================== */
+.bottom-nav {
+  background:
+    rgba(8,10,20,0.88);
+
+  backdrop-filter: blur(20px);
+
+  border:
+    1px solid rgba(255,255,255,0.08);
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.35);
+}
+
+/* ======================================================
+   🎬 ANIMATIONS
+====================================================== */
 .fade-in {
-  animation: fadeIn 0.35s ease forwards;
+  animation:
+    fadeIn 0.35s ease forwards;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* ===============================
-   🔥 STATUS COLORS
-================================ */
+.scale-in {
+  animation:
+    scaleIn 0.25s ease forwards;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ======================================================
+   ⚡ STATUS COLORS
+====================================================== */
 .status-live {
-  color: var(--emerald);
+  color: var(--pulse-emerald);
 }
 
 .status-warning {
-  color: var(--amber);
+  color: var(--pulse-amber);
 }
 
 .status-danger {
-  color: var(--red);
+  color: var(--pulse-red);
 }
 
-/* ===============================
-   📲 INSTALL BANNER (PULSE)
-================================ */
+/* ======================================================
+   📲 INSTALL BANNER
+====================================================== */
 .install-banner {
   position: fixed;
-  bottom: calc(16px + env(safe-area-inset-bottom));
+
+  top: 1rem;
   left: 50%;
+
   transform: translateX(-50%);
 
-  width: calc(100% - 32px);
+  width: calc(100% - 2rem);
   max-width: 420px;
-
-  padding: 14px 18px;
-
-  border-radius: var(--radius-xl);
-
-  background: rgba(20,20,20,0.95);
-  backdrop-filter: blur(16px);
-
-  border: 1px solid rgba(255,255,255,0.08);
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 
   z-index: 9999;
 }
 
-.install-btn {
-  background: var(--pulse-blue);
-  padding: 8px 14px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-/* ===============================
+/* ======================================================
    📜 SCROLL
-================================ */
+====================================================== */
 ::-webkit-scrollbar {
   display: none;
 }
@@ -301,30 +532,34 @@ html {
   scroll-behavior: smooth;
 }
 
-/* ===============================
-   ⚡ PERFORMANCE LAYER
-================================ */
+/* ======================================================
+   📱 SAFE AREAS
+====================================================== */
+.safe-top {
+  padding-top:
+    env(safe-area-inset-top);
+}
+
+.safe-bottom {
+  padding-bottom:
+    env(safe-area-inset-bottom);
+}
+
+/* ======================================================
+   ⚡ PERFORMANCE
+====================================================== */
 .glass,
 .btn-primary,
-.card-glow {
-  will-change: transform, opacity;
+.card-glow,
+.premium-card {
+  will-change:
+    transform,
+    opacity;
 }
 
-* {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-/* ===============================
-   📱 SAFE AREA
-================================ */
-.safe-bottom {
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-/* ===============================
-   🔋 LOW POWER MODE
-================================ */
+/* ======================================================
+   🔋 REDUCED MOTION
+====================================================== */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation: none !important;
@@ -333,5 +568,21 @@ html {
 
   .glass {
     backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
+}
+
+/* ======================================================
+   📱 SMALL DEVICE OPTIMIZATION
+====================================================== */
+@media (max-width: 380px) {
+
+  .btn-primary {
+    height: 52px;
+  }
+
+  .input-primary {
+    height: 52px;
+  }
+
 }
