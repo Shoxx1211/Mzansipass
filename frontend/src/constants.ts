@@ -639,3 +639,36 @@ export const QUICK_DESTINATIONS = [
   "Randburg"
 
 ] as const;
+
+export const NETWORK_ZONES = {
+  Gautrain: [
+    "Pretoria",
+    "Johannesburg",
+    "Centurion",
+    "Sandton"
+  ],
+
+  "A Re Yeng": [
+    "Pretoria",
+    "Tshwane"
+  ],
+
+  "Tshwane Bus Service": [
+    "Pretoria",
+    "Tshwane"
+  ],
+
+  "Rea Vaya": [
+    "Johannesburg",
+    "Soweto"
+  ],
+
+  Metrorail: [
+    "Pretoria",
+    "Johannesburg"
+  ],
+
+  Taxi: [
+    "Everywhere"
+  ]
+} as const;

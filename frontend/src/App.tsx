@@ -1,10 +1,9 @@
 // src/App.tsx
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 
 import { Layout } from "./components/Layout";
 import { AuthView } from "./components/Auth";
-import { VirtualCard } from "./components/VirtualCard";
 
 import {
   TripState,
@@ -28,6 +27,9 @@ import {
 import {
   BackgroundTracker
 } from "./services/backgroundTracker";
+
+import { NETWORK_ZONES } from "./constants";
+import { detectCity } from "./services/locationZone";
 
 // ======================================================
 // STORAGE
@@ -176,6 +178,31 @@ const App = () => {
   // ======================================================
   const [isPlanning, setIsPlanning] =
     useState(false);
+
+    const availableNetworks = useMemo<readonly TransitNetwork[]>(() => {
+
+  if (!lastLocation) {
+    return TRANSIT_NETWORKS;
+  }
+
+  const city =
+    detectCity(lastLocation);
+
+  return TRANSIT_NETWORKS.filter(
+    (network) => {
+
+      const zones =
+        NETWORK_ZONES[network];
+
+      return (
+        zones.includes(city as never) ||
+        zones.includes("Everywhere" as never)
+      );
+
+    }
+  );
+
+}, [lastLocation]);
 
   // ======================================================
   // LOAD USER
@@ -838,6 +865,7 @@ const App = () => {
         {activeTab === "home" && (
   <>
 
+
     {/* ====================================================== */}
     {/* HERO */}
     {/* ====================================================== */}
@@ -875,81 +903,267 @@ const App = () => {
 
     </div>
 
-    {/* ====================================================== */}
-    {/* ACTIVE TRIP CARD */}
-    {/* ====================================================== */}
-    {tripState === TripState.ACTIVE && (
+   {/* ====================================================== */}
+{/* PREMIUM ACTIVE TRIP */}
+{/* ====================================================== */}
+{tripState === TripState.ACTIVE && (
 
-      <div className="glass rounded-3xl p-5 space-y-4 border border-emerald-500/20">
+  <div
+    className="
+      relative
+      overflow-hidden
+      rounded-[2rem]
+      border
+      border-white/10
+      bg-gradient-to-br
+      from-emerald-500/15
+      via-black/40
+      to-cyan-500/10
+      backdrop-blur-2xl
+      p-6
+      shadow-2xl
+      shadow-emerald-500/10
+    "
+  >
 
-        <div className="flex items-center justify-between">
+    {/* BACKGROUND GLOW */}
+    <div
+      className="
+        absolute
+        -top-20
+        -right-20
+        h-56
+        w-56
+        rounded-full
+        bg-emerald-400/10
+        blur-3xl
+      "
+    />
 
-          <div>
+    {/* HEADER */}
+    <div className="relative flex items-start justify-between">
 
-            <p className="text-xs text-emerald-400">
-              LIVE TRIP
-            </p>
+      <div className="space-y-2">
 
-            <h2 className="text-2xl font-black">
-              {network}
-            </h2>
+        <div className="flex items-center gap-2">
 
-          </div>
+          <div
+            className="
+              h-2.5
+              w-2.5
+              rounded-full
+              bg-emerald-400
+              animate-pulse
+            "
+          />
 
-          <div className="h-3 w-3 rounded-full bg-emerald-400 pulse-glow" />
+          <p
+            className="
+              text-[11px]
+              uppercase
+              tracking-[0.25em]
+              text-emerald-300/80
+            "
+          >
+            Journey Active
+          </p>
 
         </div>
 
-        <div className="grid grid-cols-3 gap-3">
+        <div>
 
-          <div className="bg-white/5 rounded-2xl p-3">
+          <h2
+            className="
+              text-3xl
+              font-black
+              tracking-tight
+              text-white
+            "
+          >
+            {network}
+          </h2>
 
-            <p className="text-[10px] text-white/40">
-              Distance
-            </p>
+          <p className="mt-1 text-sm text-white/45">
+            Destination
+          </p>
 
-            <p className="text-lg font-bold">
-              {(currentTrip.distance || 0).toFixed(2)} km
-            </p>
-
-          </div>
-
-          <div className="bg-white/5 rounded-2xl p-3">
-
-            <p className="text-[10px] text-white/40">
-              Duration
-            </p>
-
-            <p className="text-lg font-bold">
-              {Math.floor(duration / 60)}m
-            </p>
-
-          </div>
-
-          <div className="bg-white/5 rounded-2xl p-3">
-
-            <p className="text-[10px] text-white/40">
-              Speed
-            </p>
-
-            <p className="text-lg font-bold">
-              {(currentTrip.avgSpeed || 0).toFixed(1)}
-            </p>
-
-          </div>
+          <p
+            className="
+              text-lg
+              font-semibold
+              text-white/90
+            "
+          >
+            {destination}
+          </p>
 
         </div>
-
-        <button
-          onClick={endTrip}
-          className="btn-primary w-full h-14 pulse-glow"
-        >
-          End Trip
-        </button>
 
       </div>
 
-    )}
+      {/* LIVE CHIP */}
+      <div
+        className="
+          rounded-2xl
+          border
+          border-emerald-400/20
+          bg-emerald-400/10
+          px-4
+          py-2
+          backdrop-blur-xl
+        "
+      >
+
+        <p
+          className="
+            text-[10px]
+            uppercase
+            tracking-widest
+            text-emerald-300
+          "
+        >
+          Live Tracking
+        </p>
+
+      </div>
+
+    </div>
+
+    {/* MAIN TIME */}
+    <div className="relative mt-8">
+
+      <p className="text-xs uppercase tracking-widest text-white/35">
+        Duration
+      </p>
+
+      <h1
+        className="
+          mt-2
+          text-6xl
+          font-black
+          leading-none
+          tracking-tight
+          text-white
+        "
+      >
+        {duration >= 3600
+          ? `${Math.floor(duration / 3600)}h ${Math.floor((duration % 3600) / 60)}m`
+          : duration >= 60
+          ? `${Math.floor(duration / 60)}m ${duration % 60}s`
+          : `${duration}s`}
+      </h1>
+
+    </div>
+
+    {/* METRICS */}
+    <div className="relative mt-8 grid grid-cols-2 gap-4">
+
+      {/* DISTANCE */}
+      <div
+        className="
+          rounded-3xl
+          border
+          border-white/5
+          bg-white/5
+          p-4
+          backdrop-blur-xl
+        "
+      >
+
+        <p
+          className="
+            text-[11px]
+            uppercase
+            tracking-widest
+            text-white/35
+          "
+        >
+          Distance
+        </p>
+
+        <div className="mt-3 flex items-end gap-1">
+
+          <h3 className="text-3xl font-black">
+            {(currentTrip.distance || 0).toFixed(2)}
+          </h3>
+
+          <span className="pb-1 text-sm text-white/45">
+            km
+          </span>
+
+        </div>
+
+      </div>
+
+      {/* SPEED */}
+      <div
+        className="
+          rounded-3xl
+          border
+          border-white/5
+          bg-white/5
+          p-4
+          backdrop-blur-xl
+        "
+      >
+
+        <p
+          className="
+            text-[11px]
+            uppercase
+            tracking-widest
+            text-white/35
+          "
+        >
+          Avg Speed
+        </p>
+
+        <div className="mt-3 flex items-end gap-1">
+
+          <h3 className="text-3xl font-black">
+            {(currentTrip.avgSpeed || 0).toFixed(1)}
+          </h3>
+
+          <span className="pb-1 text-sm text-white/45">
+            km/h
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    {/* END BUTTON */}
+    <button
+      onClick={endTrip}
+      className="
+        relative
+        mt-8
+        h-16
+        w-full
+        rounded-3xl
+        bg-gradient-to-r
+        from-emerald-500
+        to-cyan-500
+        text-lg
+        font-black
+        tracking-wide
+        text-white
+        transition-all
+        duration-300
+        hover:scale-[1.02]
+        active:scale-[0.98]
+        shadow-xl
+        shadow-emerald-500/20
+      "
+    >
+      End Journey
+    </button>
+
+  </div>
+
+)}
 
     {/* ====================================================== */}
     {/* PLANNING UI */}
@@ -1003,7 +1217,7 @@ const App = () => {
 
               <div className="grid grid-cols-2 gap-3">
 
-                {TRANSIT_NETWORKS.map((n) => (
+                {availableNetworks.map((n) => (
 
                   <button
                     key={n}
@@ -1072,25 +1286,6 @@ const App = () => {
           >
             Start Journey
           </button>
-
-        )}
-
-        {/* LAST TRIP */}
-        {history.length > 0 && (
-
-          <VirtualCard
-            state={tripState}
-            network={history[0]?.network || null}
-            distance={history[0]?.distance || 0}
-            duration={history[0]?.duration || 0}
-            destination={
-              history[0]?.destination || ""
-            }
-            estimatedFare={
-              history[0]?.fare || undefined
-            }
-            lastTrip={history[0]}
-          />
 
         )}
 

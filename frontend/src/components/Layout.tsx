@@ -296,7 +296,7 @@ React.FC<LayoutProps> = ({
         bg-[#050816]
         text-white
         relative
-        overflow-hidden
+        overflow-x-hidden
       "
     >
 
@@ -584,7 +584,7 @@ React.FC<LayoutProps> = ({
                 bg-white/5
                 border
                 border-white/10
-                overflow-hidden
+                overflow-x-hidden
               "
             >
 
