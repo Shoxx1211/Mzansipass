@@ -117,8 +117,11 @@ const App = () => {
   const [estimatedFare, setEstimatedFare] =
     useState<number | null>(null);
 
-  const [plannedDistance, setPlannedDistance] =
-    useState(0);
+    const [networkEstimates, setNetworkEstimates] =
+  useState<
+    Record<TransitNetwork, number>
+  >({} as Record<TransitNetwork, number>);
+
 
   const [currentTrip, setCurrentTrip] =
     useState<Partial<TripData>>({});
@@ -238,6 +241,79 @@ const App = () => {
     }
 
   }, [user]);
+
+  // ======================================================
+// RESTORE ACTIVE TRACKING SESSION
+// ======================================================
+useEffect(() => {
+
+  const restored =
+    BackgroundTracker.restoreTrip();
+
+  if (!restored) {
+    return;
+  }
+
+  setTripState(
+    TripState.ACTIVE
+  );
+
+  setDuration(
+    Math.floor(
+      (
+        Date.now() -
+        restored.startedAt
+      ) / 1000
+    )
+  );
+
+  setCurrentTrip({
+
+    distance:
+      restored.totalDistance / 1000,
+
+    avgSpeed:
+      restored.averageSpeed,
+
+    network:
+      network || undefined
+
+  });
+
+  // ======================================================
+  // LIVE SUBSCRIPTION
+  // ======================================================
+  const unsubscribe =
+    BackgroundTracker.subscribeToTrip(
+      (trip) => {
+
+        setDuration(
+          Math.floor(
+            (
+              Date.now() -
+              trip.startedAt
+            ) / 1000
+          )
+        );
+
+        setCurrentTrip((prev) => ({
+
+          ...prev,
+
+          distance:
+            trip.totalDistance / 1000,
+
+          avgSpeed:
+            trip.averageSpeed
+
+        }));
+
+      }
+    );
+
+  return unsubscribe;
+
+}, []);
 
   // ======================================================
   // FOREGROUND GPS
@@ -426,43 +502,6 @@ const App = () => {
 
   }, [tripState]);
 
-  // ======================================================
-  // TIMER
-  // ======================================================
-  useEffect(() => {
-
-    if (
-      tripState !==
-      TripState.ACTIVE
-    ) {
-      return;
-    }
-
-    const interval =
-      setInterval(() => {
-
-        if (
-          !tripStartRef.current
-        ) {
-          return;
-        }
-
-        const elapsed =
-          Math.floor(
-            (
-              Date.now() -
-              tripStartRef.current
-            ) / 1000
-          );
-
-        setDuration(elapsed);
-
-      }, 1000);
-
-    return () =>
-      clearInterval(interval);
-
-  }, [tripState]);
 
   // ======================================================
   // SAVE ACTIVE SESSION
@@ -494,9 +533,88 @@ const App = () => {
   ]);
 
   // ======================================================
+// LIVE NETWORK ESTIMATES
+// ======================================================
+useEffect(() => {
+
+  const generateEstimates =
+    async () => {
+
+      if (
+        !destination.trim() ||
+        !lastLocation
+      ) {
+        return;
+      }
+
+      try {
+
+        const result =
+          await DestinationEngine.plan({
+
+            origin:
+              lastLocation,
+
+            destination:
+              destination.trim().toLowerCase()
+
+          });
+
+        const distance =
+          result.distance;
+
+        const estimates:
+          Record<
+            TransitNetwork,
+            number
+          > =
+            {} as Record<
+              TransitNetwork,
+              number
+            >;
+
+        for (const network of availableNetworks) {
+
+          const fareResult =
+            await FareEngine.computeFinalFare({
+
+              network,
+              distance
+
+            });
+
+          estimates[network] =
+            fareResult.fare;
+
+        }
+
+        setNetworkEstimates(
+          estimates
+        );
+
+      } catch (err) {
+
+        console.error(
+          "Estimate generation failed",
+          err
+        );
+
+      }
+
+    };
+
+  generateEstimates();
+
+}, [
+  destination,
+  lastLocation,
+  availableNetworks
+]);
+
+  // ======================================================
   // PLAN TRIP
   // ======================================================
-  const planTrip = async (
+  const  planTrip = async (
     selectedNetwork: TransitNetwork
   ) => {
 
@@ -618,9 +736,7 @@ const App = () => {
         selectedNetwork
       );
 
-      setPlannedDistance(
-        distance
-      );
+  
 
       setEstimatedFare(
         fare
@@ -665,11 +781,6 @@ const App = () => {
     ) {
       return;
     }
-
-    tripStartRef.current =
-      Date.now();
-
-    setDuration(0);
 
     setTripState(
       TripState.ACTIVE
@@ -763,7 +874,6 @@ const App = () => {
 
     setEstimatedFare(null);
 
-    setPlannedDistance(0);
 
     setDestination("");
 
@@ -829,8 +939,6 @@ const App = () => {
     setDestination("");
 
     setEstimatedFare(null);
-
-    setPlannedDistance(0);
 
     setNetwork(null);
 
@@ -1207,75 +1315,157 @@ const App = () => {
           )}
 
           {/* NETWORKS */}
-          {destination.trim() && (
+{destination.trim() && (
 
-            <div className="space-y-3">
+  <div className="space-y-3">
 
-              <p className="text-xs uppercase tracking-widest text-white/40">
-                Choose Transport
-              </p>
+    <p className="text-xs uppercase tracking-widest text-white/40">
+      Available Transport
+    </p>
 
-              <div className="grid grid-cols-2 gap-3">
+    <div className="space-y-3">
 
-                {availableNetworks.map((n) => (
+      {availableNetworks.map((n) => {
 
-                  <button
-                    key={n}
-                    onClick={() =>
-                      planTrip(n)
-                    }
-                    disabled={isPlanning}
-                    className={`rounded-2xl p-4 text-left transition-all border ${
-                      network === n
-                        ? "bg-emerald-500 border-emerald-400"
-                        : "bg-white/5 border-white/5 hover:border-cyan-400/20"
-                    }`}
-                  >
+        const estimate =
+          networkEstimates[n];
 
-                    <p className="font-bold text-sm">
-                      {n}
-                    </p>
+        const selected =
+          network === n;
 
-                    <p className="text-[10px] text-white/50 mt-1">
-                      Calculate fare
-                    </p>
+        return (
 
-                  </button>
+          <button
+            key={n}
 
-                ))}
+            onClick={() => {
+
+              setNetwork(n);
+
+              if (estimate) {
+
+                setEstimatedFare(
+                  estimate
+                );
+
+              }
+
+            }}
+
+            className={`
+              w-full
+              rounded-3xl
+              p-5
+              text-left
+              transition-all
+              border
+
+              ${
+                selected
+                  ? `
+                    bg-emerald-500/15
+                    border-emerald-400/40
+                    shadow-[0_0_30px_rgba(16,185,129,0.15)]
+                  `
+                  : `
+                    bg-white/[0.03]
+                    border-white/5
+                    hover:border-cyan-400/20
+                  `
+              }
+            `}
+          >
+
+            <div className="flex items-center justify-between">
+
+              <div>
+
+                <p className="text-lg font-bold">
+                  {n}
+                </p>
+
+                <p className="text-xs text-white/40 mt-1">
+                  Smart fare estimate
+                </p>
+
+              </div>
+
+              <div className="text-right">
+
+                <p className="text-2xl font-black">
+
+                  {estimate
+                    ? `~R${estimate.toFixed(2)}`
+                    : "--"}
+
+                </p>
+
+                <p className="text-[10px] text-white/40 mt-1">
+                  Approximate
+                </p>
 
               </div>
 
             </div>
 
-          )}
+          </button>
+
+        );
+
+      })}
+
+    </div>
+
+  </div>
+
+)}
 
         </div>
 
-        {/* ESTIMATED FARE */}
-        {estimatedFare !== null && (
+      {/* ESTIMATED FARE */}
+{estimatedFare !== null && (
 
-          <div className="glass rounded-3xl p-6 text-center space-y-2">
+  <div
+    className="
+      glass
+      rounded-[2rem]
+      p-7
+      text-center
+      border
+      border-emerald-500/10
+      bg-gradient-to-br
+      from-emerald-500/10
+      to-cyan-500/5
+      backdrop-blur-2xl
+      space-y-3
+    "
+  >
 
-            <p className="text-xs uppercase tracking-widest text-white/40">
-              Estimated Fare
-            </p>
+    <p
+      className="
+        text-[11px]
+        uppercase
+        tracking-[0.3em]
+        text-white/40
+      "
+    >
+      Estimated Fare
+    </p>
 
-            <h2 className="text-5xl font-black tracking-tight">
+    <h2
+      className="
+        text-6xl
+        font-black
+        tracking-tight
+        leading-none
+      "
+    >
+      R{estimatedFare.toFixed(2)}
+    </h2>
 
-              R{estimatedFare.toFixed(2)}
+  </div>
 
-            </h2>
-
-            <p className="text-sm text-white/40">
-
-              {plannedDistance.toFixed(2)} km trip
-
-            </p>
-
-          </div>
-
-        )}
+)}
 
         {/* START BUTTON */}
         {estimatedFare !== null && (

@@ -247,6 +247,14 @@ class BackgroundTrackerService {
         STORAGE.trackingState
       );
 
+      if (this.currentTrip) {
+
+  this.currentTrip.active = false;
+
+  this.persistTrip();
+
+}
+
       console.log(
         "✅ Tracker stopped"
       );
@@ -651,6 +659,55 @@ class BackgroundTrackerService {
   getTrip() {
     return this.currentTrip;
   }
+
+  // ======================================================
+// ♻️ RESTORE ACTIVE SESSION
+// ======================================================
+restoreTrip() {
+
+  try {
+
+    const raw =
+      localStorage.getItem(
+        STORAGE.activeTrip
+      );
+
+    if (!raw) {
+      return null;
+    }
+
+    const parsed: ActiveTripSession =
+      JSON.parse(raw);
+
+    // ======================================================
+    // VALIDATE
+    // ======================================================
+    if (!parsed.active) {
+      return null;
+    }
+
+    this.currentTrip = parsed;
+
+    this.isTracking = true;
+
+    console.log(
+      "♻️ Active trip restored"
+    );
+
+    return parsed;
+
+  } catch (error) {
+
+    console.error(
+      "❌ Restore failed:",
+      error
+    );
+
+    return null;
+
+  }
+
+}
 
   // ======================================================
   // 🔋 STATUS
