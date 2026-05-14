@@ -82,9 +82,11 @@ React.FC<LayoutProps> = ({
       setDeferredPrompt(e);
 
       if (!dismissed) {
+
         setShowInstallBanner(
           true
         );
+
       }
 
     };
@@ -211,7 +213,7 @@ React.FC<LayoutProps> = ({
               "Start Journey",
 
             subtitle:
-              "Simple smart transport"
+              "Premium smart mobility"
           };
 
         case TabType.pulse:
@@ -221,7 +223,7 @@ React.FC<LayoutProps> = ({
               "Live Pulse",
 
             subtitle:
-              "Transport intelligence"
+              "Transit intelligence"
           };
 
         case TabType.stats:
@@ -231,7 +233,7 @@ React.FC<LayoutProps> = ({
               "Trip History",
 
             subtitle:
-              "Your travel insights"
+              "Travel analytics"
           };
 
         case TabType.settings:
@@ -241,7 +243,7 @@ React.FC<LayoutProps> = ({
               "Settings",
 
             subtitle:
-              "Customize Pulse"
+              "Customize experience"
           };
 
         default:
@@ -251,7 +253,7 @@ React.FC<LayoutProps> = ({
               "Pulse",
 
             subtitle:
-              "Smart mobility"
+              "Urban mobility"
           };
 
       }
@@ -292,11 +294,11 @@ React.FC<LayoutProps> = ({
 
     <div
       className="
+        relative
         min-h-screen
+        overflow-hidden
         bg-[#050816]
         text-white
-        relative
-        overflow-x-hidden
       "
     >
 
@@ -305,29 +307,40 @@ React.FC<LayoutProps> = ({
       ====================================================== */}
       <div
         className="
+          pointer-events-none
           absolute
-          top-[-120px]
-          left-[-120px]
-          w-[320px]
-          h-[320px]
-          bg-emerald-500/10
-          rounded-full
-          blur-3xl
+          inset-0
+          overflow-hidden
         "
-      />
+      >
 
-      <div
-        className="
-          absolute
-          bottom-[-120px]
-          right-[-120px]
-          w-[320px]
-          h-[320px]
-          bg-blue-500/10
-          rounded-full
-          blur-3xl
-        "
-      />
+        <div
+          className="
+            absolute
+            -top-32
+            -left-32
+            h-[420px]
+            w-[420px]
+            rounded-full
+            bg-emerald-500/10
+            blur-3xl
+          "
+        />
+
+        <div
+          className="
+            absolute
+            bottom-[-180px]
+            right-[-180px]
+            h-[420px]
+            w-[420px]
+            rounded-full
+            bg-cyan-500/10
+            blur-3xl
+          "
+        />
+
+      </div>
 
       {/* ======================================================
           INSTALL BANNER
@@ -340,10 +353,10 @@ React.FC<LayoutProps> = ({
             top-4
             left-0
             right-0
-            z-50
-            px-4
+            z-[100]
             flex
             justify-center
+            px-4
           "
         >
 
@@ -355,72 +368,80 @@ React.FC<LayoutProps> = ({
               border
               border-white/10
               bg-black/60
-              backdrop-blur-xl
               p-4
-              flex
-              items-center
-              justify-between
+              backdrop-blur-2xl
             "
           >
-
-            <div>
-
-              <p
-                className="
-                  text-sm
-                  font-bold
-                "
-              >
-                Install Pulse
-              </p>
-
-              <p
-                className="
-                  text-[11px]
-                  text-white/50
-                  mt-1
-                "
-              >
-                Faster access and offline support
-              </p>
-
-            </div>
 
             <div
               className="
                 flex
                 items-center
-                gap-2
+                justify-between
+                gap-3
               "
             >
 
-              <button
-                onClick={
-                  handleInstall
-                }
-                className="
-                  px-4
-                  py-2
-                  rounded-2xl
-                  bg-emerald-500
-                  text-xs
-                  font-bold
-                "
-              >
-                Install
-              </button>
+              <div>
 
-              <button
-                onClick={
-                  dismissInstall
-                }
+                <p
+                  className="
+                    text-sm
+                    font-bold
+                  "
+                >
+                  Install Pulse
+                </p>
+
+                <p
+                  className="
+                    mt-1
+                    text-[11px]
+                    text-white/50
+                  "
+                >
+                  Faster access and offline support
+                </p>
+
+              </div>
+
+              <div
                 className="
-                  text-white/40
-                  text-sm
+                  flex
+                  items-center
+                  gap-2
                 "
               >
-                ✕
-              </button>
+
+                <button
+                  onClick={
+                    handleInstall
+                  }
+                  className="
+                    rounded-2xl
+                    bg-emerald-500
+                    px-4
+                    py-2
+                    text-xs
+                    font-bold
+                  "
+                >
+                  Install
+                </button>
+
+                <button
+                  onClick={
+                    dismissInstall
+                  }
+                  className="
+                    text-sm
+                    text-white/40
+                  "
+                >
+                  ✕
+                </button>
+
+              </div>
 
             </div>
 
@@ -439,13 +460,13 @@ React.FC<LayoutProps> = ({
         <div
           className="
             fixed
-            bottom-24
+            bottom-28
             left-0
             right-0
             z-40
-            px-4
             flex
             justify-center
+            px-4
           "
         >
 
@@ -454,18 +475,17 @@ React.FC<LayoutProps> = ({
               w-full
               max-w-md
               rounded-2xl
-              bg-black/60
               border
               border-white/10
-              backdrop-blur-xl
+              bg-black/60
               p-3
               text-center
               text-xs
               text-white/70
+              backdrop-blur-xl
             "
           >
-            Tap Share →
-            Add to Home Screen
+            Tap Share → Add to Home Screen
           </div>
 
         </div>
@@ -473,17 +493,17 @@ React.FC<LayoutProps> = ({
       )}
 
       {/* ======================================================
-          MAIN WRAPPER
+          APP SHELL
       ====================================================== */}
       <div
         className="
           relative
           z-10
+          mx-auto
+          flex
+          min-h-screen
           w-full
           max-w-md
-          mx-auto
-          min-h-screen
-          flex
           flex-col
         "
       >
@@ -493,9 +513,16 @@ React.FC<LayoutProps> = ({
         ====================================================== */}
         <header
           className="
+            sticky
+            top-0
+            z-40
+            border-b
+            border-white/[0.03]
+            bg-[#050816]/80
             px-5
-            pt-8
+            pt-[max(env(safe-area-inset-top),1.5rem)]
             pb-5
+            backdrop-blur-2xl
           "
         >
 
@@ -517,29 +544,32 @@ React.FC<LayoutProps> = ({
 
               <div
                 className="
-                  w-12
-                  h-12
-                  rounded-2xl
-                  bg-white/5
-                  border
-                  border-white/10
                   flex
+                  h-12
+                  w-12
                   items-center
                   justify-center
+                  rounded-2xl
+                  border
+                  border-white/10
+                  bg-white/5
                   backdrop-blur-xl
                 "
               >
+
                 <PulseLogo
                   size={30}
                 />
+
               </div>
 
               <div>
 
                 <h1
                   className="
-                    text-xl
+                    text-[1.35rem]
                     font-black
+                    tracking-tight
                     leading-none
                   "
                 >
@@ -548,23 +578,21 @@ React.FC<LayoutProps> = ({
 
                 <p
                   className="
+                    mt-1
                     text-[11px]
                     text-white/45
-                    mt-1
                   "
                 >
-                  {
-                    header.subtitle
-                  }
+                  {header.subtitle}
                 </p>
 
                 {!isOnline && (
 
                   <p
                     className="
+                      mt-1
                       text-[10px]
                       text-red-400
-                      mt-1
                     "
                   >
                     Offline mode
@@ -576,15 +604,16 @@ React.FC<LayoutProps> = ({
 
             </div>
 
+            {/* PROFILE */}
             <div
               className="
-                w-11
                 h-11
+                w-11
+                overflow-hidden
                 rounded-2xl
-                bg-white/5
                 border
                 border-white/10
-                overflow-x-hidden
+                bg-white/5
               "
             >
 
@@ -592,8 +621,8 @@ React.FC<LayoutProps> = ({
                 src="https://picsum.photos/100"
                 alt="avatar"
                 className="
-                  w-full
                   h-full
+                  w-full
                   object-cover
                 "
               />
@@ -610,8 +639,11 @@ React.FC<LayoutProps> = ({
         <main
           className="
             flex-1
+            overflow-y-auto
             px-5
-            pb-32
+            pb-40
+            pt-5
+            scrollbar-hide
           "
         >
           {children}
@@ -620,93 +652,104 @@ React.FC<LayoutProps> = ({
       </div>
 
       {/* ======================================================
-          BOTTOM NAV
+          NAVBAR
       ====================================================== */}
       <nav
         className="
           fixed
-          bottom-5
+          bottom-[max(env(safe-area-inset-bottom),1rem)]
           left-0
           right-0
           z-50
-          px-4
           flex
           justify-center
+          px-4
+          pointer-events-none
         "
       >
 
         <div
           className="
+            pointer-events-auto
             w-full
             max-w-md
             rounded-[2rem]
             border
             border-white/10
             bg-black/60
-            backdrop-blur-2xl
             px-4
             py-3
-            flex
-            justify-between
-            items-center
+            backdrop-blur-2xl
+            shadow-2xl
+            shadow-black/40
           "
         >
 
-          <NavItem
-            icon="🏠"
-            label="Home"
-            active={
-              activeTab ===
-              TabType.home
-            }
-            onClick={() =>
-              onNavClick(
+          <div
+            className="
+              flex
+              items-center
+              justify-between
+            "
+          >
+
+            <NavItem
+              icon="🏠"
+              label="Home"
+              active={
+                activeTab ===
                 TabType.home
-              )
-            }
-          />
+              }
+              onClick={() =>
+                onNavClick(
+                  TabType.home
+                )
+              }
+            />
 
-          <NavItem
-            icon="📡"
-            label="Pulse"
-            active={
-              activeTab ===
-              TabType.pulse
-            }
-            onClick={() =>
-              onNavClick(
+            <NavItem
+              icon="📡"
+              label="Pulse"
+              active={
+                activeTab ===
                 TabType.pulse
-              )
-            }
-          />
+              }
+              onClick={() =>
+                onNavClick(
+                  TabType.pulse
+                )
+              }
+            />
 
-          <NavItem
-            icon="📊"
-            label="Stats"
-            active={
-              activeTab ===
-              TabType.stats
-            }
-            onClick={() =>
-              onNavClick(
+            <NavItem
+              icon="📊"
+              label="Stats"
+              active={
+                activeTab ===
                 TabType.stats
-              )
-            }
-          />
+              }
+              onClick={() =>
+                onNavClick(
+                  TabType.stats
+                )
+              }
+            />
 
-          <NavItem
-            icon="⚙️"
-            label="Settings"
-            active={
-              activeTab ===
-              TabType.settings
-            }
-            onClick={() =>
-              onNavClick(
+            <NavItem
+              icon="⚙️"
+              label="Settings"
+              active={
+                activeTab ===
                 TabType.settings
-              )
-            }
-          />
+              }
+              onClick={() =>
+                onNavClick(
+                  TabType.settings
+                )
+              }
+            />
+
+          </div>
 
         </div>
 
@@ -743,26 +786,28 @@ React.FC<{
       onClick={onClick}
       className="
         flex
+        min-w-[58px]
         flex-col
         items-center
         justify-center
         gap-1
         transition-all
-        active:scale-90
-        min-w-[56px]
+        active:scale-95
       "
     >
 
       <div
         className={`
-          w-11
-          h-11
-          rounded-2xl
           flex
+          h-11
+          w-11
           items-center
           justify-center
+          rounded-2xl
           text-lg
           transition-all
+          duration-300
+
           ${
             active
               ? `
@@ -785,6 +830,7 @@ React.FC<{
         className={`
           text-[10px]
           font-medium
+
           ${
             active
               ? "text-white"

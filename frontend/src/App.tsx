@@ -182,6 +182,9 @@ const App = () => {
   const [isPlanning, setIsPlanning] =
     useState(false);
 
+    const [showTransportOptions, setShowTransportOptions] =
+  useState(false);
+
     const availableNetworks = useMemo<readonly TransitNetwork[]>(() => {
 
   if (!lastLocation) {
@@ -533,6 +536,27 @@ useEffect(() => {
   ]);
 
   // ======================================================
+// CONTINUE TO TRANSPORT OPTIONS
+// ======================================================
+const continueToTransportOptions = () => {
+
+  if (!destination.trim()) {
+
+    setError(
+      "Please enter a destination"
+    );
+
+    return;
+
+  }
+
+  setError(null);
+
+  setShowTransportOptions(true);
+
+};
+
+  // ======================================================
 // LIVE NETWORK ESTIMATES
 // ======================================================
 useEffect(() => {
@@ -874,6 +898,7 @@ useEffect(() => {
 
     setEstimatedFare(null);
 
+    setShowTransportOptions(false);
 
     setDestination("");
 
@@ -937,6 +962,8 @@ useEffect(() => {
     setCurrentTrip({});
 
     setDestination("");
+
+    setShowTransportOptions(false);
 
     setEstimatedFare(null);
 
@@ -1299,6 +1326,26 @@ useEffect(() => {
               className="w-full h-16 px-5 text-lg bg-white/5 rounded-3xl outline-none border border-white/5 focus:border-cyan-400/40 transition-all"
             />
 
+            <button
+  onClick={continueToTransportOptions}
+  className="
+    w-full
+    h-14
+    rounded-3xl
+    bg-gradient-to-r
+    from-cyan-500
+    to-emerald-500
+    font-bold
+    text-white
+    transition-all
+    duration-300
+    hover:scale-[1.01]
+    active:scale-[0.99]
+  "
+>
+  Continue
+</button>
+
           </div>
 
           {/* ERROR */}
@@ -1315,7 +1362,7 @@ useEffect(() => {
           )}
 
           {/* NETWORKS */}
-{destination.trim() && (
+{showTransportOptions && (
 
   <div className="space-y-3">
 
