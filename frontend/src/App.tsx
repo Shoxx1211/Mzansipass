@@ -182,8 +182,12 @@ const App = () => {
   const [isPlanning, setIsPlanning] =
     useState(false);
 
-    const [showTransportOptions, setShowTransportOptions] =
-  useState(false);
+  const [planningStep, setPlanningStep] =
+  useState<
+    "destination" |
+    "transport" |
+    "fare"
+  >("destination");
 
     const availableNetworks = useMemo<readonly TransitNetwork[]>(() => {
 
@@ -552,7 +556,7 @@ const continueToTransportOptions = () => {
 
   setError(null);
 
-  setShowTransportOptions(true);
+  setPlanningStep("transport");
 
 };
 
@@ -898,8 +902,6 @@ useEffect(() => {
 
     setEstimatedFare(null);
 
-    setShowTransportOptions(false);
-
     setDestination("");
 
     fareCacheRef.current.clear();
@@ -962,8 +964,6 @@ useEffect(() => {
     setCurrentTrip({});
 
     setDestination("");
-
-    setShowTransportOptions(false);
 
     setEstimatedFare(null);
 
@@ -1300,17 +1300,31 @@ useEffect(() => {
 
 )}
 
-    {/* ====================================================== */}
-    {/* PLANNING UI */}
-    {/* ====================================================== */}
-    {tripState !== TripState.ACTIVE && (
+ {/* ====================================================== */}
+{/* PLANNING UI */}
+{/* ====================================================== */}
+{tripState !== TripState.ACTIVE && (
+
+  <>
+  {error && (
+
+  <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-3">
+
+    <p className="text-red-400 text-sm">
+      {error}
+    </p>
+
+  </div>
+
+)}
+
+    {/* STEP 1 — DESTINATION */}
+    {planningStep === "destination" && (
 
       <div className="space-y-5">
 
-        {/* SEARCH CARD */}
         <div className="glass rounded-3xl p-5 space-y-5">
 
-          {/* DESTINATION */}
           <div className="space-y-2">
 
             <p className="text-xs uppercase tracking-widest text-white/40">
@@ -1327,208 +1341,206 @@ useEffect(() => {
             />
 
             <button
-  onClick={continueToTransportOptions}
-  className="
-    w-full
-    h-14
-    rounded-3xl
-    bg-gradient-to-r
-    from-cyan-500
-    to-emerald-500
-    font-bold
-    text-white
-    transition-all
-    duration-300
-    hover:scale-[1.01]
-    active:scale-[0.99]
-  "
->
-  Continue
-</button>
+              onClick={continueToTransportOptions}
+              className="
+                w-full
+                h-14
+                rounded-3xl
+                bg-gradient-to-r
+                from-cyan-500
+                to-emerald-500
+                font-bold
+                text-white
+              "
+            >
+              Continue
+            </button>
 
           </div>
 
-          {/* ERROR */}
-          {error && (
-
-            <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-3">
-
-              <p className="text-red-400 text-sm">
-                {error}
-              </p>
-
-            </div>
-
-          )}
-
-          {/* NETWORKS */}
-{showTransportOptions && (
-
-  <div className="space-y-3">
-
-    <p className="text-xs uppercase tracking-widest text-white/40">
-      Available Transport
-    </p>
-
-    <div className="space-y-3">
-
-      {availableNetworks.map((n) => {
-
-        const estimate =
-          networkEstimates[n];
-
-        const selected =
-          network === n;
-
-        return (
-
-          <button
-            key={n}
-
-            onClick={() => {
-
-              setNetwork(n);
-
-              if (estimate) {
-
-                setEstimatedFare(
-                  estimate
-                );
-
-              }
-
-            }}
-
-            className={`
-              w-full
-              rounded-3xl
-              p-5
-              text-left
-              transition-all
-              border
-
-              ${
-                selected
-                  ? `
-                    bg-emerald-500/15
-                    border-emerald-400/40
-                    shadow-[0_0_30px_rgba(16,185,129,0.15)]
-                  `
-                  : `
-                    bg-white/[0.03]
-                    border-white/5
-                    hover:border-cyan-400/20
-                  `
-              }
-            `}
-          >
-
-            <div className="flex items-center justify-between">
-
-              <div>
-
-                <p className="text-lg font-bold">
-                  {n}
-                </p>
-
-                <p className="text-xs text-white/40 mt-1">
-                  Smart fare estimate
-                </p>
-
-              </div>
-
-              <div className="text-right">
-
-                <p className="text-2xl font-black">
-
-                  {estimate
-                    ? `~R${estimate.toFixed(2)}`
-                    : "--"}
-
-                </p>
-
-                <p className="text-[10px] text-white/40 mt-1">
-                  Approximate
-                </p>
-
-              </div>
-
-            </div>
-
-          </button>
-
-        );
-
-      })}
-
-    </div>
-
-  </div>
-
-)}
-
         </div>
-
-      {/* ESTIMATED FARE */}
-{estimatedFare !== null && (
-
-  <div
-    className="
-      glass
-      rounded-[2rem]
-      p-7
-      text-center
-      border
-      border-emerald-500/10
-      bg-gradient-to-br
-      from-emerald-500/10
-      to-cyan-500/5
-      backdrop-blur-2xl
-      space-y-3
-    "
-  >
-
-    <p
-      className="
-        text-[11px]
-        uppercase
-        tracking-[0.3em]
-        text-white/40
-      "
-    >
-      Estimated Fare
-    </p>
-
-    <h2
-      className="
-        text-6xl
-        font-black
-        tracking-tight
-        leading-none
-      "
-    >
-      R{estimatedFare.toFixed(2)}
-    </h2>
-
-  </div>
-
-)}
-
-        {/* START BUTTON */}
-        {estimatedFare !== null && (
-
-          <button
-            onClick={startTrip}
-            className="btn-primary w-full h-16 text-lg font-bold rounded-3xl"
-          >
-            Start Journey
-          </button>
-
-        )}
 
       </div>
 
     )}
+
+    {/* STEP 2 — TRANSPORT OPTIONS */}
+    {planningStep === "transport" && (
+
+      <div className="space-y-5">
+
+        <button
+          onClick={() =>
+            setPlanningStep("destination")
+          }
+          className="text-sm text-cyan-400"
+        >
+          ← Back
+        </button>
+
+        <div className="space-y-3">
+
+          <p className="text-xs uppercase tracking-widest text-white/40">
+            Available Transport
+          </p>
+
+          <div className="space-y-3">
+
+            {availableNetworks.map((n) => {
+
+              const estimate =
+                networkEstimates[n];
+
+              const selected =
+                network === n;
+
+              return (
+
+                <button
+                  key={n}
+                  onClick={() =>
+                    planTrip(n)
+                  }
+                  className={`
+                    w-full
+                    rounded-3xl
+                    p-5
+                    text-left
+                    transition-all
+                    border
+
+                    ${
+                      selected
+                        ? `
+                          bg-emerald-500/15
+                          border-emerald-400/40
+                        `
+                        : `
+                          bg-white/[0.03]
+                          border-white/5
+                        `
+                    }
+                  `}
+                >
+
+                  <div className="flex items-center justify-between">
+
+                    <div>
+
+                      <p className="text-lg font-bold">
+                        {n}
+                      </p>
+
+                      <p className="text-xs text-white/40 mt-1">
+                        Smart fare estimate
+                      </p>
+
+                    </div>
+
+                    <div className="text-right">
+
+                      <p className="text-2xl font-black">
+
+                        {estimate
+                          ? `~R${estimate.toFixed(2)}`
+                          : "--"}
+
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                </button>
+
+              );
+
+            })}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    )}
+
+    {/* STEP 3 — FARE SCREEN */}
+    {planningStep === "fare" &&
+      estimatedFare !== null && (
+
+      <div className="space-y-5">
+
+        <button
+          onClick={() =>
+            setPlanningStep("transport")
+          }
+          className="text-sm text-cyan-400"
+        >
+          ← Back
+        </button>
+
+        <div
+          className="
+            glass
+            rounded-[2rem]
+            p-7
+            text-center
+            border
+            border-emerald-500/10
+            bg-gradient-to-br
+            from-emerald-500/10
+            to-cyan-500/5
+            backdrop-blur-2xl
+            space-y-3
+          "
+        >
+
+          <p
+            className="
+              text-[11px]
+              uppercase
+              tracking-[0.3em]
+              text-white/40
+            "
+          >
+            Estimated Fare
+          </p>
+
+          <h2
+            className="
+              text-6xl
+              font-black
+              tracking-tight
+              leading-none
+            "
+          >
+            R{estimatedFare.toFixed(2)}
+          </h2>
+
+        </div>
+
+        <button
+          onClick={startTrip}
+          className="
+            btn-primary
+            w-full
+            h-16
+            text-lg
+            font-bold
+            rounded-3xl
+          "
+        >
+          Start Journey
+        </button>
+
+      </div>
+
+    )}
+
+  </>
+
+)}
 
     {/* ====================================================== */}
     {/* VERIFY */}

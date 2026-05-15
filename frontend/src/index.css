@@ -93,7 +93,7 @@ body,
 
   scroll-behavior: smooth;
 
-  touch-action: manipulation;
+  touch-action: pan-y;
 }
 
 /* ======================================================
@@ -652,4 +652,29 @@ main {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
+}
+
+/* ======================================================
+   📱 PREMIUM SCROLL ENGINE
+====================================================== */
+
+html,
+body,
+#root {
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  -webkit-overflow-scrolling: touch;
+
+  scroll-behavior: smooth;
+}
+
+/* smoother momentum scrolling */
+* {
+  scroll-behavior: smooth;
+}
+
+/* allow full screen touch dragging */
+body {
+  touch-action: pan-y;
 }

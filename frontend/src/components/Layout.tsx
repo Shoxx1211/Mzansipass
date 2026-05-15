@@ -293,14 +293,15 @@ React.FC<LayoutProps> = ({
   return (
 
     <div
-      className="
-        relative
-        min-h-screen
-        overflow-hidden
-        bg-[#050816]
-        text-white
-      "
-    >
+  className="
+    relative
+    min-h-screen
+    overflow-x-hidden
+    overflow-y-auto
+    bg-[#050816]
+    text-white
+  "
+>
 
       {/* ======================================================
           BACKGROUND
@@ -636,16 +637,16 @@ React.FC<LayoutProps> = ({
         {/* ======================================================
             CONTENT
         ====================================================== */}
-        <main
-          className="
-            flex-1
-            overflow-y-auto
-            px-5
-            pb-40
-            pt-5
-            scrollbar-hide
-          "
-        >
+       <main
+  className="
+    flex-1
+    px-5
+    pb-40
+    overflow-y-auto
+    overflow-x-hidden
+    overscroll-y-contain
+  "
+>
           {children}
         </main>
 
