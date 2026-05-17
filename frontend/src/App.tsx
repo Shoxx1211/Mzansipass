@@ -1,4 +1,4 @@
-// src/App.tsx - FIXED VERSION with working inputs and buttons
+// src/App.tsx - FULLY FIXED with working inputs and better UI
 
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 
@@ -131,6 +131,7 @@ const App = () => {
   const [isPlanning, setIsPlanning] = useState(false);
   const [isLoadingEstimates, setIsLoadingEstimates] = useState(false);
   const [planningStep, setPlanningStep] = useState<"destination" | "transport" | "fare">("destination");
+  const [inputKey, setInputKey] = useState(Date.now()); // Force input refresh
 
   // ======================================================
   // REFS
@@ -138,6 +139,7 @@ const App = () => {
   const fareCacheRef = useRef<Map<string, number>>(new Map());
   const gpsWatchIdRef = useRef<number | null>(null);
   const isMountedRef = useRef(true);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // ======================================================
   // MEMOIZED VALUES
@@ -166,6 +168,7 @@ const App = () => {
     setPlanningStep("destination");
     setError(null);
     setIsPlanning(false);
+    setInputKey(Date.now()); // Force input refresh
   }, []);
 
   const resetAllTripState = useCallback(() => {
@@ -177,6 +180,15 @@ const App = () => {
     resetTripPlanner();
     Session.clear("active_trip");
   }, [resetTripPlanner]);
+
+  // Focus input when destination step becomes active
+  useEffect(() => {
+    if (planningStep === "destination" && inputRef.current) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  }, [planningStep]);
 
   // ======================================================
   // DESTINATION PLANNING - FIXED
@@ -216,7 +228,6 @@ const App = () => {
   const handleActualFareChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     console.log("Actual fare changed to:", value);
-    // Allow only numbers and decimal point
     if (value === "" || /^\d*\.?\d*$/.test(value)) {
       setActualFare(value);
       if (error === "Please enter a valid fare amount (0-1000)") {
@@ -226,7 +237,7 @@ const App = () => {
   };
 
   // ======================================================
-  // TAB CHANGE HANDLER - FIXED
+  // TAB CHANGE HANDLER
   // ======================================================
   const handleTabChange = (tab: TabType) => {
     console.log("Tab changed to:", tab);
@@ -582,13 +593,17 @@ const App = () => {
   }
 
   // ======================================================
-  // RENDER
+  // RENDER - FULLY FIXED
   // ======================================================
   return (
     <Layout activeTab={activeTab} onNavClick={handleTabChange}>
       <div 
-        className="space-y-6 px-4 pb-28 overflow-y-auto min-h-screen"
-        style={{ WebkitOverflowScrolling: "touch", scrollBehavior: "smooth" }}
+        className="space-y-6 px-4 pb-32 overflow-y-auto min-h-screen"
+        style={{ 
+          WebkitOverflowScrolling: "touch", 
+          scrollBehavior: "smooth",
+          paddingBottom: "120px" // Extra padding for sticky button
+        }}
       >
         {/* HOME TAB */}
         {activeTab === "home" && (
@@ -599,7 +614,7 @@ const App = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-white/40 text-sm">Welcome back</p>
-                    <h1 className="text-3xl font-black tracking-tight">Where are you going?</h1>
+                    <h1 className="text-3xl font-black tracking-tight text-white">Where are you going?</h1>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-white/50">
                     <span>{locationReady ? "🟢" : "🔴"}</span>
@@ -646,14 +661,14 @@ const App = () => {
                   <div className="rounded-3xl border border-white/5 bg-white/5 p-4 backdrop-blur-xl">
                     <p className="text-[11px] uppercase tracking-widest text-white/35">Distance</p>
                     <div className="mt-3 flex items-end gap-1">
-                      <h3 className="text-3xl font-black">{(currentTrip.distance || 0).toFixed(2)}</h3>
+                      <h3 className="text-3xl font-black text-white">{(currentTrip.distance || 0).toFixed(2)}</h3>
                       <span className="pb-1 text-sm text-white/45">km</span>
                     </div>
                   </div>
                   <div className="rounded-3xl border border-white/5 bg-white/5 p-4 backdrop-blur-xl">
                     <p className="text-[11px] uppercase tracking-widest text-white/35">Avg Speed</p>
                     <div className="mt-3 flex items-end gap-1">
-                      <h3 className="text-3xl font-black">{(currentTrip.avgSpeed || 0).toFixed(1)}</h3>
+                      <h3 className="text-3xl font-black text-white">{(currentTrip.avgSpeed || 0).toFixed(1)}</h3>
                       <span className="pb-1 text-sm text-white/45">km/h</span>
                     </div>
                   </div>
@@ -674,13 +689,15 @@ const App = () => {
                   </div>
                 )}
 
-                {/* STEP 1: DESTINATION */}
+                {/* STEP 1: DESTINATION - FIXED INPUT */}
                 {planningStep === "destination" && (
                   <div className="space-y-5">
                     <div className="glass rounded-3xl p-5 space-y-5">
                       <div className="space-y-2">
                         <p className="text-xs uppercase tracking-widest text-white/40">Destination</p>
                         <input
+                          key={inputKey}
+                          ref={inputRef}
                           type="text"
                           value={destination}
                           onChange={handleDestinationChange}
@@ -689,15 +706,17 @@ const App = () => {
                               continueToTransportOptions();
                             }
                           }}
-                          placeholder="Braamfontein, Sandton, Pretoria..."
-                          className="w-full h-16 px-5 text-lg bg-white/5 rounded-3xl outline-none border border-white/5 focus:border-cyan-400/40 transition-all text-white"
+                          placeholder="e.g., Braamfontein, Sandton, Pretoria..."
+                          className="w-full h-16 px-5 text-lg bg-white/10 rounded-3xl outline-none border-2 border-white/20 focus:border-cyan-400 focus:bg-white/20 transition-all text-white placeholder-white/50"
                           autoFocus
+                          autoComplete="off"
+                          autoCapitalize="words"
                         />
                         <button
                           onClick={continueToTransportOptions}
-                          className="w-full h-14 rounded-3xl bg-gradient-to-r from-cyan-500 to-emerald-500 font-bold text-white transition-all hover:opacity-90 active:scale-95"
+                          className="w-full h-14 rounded-3xl bg-gradient-to-r from-cyan-500 to-emerald-500 font-bold text-white text-lg transition-all hover:opacity-90 active:scale-95 shadow-lg shadow-cyan-500/25"
                         >
-                          Continue
+                          Continue →
                         </button>
                       </div>
                     </div>
@@ -711,6 +730,7 @@ const App = () => {
                       onClick={() => {
                         setPlanningStep("destination");
                         setError(null);
+                        setTimeout(() => inputRef.current?.focus(), 100);
                       }} 
                       className="text-sm text-cyan-400 transition-all hover:opacity-80"
                     >
@@ -727,9 +747,9 @@ const App = () => {
                               onClick={() => planTrip(n)}
                               disabled={isPlanning || isLoadingEstimates}
                               className={`
-                                w-full rounded-3xl p-5 text-left transition-all border
-                                ${isPlanning || isLoadingEstimates ? "opacity-50 cursor-not-allowed" : "active:scale-[0.98]"}
-                                bg-white/[0.03] border-white/5 hover:bg-white/[0.06]
+                                w-full rounded-3xl p-5 text-left transition-all border-2
+                                ${isPlanning || isLoadingEstimates ? "opacity-50 cursor-not-allowed" : "active:scale-[0.98] hover:border-cyan-400/50"}
+                                bg-white/5 border-white/10 hover:bg-white/10
                               `}
                             >
                               <div className="flex items-center justify-between">
@@ -751,9 +771,9 @@ const App = () => {
                   </div>
                 )}
 
-                {/* STEP 3: FARE CONFIRMATION */}
+                {/* STEP 3: FARE CONFIRMATION - WITH STICKY BUTTON */}
                 {planningStep === "fare" && estimatedFare !== null && (
-                  <div className="space-y-5">
+                  <div className="space-y-5 pb-32">
                     <button onClick={() => setPlanningStep("transport")} className="text-sm text-cyan-400 transition-all hover:opacity-80">
                       ← Back
                     </button>
@@ -762,9 +782,16 @@ const App = () => {
                       <h2 className="text-6xl font-black tracking-tight leading-none text-white">R{estimatedFare.toFixed(2)}</h2>
                       <p className="text-xs text-white/30 mt-2">Includes all applicable taxes and fees</p>
                     </div>
-                    <button onClick={startTrip} className="w-full h-16 text-lg font-bold rounded-3xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white transition-all hover:scale-[1.02] active:scale-[0.98]">
-                      Start Journey
-                    </button>
+                    
+                    {/* STICKY BUTTON - Always visible at bottom */}
+                    <div className="fixed bottom-20 left-4 right-4 z-50">
+                      <button 
+                        onClick={startTrip} 
+                        className="w-full h-16 text-lg font-bold rounded-3xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-emerald-500/30 animate-pulse"
+                      >
+                        🚀 Start Journey Now
+                      </button>
+                    </div>
                   </div>
                 )}
               </>
@@ -789,7 +816,7 @@ const App = () => {
                       value={actualFare}
                       onChange={handleActualFareChange}
                       placeholder="Enter actual fare"
-                      className="w-full h-14 px-4 bg-white/5 rounded-2xl outline-none border border-white/10 focus:border-emerald-400/40 transition-all text-white"
+                      className="w-full h-14 px-4 bg-white/10 rounded-2xl outline-none border-2 border-white/20 focus:border-emerald-400 transition-all text-white placeholder-white/50"
                     />
                     <p className="text-[10px] text-white/30">Leave empty to use estimated fare</p>
                   </div>

@@ -92,12 +92,10 @@ body,
   overscroll-behavior-y: none;
 
   scroll-behavior: smooth;
-
-  touch-action: pan-y;
 }
 
 /* ======================================================
-   📱 BODY
+   📱 BODY - FIXED: Removed touch-action restriction
 ====================================================== */
 body {
 
@@ -674,7 +672,89 @@ body,
   scroll-behavior: smooth;
 }
 
-/* allow full screen touch dragging */
-body {
-  touch-action: pan-y;
+/* ======================================================
+   🔥 CRITICAL FIX: ENABLE INPUT INTERACTIONS
+   ====================================================== */
+
+/* Override touch-action for interactive elements */
+input,
+textarea,
+button,
+[contenteditable="true"],
+select,
+[role="button"] {
+  touch-action: manipulation !important;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Specifically for text inputs - allow typing */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="tel"],
+input[type="search"] {
+  touch-action: auto !important;
+  -webkit-user-select: text !important;
+  user-select: text !important;
+  cursor: text !important;
+}
+
+/* Ensure focus state works */
+input:focus,
+textarea:focus {
+  outline: none;
+  touch-action: auto !important;
+}
+
+/* Fix for iOS input zoom prevention (good practice) */
+@media screen and (max-width: 768px) {
+  input,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Ensure buttons are clickable */
+button {
+  touch-action: manipulation !important;
+  cursor: pointer !important;
+}
+
+/* Ensure the main container doesn't block inputs */
+main,
+div[class*="space-y-6"] {
+  touch-action: pan-y pinch-zoom !important;
+}
+
+/* Make sure inputs are above any overlays */
+input,
+button {
+  position: relative;
+  z-index: 10;
+}
+
+/* Remove any pointer-events restrictions */
+input,
+button,
+textarea {
+  pointer-events: auto !important;
+}
+
+/* Fix for any parent containers blocking events */
+.glass,
+.premium-card,
+div[class*="rounded-3xl"] {
+  pointer-events: auto !important;
+}
+
+/* Specific fix for the destination input */
+input[placeholder*="Braamfontein"],
+input[placeholder*="Sandton"],
+input[placeholder*="Pretoria"] {
+  touch-action: auto !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
