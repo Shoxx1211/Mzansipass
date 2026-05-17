@@ -1,6 +1,4 @@
-// src/App.tsx
-// PULSE TRANSIT - Premium Production Build
-// Version: 2.0.0 | Senior Engineering Release
+// src/App.tsx - FIXED VERSION with working inputs and buttons
 
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 
@@ -34,7 +32,7 @@ import { NETWORK_ZONES } from "./constants";
 import { detectCity } from "./services/locationZone";
 
 // ======================================================
-// STORAGE SERVICE - Enhanced with error handling
+// STORAGE SERVICE
 // ======================================================
 const Storage = {
   save: (user: string, key: string, data: unknown): void => {
@@ -65,12 +63,12 @@ const Storage = {
 };
 
 // ======================================================
-// SESSION SERVICE - Enhanced with validation
+// SESSION SERVICE
 // ======================================================
 const Session = {
   save: (key: string, data: unknown): void => {
     try {
-      sessionStorage.setItem(`pulse_session_${key}`, JSON.stringify(data));
+      localStorage.setItem(`pulse_session_${key}`, JSON.stringify(data));
     } catch (error) {
       console.error(`Session save failed for ${key}:`, error);
     }
@@ -78,7 +76,7 @@ const Session = {
 
   load: <T,>(key: string): T | null => {
     try {
-      const raw = sessionStorage.getItem(`pulse_session_${key}`);
+      const raw = localStorage.getItem(`pulse_session_${key}`);
       return raw ? JSON.parse(raw) : null;
     } catch (error) {
       console.error(`Session load failed for ${key}:`, error);
@@ -88,7 +86,7 @@ const Session = {
 
   clear: (key: string): void => {
     try {
-      sessionStorage.removeItem(`pulse_session_${key}`);
+      localStorage.removeItem(`pulse_session_${key}`);
     } catch (error) {
       console.error(`Session clear failed for ${key}:`, error);
     }
@@ -96,10 +94,10 @@ const Session = {
 
   clearAll: (): void => {
     try {
-      const keys = Object.keys(sessionStorage);
+      const keys = Object.keys(localStorage);
       keys.forEach(key => {
         if (key.startsWith('pulse_session_')) {
-          sessionStorage.removeItem(key);
+          localStorage.removeItem(key);
         }
       });
     } catch (error) {
@@ -109,7 +107,7 @@ const Session = {
 };
 
 // ======================================================
-// APP - Premium Enterprise Edition
+// APP
 // ======================================================
 const App = () => {
   // ======================================================
@@ -161,17 +159,6 @@ const App = () => {
     return `${network}_${destination}_${origin.lat.toFixed(3)}_${origin.lng.toFixed(3)}`;
   }, []);
 
-  const validateFareInput = useCallback((value: string): { isValid: boolean; parsedValue: number | null } => {
-    if (!value.trim()) return { isValid: true, parsedValue: null };
-    
-    const parsed = parseFloat(value);
-    if (isNaN(parsed)) return { isValid: false, parsedValue: null };
-    if (parsed < 0) return { isValid: false, parsedValue: null };
-    if (parsed > 1000) return { isValid: false, parsedValue: null }; // Sanity check
-    
-    return { isValid: true, parsedValue: parsed };
-  }, []);
-
   const resetTripPlanner = useCallback(() => {
     setDestination("");
     setEstimatedFare(null);
@@ -192,25 +179,62 @@ const App = () => {
   }, [resetTripPlanner]);
 
   // ======================================================
-  // DESTINATION PLANNING
+  // DESTINATION PLANNING - FIXED
   // ======================================================
-  const continueToTransportOptions = useCallback(() => {
+  const handleDestinationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    console.log("Destination changed to:", value);
+    setDestination(value);
+    if (error === "Please enter a destination" || error === "Destination must be at least 3 characters") {
+      setError(null);
+    }
+  };
+
+  const continueToTransportOptions = () => {
+    console.log("Continue button clicked, destination:", destination);
+    
     if (!destination || !destination.trim()) {
+      console.log("No destination entered");
       setError("Please enter a destination");
       return;
     }
 
     if (destination.trim().length < 3) {
+      console.log("Destination too short");
       setError("Destination must be at least 3 characters");
       return;
     }
 
+    console.log("Moving to transport step");
     setError(null);
     setPlanningStep("transport");
-  }, [destination]);
+  };
 
   // ======================================================
-  // LIVE NETWORK ESTIMATES - Optimized
+  // HANDLE ACTUAL FARE INPUT - FIXED
+  // ======================================================
+  const handleActualFareChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    console.log("Actual fare changed to:", value);
+    // Allow only numbers and decimal point
+    if (value === "" || /^\d*\.?\d*$/.test(value)) {
+      setActualFare(value);
+      if (error === "Please enter a valid fare amount (0-1000)") {
+        setError(null);
+      }
+    }
+  };
+
+  // ======================================================
+  // TAB CHANGE HANDLER - FIXED
+  // ======================================================
+  const handleTabChange = (tab: TabType) => {
+    console.log("Tab changed to:", tab);
+    setActiveTab(tab);
+  };
+
+  // ======================================================
+  // LIVE NETWORK ESTIMATES
   // ======================================================
   useEffect(() => {
     let isSubscribed = true;
@@ -231,7 +255,6 @@ const App = () => {
         const distance = result.distance;
         const estimates: Record<TransitNetwork, number> = {} as Record<TransitNetwork, number>;
 
-        // Fetch estimates in parallel for better performance
         await Promise.all(
           availableNetworks.map(async (network) => {
             const fareResult = await FareEngine.computeFinalFare({ network, distance });
@@ -262,10 +285,25 @@ const App = () => {
   }, [destination, lastLocation, availableNetworks]);
 
   // ======================================================
-  // PLAN TRIP - Enhanced with better error handling
+  // PLAN TRIP
   // ======================================================
-  const planTrip = useCallback(async (selectedNetwork: TransitNetwork) => {
-    if (isPlanning || !lastLocation || !destination.trim()) return;
+  const planTrip = async (selectedNetwork: TransitNetwork) => {
+    console.log("Plan trip called with network:", selectedNetwork);
+    
+    if (isPlanning) {
+      console.log("Already planning, skipping");
+      return;
+    }
+    
+    if (!lastLocation) {
+      setError("Waiting for GPS...");
+      return;
+    }
+    
+    if (!destination.trim()) {
+      setError("Please enter a destination");
+      return;
+    }
 
     setError(null);
     setIsPlanning(true);
@@ -304,14 +342,26 @@ const App = () => {
     } finally {
       setIsPlanning(false);
     }
-  }, [isPlanning, lastLocation, destination, buildCacheKey]);
+  };
 
   // ======================================================
-  // START TRIP - Enhanced
+  // START TRIP
   // ======================================================
-  const startTrip = useCallback(async () => {
-    if (!network || !lastLocation || !destination) {
-      setError("Missing required trip information");
+  const startTrip = async () => {
+    console.log("Start trip called");
+    
+    if (!network) {
+      setError("No transport network selected");
+      return;
+    }
+    
+    if (!lastLocation) {
+      setError("GPS not ready");
+      return;
+    }
+    
+    if (!destination) {
+      setError("No destination set");
       return;
     }
 
@@ -321,7 +371,7 @@ const App = () => {
     setCurrentTrip({
       id: Date.now().toString(),
       network,
-      destination, // Save destination in trip
+      destination,
       startTime: Date.now(),
       distance: 0,
       avgSpeed: 0,
@@ -329,14 +379,15 @@ const App = () => {
       lastTrackedLocation: lastLocation
     });
 
-    // Clear any stale errors
     setError(null);
-  }, [network, lastLocation, destination]);
+  };
 
   // ======================================================
-  // END TRIP - Fixed state management
+  // END TRIP
   // ======================================================
-  const endTrip = useCallback(async () => {
+  const endTrip = async () => {
+    console.log("End trip called");
+    
     if (!network || !currentTrip.startTime) {
       console.error("Cannot end trip: Missing required data");
       return;
@@ -354,29 +405,31 @@ const App = () => {
       distance,
       fare: fareResult.fare,
       avgSpeed: currentTrip.avgSpeed || 0,
-      destination: currentTrip.destination || destination // Preserve destination
+      destination: currentTrip.destination || destination
     };
 
     setVerifyTrip(trip);
     setDuration(0);
     Session.clear("active_trip");
-    
-    // Don't clear network/destination here - they're needed for verification
-  }, [network, currentTrip, duration, destination]);
+  };
 
   // ======================================================
-  // CONFIRM TRIP - Complete reset
+  // CONFIRM TRIP
   // ======================================================
-  const confirmTrip = useCallback(() => {
+  const confirmTrip = () => {
+    console.log("Confirm trip called");
+    
     if (!verifyTrip) return;
 
-    const validation = validateFareInput(actualFare);
-    if (!validation.isValid) {
-      setError("Please enter a valid fare amount (0-1000)");
-      return;
+    let finalFare = verifyTrip.fare;
+    
+    if (actualFare.trim()) {
+      const parsedFare = parseFloat(actualFare);
+      if (!isNaN(parsedFare) && parsedFare > 0 && parsedFare <= 1000) {
+        finalFare = parsedFare;
+      }
     }
 
-    const finalFare = validation.parsedValue ?? verifyTrip.fare;
     const finalTrip: TripData = { ...verifyTrip, fare: finalFare };
 
     setHistory((prev) => {
@@ -385,16 +438,12 @@ const App = () => {
       return updated;
     });
 
-    // Complete reset to initial state
     resetAllTripState();
-    setActiveTab("home"); // Ensure we're on home tab
-    
-    // Optional success feedback
     console.log("✅ Trip saved successfully!");
-  }, [verifyTrip, actualFare, user, resetAllTripState, validateFareInput]);
+  };
 
   // ======================================================
-  // GPS WATCH - Fixed race condition
+  // GPS WATCH
   // ======================================================
   useEffect(() => {
     if (!isMountedRef.current) return;
@@ -407,7 +456,6 @@ const App = () => {
         setError(null);
         setLastLocation(loc);
 
-        // Live active trip tracking
         if (tripState === TripState.ACTIVE) {
           setCurrentTrip((prev) => {
             if (!prev.lastTrackedLocation) {
@@ -422,7 +470,6 @@ const App = () => {
             const previous = prev.lastTrackedLocation;
             const distance = calculateDistance(previous, loc);
 
-            // Filter bad GPS jumps
             if (!Number.isFinite(distance) || distance < 0 || distance > 2) {
               return { ...prev, lastTrackedLocation: loc };
             }
@@ -463,7 +510,7 @@ const App = () => {
         clearLocationWatch(gpsWatchIdRef.current);
       }
     };
-  }, [tripState]); // Only re-run when tripState changes
+  }, [tripState]);
 
   // ======================================================
   // SAVE ACTIVE SESSION
@@ -475,7 +522,7 @@ const App = () => {
   }, [currentTrip, tripState, network, duration, destination]);
 
   // ======================================================
-  // RESTORE ACTIVE SESSION - Fixed destination restoration
+  // RESTORE ACTIVE SESSION
   // ======================================================
   useEffect(() => {
     const restored = BackgroundTracker.restoreTrip();
@@ -528,26 +575,6 @@ const App = () => {
   }, [user]);
 
   // ======================================================
-  // INPUT HANDLERS
-  // ======================================================
-  const handleDestinationChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setDestination(e.target.value);
-    if (error === "Please enter a destination" || error === "Destination must be at least 3 characters") {
-      setError(null);
-    }
-  }, [error]);
-
-  const handleActualFareChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value === "" || /^\d*\.?\d*$/.test(value)) {
-      setActualFare(value);
-      if (error === "Please enter a valid fare amount (0-1000)") {
-        setError(null);
-      }
-    }
-  }, [error]);
-
-  // ======================================================
   // AUTH SCREEN
   // ======================================================
   if (!user) {
@@ -555,10 +582,10 @@ const App = () => {
   }
 
   // ======================================================
-  // RENDER - Premium UI
+  // RENDER
   // ======================================================
   return (
-    <Layout activeTab={activeTab} onNavClick={setActiveTab}>
+    <Layout activeTab={activeTab} onNavClick={handleTabChange}>
       <div 
         className="space-y-6 px-4 pb-28 overflow-y-auto min-h-screen"
         style={{ WebkitOverflowScrolling: "touch", scrollBehavior: "smooth" }}
@@ -642,7 +669,7 @@ const App = () => {
             {tripState !== TripState.ACTIVE && !verifyTrip && (
               <>
                 {error && (
-                  <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-3 animate-shake">
+                  <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-3">
                     <p className="text-red-400 text-sm">{error}</p>
                   </div>
                 )}
@@ -654,17 +681,21 @@ const App = () => {
                       <div className="space-y-2">
                         <p className="text-xs uppercase tracking-widest text-white/40">Destination</p>
                         <input
+                          type="text"
                           value={destination}
                           onChange={handleDestinationChange}
-                          onKeyPress={(e) => e.key === 'Enter' && continueToTransportOptions()}
+                          onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                              continueToTransportOptions();
+                            }
+                          }}
                           placeholder="Braamfontein, Sandton, Pretoria..."
-                          className="w-full h-16 px-5 text-lg bg-white/5 rounded-3xl outline-none border border-white/5 focus:border-cyan-400/40 transition-all"
+                          className="w-full h-16 px-5 text-lg bg-white/5 rounded-3xl outline-none border border-white/5 focus:border-cyan-400/40 transition-all text-white"
                           autoFocus
                         />
                         <button
                           onClick={continueToTransportOptions}
-                          disabled={!destination.trim()}
-                          className="w-full h-14 rounded-3xl bg-gradient-to-r from-cyan-500 to-emerald-500 font-bold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="w-full h-14 rounded-3xl bg-gradient-to-r from-cyan-500 to-emerald-500 font-bold text-white transition-all hover:opacity-90 active:scale-95"
                         >
                           Continue
                         </button>
@@ -676,7 +707,13 @@ const App = () => {
                 {/* STEP 2: TRANSPORT */}
                 {planningStep === "transport" && (
                   <div className="space-y-5">
-                    <button onClick={() => { setPlanningStep("destination"); setError(null); }} className="text-sm text-cyan-400 transition-all hover:opacity-80">
+                    <button 
+                      onClick={() => {
+                        setPlanningStep("destination");
+                        setError(null);
+                      }} 
+                      className="text-sm text-cyan-400 transition-all hover:opacity-80"
+                    >
                       ← Back
                     </button>
                     <div className="space-y-3">
@@ -684,7 +721,6 @@ const App = () => {
                       <div className="space-y-3">
                         {availableNetworks.map((n) => {
                           const estimate = networkEstimates[n];
-                          const selected = network === n;
                           return (
                             <button
                               key={n}
@@ -693,16 +729,16 @@ const App = () => {
                               className={`
                                 w-full rounded-3xl p-5 text-left transition-all border
                                 ${isPlanning || isLoadingEstimates ? "opacity-50 cursor-not-allowed" : "active:scale-[0.98]"}
-                                ${selected ? "bg-emerald-500/15 border-emerald-400/40" : "bg-white/[0.03] border-white/5 hover:bg-white/[0.06]"}
+                                bg-white/[0.03] border-white/5 hover:bg-white/[0.06]
                               `}
                             >
                               <div className="flex items-center justify-between">
                                 <div>
-                                  <p className="text-lg font-bold">{n}</p>
+                                  <p className="text-lg font-bold text-white">{n}</p>
                                   <p className="text-xs text-white/40 mt-1">Smart fare estimate</p>
                                 </div>
                                 <div className="text-right">
-                                  <p className="text-2xl font-black">
+                                  <p className="text-2xl font-black text-white">
                                     {isLoadingEstimates ? "⏳" : estimate ? `~R${estimate.toFixed(2)}` : "--"}
                                   </p>
                                 </div>
@@ -723,10 +759,10 @@ const App = () => {
                     </button>
                     <div className="glass rounded-[2rem] p-7 text-center border border-emerald-500/10 bg-gradient-to-br from-emerald-500/10 to-cyan-500/5 backdrop-blur-2xl space-y-3">
                       <p className="text-[11px] uppercase tracking-[0.3em] text-white/40">Estimated Fare</p>
-                      <h2 className="text-6xl font-black tracking-tight leading-none">R{estimatedFare.toFixed(2)}</h2>
+                      <h2 className="text-6xl font-black tracking-tight leading-none text-white">R{estimatedFare.toFixed(2)}</h2>
                       <p className="text-xs text-white/30 mt-2">Includes all applicable taxes and fees</p>
                     </div>
-                    <button onClick={startTrip} className="btn-primary w-full h-16 text-lg font-bold rounded-3xl transition-all hover:scale-[1.02] active:scale-[0.98]">
+                    <button onClick={startTrip} className="w-full h-16 text-lg font-bold rounded-3xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white transition-all hover:scale-[1.02] active:scale-[0.98]">
                       Start Journey
                     </button>
                   </div>
@@ -740,7 +776,7 @@ const App = () => {
                 <div className="glass p-5 rounded-3xl space-y-4">
                   <div>
                     <p className="text-sm text-white/50">Trip Complete</p>
-                    <p className="text-4xl font-black mt-1">R{verifyTrip.fare.toFixed(2)}</p>
+                    <p className="text-4xl font-black text-white mt-1">R{verifyTrip.fare.toFixed(2)}</p>
                     {verifyTrip.destination && (
                       <p className="text-xs text-white/40 mt-2">To: {verifyTrip.destination}</p>
                     )}
@@ -753,11 +789,11 @@ const App = () => {
                       value={actualFare}
                       onChange={handleActualFareChange}
                       placeholder="Enter actual fare"
-                      className="w-full h-14 px-4 bg-white/5 rounded-2xl outline-none border border-white/10 focus:border-emerald-400/40 transition-all"
+                      className="w-full h-14 px-4 bg-white/5 rounded-2xl outline-none border border-white/10 focus:border-emerald-400/40 transition-all text-white"
                     />
                     <p className="text-[10px] text-white/30">Leave empty to use estimated fare</p>
                   </div>
-                  <button onClick={confirmTrip} className="btn-primary w-full h-14 rounded-2xl font-bold transition-all hover:scale-[1.02] active:scale-[0.98]">
+                  <button onClick={confirmTrip} className="w-full h-14 rounded-2xl font-bold bg-gradient-to-r from-emerald-500 to-cyan-500 text-white transition-all hover:scale-[1.02] active:scale-[0.98]">
                     Confirm Trip
                   </button>
                 </div>
@@ -776,26 +812,24 @@ const App = () => {
               </div>
             ) : (
               <>
-                {/* Stats Summary */}
                 <div className="glass p-4 rounded-3xl bg-gradient-to-r from-cyan-500/10 to-emerald-500/10">
                   <p className="text-xs uppercase tracking-widest text-white/40">Total Spend</p>
-                  <p className="text-3xl font-black">R{history.reduce((sum, t) => sum + (t.fare || 0), 0).toFixed(2)}</p>
+                  <p className="text-3xl font-black text-white">R{history.reduce((sum, t) => sum + (t.fare || 0), 0).toFixed(2)}</p>
                   <p className="text-xs text-white/30 mt-1">{history.length} trips completed</p>
                 </div>
                 
-                {/* Trip History List */}
                 {history.map((t) => (
                   <div key={t.id} className="glass p-4 rounded-3xl transition-all hover:scale-[1.02] active:scale-[0.98]">
-                    <p className="font-bold text-lg">{t.network}</p>
+                    <p className="font-bold text-lg text-white">{t.network}</p>
                     {t.destination && <p className="text-xs text-white/40 mt-0.5">📍 {t.destination}</p>}
                     <p className="text-xs text-white/50 mt-1">
                       {new Date(t.startTime).toLocaleString()}
                     </p>
                     <div className="mt-3 text-xs space-y-1.5">
-                      <p className="flex items-center gap-2">📏 {(t.distance || 0).toFixed(2)} km</p>
-                      <p className="flex items-center gap-2">💰 R{(t.fare || 0).toFixed(2)}</p>
-                      <p className="flex items-center gap-2">⏱ {t.duration || 0}s</p>
-                      <p className="flex items-center gap-2">⚡ {(t.avgSpeed || 0).toFixed(1)} km/h</p>
+                      <p className="flex items-center gap-2 text-white/70">📏 {(t.distance || 0).toFixed(2)} km</p>
+                      <p className="flex items-center gap-2 text-white/70">💰 R{(t.fare || 0).toFixed(2)}</p>
+                      <p className="flex items-center gap-2 text-white/70">⏱ {t.duration || 0}s</p>
+                      <p className="flex items-center gap-2 text-white/70">⚡ {(t.avgSpeed || 0).toFixed(1)} km/h</p>
                     </div>
                   </div>
                 ))}
