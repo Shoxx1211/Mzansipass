@@ -536,27 +536,26 @@ useEffect(() => {
     duration
   ]);
 
-  // ======================================================
-// CONTINUE TO TRANSPORT OPTIONS
+// ======================================================
+// CONTINUE TO TRANSPORT OPTIONS - FIXED
 // ======================================================
 const continueToTransportOptions = () => {
 
-  if (!destination.trim()) {
+  console.log("Continue button clicked");
+  console.log("Current destination:", destination);
+  console.log("Destination trimmed:", destination.trim());
 
-    setError(
-      "Please enter a destination"
-    );
-
+  if (!destination || !destination.trim()) {
+    console.log("No destination entered");
+    setError("Please enter a destination");
     return;
-
   }
 
+  console.log("Destination is valid, moving to transport step");
   setError(null);
-
   setPlanningStep("transport");
 
 };
-
   // ======================================================
 // LIVE NETWORK ESTIMATES
 // ======================================================
