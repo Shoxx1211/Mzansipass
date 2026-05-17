@@ -764,11 +764,11 @@ useEffect(() => {
         selectedNetwork
       );
 
-  
-
       setEstimatedFare(
         fare
       );
+
+      setPlanningStep("fare");
 
       console.log(
         "✅ FARE CALCULATED",
@@ -1300,61 +1300,140 @@ useEffect(() => {
 
 )}
 
- {/* ====================================================== */}
+{/* ====================================================== */}
 {/* PLANNING UI */}
 {/* ====================================================== */}
 {tripState !== TripState.ACTIVE && (
 
   <>
-  {error && (
 
-  <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-3">
+    {/* ERROR */}
+    {error && (
 
-    <p className="text-red-400 text-sm">
-      {error}
-    </p>
+      <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-3">
 
-  </div>
+        <p className="text-red-400 text-sm">
+          {error}
+        </p>
 
-)}
+      </div>
 
+    )}
+
+    {/* ====================================================== */}
     {/* STEP 1 — DESTINATION */}
+    {/* ====================================================== */}
     {planningStep === "destination" && (
 
       <div className="space-y-5">
 
-        <div className="glass rounded-3xl p-5 space-y-5">
+        <div
+          className="
+            relative
+            overflow-hidden
+            rounded-[2rem]
+            border
+            border-white/10
+            bg-gradient-to-br
+            from-cyan-500/10
+            via-black/40
+            to-emerald-500/10
+            backdrop-blur-2xl
+            p-6
+            shadow-2xl
+          "
+        >
 
-          <div className="space-y-2">
+          {/* GLOW */}
+          <div
+            className="
+              absolute
+              -top-24
+              -right-24
+              h-56
+              w-56
+              rounded-full
+              bg-cyan-400/10
+              blur-3xl
+            "
+          />
 
-            <p className="text-xs uppercase tracking-widest text-white/40">
-              Destination
-            </p>
+          <div className="relative space-y-5">
 
-            <input
-              value={destination}
-              onChange={(e) =>
-                setDestination(e.target.value)
-              }
-              placeholder="Braamfontein, Sandton, Pretoria..."
-              className="w-full h-16 px-5 text-lg bg-white/5 rounded-3xl outline-none border border-white/5 focus:border-cyan-400/40 transition-all"
-            />
+            <div>
 
-            <button
-              onClick={continueToTransportOptions}
-              className="
-                w-full
-                h-14
-                rounded-3xl
-                bg-gradient-to-r
-                from-cyan-500
-                to-emerald-500
-                font-bold
-                text-white
-              "
-            >
-              Continue
-            </button>
+              <p className="text-sm text-white/40">
+                Destination
+              </p>
+
+              <h2 className="text-3xl font-black tracking-tight mt-1">
+                Where are you going?
+              </h2>
+
+            </div>
+
+            {/* INPUT */}
+            <div className="space-y-3">
+
+              <input
+                type="text"
+                value={destination}
+                onChange={(e) =>
+                  setDestination(e.target.value)
+                }
+                onKeyDown={(e) => {
+
+                  if (e.key === "Enter") {
+
+                    continueToTransportOptions();
+
+                  }
+
+                }}
+                placeholder="Braamfontein, Sandton, Pretoria..."
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
+                className="
+                  w-full
+                  h-16
+                  px-5
+                  text-lg
+                  text-white
+                  bg-white/5
+                  rounded-3xl
+                  outline-none
+                  border
+                  border-white/10
+                  focus:border-cyan-400/50
+                  transition-all
+                "
+              />
+
+              <button
+                onClick={continueToTransportOptions}
+                className="
+                  w-full
+                  h-16
+                  rounded-3xl
+                  bg-gradient-to-r
+                  from-cyan-500
+                  to-emerald-500
+                  text-lg
+                  font-black
+                  tracking-wide
+                  text-white
+                  transition-all
+                  duration-300
+                  hover:scale-[1.01]
+                  active:scale-[0.99]
+                  shadow-xl
+                "
+              >
+                Continue
+              </button>
+
+            </div>
 
           </div>
 
@@ -1364,100 +1443,123 @@ useEffect(() => {
 
     )}
 
+    {/* ====================================================== */}
     {/* STEP 2 — TRANSPORT OPTIONS */}
+    {/* ====================================================== */}
     {planningStep === "transport" && (
 
       <div className="space-y-5">
 
+        {/* BACK */}
         <button
           onClick={() =>
             setPlanningStep("destination")
           }
-          className="text-sm text-cyan-400"
+          className="
+            text-sm
+            text-cyan-400
+            font-medium
+          "
         >
           ← Back
         </button>
 
-        <div className="space-y-3">
+        {/* HEADER */}
+        <div>
 
-          <p className="text-xs uppercase tracking-widest text-white/40">
+          <p className="text-sm text-white/40">
             Available Transport
           </p>
 
-          <div className="space-y-3">
+          <h2 className="text-3xl font-black tracking-tight mt-1">
+            Choose your ride
+          </h2>
 
-            {availableNetworks.map((n) => {
+        </div>
 
-              const estimate =
-                networkEstimates[n];
+        {/* NETWORKS */}
+        <div className="space-y-4">
 
-              const selected =
-                network === n;
+          {availableNetworks.map((n) => {
 
-              return (
+            const estimate =
+              networkEstimates[n];
 
-                <button
-                  key={n}
-                  onClick={() =>
-                    planTrip(n)
+            const selected =
+              network === n;
+
+            return (
+
+              <button
+                key={n}
+                onClick={() =>
+                  planTrip(n)
+                }
+                className={`
+                  relative
+                  overflow-hidden
+                  w-full
+                  rounded-[2rem]
+                  p-5
+                  text-left
+                  transition-all
+                  duration-300
+                  border
+                  backdrop-blur-xl
+
+                  ${
+                    selected
+                      ? `
+                        border-emerald-400/40
+                        bg-emerald-500/15
+                        shadow-[0_0_30px_rgba(16,185,129,0.15)]
+                      `
+                      : `
+                        border-white/10
+                        bg-white/[0.03]
+                        hover:border-cyan-400/30
+                      `
                   }
-                  className={`
-                    w-full
-                    rounded-3xl
-                    p-5
-                    text-left
-                    transition-all
-                    border
+                `}
+              >
 
-                    ${
-                      selected
-                        ? `
-                          bg-emerald-500/15
-                          border-emerald-400/40
-                        `
-                        : `
-                          bg-white/[0.03]
-                          border-white/5
-                        `
-                    }
-                  `}
-                >
+                <div className="flex items-center justify-between">
 
-                  <div className="flex items-center justify-between">
+                  <div>
 
-                    <div>
+                    <p className="text-xl font-black">
+                      {n}
+                    </p>
 
-                      <p className="text-lg font-bold">
-                        {n}
-                      </p>
-
-                      <p className="text-xs text-white/40 mt-1">
-                        Smart fare estimate
-                      </p>
-
-                    </div>
-
-                    <div className="text-right">
-
-                      <p className="text-2xl font-black">
-
-                        {estimate
-                          ? `~R${estimate.toFixed(2)}`
-                          : "--"}
-
-                      </p>
-
-                    </div>
+                    <p className="text-xs text-white/40 mt-1">
+                      Smart fare estimate
+                    </p>
 
                   </div>
 
-                </button>
+                  <div className="text-right">
 
-              );
+                    <p className="text-3xl font-black">
 
-            })}
+                      {estimate
+                        ? `R${estimate.toFixed(2)}`
+                        : "--"}
 
-          </div>
+                    </p>
+
+                    <p className="text-[10px] text-white/40 mt-1">
+                      Estimated
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </button>
+
+            );
+
+          })}
 
         </div>
 
@@ -1465,70 +1567,113 @@ useEffect(() => {
 
     )}
 
-    {/* STEP 3 — FARE SCREEN */}
+    {/* ====================================================== */}
+    {/* STEP 3 — FARE */}
+    {/* ====================================================== */}
     {planningStep === "fare" &&
       estimatedFare !== null && (
 
       <div className="space-y-5">
 
+        {/* BACK */}
         <button
           onClick={() =>
             setPlanningStep("transport")
           }
-          className="text-sm text-cyan-400"
+          className="
+            text-sm
+            text-cyan-400
+            font-medium
+          "
         >
           ← Back
         </button>
 
+        {/* PREMIUM CARD */}
         <div
           className="
-            glass
-            rounded-[2rem]
-            p-7
-            text-center
+            relative
+            overflow-hidden
+            rounded-[2.5rem]
             border
-            border-emerald-500/10
+            border-emerald-500/20
             bg-gradient-to-br
-            from-emerald-500/10
-            to-cyan-500/5
+            from-emerald-500/15
+            via-black/40
+            to-cyan-500/10
             backdrop-blur-2xl
-            space-y-3
+            p-8
+            text-center
+            shadow-2xl
           "
         >
 
-          <p
+          {/* GLOW */}
+          <div
             className="
-              text-[11px]
-              uppercase
-              tracking-[0.3em]
-              text-white/40
+              absolute
+              -top-20
+              -right-20
+              h-56
+              w-56
+              rounded-full
+              bg-emerald-400/10
+              blur-3xl
             "
-          >
-            Estimated Fare
-          </p>
+          />
 
-          <h2
-            className="
-              text-6xl
-              font-black
-              tracking-tight
-              leading-none
-            "
-          >
-            R{estimatedFare.toFixed(2)}
-          </h2>
+          <div className="relative space-y-4">
+
+            <p
+              className="
+                text-[11px]
+                uppercase
+                tracking-[0.35em]
+                text-white/40
+              "
+            >
+              Estimated Fare
+            </p>
+
+            <h1
+              className="
+                text-7xl
+                font-black
+                leading-none
+                tracking-tight
+              "
+            >
+              R{estimatedFare.toFixed(2)}
+            </h1>
+
+            <p className="text-white/40 text-sm">
+              Destination: {destination}
+            </p>
+
+          </div>
 
         </div>
 
+        {/* START BUTTON */}
         <button
           onClick={startTrip}
           className="
-            btn-primary
             w-full
             h-16
-            text-lg
-            font-bold
             rounded-3xl
+            bg-gradient-to-r
+            from-emerald-500
+            to-cyan-500
+            text-lg
+            font-black
+            tracking-wide
+            text-white
+            transition-all
+            duration-300
+            hover:scale-[1.01]
+            active:scale-[0.99]
+            shadow-xl
+            shadow-emerald-500/20
           "
         >
           Start Journey
