@@ -1,0 +1,22 @@
+# .prettierignore
+node_modules/
+dist/
+build/
+coverage/
+android/
+ios/
+*.log
+*.lock
+*.tgz
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ico
+*.woff
+*.woff2
+*.ttf
+*.eot
+*.mp4
+*.webm
+*.zip

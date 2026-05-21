@@ -1,0 +1,16 @@
+{
+  "appId": "com.pulse.transit",
+  "appName": "Pulse Transit",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https",
+    "cleartext": false
+  },
+  "android": {
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false
+  },
+  "ios": {
+    "webContentsDebuggingEnabled": false
+  }
+}

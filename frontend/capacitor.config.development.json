@@ -1,0 +1,17 @@
+{
+  "appId": "com.pulse.transit.dev",
+  "appName": "Pulse Transit Dev",
+  "webDir": "dist",
+  "server": {
+    "url": "http://localhost:5173",
+    "cleartext": true,
+    "androidScheme": "http"
+  },
+  "android": {
+    "allowMixedContent": true,
+    "webContentsDebuggingEnabled": true
+  },
+  "ios": {
+    "webContentsDebuggingEnabled": true
+  }
+}

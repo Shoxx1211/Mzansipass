@@ -1,646 +1,348 @@
-import React, {
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from "react";
+// src/components/VirtualCard.tsx
+// Pulse Transit - Premium Interactive Journey Card
+// Features: 3D tilt effect, real-time metrics, animated transitions, compact mode
 
+import React, { useEffect, useMemo, useRef, useState, memo } from "react";
 import { TripState } from "../types";
-
-import type {
-  TransitNetwork
-} from "../types";
+import type { TransitNetwork } from "../types";
 
 // ======================================================
 // TYPES
 // ======================================================
 
 interface VirtualCardProps {
-
   state: TripState;
-
   network: TransitNetwork | null;
-
   distance: number;
-
   duration: number;
-
   destination?: string;
-
   estimatedFare?: number;
-
   lastTrip?: {
     distance: number;
     network: string;
     fare: number;
     date?: number;
   };
-
+  variant?: 'full' | 'compact' | 'minimal';
+  showTilt?: boolean;
+  className?: string;
 }
 
 // ======================================================
-// NETWORK COLORS
+// NETWORK THEMES
 // ======================================================
 
-const NETWORK_THEME = {
-
-  Taxi:
-    "from-amber-500/30 to-orange-500/10",
-
-  Gautrain:
-    "from-blue-500/30 to-cyan-500/10",
-
-  "Rea Vaya":
-    "from-emerald-500/30 to-green-500/10",
-
-  "A Re Yeng":
-    "from-purple-500/30 to-fuchsia-500/10",
-
-  "Tshwane Bus Service":
-    "from-sky-500/30 to-indigo-500/10",
-
-  Metrorail:
-    "from-zinc-500/30 to-zinc-800/10"
-
+const NETWORK_THEME: Record<TransitNetwork, { gradient: string; accent: string; icon: string }> = {
+  Taxi: {
+    gradient: "from-amber-500/30 to-orange-500/10",
+    accent: "text-amber-400",
+    icon: "🚖"
+  },
+  Gautrain: {
+    gradient: "from-blue-500/30 to-cyan-500/10",
+    accent: "text-blue-400",
+    icon: "🚆"
+  },
+  "Rea Vaya": {
+    gradient: "from-emerald-500/30 to-green-500/10",
+    accent: "text-emerald-400",
+    icon: "🚌"
+  },
+  "A Re Yeng": {
+    gradient: "from-purple-500/30 to-fuchsia-500/10",
+    accent: "text-purple-400",
+    icon: "🚍"
+  },
+  "Tshwane Bus Service": {
+    gradient: "from-sky-500/30 to-indigo-500/10",
+    accent: "text-sky-400",
+    icon: "🚌"
+  },
+  Metrorail: {
+    gradient: "from-zinc-500/30 to-zinc-800/10",
+    accent: "text-zinc-400",
+    icon: "🚂"
+  }
 } as const;
 
+const DEFAULT_THEME = {
+  gradient: "from-cyan-500/20 to-emerald-500/10",
+  accent: "text-cyan-400",
+  icon: "🚀"
+};
+
 // ======================================================
-// COMPONENT
+// CUSTOM HOOK: TILT EFFECT
 // ======================================================
 
-export const VirtualCard: React.FC<VirtualCardProps> =
-React.memo(({
+const useTiltEffect = (enabled: boolean = true) => {
+  const [rotation, setRotation] = useState({ x: 0, y: 0 });
+  const rafRef = useRef<number | null>(null);
 
-  state,
-  network,
-
-  distance = 0,
-  duration = 0,
-
-  destination,
-
-  estimatedFare,
-
-  lastTrip
-
-}) => {
-
-  // ======================================================
-  // TILT ENGINE
-  // ======================================================
-
-  const [rotation, setRotation] =
-    useState({ x: 0, y: 0 });
-
-  const rafRef =
-    useRef<number | null>(null);
-
-  useEffect(() => {
-
-    return () => {
-
-      if (rafRef.current) {
-        cancelAnimationFrame(
-          rafRef.current
-        );
-      }
-
-    };
-
-  }, []);
-
-  const updateRotation = (
-    x: number,
-    y: number
-  ) => {
-
-    if (rafRef.current) {
-
-      cancelAnimationFrame(
-        rafRef.current
-      );
-
-    }
-
-    rafRef.current =
-      requestAnimationFrame(() => {
-
-        setRotation({ x, y });
-
-      });
-
+  const updateRotation = (x: number, y: number) => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => setRotation({ x, y }));
   };
 
-  const handleMove = (
-    clientX: number,
-    clientY: number,
-    rect: DOMRect
-  ) => {
-
-    const x =
-      clientX - rect.left;
-
-    const y =
-      clientY - rect.top;
-
-    const centerX =
-      rect.width / 2;
-
-    const centerY =
-      rect.height / 2;
-
-    updateRotation(
-      (centerY - y) / 30,
-      (x - centerX) / 30
-    );
-
-  };
-
-  const handleMouseMove = (
-    e: React.MouseEvent<HTMLDivElement>
-  ) => {
-
-    handleMove(
-      e.clientX,
-      e.clientY,
-      e.currentTarget.getBoundingClientRect()
-    );
-
-  };
-
-  const handleTouchMove = (
-    e: React.TouchEvent<HTMLDivElement>
-  ) => {
-
-    const touch =
-      e.touches[0];
-
-    if (!touch) return;
-
-    handleMove(
-      touch.clientX,
-      touch.clientY,
-      e.currentTarget.getBoundingClientRect()
-    );
-
+  const handleMove = (clientX: number, clientY: number, rect: DOMRect) => {
+    if (!enabled) return;
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    updateRotation((centerY - y) / 25, (x - centerX) / 25);
   };
 
   const resetTilt = () => {
-
-    setRotation({
-      x: 0,
-      y: 0
-    });
-
+    if (!enabled) return;
+    updateRotation(0, 0);
   };
 
-  // ======================================================
-  // FORMATTERS
-  // ======================================================
+  useEffect(() => {
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
 
-  const formatTime = (
-    seconds: number
-  ) => {
+  return { rotation, handleMove, resetTilt };
+};
 
-    if (!seconds) {
-      return "0m";
-    }
+// ======================================================
+// SUB-COMPONENTS
+// ======================================================
 
-    const h =
-      Math.floor(seconds / 3600);
+const Metric: React.FC<{
+  label: string;
+  value: string;
+  icon?: React.ReactNode;
+  highlight?: boolean;
+  trend?: 'up' | 'down' | null;
+}> = ({ label, value, icon, highlight, trend }) => (
+  <div className="rounded-xl bg-white/5 border border-white/10 p-3 group hover:bg-white/10 transition-all">
+    <div className="flex items-center gap-1.5 mb-1">
+      {icon && <span className="text-white/40">{icon}</span>}
+      <p className="text-[9px] uppercase tracking-wider text-white/40">{label}</p>
+      {trend && (
+        <span className={`text-[9px] ${trend === 'up' ? 'text-green-400' : 'text-red-400'}`}>
+          {trend === 'up' ? '↑' : '↓'}
+        </span>
+      )}
+    </div>
+    <p className={`text-base font-bold ${highlight ? 'text-emerald-400' : 'text-white'}`}>
+      {value}
+    </p>
+  </div>
+);
 
-    const m =
-      Math.floor(
-        (seconds % 3600) / 60
-      );
-
-    if (h > 0) {
-      return `${h}h ${m}m`;
-    }
-
-    return `${m}m`;
-
+const SpeedIndicator: React.FC<{ speed: number }> = ({ speed }) => {
+  const getSpeedStatus = () => {
+    if (speed >= 70) return { label: "Fast", color: "text-red-400", icon: "⚡" };
+    if (speed >= 40) return { label: "Cruising", color: "text-emerald-400", icon: "🚀" };
+    if (speed >= 20) return { label: "Moderate", color: "text-cyan-400", icon: "🚗" };
+    if (speed > 0) return { label: "Slow", color: "text-yellow-400", icon: "🐢" };
+    return { label: "Stopped", color: "text-white/40", icon: "⏸️" };
   };
 
-  const speed = useMemo(() => {
-
-    if (
-      !distance ||
-      !duration ||
-      duration < 10
-    ) {
-
-      return 0;
-
-    }
-
-    const calculated =
-      distance /
-      (duration / 3600);
-
-    if (
-      !Number.isFinite(calculated) ||
-      calculated < 0 ||
-      calculated > 180
-    ) {
-
-      return 0;
-
-    }
-
-    return calculated;
-
-  }, [distance, duration]);
-
-  // ======================================================
-  // STATUS
-  // ======================================================
-
-  const statusText = useMemo(() => {
-
-    switch (state) {
-
-      case TripState.ACTIVE:
-        return "Journey Active";
-
-      case TripState.PLANNING:
-        return "Ready To Travel";
-
-      default:
-        return "Ready";
-
-    }
-
-  }, [state]);
-
-  // ======================================================
-  // THEME
-  // ======================================================
-
-  const theme =
-    network &&
-    network in NETWORK_THEME
-      ? NETWORK_THEME[network]
-      : "from-blue-500/20 to-cyan-500/5";
-
-  // ======================================================
-  // STYLE
-  // ======================================================
-
-  const style = {
-
-    transform:
-      `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`
-
-  };
-
-  // ======================================================
-  // UI
-  // ======================================================
+  const status = getSpeedStatus();
 
   return (
+    <div className="flex items-center gap-1.5">
+      <span className={status.color}>{status.icon}</span>
+      <span className={`text-xs font-semibold ${status.color}`}>{status.label}</span>
+    </div>
+  );
+};
 
+// ======================================================
+// MAIN COMPONENT
+// ======================================================
+
+export const VirtualCard = memo<VirtualCardProps>(({
+  state,
+  network,
+  distance = 0,
+  duration = 0,
+  destination,
+  estimatedFare,
+  lastTrip,
+  variant = 'compact',
+  showTilt = true,
+  className = ""
+}) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const { rotation, handleMove, resetTilt } = useTiltEffect(showTilt && variant !== 'minimal');
+
+  // ======================================================
+  // DERIVED VALUES
+  // ======================================================
+  const theme = network && NETWORK_THEME[network] ? NETWORK_THEME[network] : DEFAULT_THEME;
+  
+  const speed = useMemo(() => {
+    if (!distance || !duration || duration < 10) return 0;
+    const calculated = distance / (duration / 3600);
+    if (!Number.isFinite(calculated) || calculated < 0 || calculated > 180) return 0;
+    return calculated;
+  }, [distance, duration]);
+
+  const formatTime = (seconds: number): string => {
+    if (!seconds) return "0m";
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    if (h > 0) return `${h}h ${m}m`;
+    return `${m}m`;
+  };
+
+  const statusText = state === TripState.ACTIVE ? "Journey Active" : state === TripState.PLANNING ? "Ready To Travel" : "Ready";
+  const isActive = state === TripState.ACTIVE;
+
+  // ======================================================
+  // EVENT HANDLERS WITH REF
+  // ======================================================
+  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (cardRef.current) {
+      handleMove(e.clientX, e.clientY, cardRef.current.getBoundingClientRect());
+    }
+  };
+
+  const onTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    const touch = e.touches[0];
+    if (touch && cardRef.current) {
+      handleMove(touch.clientX, touch.clientY, cardRef.current.getBoundingClientRect());
+    }
+  };
+
+  // ======================================================
+  // MINIMAL VARIANT
+  // ======================================================
+  if (variant === 'minimal') {
+    return (
+      <div className={`glass rounded-xl p-3 border border-white/10 ${className}`}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">{theme.icon}</span>
+            <div>
+              <p className="text-sm font-semibold text-white">{network || "Ready"}</p>
+              <p className="text-[10px] text-white/40">{statusText}</p>
+            </div>
+          </div>
+          {isActive && (
+            <div className="text-right">
+              <p className="text-lg font-black text-white">{distance.toFixed(1)}<span className="text-xs">km</span></p>
+              <p className="text-[10px] text-white/40">{formatTime(duration)}</p>
+            </div>
+          )}
+          {!isActive && estimatedFare && (
+            <div className="text-right">
+              <p className="text-lg font-black text-emerald-400">R{estimatedFare.toFixed(2)}</p>
+              <p className="text-[10px] text-white/40">est. fare</p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // ======================================================
+  // COMPACT VARIANT (Default - Non-intrusive)
+  // ======================================================
+  return (
     <div
-      className="
-        relative
-        w-full
-        aspect-[1.65/1]
-      "
-      style={{
-        perspective: "1600px"
-      }}
-      onMouseMove={handleMouseMove}
-      onTouchMove={handleTouchMove}
+      ref={cardRef}
+      className={`relative w-full ${className}`}
+      style={{ perspective: showTilt ? "1200px" : "none" }}
+      onMouseMove={onMouseMove}
+      onTouchMove={onTouchMove}
       onMouseLeave={resetTilt}
       onTouchEnd={resetTilt}
     >
-
-      {/* GLOW */}
+      {/* Glow Effect */}
+      <div className={`absolute inset-0 rounded-2xl blur-xl opacity-30 bg-gradient-to-br ${theme.gradient}`} />
+      
+      {/* Main Card */}
       <div
         className={`
-          absolute inset-0
-          rounded-[2.5rem]
-          blur-3xl
-          opacity-50
-          bg-gradient-to-br
-          ${theme}
-        `}
-      />
-
-      {/* CARD */}
-      <div
-        style={style}
-        className="
-          relative
-          overflow-hidden
-          w-full
-          h-full
-          rounded-[2.5rem]
+          relative overflow-hidden rounded-2xl
           border border-white/10
-          transition-transform
-          duration-200
+          transition-all duration-200
           will-change-transform
-        "
+          bg-black/40 backdrop-blur-sm
+        `}
+        style={{
+          transform: showTilt ? `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)` : "none"
+        }}
       >
-
-        {/* BG */}
-        <div
-          className={`
-            absolute inset-0
-            bg-gradient-to-br
-            ${theme}
-          `}
-        />
-
-        {/* GLASS */}
-        <div
-          className="
-            absolute inset-0
-            bg-black/50
-            backdrop-blur-2xl
-          "
-        />
-
-        {/* SHINE */}
-        <div
-          className="
-            absolute
-            top-0
-            left-[-30%]
-            h-full
-            w-[40%]
-            rotate-12
-            bg-white/10
-            blur-2xl
-          "
-        />
-
-        {/* CONTENT */}
-        <div
-          className="
-            relative
-            z-10
-            h-full
-            p-6
-            flex
-            flex-col
-            justify-between
-          "
-        >
-
-          {/* HEADER */}
-          <div
-            className="
-              flex
-              items-start
-              justify-between
-            "
-          >
-
-            <div>
-
-              <p
-                className="
-                  text-[11px]
-                  uppercase
-                  tracking-[0.25em]
-                  text-white/40
-                "
-              >
-                Pulse Transit
-              </p>
-
-              <h2
-                className="
-                  mt-2
-                  text-3xl
-                  font-black
-                  leading-none
-                "
-              >
-                {network || "Start Journey"}
-              </h2>
-
+        {/* Gradient Background */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-30`} />
+        
+        {/* Content */}
+        <div className="relative z-10 p-4">
+          {/* Header */}
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">{theme.icon}</span>
+              <div>
+                <p className="text-xs text-white/40 uppercase tracking-wider">Current Journey</p>
+                <h3 className="text-lg font-bold text-white">{network || "Select Transport"}</h3>
+              </div>
             </div>
-
-            <div
-              className="
-                px-3
-                py-1
-                rounded-full
-                bg-white/10
-                text-[10px]
-                uppercase
-                tracking-wider
-                text-white/70
-              "
-            >
-              {statusText}
+            <div className="flex items-center gap-2">
+              {isActive && <SpeedIndicator speed={speed} />}
+              <div className="px-2 py-0.5 rounded-full bg-white/10 text-[9px] text-white/60">
+                {statusText}
+              </div>
             </div>
-
           </div>
 
-          {/* CENTER */}
-          {state === TripState.ACTIVE ? (
-
-            <div
-              className="
-                grid
-                grid-cols-2
-                gap-4
-              "
-            >
-
-              <Metric
-                label="Distance"
-                value={`${distance.toFixed(2)} km`}
-              />
-
-              <Metric
-                label="Duration"
-                value={formatTime(duration)}
-              />
-
-              <Metric
-                label="Speed"
-                value={`${speed.toFixed(0)} km/h`}
-              />
-
-              <Metric
-                label="Estimated"
-                value={
-                  estimatedFare !== undefined
-                    ? `R${estimatedFare.toFixed(2)}`
-                    : "--"
-                }
-                highlight
-              />
-
-            </div>
-
-          ) : (
-
-            <div>
-
-              <p
-                className="
-                  text-white/50
-                  text-sm
-                "
-              >
-                Destination
-              </p>
-
-              <h3
-                className="
-                  mt-1
-                  text-2xl
-                  font-bold
-                  truncate
-                "
-              >
-                {destination ||
-                  "Where are you going?"}
-              </h3>
-
-              {estimatedFare !== undefined && (
-
-                <div className="mt-5">
-
-                  <p
-                    className="
-                      text-white/40
-                      text-xs
-                    "
-                  >
-                    Estimated Fare
-                  </p>
-
-                  <p
-                    className="
-                      text-4xl
-                      font-black
-                      text-emerald-400
-                    "
-                  >
-                    R
-                    {estimatedFare.toFixed(2)}
-                  </p>
-
-                </div>
-
+          {/* Destination */}
+          {destination && (
+            <div className="mb-3 flex items-center gap-2 text-sm bg-white/5 rounded-xl p-2">
+              <span className="text-cyan-400">📍</span>
+              <span className="text-white/80 text-sm truncate flex-1">{destination}</span>
+              {isActive && (
+                <span className="text-[10px] text-white/40">ETA: ~{Math.round(distance / Math.max(speed, 1) * 60)}m</span>
               )}
-
             </div>
-
           )}
 
-          {/* FOOTER */}
-          <div
-            className="
-              flex
-              items-end
-              justify-between
-            "
-          >
-
-            <div>
-
-              {lastTrip && (
-                <p
-                  className="
-                    text-[11px]
-                    text-white/35
-                  "
-                >
-                  Last Trip • R
-                  {lastTrip.fare.toFixed(2)}
-                </p>
-              )}
-
-            </div>
-
-            <p
-              className="
-                text-[11px]
-                text-white/25
-                italic
-              "
-            >
-              Feel the rhythm
-            </p>
-
+          {/* Metrics Grid */}
+          <div className="grid grid-cols-4 gap-2">
+            <Metric 
+              label="Distance" 
+              value={`${distance.toFixed(1)} km`}
+              icon="📏"
+            />
+            <Metric 
+              label="Duration" 
+              value={formatTime(duration)}
+              icon="⏱️"
+            />
+            <Metric 
+              label="Speed" 
+              value={`${speed.toFixed(0)} km/h`}
+              icon="⚡"
+              trend={speed > 0 ? 'up' : null}
+            />
+            <Metric 
+              label="Fare" 
+              value={estimatedFare ? `R${estimatedFare.toFixed(2)}` : "--"}
+              icon="💰"
+              highlight={!!estimatedFare}
+            />
           </div>
 
+          {/* Footer */}
+          {lastTrip && !isActive && (
+            <div className="mt-3 pt-2 border-t border-white/10 flex justify-between text-[10px] text-white/30">
+              <span>Last trip: {lastTrip.network}</span>
+              <span>R{lastTrip.fare.toFixed(2)} • {lastTrip.distance.toFixed(1)} km</span>
+            </div>
+          )}
         </div>
-
       </div>
-
     </div>
-
   );
-
 });
 
-// ======================================================
-// METRIC
-// ======================================================
+VirtualCard.displayName = "VirtualCard";
 
-interface MetricProps {
-
-  label: string;
-
-  value: string;
-
-  highlight?: boolean;
-
-}
-
-const Metric: React.FC<MetricProps> = ({
-  label,
-  value,
-  highlight
-}) => {
-
-  return (
-
-    <div
-      className="
-        rounded-2xl
-        bg-white/5
-        border border-white/5
-        p-4
-      "
-    >
-
-      <p
-        className="
-          text-[11px]
-          uppercase
-          tracking-wide
-          text-white/40
-        "
-      >
-        {label}
-      </p>
-
-      <p
-        className={`
-          mt-1
-          text-lg
-          font-bold
-          ${
-            highlight
-              ? "text-emerald-400"
-              : "text-white"
-          }
-        `}
-      >
-        {value}
-      </p>
-
-    </div>
-
-  );
-
-};
+export type { VirtualCardProps };

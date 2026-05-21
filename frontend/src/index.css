@@ -1,25 +1,30 @@
 @import "tailwindcss";
 
 /* ======================================================
-   🌍 PULSE ELITE DESIGN SYSTEM
+   🌍 PULSE ELITE DESIGN SYSTEM v3.0
+   Enterprise-Grade Styles | Production Ready
 ====================================================== */
-:root {
 
+:root {
   /* ======================================================
      COLORS
   ====================================================== */
   --bg: #040816;
   --bg-secondary: #0a1020;
+  --bg-tertiary: #0f1525;
 
   --surface: rgba(255,255,255,0.04);
   --surface-strong: rgba(255,255,255,0.08);
+  --surface-hover: rgba(255,255,255,0.12);
 
   --glass-bg: rgba(255,255,255,0.06);
   --glass-border: rgba(255,255,255,0.08);
+  --glass-border-hover: rgba(255,255,255,0.15);
 
   --text-primary: #ffffff;
   --text-secondary: rgba(255,255,255,0.72);
   --text-muted: rgba(255,255,255,0.42);
+  --text-disabled: rgba(255,255,255,0.24);
 
   --pulse-blue: #3b82f6;
   --pulse-cyan: #06b6d4;
@@ -27,199 +32,178 @@
   --pulse-emerald: #10b981;
   --pulse-red: #ef4444;
   --pulse-amber: #f59e0b;
+  --pulse-pink: #ec4899;
+  --pulse-indigo: #6366f1;
 
   /* ======================================================
      RADII
   ====================================================== */
+  --radius-sm: 0.75rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.25rem;
   --radius-xl: 1.5rem;
   --radius-2xl: 2rem;
   --radius-3xl: 2.5rem;
+  --radius-full: 9999px;
 
   /* ======================================================
      SHADOWS
   ====================================================== */
-  --shadow-soft:
-    0 10px 30px rgba(0,0,0,0.25);
-
-  --shadow-deep:
-    0 30px 80px rgba(0,0,0,0.45);
-
-  --shadow-glow:
-    0 0 50px rgba(59,130,246,0.18);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.15);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.2);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.25);
+  --shadow-xl: 0 16px 48px rgba(0,0,0,0.3);
+  --shadow-2xl: 0 24px 64px rgba(0,0,0,0.35);
+  --shadow-soft: 0 10px 30px rgba(0,0,0,0.25);
+  --shadow-deep: 0 30px 80px rgba(0,0,0,0.45);
+  --shadow-glow: 0 0 50px rgba(59,130,246,0.18);
+  --shadow-glow-cyan: 0 0 40px rgba(6,182,212,0.15);
+  --shadow-glow-emerald: 0 0 40px rgba(16,185,129,0.15);
 
   /* ======================================================
      BLUR
   ====================================================== */
+  --blur-sm: 4px;
+  --blur-md: 8px;
+  --blur-lg: 12px;
   --blur-xl: 20px;
+  --blur-2xl: 32px;
 
   /* ======================================================
      TRANSITIONS
   ====================================================== */
   --transition-fast: 140ms ease;
   --transition-base: 220ms ease;
+  --transition-slow: 350ms ease;
+  --transition-bounce: 500ms cubic-bezier(0.34, 1.2, 0.64, 1);
+
+  /* ======================================================
+     Z-INDEX LAYERS
+  ====================================================== */
+  --z-base: 1;
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-header: 30;
+  --z-modal: 40;
+  --z-toast: 50;
+  --z-tooltip: 60;
 }
 
 /* ======================================================
    🌍 GLOBAL RESET
 ====================================================== */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 html,
 body,
 #root {
-
-  margin: 0;
-  padding: 0;
-
   width: 100%;
   min-height: 100%;
-
   background: var(--bg);
-
   color: var(--text-primary);
-
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-
   overflow-x: hidden;
-
   overscroll-behavior-y: none;
-
   scroll-behavior: smooth;
 }
 
 /* ======================================================
-   📱 BODY - FIXED: Removed touch-action restriction
+   📱 BODY - Premium Gradient Background
 ====================================================== */
+
 body {
-
   position: relative;
-
-  background:
-    radial-gradient(
-      circle at top left,
-      rgba(59,130,246,0.12),
-      transparent 28%
-    ),
-
-    radial-gradient(
-      circle at top right,
-      rgba(139,92,246,0.10),
-      transparent 24%
-    ),
-
-    radial-gradient(
-      circle at bottom,
-      rgba(6,182,212,0.08),
-      transparent 30%
-    ),
-
-    linear-gradient(
-      180deg,
-      #040816 0%,
-      #060b18 45%,
-      #03060f 100%
-    );
-
+  background: radial-gradient(circle at top left, rgba(59,130,246,0.12), transparent 28%),
+              radial-gradient(circle at top right, rgba(139,92,246,0.10), transparent 24%),
+              radial-gradient(circle at bottom, rgba(6,182,212,0.08), transparent 30%),
+              linear-gradient(180deg, #040816 0%, #060b18 45%, #03060f 100%);
   background-attachment: fixed;
+  min-height: 100vh;
 }
 
 /* ======================================================
-   ⚡ UNIVERSAL
+   ⚡ UNIVERSAL UTILITIES
 ====================================================== */
+
 * {
-
   box-sizing: border-box;
-
   -webkit-tap-highlight-color: transparent;
-
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-
-  scrollbar-width: none;
 }
 
+/* Hide scrollbars for cleaner UI */
 *::-webkit-scrollbar {
   display: none;
+}
+
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 /* ======================================================
    🖼 MEDIA
 ====================================================== */
-img,
-video {
 
+img, video, canvas, iframe {
   display: block;
   max-width: 100%;
+  height: auto;
 }
 
 /* ======================================================
-   🔘 FORM ELEMENTS
+   🔘 FORM ELEMENTS - Premium Styling
 ====================================================== */
+
 button,
 input,
-textarea {
-
+textarea,
+select {
   font: inherit;
-
   outline: none;
+  background: transparent;
+  border: none;
+}
+
+button {
+  cursor: pointer;
+  user-select: none;
 }
 
 /* ======================================================
-   🧊 GLASS SYSTEM
+   🧊 GLASS SYSTEM - Enhanced
 ====================================================== */
+
 .glass {
-
   position: relative;
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255,255,255,0.07),
-      rgba(255,255,255,0.04)
-    );
-
-  border:
-    1px solid rgba(255,255,255,0.08);
-
+  background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+  border: 1px solid var(--glass-border);
   backdrop-filter: blur(var(--blur-xl));
   -webkit-backdrop-filter: blur(var(--blur-xl));
-
-  box-shadow:
-    var(--shadow-soft);
-
-  transition:
-    transform var(--transition-base),
-    border-color var(--transition-base),
-    background var(--transition-base);
-
+  box-shadow: var(--shadow-soft);
+  transition: transform var(--transition-base), border-color var(--transition-base), background var(--transition-base);
   overflow: hidden;
 }
 
 .glass::before {
-
   content: "";
-
   position: absolute;
   inset: 0;
-
-  background:
-    linear-gradient(
-      120deg,
-      transparent,
-      rgba(255,255,255,0.04),
-      transparent
-    );
-
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.04), transparent);
   opacity: 0;
-
   transition: opacity 0.4s ease;
+  pointer-events: none;
 }
 
 .glass:hover::before {
@@ -227,304 +211,266 @@ textarea {
 }
 
 .glass:hover {
+  border-color: var(--glass-border-hover);
+  transform: translateY(-2px);
+}
 
-  border-color:
-    rgba(255,255,255,0.12);
+.glass-active {
+  border-color: var(--pulse-cyan);
+  background: linear-gradient(180deg, rgba(6,182,212,0.12), rgba(6,182,212,0.04));
 }
 
 /* ======================================================
    🔥 PREMIUM CARD
 ====================================================== */
+
 .premium-card {
-
   position: relative;
-
   border-radius: var(--radius-3xl);
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255,255,255,0.08),
-      rgba(255,255,255,0.03)
-    );
-
-  border:
-    1px solid rgba(255,255,255,0.08);
-
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.08);
   overflow: hidden;
+  box-shadow: var(--shadow-deep);
+}
 
-  box-shadow:
-    var(--shadow-deep);
+.premium-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
 }
 
 /* ======================================================
-   ✨ CARD GLOW
+   ✨ CARD GLOW EFFECT
 ====================================================== */
-.card-glow {
 
+.card-glow {
   position: relative;
   isolation: isolate;
 }
 
 .card-glow::before {
-
   content: "";
-
   position: absolute;
   inset: -1px;
-
   border-radius: inherit;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(59,130,246,0.45),
-      rgba(139,92,246,0.25),
-      rgba(6,182,212,0.25)
-    );
-
+  background: linear-gradient(135deg, rgba(59,130,246,0.45), rgba(139,92,246,0.25), rgba(6,182,212,0.25));
   filter: blur(30px);
-
   opacity: 0.18;
-
   z-index: -1;
+  transition: opacity 0.3s ease;
+}
+
+.card-glow:hover::before {
+  opacity: 0.35;
 }
 
 /* ======================================================
-   ✨ SHIMMER
+   ✨ SHIMMER ANIMATION
 ====================================================== */
+
+.card-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
 .card-shimmer::after {
-
   content: "";
-
   position: absolute;
   inset: 0;
-
-  background:
-    linear-gradient(
-      120deg,
-      transparent 20%,
-      rgba(255,255,255,0.08) 50%,
-      transparent 80%
-    );
-
+  background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.08) 50%, transparent 80%);
   transform: translateX(-120%);
-
   animation: shimmer 5s infinite;
-
   pointer-events: none;
 }
 
 @keyframes shimmer {
-
   100% {
     transform: translateX(120%);
   }
 }
 
 /* ======================================================
-   🔘 BUTTONS
+   🔘 BUTTONS - Premium System
 ====================================================== */
+
 .btn-primary {
-
   position: relative;
-
-  height: 58px;
-
+  height: 56px;
+  padding: 0 24px;
   border: none;
-
   border-radius: 1.5rem;
-
   color: white;
-
-  font-weight: 800;
-
-  letter-spacing: -0.02em;
-
-  background:
-    linear-gradient(
-      135deg,
-      var(--pulse-blue),
-      var(--pulse-purple)
-    );
-
-  box-shadow:
-    0 12px 35px rgba(59,130,246,0.28);
-
-  transition:
-    transform var(--transition-fast),
-    opacity var(--transition-fast),
-    box-shadow var(--transition-fast);
-
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  background: linear-gradient(135deg, var(--pulse-blue), var(--pulse-purple));
+  box-shadow: 0 8px 24px rgba(59,130,246,0.3);
+  transition: transform var(--transition-fast), opacity var(--transition-fast), box-shadow var(--transition-fast);
   overflow: hidden;
+  cursor: pointer;
 }
 
 .btn-primary::before {
-
   content: "";
-
   position: absolute;
   inset: 0;
-
-  background:
-    linear-gradient(
-      120deg,
-      transparent,
-      rgba(255,255,255,0.18),
-      transparent
-    );
-
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
   transform: translateX(-120%);
+  transition: transform 0.6s ease;
 }
 
 .btn-primary:hover::before {
-
-  animation: buttonShine 1.2s ease;
-}
-
-@keyframes buttonShine {
-
-  100% {
-    transform: translateX(120%);
-  }
+  transform: translateX(120%);
 }
 
 .btn-primary:hover {
-
-  transform: translateY(-1px);
-
-  box-shadow:
-    0 18px 40px rgba(59,130,246,0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(59,130,246,0.4);
 }
 
 .btn-primary:active {
-
   transform: scale(0.97);
 }
 
 .btn-primary:disabled {
-
-  opacity: 0.45;
-
+  opacity: 0.5;
   pointer-events: none;
+  transform: none;
 }
 
-/* ======================================================
-   🔳 SECONDARY BUTTON
-====================================================== */
+/* Secondary Button */
 .btn-secondary {
-
-  background:
-    rgba(255,255,255,0.05);
-
-  border:
-    1px solid rgba(255,255,255,0.08);
-
-  color: white;
-
-  border-radius: 1.3rem;
-
-  transition:
-    all var(--transition-fast);
+  height: 48px;
+  padding: 0 20px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-secondary);
+  border-radius: 1.2rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  cursor: pointer;
 }
 
 .btn-secondary:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.2);
+  color: white;
+}
 
-  background:
-    rgba(255,255,255,0.08);
+.btn-secondary:active {
+  transform: scale(0.97);
+}
+
+/* Outline Button */
+.btn-outline {
+  height: 48px;
+  padding: 0 20px;
+  background: transparent;
+  border: 1.5px solid var(--pulse-cyan);
+  color: var(--pulse-cyan);
+  border-radius: 1.2rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.btn-outline:hover {
+  background: rgba(6,182,212,0.1);
+  transform: translateY(-1px);
 }
 
 /* ======================================================
-   🧠 INPUT SYSTEM
+   🧠 INPUT SYSTEM - Premium
 ====================================================== */
+
 .input-primary {
-
   width: 100%;
-  height: 60px;
-
+  height: 56px;
   padding: 0 1.2rem;
-
-  border-radius: 1.5rem;
-
-  border:
-    1px solid rgba(255,255,255,0.06);
-
-  background:
-    rgba(255,255,255,0.05);
-
+  border-radius: 1.2rem;
+  border: 1.5px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
   color: white;
-
-  transition:
-    border-color var(--transition-fast),
-    background var(--transition-fast),
-    transform var(--transition-fast);
+  font-size: 1rem;
+  transition: border-color var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
 }
 
 .input-primary:focus {
-
-  border-color:
-    rgba(59,130,246,0.4);
-
-  background:
-    rgba(255,255,255,0.08);
-
+  border-color: rgba(59,130,246,0.5);
+  background: rgba(255,255,255,0.08);
   transform: translateY(-1px);
 }
 
 .input-primary::placeholder {
+  color: rgba(255,255,255,0.3);
+}
 
-  color:
-    rgba(255,255,255,0.34);
+.input-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Input with icon */
+.input-icon {
+  position: relative;
+}
+
+.input-icon input {
+  padding-left: 3rem;
+}
+
+.input-icon .icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255,255,255,0.4);
+  pointer-events: none;
 }
 
 /* ======================================================
    📊 STAT CARD
 ====================================================== */
+
 .stat-card {
+  border-radius: 1.5rem;
+  padding: 1.25rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: all var(--transition-fast);
+}
 
-  border-radius: 1.6rem;
-
-  padding: 1rem;
-
-  background:
-    rgba(255,255,255,0.05);
-
-  border:
-    1px solid rgba(255,255,255,0.06);
+.stat-card:hover {
+  background: rgba(255,255,255,0.06);
+  transform: translateY(-2px);
 }
 
 /* ======================================================
-   💓 LIVE DOT
+   💓 LIVE DOT ANIMATION
 ====================================================== */
-.live-dot {
 
+.live-dot {
   width: 8px;
   height: 8px;
-
-  border-radius: 999px;
-
-  background:
-    var(--pulse-emerald);
-
-  box-shadow:
-    0 0 12px rgba(16,185,129,0.8);
-
-  animation:
-    livePulse 1.5s infinite;
+  border-radius: 9999px;
+  background: var(--pulse-emerald);
+  box-shadow: 0 0 12px rgba(16,185,129,0.8);
+  animation: livePulse 1.5s infinite;
 }
 
 @keyframes livePulse {
-
   0% {
     transform: scale(1);
     opacity: 1;
   }
-
   50% {
-    transform: scale(1.45);
+    transform: scale(1.4);
     opacity: 0.7;
   }
-
   100% {
     transform: scale(1);
     opacity: 1;
@@ -532,123 +478,239 @@ textarea {
 }
 
 /* ======================================================
-   📲 SAFE AREAS
+   📲 SAFE AREAS (iOS Notch Support)
 ====================================================== */
-.safe-top {
 
-  padding-top:
-    env(safe-area-inset-top);
+.safe-top {
+  padding-top: env(safe-area-inset-top);
 }
 
 .safe-bottom {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+}
 
-  padding-bottom:
-    calc(
-      env(safe-area-inset-bottom) + 1rem
-    );
+.safe-left {
+  padding-left: env(safe-area-inset-left);
+}
+
+.safe-right {
+  padding-right: env(safe-area-inset-right);
 }
 
 /* ======================================================
    📱 SCROLL FIXES
 ====================================================== */
+
 main {
-
   overflow-x: hidden;
+  padding-bottom: 8rem;
+}
 
-  padding-bottom: 9rem;
+/* Smooth scrolling container */
+.scroll-container {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
 /* ======================================================
    🧠 NAVBAR OFFSET FIX
 ====================================================== */
-.bottom-nav-spacer {
 
-  height: 120px;
+.bottom-nav-spacer {
+  height: 80px;
 }
 
 /* ======================================================
-   ⚡ PERFORMANCE
+   ⚡ PERFORMANCE OPTIMIZATIONS
 ====================================================== */
+
 .glass,
 .btn-primary,
 .premium-card,
-.card-glow {
+.card-glow,
+.card-shimmer {
+  will-change: transform, opacity;
+}
 
-  will-change:
-    transform,
-    opacity;
+/* Reduce motion for heavy animations */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ======================================================
-   🎬 ANIMATIONS
+   🎬 ENHANCED ANIMATIONS
 ====================================================== */
-.fade-in {
-
-  animation:
-    fadeIn 0.35s ease forwards;
-}
 
 @keyframes fadeIn {
-
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(10px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-.scale-in {
-
-  animation:
-    scaleIn 0.25s ease forwards;
-}
-
-@keyframes scaleIn {
-
+@keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: scale(0.96);
+    transform: translateY(20px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
   to {
     opacity: 1;
     transform: scale(1);
   }
 }
 
-/* ======================================================
-   📱 SMALL DEVICE
-====================================================== */
-@media (max-width: 380px) {
-
-  .btn-primary {
-    height: 54px;
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
   }
-
-  .input-primary {
-    height: 54px;
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
-/* ======================================================
-   🔋 REDUCED MOTION
-====================================================== */
-@media (prefers-reduced-motion: reduce) {
-
-  * {
-
-    animation: none !important;
-    transition: none !important;
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
   }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 
-  .glass {
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
 
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Animation Classes */
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.4s ease forwards;
+}
+
+.animate-fadeInScale {
+  animation: fadeInScale 0.3s ease forwards;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.3s ease forwards;
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.3s ease forwards;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-bounce {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+/* Staggered animations for lists */
+.stagger-item:nth-child(1) { animation-delay: 0ms; }
+.stagger-item:nth-child(2) { animation-delay: 50ms; }
+.stagger-item:nth-child(3) { animation-delay: 100ms; }
+.stagger-item:nth-child(4) { animation-delay: 150ms; }
+.stagger-item:nth-child(5) { animation-delay: 200ms; }
+.stagger-item:nth-child(6) { animation-delay: 250ms; }
+
+/* ======================================================
+   📱 RESPONSIVE UTILITIES
+====================================================== */
+
+/* Mobile first - base styles for all devices */
+
+/* Tablet (768px and up) */
+@media (min-width: 768px) {
+  .btn-primary {
+    height: 60px;
+    font-size: 1.125rem;
+  }
+  
+  .input-primary {
+    height: 60px;
+    font-size: 1.125rem;
+  }
+}
+
+/* Desktop (1024px and up) */
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* Small devices (under 380px) */
+@media (max-width: 380px) {
+  .btn-primary {
+    height: 50px;
+    font-size: 0.875rem;
+  }
+  
+  .input-primary {
+    height: 50px;
+    font-size: 0.875rem;
+  }
+  
+  .premium-card {
+    border-radius: 1.5rem;
   }
 }
 
@@ -661,20 +723,13 @@ body,
 #root {
   overflow-x: hidden;
   overflow-y: auto;
-
   -webkit-overflow-scrolling: touch;
-
-  scroll-behavior: smooth;
-}
-
-/* smoother momentum scrolling */
-* {
   scroll-behavior: smooth;
 }
 
 /* ======================================================
    🔥 CRITICAL FIX: ENABLE INPUT INTERACTIONS
-   ====================================================== */
+====================================================== */
 
 /* Override touch-action for interactive elements */
 input,
@@ -694,7 +749,8 @@ input[type="email"],
 input[type="number"],
 input[type="password"],
 input[type="tel"],
-input[type="search"] {
+input[type="search"],
+input[type="url"] {
   touch-action: auto !important;
   -webkit-user-select: text !important;
   user-select: text !important;
@@ -708,10 +764,11 @@ textarea:focus {
   touch-action: auto !important;
 }
 
-/* Fix for iOS input zoom prevention (good practice) */
+/* Prevent zoom on input focus on iOS (good practice) */
 @media screen and (max-width: 768px) {
   input,
-  textarea {
+  textarea,
+  select {
     font-size: 16px !important;
   }
 }
@@ -730,31 +787,104 @@ div[class*="space-y-6"] {
 
 /* Make sure inputs are above any overlays */
 input,
-button {
+button,
+textarea {
   position: relative;
-  z-index: 10;
+  z-index: var(--z-base);
 }
 
 /* Remove any pointer-events restrictions */
 input,
 button,
-textarea {
+textarea,
+[role="button"] {
   pointer-events: auto !important;
 }
 
 /* Fix for any parent containers blocking events */
 .glass,
 .premium-card,
-div[class*="rounded-3xl"] {
+div[class*="rounded-3xl"],
+div[class*="rounded-2xl"] {
   pointer-events: auto !important;
 }
 
 /* Specific fix for the destination input */
 input[placeholder*="Braamfontein"],
 input[placeholder*="Sandton"],
-input[placeholder*="Pretoria"] {
+input[placeholder*="Pretoria"],
+input[placeholder*="Destination"] {
   touch-action: auto !important;
   pointer-events: auto !important;
   opacity: 1 !important;
   visibility: visible !important;
+}
+
+/* ======================================================
+   🎯 UTILITY CLASSES
+====================================================== */
+
+/* Text truncation - with standard property for compatibility */
+.truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;  /* ← Add standard property */
+  overflow: hidden;
+}
+
+.truncate-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;  /* ← Add standard property */
+  overflow: hidden;
+}
+
+/* Focus ring for accessibility */
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--pulse-cyan);
+}
+
+/* Loading skeleton */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.1), rgba(255,255,255,0.06));
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+/* ======================================================
+   🔥 DARK MODE SUPPORT (Optional)
+====================================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #03060f;
+    --bg-secondary: #081020;
+  }
+}
+
+/* ======================================================
+   🚀 PRINT STYLES
+====================================================== */
+
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .glass,
+  .premium-card {
+    background: white;
+    border: 1px solid #ccc;
+    backdrop-filter: none;
+  }
+  
+  .btn-primary,
+  button {
+    display: none;
+  }
 }

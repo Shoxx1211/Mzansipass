@@ -3,50 +3,182 @@
   <head>
     <meta charset="UTF-8" />
 
-    <!-- 📱 MOBILE -->
+    <!-- ======================================================
+         📱 MOBILE & VIEWPORT
+    ====================================================== -->
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes"
     />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="HandheldFriendly" content="true" />
 
-    <!-- 🔥 PWA CORE -->
+    <!-- ======================================================
+         🔥 PWA CORE
+    ====================================================== -->
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="theme-color" content="#3b82f6" />
     <meta name="mobile-web-app-capable" content="yes" />
-
-    <!-- 🍏 iOS APP MODE -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Pulse Transit" />
+    <meta name="apple-mobile-web-app-title" content="Pulse" />
+
+    <!-- ======================================================
+         🍏 iOS SPECIFIC
+    ====================================================== -->
     <meta
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
-    <meta name="apple-mobile-web-app-title" content="Pulse" />
-
-    <!-- 🧠 SEO -->
-    <meta
-      name="description"
-      content="Pulse – Feel the rhythm of your journey. Real-time transport intelligence across South Africa."
+    
+    <!-- iOS Splash Screens -->
+    <link
+      rel="apple-touch-startup-image"
+      href="/splash/iphone_splash.png"
+      media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      href="/splash/iphone_x_splash.png"
+      media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      href="/splash/ipad_splash.png"
+      media="(min-device-width: 768px) and (max-device-width: 1024px)"
     />
 
-    <!-- 🔗 ICONS -->
-    <link rel="icon" href="/icons/pulse-192.png" />
-    <link rel="apple-touch-icon" href="/icons/pulse-192.png" />
+    <!-- ======================================================
+         🧠 SEO & OPEN GRAPH
+    ====================================================== -->
+    <meta
+      name="description"
+      content="Pulse Transit – Smart transport intelligence for South Africa. Track trips, estimate fares, and navigate like a pro."
+    />
+    <meta name="keywords" content="transit, taxi, gautrain, pulse, commuter, south africa, fare calculator, trip tracker" />
+    <meta name="author" content="Pulse Transit" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pulse-transit.app/" />
+    <meta property="og:title" content="Pulse Transit - Smart Commuting" />
+    <meta property="og:description" content="Track your journeys, estimate fares, and navigate South African public transport with ease." />
+    <meta property="og:image" content="/og-image.png" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://pulse-transit.app/" />
+    <meta property="twitter:title" content="Pulse Transit - Smart Commuting" />
+    <meta property="twitter:description" content="Track your journeys, estimate fares, and navigate South African public transport with ease." />
+    <meta property="twitter:image" content="/og-image.png" />
 
-    <!-- 🔥 SPLASH (iOS fallback experience) -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <!-- ======================================================
+         🔗 ICONS (Multiple Resolutions)
+    ====================================================== -->
+    <!-- Standard favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/icons/apple-icon-60x60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/icons/apple-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/icons/apple-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-icon-180x180.png" />
+    
+    <!-- Android Chrome Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/android-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/android-icon-512x512.png" />
 
-    <!-- 🧾 TITLE -->
-    <title>Pulse Transit</title>
+    <!-- ======================================================
+         🧾 TITLE
+    ====================================================== -->
+    <title>Pulse Transit - Smart Commuting in South Africa</title>
 
-    <!-- ⚡ PERFORMANCE -->
+    <!-- ======================================================
+         ⚡ PERFORMANCE OPTIMIZATIONS
+    ====================================================== -->
+    <!-- Preconnect to critical origins -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://api.pulse-transit.app" />
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin />
+    
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://api.pulse-transit.app" />
+    
+    <!-- Preconnect for analytics -->
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+
+    <!-- ======================================================
+         🔐 CSP (Content Security Policy) - Production Only
+    ====================================================== -->
+    <!--
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' https://www.google-analytics.com;
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data: https:;
+      font-src 'self' https://fonts.gstatic.com;
+      connect-src 'self' https://api.pulse-transit.app https://www.google-analytics.com;
+    " />
+    -->
+
+    <!-- ======================================================
+         🎨 THEME COLORS
+    ====================================================== -->
+    <meta name="theme-color" content="#040816" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+
+    <!-- ======================================================
+         📱 iOS Status Bar Styles
+    ====================================================== -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- ======================================================
+         🔄 PWA UPDATE NOTIFICATION (via Service Worker)
+    ====================================================== -->
+    <meta name="service-worker-enabled" content="true" />
+
+    <!-- ======================================================
+         🌐 BASE URL (for routing)
+    ====================================================== -->
+    <base href="/" />
   </head>
 
   <body>
+    <!-- Root mount point -->
     <div id="root"></div>
 
-    <!-- ✅ ENTRY -->
+    <!-- ======================================================
+         🚀 ENTRY SCRIPT
+    ====================================================== -->
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- ======================================================
+         📡 OFFLINE FALLBACK (if needed)
+    ====================================================== -->
+    <script>
+      if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+              console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
   </body>
 </html>
