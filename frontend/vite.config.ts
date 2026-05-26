@@ -4,7 +4,9 @@ import { VitePWA } from "vite-plugin-pwa";
 import basicSsl from "@vitejs/plugin-basic-ssl";
 import path from "path";
 
+
 export default defineConfig({
+  base: "./",
   plugins: [
     react(),
     basicSsl(),
