@@ -39,6 +39,7 @@ interface TripTrackerProps {
   batteryLevel?: number;
   isBackgroundTracking?: boolean;
   onEtaUpdate?: (eta: number) => void;
+  onEndTrip: () => void | Promise<void>;
 }
 
 interface SpeedQuality {
@@ -223,7 +224,8 @@ export const TripTracker = memo<TripTrackerProps>(({
   signalStrength = 'good',
   batteryLevel = 85,
   isBackgroundTracking = false,
-  onEtaUpdate
+  onEtaUpdate,
+  onEndTrip
 }) => {
   const [isAnimating] = useState(true);
   const etaPrediction = useEtaPrediction(distance, speed, expectedDistance);
@@ -467,6 +469,18 @@ export const TripTracker = memo<TripTrackerProps>(({
           </div>
         </div>
       </div>
+
+      <button
+  onClick={onEndTrip}
+  className="
+    w-full h-14 rounded-2xl
+    bg-gradient-to-r from-red-500 to-orange-500
+    text-white font-bold
+    transition-all hover:scale-[1.02] active:scale-[0.98]
+  "
+>
+  🛑 End Trip
+</button>
       
       {/* ====================================================== */}
       {/* PERFORMANCE METRICS */}

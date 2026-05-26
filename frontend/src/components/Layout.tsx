@@ -2,7 +2,7 @@
 // Pulse Transit - Premium Layout Component
 // Features: Safe area handling, gesture navigation, animated transitions, haptic feedback
 
-import React, { useState, useEffect, useCallback, memo } from "react";
+import React, { useState, memo } from "react";
 import type { ReactNode } from "react";
 import { TabType } from "../types";
 
@@ -59,68 +59,6 @@ const NAV_ITEMS: NavItem[] = [
 // ======================================================
 // CUSTOM HOOKS
 // ======================================================
-const useSwipeGesture = (
-  onSwipeLeft?: () => void,
-  onSwipeRight?: () => void,
-  enabled: boolean = true
-) => {
-  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
-  const [touchEnd, setTouchEnd] = useState<{ x: number; y: number } | null>(null);
-
-  const minSwipeDistance = 50;
-
-  const onTouchStart = useCallback((e: TouchEvent) => {
-    if (!enabled) return;
-    setTouchEnd(null);
-    setTouchStart({
-      x: e.targetTouches[0].clientX,
-      y: e.targetTouches[0].clientY
-    });
-  }, [enabled]);
-
-  const onTouchMove = useCallback((e: TouchEvent) => {
-    if (!enabled || !touchStart) return;
-    setTouchEnd({
-      x: e.targetTouches[0].clientX,
-      y: e.targetTouches[0].clientY
-    });
-  }, [enabled, touchStart]);
-
-  const onTouchEnd = useCallback(() => {
-    if (!enabled || !touchStart || !touchEnd) return;
-    
-    const distanceX = touchStart.x - touchEnd.x;
-    const distanceY = touchStart.y - touchEnd.y;
-    const isHorizontalSwipe = Math.abs(distanceX) > Math.abs(distanceY);
-    
-    if (isHorizontalSwipe && Math.abs(distanceX) > minSwipeDistance) {
-      if (distanceX > 0) {
-        onSwipeLeft?.();
-      } else {
-        onSwipeRight?.();
-      }
-    }
-    
-    setTouchStart(null);
-    setTouchEnd(null);
-  }, [enabled, touchStart, touchEnd, onSwipeLeft, onSwipeRight]);
-
-  useEffect(() => {
-    if (!enabled) return;
-    
-    document.addEventListener('touchstart', onTouchStart);
-    document.addEventListener('touchmove', onTouchMove);
-    document.addEventListener('touchend', onTouchEnd);
-    
-    return () => {
-      document.removeEventListener('touchstart', onTouchStart);
-      document.removeEventListener('touchmove', onTouchMove);
-      document.removeEventListener('touchend', onTouchEnd);
-    };
-  }, [enabled, onTouchStart, onTouchMove, onTouchEnd]);
-
-  return { touchStart, touchEnd };
-};
 
 // ======================================================
 // SUB-COMPONENTS
@@ -222,50 +160,31 @@ export const Layout = memo<LayoutProps>(({
   title,
   subtitle,
   showHeader = true,
-  enableGestures = true
+  enableGestures = false
 }) => {
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isVisible] = useState(true);
+  
 
   // Handle swipe gestures for tab navigation
-  const handleSwipeLeft = useCallback(() => {
-    const currentIndex = NAV_ITEMS.findIndex(item => item.id === activeTab);
-    if (currentIndex < NAV_ITEMS.length - 1) {
-      onNavClick(NAV_ITEMS[currentIndex + 1].id);
-      // Haptic feedback (if supported)
-      if ('vibrate' in navigator) {
-        navigator.vibrate(10);
-      }
-    }
-  }, [activeTab, onNavClick]);
 
-  const handleSwipeRight = useCallback(() => {
-    const currentIndex = NAV_ITEMS.findIndex(item => item.id === activeTab);
-    if (currentIndex > 0) {
-      onNavClick(NAV_ITEMS[currentIndex - 1].id);
-      if ('vibrate' in navigator) {
-        navigator.vibrate(10);
-      }
-    }
-  }, [activeTab, onNavClick]);
 
-  useSwipeGesture(handleSwipeLeft, handleSwipeRight, enableGestures);
+  //useSwipeGesture(handleSwipeLeft, handleSwipeRight, enableGestures);
 
   // Hide nav on scroll (for better UX)
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
-      }
-      setLastScrollY(currentScrollY);
-    };
+  //eEffect(() => {
+  //const handleScroll = () => {
+    //const currentScrollY = window.scrollY;
+    //if (currentScrollY > lastScrollY && currentScrollY > 100) {
+     // setIsVisible(false);
+    //} else {
+      //setIsVisible(true);
+    //}
+    //setLastScrollY(currentScrollY);
+  //};
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  //window.addEventListener('scroll', handleScroll);
+  //return () => window.removeEventListener('scroll', handleScroll);
+//}, [lastScrollY]);
 
   // Get current tab info for header
   const currentTabInfo = NAV_ITEMS.find(item => item.id === activeTab);
@@ -345,7 +264,7 @@ export const Layout = memo<LayoutProps>(({
         <button
           onClick={() => onNavClick("navigate")}
           className="
-            fixed bottom-24 right-4 z-40
+            fixed bottom-28 right-4 z-20
             w-14 h-14 rounded-full
             bg-gradient-to-r from-cyan-500 to-emerald-500
             shadow-lg shadow-cyan-500/25

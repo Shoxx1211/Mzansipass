@@ -337,7 +337,26 @@ const App = () => {
   // ======================================================
   // END TRIP
   // ======================================================
+const endTrip = useCallback(async () => {
+  if (!currentTrip.startTime || !network) return;
 
+  const fare = estimatedFare || 0;
+
+  const completedTrip: TripData = {
+    ...(currentTrip as TripData),
+    endTime: Date.now(),
+    duration,
+    fare,
+    destination,
+    network
+  };
+
+  setVerifyTrip(completedTrip);
+
+  setTripState(TripState.COMPLETED);
+
+  await BackgroundTracker.stop();
+}, [currentTrip, network, estimatedFare, duration, destination]);
   // ======================================================
   // CONFIRM TRIP
   // ======================================================
@@ -414,6 +433,17 @@ const App = () => {
   }, [user]);
 
   // ======================================================
+// GEMINI NAVIGATION TAB HANDLER
+// ======================================================
+useEffect(() => {
+  if (activeTab === "navigate") {
+    gemini.openNavigator();
+  } else {
+    gemini.closeNavigator();
+  }
+}, [activeTab]);
+
+  // ======================================================
   // ACTIVE SESSION MANAGEMENT
   // ======================================================
   useEffect(() => {
@@ -434,13 +464,25 @@ const App = () => {
   // ======================================================
   return (
     <>
-      <Layout activeTab={activeTab} onNavClick={setActiveTab}>
+  <Layout
+  activeTab={activeTab}
+  onNavClick={setActiveTab}
+>
+   <div className="w-full max-w-7xl mx-auto">
         <div 
-          className="space-y-6 px-4 pb-32 overflow-y-auto min-h-screen"
+           className="
+    space-y-6
+    px-4
+    md:px-8
+    lg:px-12
+    pb-40
+    min-h-[100dvh]
+    relative
+    z-10
+  "
           style={{ 
             WebkitOverflowScrolling: "touch", 
             scrollBehavior: "smooth",
-            paddingBottom: "120px"
           }}
         >
           {/* HOME TAB */}
@@ -449,7 +491,7 @@ const App = () => {
               {/* HERO SECTION */}
               {tripState !== TripState.ACTIVE && !verifyTrip && (
                 <div className="pt-4 space-y-2">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div>
                       <p className="text-white/40 text-sm">Welcome back</p>
                       <h1 className="text-3xl font-black tracking-tight text-white">Where are you going?</h1>
@@ -465,12 +507,13 @@ const App = () => {
               {/* ACTIVE TRIP UI */}
               {tripState === TripState.ACTIVE && (
                 <TripTracker
-                  network={network}
-                  destination={destination}
-                  distance={currentTrip.distance || 0}
-                  duration={duration}
-                  speed={currentTrip.avgSpeed || 0}
-                />
+  network={network}
+  destination={destination}
+  distance={currentTrip.distance || 0}
+  duration={duration}
+  speed={currentTrip.avgSpeed || 0}
+  onEndTrip={endTrip}
+/>
               )}
 
               {/* PLANNING UI */}
@@ -499,12 +542,55 @@ const App = () => {
 
                   {/* STEP 2: TRANSPORT */}
                   {planningStep === "transport" && (
-                    <TransportRecommendation
-                      recommendations={recommendations}
-                      selected={selectedRecommendation}
-                      onSelect={handleSelectRecommendation}
-                    />
-                  )}
+  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    
+    {/* LEFT PANEL - Desktop only */}
+    <div className="hidden lg:block lg:col-span-1">
+      <div className="glass rounded-3xl p-6 sticky top-24">
+        <p className="text-white/40 text-sm">Destination</p>
+        <h2 className="text-2xl font-black text-white mt-2">
+          {destination}
+        </h2>
+
+        <div className="mt-6 space-y-3">
+          <div className="glass p-4 rounded-2xl">
+            <p className="text-xs text-white/40 uppercase">
+              Available Routes
+            </p>
+            <p className="text-3xl font-black text-cyan-400">
+              {recommendations.length}
+            </p>
+          </div>
+
+          <div className="glass p-4 rounded-2xl">
+            <p className="text-xs text-white/40 uppercase">
+              GPS Status
+            </p>
+            <p className="text-lg font-bold text-emerald-400">
+              {location.location ? "Connected" : "Searching"}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* RIGHT PANEL */}
+    <div className="lg:col-span-2 max-w-4xl">
+      <button
+        onClick={() => setPlanningStep("destination")}
+        className="text-sm text-cyan-400 mb-4 inline-block"
+      >
+        ← Back
+      </button>
+
+      <TransportRecommendation
+        recommendations={recommendations}
+        selected={selectedRecommendation}
+        onSelect={handleSelectRecommendation}
+      />
+    </div>
+  </div>
+)}
 
                   {/* STEP 3: FARE CONFIRMATION */}
                   {planningStep === "fare" && estimatedFare !== null && (
@@ -524,7 +610,7 @@ const App = () => {
                         showTilt={false}
                       />
                       
-                      <div className="fixed bottom-20 left-4 right-4 z-50">
+                      <div className="sticky bottom-4 z-40 pt-6">
                         <button 
                           onClick={startTrip} 
                           className="w-full h-16 text-lg font-bold rounded-3xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-emerald-500/30 animate-pulse"
@@ -609,6 +695,7 @@ const App = () => {
               )}
             </div>
           )}
+        </div>
         </div>
       </Layout>
 
