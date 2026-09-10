@@ -20,7 +20,7 @@ import {
 
 import {
   type TransportRecommendation as RecommendationType
-} from "../types";
+} from "../../types";
 
 // ======================================================
 // TYPES
@@ -90,7 +90,7 @@ const formatBadge = (badge: string): string => {
 const getModeIcon = (mode: string): string => {
   switch (mode) {
     case "Taxi": return "🚖";
-    case "Gautrain": return "🚆";
+    case "Gautrain": return "🚅";
     case "Metrorail": return "🚂";
     case "Rea Vaya": return "🚌";
     case "A Re Yeng": return "🚍";
@@ -148,12 +148,17 @@ const RecommendationCard: React.FC<{
               <p className="font-bold text-lg text-white">
                 {recommendation.mode}
               </p>
-              <span className={`
-                text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-full
-                ${getBadgeColor(recommendation.badge)}
-              `}>
-                {formatBadge(recommendation.badge)}
-              </span>
+ {recommendation.badges.map((badge) => (
+  <span
+    key={badge}
+    className={`
+      text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-full
+      ${getBadgeColor(badge)}
+    `}
+  >
+    {formatBadge(badge)}
+  </span>
+))}
             </div>
             
             <p className="text-sm text-white/50 mt-0.5">
@@ -274,10 +279,10 @@ const RecommendationCard: React.FC<{
             </div>
           </div>
 
-          {recommendation.aiConfidence && (
+          {recommendation.confidence && (
             <div className="flex items-center gap-2 text-[10px] text-white/40">
               <Sparkles size={10} />
-              <span>AI Confidence: {(recommendation.aiConfidence * 100).toFixed(0)}%</span>
+              <span>AI Confidence: {(recommendation.confidence * 100).toFixed(0)}%</span>
             </div>
           )}
         </div>

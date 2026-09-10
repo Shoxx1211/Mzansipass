@@ -19,8 +19,8 @@ import {
   TrendingUp,
   Clock} from "lucide-react";
 
-import type { TransitNetwork } from "../types";
-import { NETWORK_UI } from "../constants";
+import type { TransitNetwork } from "../../types";
+import { NETWORK_UI } from "../../constants";
 
 // ======================================================
 // TYPES
@@ -185,7 +185,7 @@ const MetricCard: React.FC<{
       {unit && <span className="text-xs text-white/40">{unit}</span>}
       {trend && (
         <span className={`text-xs ml-2 ${trend === 'up' ? 'text-green-400' : 'text-red-400'}`}>
-          {trend === 'up' ? '↑' : '↓'}
+          {trend === 'up' ? 'ÃŽâ€œÃƒÂ¥ÃƒÂ¦' : 'ÃŽâ€œÃƒÂ¥ÃƒÂ´'}
         </span>
       )}
     </div>
@@ -305,7 +305,7 @@ export const TripTracker = memo<TripTrackerProps>(({
                   flex items-center justify-center text-3xl
                   transition-all duration-300
                 `}>
-                  {networkUI?.icon || "🚌"}
+                  {networkUI?.icon || "Ã¢â€°Â¡Ã†â€™ÃƒÅ“ÃƒÂ®"}
                   {isAnimating && (
                     <div className="absolute -inset-1 rounded-2xl bg-cyan-500/20 animate-ping" />
                   )}
@@ -340,7 +340,7 @@ export const TripTracker = memo<TripTrackerProps>(({
               </div>
               {isBackgroundTracking && (
                 <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-white/10">
-                  <span className="text-[8px] text-white/40">📱 BG</span>
+                  <span className="text-[8px] text-white/40">Ã¢â€°Â¡Ã†â€™ÃƒÂ´Ã¢â€“â€™ BG</span>
                 </div>
               )}
             </div>
@@ -479,7 +479,7 @@ export const TripTracker = memo<TripTrackerProps>(({
     transition-all hover:scale-[1.02] active:scale-[0.98]
   "
 >
-  🛑 End Trip
+  Ã¢â€°Â¡Ã†â€™Ã‚Â¢ÃƒÂ¦ End Trip
 </button>
       
       {/* ====================================================== */}

@@ -1,341 +1,268 @@
 @import "tailwindcss";
 
-/* ======================================================
-   🌍 PULSE ELITE DESIGN SYSTEM v3.0
-   Enterprise-Grade Styles | Production Ready
-====================================================== */
+/* =========================================================
+   PULSE TRANSIT
+   Responsive Design System
+   Mobile / Tablet / Laptop / Desktop
+========================================================= */
 
 :root {
-  /* ======================================================
-     COLORS
-  ====================================================== */
   --bg: #040816;
-  --bg-secondary: #0a1020;
-  --bg-tertiary: #0f1525;
+  --bg-secondary: #080f20;
+  --bg-tertiary: #0d1628;
 
-  --surface: rgba(255,255,255,0.04);
-  --surface-strong: rgba(255,255,255,0.08);
-  --surface-hover: rgba(255,255,255,0.12);
+  --surface: rgba(255, 255, 255, 0.045);
+  --surface-hover: rgba(255, 255, 255, 0.075);
 
-  --glass-bg: rgba(255,255,255,0.06);
-  --glass-border: rgba(255,255,255,0.08);
-  --glass-border-hover: rgba(255,255,255,0.15);
+  --glass-bg: rgba(255, 255, 255, 0.055);
+  --glass-border: rgba(255, 255, 255, 0.09);
 
   --text-primary: #ffffff;
-  --text-secondary: rgba(255,255,255,0.72);
-  --text-muted: rgba(255,255,255,0.42);
-  --text-disabled: rgba(255,255,255,0.24);
+  --text-secondary: rgba(255, 255, 255, 0.72);
+  --text-muted: rgba(255, 255, 255, 0.45);
 
   --pulse-blue: #3b82f6;
   --pulse-cyan: #06b6d4;
   --pulse-purple: #8b5cf6;
   --pulse-emerald: #10b981;
-  --pulse-red: #ef4444;
-  --pulse-amber: #f59e0b;
-  --pulse-pink: #ec4899;
-  --pulse-indigo: #6366f1;
 
-  /* ======================================================
-     RADII
-  ====================================================== */
   --radius-sm: 0.75rem;
   --radius-md: 1rem;
   --radius-lg: 1.25rem;
   --radius-xl: 1.5rem;
   --radius-2xl: 2rem;
-  --radius-3xl: 2.5rem;
-  --radius-full: 9999px;
 
-  /* ======================================================
-     SHADOWS
-  ====================================================== */
-  --shadow-sm: 0 2px 8px rgba(0,0,0,0.15);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.2);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.25);
-  --shadow-xl: 0 16px 48px rgba(0,0,0,0.3);
-  --shadow-2xl: 0 24px 64px rgba(0,0,0,0.35);
-  --shadow-soft: 0 10px 30px rgba(0,0,0,0.25);
-  --shadow-deep: 0 30px 80px rgba(0,0,0,0.45);
-  --shadow-glow: 0 0 50px rgba(59,130,246,0.18);
-  --shadow-glow-cyan: 0 0 40px rgba(6,182,212,0.15);
-  --shadow-glow-emerald: 0 0 40px rgba(16,185,129,0.15);
-
-  /* ======================================================
-     BLUR
-  ====================================================== */
-  --blur-sm: 4px;
-  --blur-md: 8px;
-  --blur-lg: 12px;
-  --blur-xl: 20px;
-  --blur-2xl: 32px;
-
-  /* ======================================================
-     TRANSITIONS
-  ====================================================== */
-  --transition-fast: 140ms ease;
-  --transition-base: 220ms ease;
-  --transition-slow: 350ms ease;
-  --transition-bounce: 500ms cubic-bezier(0.34, 1.2, 0.64, 1);
-
-  /* ======================================================
-     Z-INDEX LAYERS
-  ====================================================== */
-  --z-base: 1;
-  --z-dropdown: 10;
-  --z-sticky: 20;
-  --z-header: 30;
-  --z-modal: 40;
-  --z-toast: 50;
-  --z-tooltip: 60;
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.25);
+  --shadow-deep: 0 25px 70px rgba(0, 0, 0, 0.4);
 }
 
-/* ======================================================
-   🌍 GLOBAL RESET
-====================================================== */
+/* =========================================================
+   RESET
+========================================================= */
 
 *,
 *::before,
 *::after {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
-html,
-body,
-#root {
+html {
   width: 100%;
-  min-height: 100dvh;
-  background: var(--bg);
-  color: var(--text-primary);
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-
+  min-height: 100%;
   overflow-x: hidden;
-  overflow-y: auto;
-
-  overscroll-behavior-y: none;
-  scroll-behavior: smooth;
-
-  -webkit-overflow-scrolling: touch;
+  background: var(--bg);
 }
-
-/* ======================================================
-   📱 BODY - Premium Gradient Background
-====================================================== */
 
 body {
-  position: relative;
-  background: radial-gradient(circle at top left, rgba(59,130,246,0.12), transparent 28%),
-              radial-gradient(circle at top right, rgba(139,92,246,0.10), transparent 24%),
-              radial-gradient(circle at bottom, rgba(6,182,212,0.08), transparent 30%),
-              linear-gradient(180deg, #040816 0%, #060b18 45%, #03060f 100%);
-  background-attachment: fixed;
+  width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+
+  background:
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(59, 130, 246, 0.14),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 85% 5%,
+      rgba(139, 92, 246, 0.1),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(6, 182, 212, 0.07),
+      transparent 35%
+    ),
+    linear-gradient(
+      180deg,
+      #040816 0%,
+      #060b18 50%,
+      #03060f 100%
+    );
+
+  color: var(--text-primary);
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  overflow-x: hidden;
 }
 
-/* ======================================================
-   ⚡ UNIVERSAL UTILITIES
-====================================================== */
-
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
-/* Optional elegant scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
+#root {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.15);
-  border-radius: 999px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* ======================================================
-   🖼 MEDIA
-====================================================== */
-
-img, video, canvas, iframe {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-/* ======================================================
-   🔘 FORM ELEMENTS - Premium Styling
-====================================================== */
+/* =========================================================
+   ELEMENTS
+========================================================= */
 
 button,
 input,
 textarea,
 select {
   font: inherit;
-  outline: none;
-  background: transparent;
-  border: none;
 }
 
 button {
   cursor: pointer;
-  user-select: none;
 }
 
-/* ======================================================
-   🧊 GLASS SYSTEM - Enhanced
-====================================================== */
+input,
+textarea,
+select {
+  color: white;
+}
+
+img,
+video,
+canvas,
+iframe {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* =========================================================
+   GLASS
+========================================================= */
 
 .glass {
   position: relative;
-  background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.075),
+      rgba(255, 255, 255, 0.035)
+    );
+
   border: 1px solid var(--glass-border);
-  backdrop-filter: blur(var(--blur-xl));
-  -webkit-backdrop-filter: blur(var(--blur-xl));
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
   box-shadow: var(--shadow-soft);
-  transition: transform var(--transition-base), border-color var(--transition-base), background var(--transition-base);
-  overflow: hidden;
-}
 
-.glass::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.04), transparent);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-}
-
-.glass:hover::before {
-  opacity: 1;
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease;
 }
 
 .glass:hover {
-  border-color: var(--glass-border-hover);
-  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
 .glass-active {
-  border-color: var(--pulse-cyan);
-  background: linear-gradient(180deg, rgba(6,182,212,0.12), rgba(6,182,212,0.04));
+  border-color: rgba(6, 182, 212, 0.5);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(6, 182, 212, 0.12),
+      rgba(6, 182, 212, 0.04)
+    );
 }
 
-/* ======================================================
-   🔥 PREMIUM CARD
-====================================================== */
+/* =========================================================
+   PREMIUM CARD
+========================================================= */
 
 .premium-card {
   position: relative;
-  border-radius: var(--radius-3xl);
-  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-  border: 1px solid rgba(255,255,255,0.08);
-  overflow: hidden;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.07),
+      rgba(255, 255, 255, 0.025)
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 1.5rem;
+
   box-shadow: var(--shadow-deep);
-}
 
-.premium-card::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-}
-
-/* ======================================================
-   ✨ CARD GLOW EFFECT
-====================================================== */
-
-.card-glow {
-  position: relative;
-  isolation: isolate;
-}
-
-.card-glow::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  background: linear-gradient(135deg, rgba(59,130,246,0.45), rgba(139,92,246,0.25), rgba(6,182,212,0.25));
-  filter: blur(30px);
-  opacity: 0.18;
-  z-index: -1;
-  transition: opacity 0.3s ease;
-}
-
-.card-glow:hover::before {
-  opacity: 0.35;
-}
-
-/* ======================================================
-   ✨ SHIMMER ANIMATION
-====================================================== */
-
-.card-shimmer {
-  position: relative;
   overflow: hidden;
 }
 
-.card-shimmer::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.08) 50%, transparent 80%);
-  transform: translateX(-120%);
-  animation: shimmer 5s infinite;
-  pointer-events: none;
-}
-
-@keyframes shimmer {
-  100% {
-    transform: translateX(120%);
-  }
-}
-
-/* ======================================================
-   🔘 BUTTONS - Premium System
-====================================================== */
+/* =========================================================
+   BUTTONS
+========================================================= */
 
 .btn-primary {
   position: relative;
-  height: 56px;
-  padding: 0 24px;
+
+  min-height: 54px;
+
+  padding: 0 1.5rem;
+
   border: none;
-  border-radius: 1.5rem;
+  border-radius: 1rem;
+
   color: white;
+
   font-weight: 700;
-  font-size: 1rem;
-  letter-spacing: -0.01em;
-  background: linear-gradient(135deg, var(--pulse-blue), var(--pulse-purple));
-  box-shadow: 0 8px 24px rgba(59,130,246,0.3);
-  transition: transform var(--transition-fast), opacity var(--transition-fast), box-shadow var(--transition-fast);
-  overflow: hidden;
-  cursor: pointer;
-}
 
-.btn-primary::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
-  transform: translateX(-120%);
-  transition: transform 0.6s ease;
-}
+  background:
+    linear-gradient(
+      135deg,
+      var(--pulse-blue),
+      var(--pulse-purple)
+    );
 
-.btn-primary:hover::before {
-  transform: translateX(120%);
+  box-shadow:
+    0 8px 24px rgba(59, 130, 246, 0.25);
+
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease,
+    opacity 150ms ease;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(59,130,246,0.4);
+  box-shadow:
+    0 12px 32px rgba(59, 130, 246, 0.35);
 }
 
 .btn-primary:active {
@@ -344,155 +271,94 @@ button {
 
 .btn-primary:disabled {
   opacity: 0.5;
-  pointer-events: none;
-  transform: none;
-}
-
-/* Secondary Button */
-.btn-secondary {
-  height: 48px;
-  padding: 0 20px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: var(--text-secondary);
-  border-radius: 1.2rem;
-  font-weight: 600;
-  transition: all var(--transition-fast);
-  cursor: pointer;
-}
-
-.btn-secondary:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: rgba(255,255,255,0.2);
-  color: white;
-}
-
-.btn-secondary:active {
-  transform: scale(0.97);
-}
-
-/* Outline Button */
-.btn-outline {
-  height: 48px;
-  padding: 0 20px;
-  background: transparent;
-  border: 1.5px solid var(--pulse-cyan);
-  color: var(--pulse-cyan);
-  border-radius: 1.2rem;
-  font-weight: 600;
-  transition: all var(--transition-fast);
-  cursor: pointer;
-}
-
-.btn-outline:hover {
-  background: rgba(6,182,212,0.1);
-  transform: translateY(-1px);
-}
-
-/* ======================================================
-   🧠 INPUT SYSTEM - Premium
-====================================================== */
-
-.input-primary {
-  width: 100%;
-  height: 56px;
-  padding: 0 1.2rem;
-  border-radius: 1.2rem;
-  border: 1.5px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.04);
-  color: white;
-  font-size: 1rem;
-  transition: border-color var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
-}
-
-.input-primary:focus {
-  border-color: rgba(59,130,246,0.5);
-  background: rgba(255,255,255,0.08);
-  transform: translateY(-1px);
-}
-
-.input-primary::placeholder {
-  color: rgba(255,255,255,0.3);
-}
-
-.input-primary:disabled {
-  opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* Input with icon */
-.input-icon {
-  position: relative;
+/* =========================================================
+   INPUTS
+========================================================= */
+
+.input-primary {
+  width: 100%;
+  min-height: 54px;
+
+  padding: 0 1rem;
+
+  border-radius: 1rem;
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+
+  background: rgba(255, 255, 255, 0.045);
+
+  color: white;
+
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
 }
 
-.input-icon input {
-  padding-left: 3rem;
+.input-primary::placeholder {
+  color: rgba(255, 255, 255, 0.35);
 }
 
-.input-icon .icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: rgba(255,255,255,0.4);
-  pointer-events: none;
+.input-primary:focus {
+  border-color: rgba(6, 182, 212, 0.65);
+
+  background: rgba(255, 255, 255, 0.07);
+
+  box-shadow:
+    0 0 0 3px rgba(6, 182, 212, 0.1);
+
+  outline: none;
 }
 
-/* ======================================================
-   📊 STAT CARD
-====================================================== */
-
-.stat-card {
-  border-radius: 1.5rem;
-  padding: 1.25rem;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.06);
-  transition: all var(--transition-fast);
-}
-
-.stat-card:hover {
-  background: rgba(255,255,255,0.06);
-  transform: translateY(-2px);
-}
-
-/* ======================================================
-   💓 LIVE DOT ANIMATION
-====================================================== */
+/* =========================================================
+   LIVE INDICATOR
+========================================================= */
 
 .live-dot {
+  display: inline-block;
+
   width: 8px;
   height: 8px;
-  border-radius: 9999px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
   background: var(--pulse-emerald);
-  box-shadow: 0 0 12px rgba(16,185,129,0.8);
-  animation: livePulse 1.5s infinite;
+
+  box-shadow:
+    0 0 12px rgba(16, 185, 129, 0.8);
+
+  animation: livePulse 1.6s ease-in-out infinite;
 }
 
 @keyframes livePulse {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.4);
-    opacity: 0.7;
-  }
+  0%,
   100% {
-    transform: scale(1);
     opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.55;
+    transform: scale(1.25);
   }
 }
 
-/* ======================================================
-   📲 SAFE AREAS (iOS Notch Support)
-====================================================== */
+/* =========================================================
+   SAFE AREAS
+========================================================= */
 
 .safe-top {
   padding-top: env(safe-area-inset-top);
 }
 
 .safe-bottom {
-  padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+  padding-bottom:
+    calc(env(safe-area-inset-bottom) + 0.25rem);
 }
 
 .safe-left {
@@ -503,61 +369,20 @@ button {
   padding-right: env(safe-area-inset-right);
 }
 
-/* ======================================================
-   📱 SCROLL FIXES
-====================================================== */
-
-main {
-  overflow-x: hidden;
-  padding-bottom: 8rem;
+.pt-safe-top {
+  padding-top: env(safe-area-inset-top);
 }
 
-/* Smooth scrolling container */
-.scroll-container {
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-}
-
-/* ======================================================
-   🧠 NAVBAR OFFSET FIX
-====================================================== */
-
-.bottom-nav-spacer {
-  height: 80px;
-}
-
-/* ======================================================
-   ⚡ PERFORMANCE OPTIMIZATIONS
-====================================================== */
-
-.glass,
-.btn-primary,
-.premium-card,
-.card-glow,
-.card-shimmer {
-  will-change: transform, opacity;
-}
-
-/* Reduce motion for heavy animations */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-/* ======================================================
-   🎬 ENHANCED ANIMATIONS
-====================================================== */
+/* =========================================================
+   ANIMATIONS
+========================================================= */
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -567,75 +392,15 @@ main {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(18px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-/* Animation Classes */
 .animate-fadeIn {
   animation: fadeIn 0.3s ease forwards;
 }
@@ -644,257 +409,84 @@ main {
   animation: fadeInUp 0.4s ease forwards;
 }
 
-.animate-fadeInScale {
-  animation: fadeInScale 0.3s ease forwards;
-}
+/* =========================================================
+   MOBILE
+========================================================= */
 
-.animate-slideInRight {
-  animation: slideInRight 0.3s ease forwards;
-}
-
-.animate-slideInLeft {
-  animation: slideInLeft 0.3s ease forwards;
-}
-
-.animate-pulse {
-  animation: pulse 2s ease-in-out infinite;
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-
-.animate-bounce {
-  animation: bounce 1s ease-in-out infinite;
-}
-
-/* Staggered animations for lists */
-.stagger-item:nth-child(1) { animation-delay: 0ms; }
-.stagger-item:nth-child(2) { animation-delay: 50ms; }
-.stagger-item:nth-child(3) { animation-delay: 100ms; }
-.stagger-item:nth-child(4) { animation-delay: 150ms; }
-.stagger-item:nth-child(5) { animation-delay: 200ms; }
-.stagger-item:nth-child(6) { animation-delay: 250ms; }
-
-/* ======================================================
-   📱 RESPONSIVE UTILITIES
-====================================================== */
-
-/* Mobile first - base styles for all devices */
-
-/* Tablet (768px and up) */
-@media (min-width: 768px) {
-  .btn-primary {
-    height: 60px;
-    font-size: 1.125rem;
+@media (max-width: 639px) {
+  body {
+    font-size: 15px;
   }
-  
+
+  .glass {
+    border-radius: 1.25rem;
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (min-width: 640px) {
   .input-primary {
-    height: 60px;
-    font-size: 1.125rem;
+    min-height: 56px;
+  }
+
+  .btn-primary {
+    min-height: 56px;
   }
 }
 
-/* Desktop (1024px and up) */
+/* =========================================================
+   LAPTOP
+========================================================= */
+
 @media (min-width: 1024px) {
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
+  body {
+    font-size: 16px;
   }
-}
 
-/* Small devices (under 380px) */
-@media (max-width: 380px) {
-  .btn-primary {
-    height: 50px;
-    font-size: 0.875rem;
-  }
-  
   .input-primary {
-    height: 50px;
-    font-size: 0.875rem;
+    min-height: 58px;
   }
-  
-  .premium-card {
-    border-radius: 1.5rem;
-  }
-}
 
-
-/* ======================================================
-   🔥 CRITICAL FIX: ENABLE INPUT INTERACTIONS
-====================================================== */
-
-/* Override touch-action for interactive elements */
-input,
-textarea,
-button,
-[contenteditable="true"],
-select,
-[role="button"] {
-  touch-action: manipulation !important;
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-/* Specifically for text inputs - allow typing */
-input[type="text"],
-input[type="email"],
-input[type="number"],
-input[type="password"],
-input[type="tel"],
-input[type="search"],
-input[type="url"] {
-  touch-action: auto !important;
-  -webkit-user-select: text !important;
-  user-select: text !important;
-  cursor: text !important;
-}
-
-/* Ensure focus state works */
-input:focus,
-textarea:focus {
-  outline: none;
-  touch-action: auto !important;
-}
-
-/* Prevent zoom on input focus on iOS (good practice) */
-@media screen and (max-width: 768px) {
-  input,
-  textarea,
-  select {
-    font-size: 16px !important;
+  .btn-primary {
+    min-height: 58px;
   }
 }
 
-/* Ensure buttons are clickable */
-button {
-  touch-action: manipulation !important;
-  cursor: pointer !important;
-}
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
 
-
-/* Make sure inputs are above any overlays */
-input,
-button,
-textarea {
-  position: relative;
-  z-index: var(--z-base);
-}
-
-/* Remove any pointer-events restrictions */
-input,
-button,
-textarea,
-[role="button"] {
-  pointer-events: auto !important;
-}
-
-
-/* Specific fix for the destination input */
-input[placeholder*="Braamfontein"],
-input[placeholder*="Sandton"],
-input[placeholder*="Pretoria"],
-input[placeholder*="Destination"] {
-  touch-action: auto !important;
-  pointer-events: auto !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-/* ======================================================
-   🎯 UTILITY CLASSES
-====================================================== */
-
-/* Text truncation - with standard property for compatibility */
-.truncate-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  line-clamp: 2;  /* ← Add standard property */
-  overflow: hidden;
-}
-
-.truncate-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  line-clamp: 3;  /* ← Add standard property */
-  overflow: hidden;
-}
-
-/* Focus ring for accessibility */
-.focus-ring:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--pulse-cyan);
-}
-
-/* Loading skeleton */
-.skeleton {
-  background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.1), rgba(255,255,255,0.06));
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: var(--radius-md);
-}
-
-/* ======================================================
-   🔥 DARK MODE SUPPORT (Optional)
-====================================================== */
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #03060f;
-    --bg-secondary: #081020;
+@media (min-width: 1440px) {
+  body {
+    font-size: 17px;
   }
 }
 
-/* ======================================================
-   🚀 PRINT STYLES
-====================================================== */
+/* =========================================================
+   REDUCE MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================================================
+   PRINT
+========================================================= */
 
 @media print {
   body {
     background: white;
     color: black;
   }
-  
-  .glass,
-  .premium-card {
-    background: white;
-    border: 1px solid #ccc;
-    backdrop-filter: none;
-  }
-  
-  .btn-primary,
-  button {
-    display: none;
-  }
 }
-
-/* =========================================
-   MOBILE VIEWPORT FIX
-========================================= */
-
-@supports (height: 100dvh) {
-  body,
-  #root {
-    min-height: 100dvh;
-  }
-}
-
-html {
-  overflow-x: hidden;
-}
-
-body {
-  overflow-x: hidden;
-}
-
-img,
-button,
-input,
-.glass,
-.premium-card {
-  transform: translateZ(0);
-}
-

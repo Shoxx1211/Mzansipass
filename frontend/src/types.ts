@@ -289,6 +289,12 @@ export type RecommendationBadge =
 // 🚇 TRANSPORT RECOMMENDATION
 // ======================================================
 export interface TransportRecommendation {
+  routeName: ReactNode;
+  subtitle: import("react/jsx-runtime").JSX.Element;
+  estimatedTime: ReactNode;
+  reliabilityScore: number;
+  affordabilityScore: number;
+  speedScore: number;
   id: string;
   mode: string;
 

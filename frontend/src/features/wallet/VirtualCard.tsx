@@ -3,7 +3,7 @@
 // Features: 3D tilt effect, real-time metrics, animated transitions, compact mode
 
 import React, { useEffect, useMemo, useRef, useState, memo } from "react";
-import { TripState } from "../types";
+import { TripState } from "../../types";
 import type { TransitNetwork } from "../types";
 
 // ======================================================

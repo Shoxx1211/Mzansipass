@@ -1,8 +1,11 @@
+// Polyfill for process
+(window as any).process = { env: { NODE_ENV: 'development' } };
+
 // src/main.tsx (for Vite)
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import App from './app/App';
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component<
