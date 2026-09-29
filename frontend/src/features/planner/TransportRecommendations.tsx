@@ -337,6 +337,13 @@ const getBadgeColor = (
     case "MULTIMODAL":
       return "border-fuchsia-400/20 bg-fuchsia-500/10 text-fuchsia-300";
 
+    case "ACCESS_REQUIRED":
+      return "border-amber-400/20 bg-amber-500/10 text-amber-200";
+
+    case "ROAD_ROUTE":
+    case "FARE_VERIFY":
+      return "border-orange-400/20 bg-orange-500/10 text-orange-200";
+
     case "CONFIGURED_DATA":
       return "border-white/10 bg-white/5 text-white/45";
 
@@ -370,6 +377,12 @@ const formatBadge = (
       "Official route",
     MULTIMODAL:
       "Multi-modal",
+    ACCESS_REQUIRED:
+      "Station access",
+    ROAD_ROUTE:
+      "Road route",
+    FARE_VERIFY:
+      "Fare to confirm",
     CONFIGURED_DATA:
       "Configured data",
   };
@@ -407,6 +420,9 @@ const getEvidenceHeading = (
     case "multi-operator-published-connection":
       return "Multi-modal connection evidence";
 
+    case "road-baseline":
+      return "Road connection available";
+
     case "configured":
     default:
       return "Configured route evidence";
@@ -433,6 +449,9 @@ const getEvidenceDescription = (
 
     case "multi-operator-published-connection":
       return "Pulse found a plausible connection between official operator networks using published service membership and route geometry. Transfer timing, exact interchange walking and the combined fare remain unverified.";
+
+    case "road-baseline":
+      return "Pulse confirmed a road connection to the destination. The exact minibus-taxi rank, stopping pattern, vehicle changes and fare still need local confirmation.";
 
     case "configured":
     default:
@@ -823,7 +842,13 @@ const RecommendationCard: React.FC<{
                   size={12}
                 />
               }
-              heading="Access walk"
+              heading={
+                recommendation.badges.includes(
+                  "ACCESS_REQUIRED",
+                )
+                  ? "Station access"
+                  : "Access walk"
+              }
               value={formatWalking(
                 recommendation.walkingDistance,
               )}
