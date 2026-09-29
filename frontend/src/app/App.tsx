@@ -862,14 +862,55 @@ const App = () => {
       try {
         const origin = plannerOrigin;
 
+        let effectiveDestination =
+          resolvedDestination;
+
+        if (
+          !destinationToLocation(
+            effectiveDestination,
+          )
+        ) {
+          try {
+            const fallbackPlace =
+              await DestinationEngine.geocode(
+                destination.trim(),
+              );
+
+            if (fallbackPlace) {
+              effectiveDestination = {
+                id:
+                  `pulse-fallback:${fallbackPlace.placeId ?? destination.trim().toLowerCase()}`,
+                name:
+                  resolvedDestination?.name ??
+                  fallbackPlace.formattedAddress,
+                label:
+                  resolvedDestination?.label ??
+                  `${fallbackPlace.formattedAddress}, Gauteng, South Africa`,
+                lat:
+                  fallbackPlace.location.lat,
+                lng:
+                  fallbackPlace.location.lng,
+                category:
+                  resolvedDestination?.category,
+                source: "pulse",
+              };
+            }
+          } catch (fallbackGeocodeError) {
+            console.warn(
+              "Pulse fallback geocoder unavailable:",
+              fallbackGeocodeError,
+            );
+          }
+        }
+
         let nextRoutePlan: RoutePlanSummary = EMPTY_ROUTE_PLAN;
 
         // 1) Best case: resolved destination + Mapbox road geometry.
-        if (resolvedDestination) {
+        if (effectiveDestination) {
           try {
             const mapboxPlan = await getMapboxRoadBaseline(
               origin,
-              resolvedDestination,
+              effectiveDestination,
             );
 
             if (mapboxPlan) {
@@ -909,10 +950,10 @@ const App = () => {
         // approximate in the UI and should not be mistaken for road geometry.
         if (
           nextRoutePlan.distanceKm === null &&
-          resolvedDestination?.lat !== undefined &&
-          resolvedDestination.lng !== undefined
+          effectiveDestination?.lat !== undefined &&
+          effectiveDestination.lng !== undefined
         ) {
-          const destinationLocation = destinationToLocation(resolvedDestination);
+          const destinationLocation = destinationToLocation(effectiveDestination);
 
           if (destinationLocation) {
             nextRoutePlan = {
@@ -930,7 +971,7 @@ const App = () => {
 
         setRoutePlan(nextRoutePlan);
 
-        const destinationLocation = destinationToLocation(resolvedDestination);
+        const destinationLocation = destinationToLocation(effectiveDestination);
 
         // A recommendation now has to fit BOTH ends of the journey. Merely
         // finding a network near the user's origin is no longer enough.
