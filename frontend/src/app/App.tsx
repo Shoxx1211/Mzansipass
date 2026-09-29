@@ -1149,7 +1149,7 @@ const App = () => {
 
         if (enrichedRecommendations.length === 0) {
           setError(
-            "Pulse found the destination, but no supported public-transport route or connection is available in the current Gauteng dataset for both ends of this journey.",
+            "Pulse found the destination, but no supported public-transport route or connection is available in the currently supported operator data for both ends of this journey.",
           );
         }
       } catch (planningError) {
@@ -1655,7 +1655,7 @@ const App = () => {
                       <div className="max-w-3xl">
                         <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.045] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-white/35">
                           <span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />
-                          Door-to-door Gauteng journeys
+                          The rhythm of movement
                         </div>
 
                         <h1 className="mt-4 text-4xl font-black tracking-[-0.045em] text-white sm:text-5xl lg:text-6xl">
@@ -1663,7 +1663,7 @@ const App = () => {
                         </h1>
 
                         <p className="mt-3 max-w-xl text-sm leading-6 text-white/45 sm:text-[15px]">
-                          Compare taxi, rail and bus connections in one journey.
+                          Plan taxi, rail and bus journeys across South Africa.
                         </p>
                       </div>
 
