@@ -288,6 +288,19 @@ export type RecommendationBadge =
 // ======================================================
 // 🚇 TRANSPORT RECOMMENDATION
 // ======================================================
+export interface JourneyLeg {
+  id: string;
+  mode: "walk" | "taxi" | "bus" | "rail";
+  label: string;
+  operator?: TransitNetwork;
+  from?: string;
+  to?: string;
+  distanceKm?: number | null;
+  fare?: number | null;
+  fareStatus?: "verified" | "estimated" | "unverified";
+  evidence?: "published" | "official-gis" | "road-access" | "estimated";
+}
+
 export interface TransportRecommendation {
   id: string;
   mode: TransitNetwork;
@@ -350,6 +363,7 @@ export interface TransportRecommendation {
 
   routeCodes?: string[];
   transferStops?: string[];
+  journeyLegs?: JourneyLeg[];
   publishedFareRange?: {
     currency: string;
     minimum: number;
