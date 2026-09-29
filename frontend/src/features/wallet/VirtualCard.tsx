@@ -62,6 +62,11 @@ const NETWORK_THEME: Record<TransitNetwork, { gradient: string; accent: string; 
     gradient: "from-zinc-500/30 to-zinc-800/10",
     accent: "text-zinc-400",
     icon: "🚂"
+  },
+  Putco: {
+    gradient: "from-sky-500/30 to-blue-800/10",
+    accent: "text-sky-400",
+    icon: "🚌"
   }
 } as const;
 
