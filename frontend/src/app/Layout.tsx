@@ -157,67 +157,35 @@ const NavButton: React.FC<{
       onMouseUp={() => setIsPressed(false)}
       onMouseLeave={() => setIsPressed(false)}
       className={`
-        relative
-        flex
-        min-w-[72px]
-        flex-1
-        max-w-[140px]
-        flex-col
-        items-center
-        justify-center
-        gap-1.5
-        rounded-2xl
-        px-3
-        py-2.5
-        transition-all
-        duration-200
-        ${
-          isActive
-            ? "text-cyan-300"
-            : "text-white/45 hover:text-white/80"
+        relative flex min-w-0 flex-1 items-center justify-center gap-2
+        rounded-2xl px-3 py-3 text-xs font-bold
+        transition-all duration-200
+        ${isActive
+          ? "bg-white/[0.09] text-white shadow-[0_8px_24px_rgba(0,0,0,0.22)]"
+          : "text-white/40 hover:bg-white/[0.045] hover:text-white/75"
         }
-        ${isPressed ? "scale-95" : "scale-100"}
+        ${isPressed ? "scale-[0.97]" : "scale-100"}
       `}
     >
-      {isActive && (
-        <div
-          className="
-            absolute
-            -top-2
-            left-1/2
-            h-1
-            w-8
-            -translate-x-1/2
-            rounded-full
-            bg-gradient-to-r
-            from-cyan-400
-            to-emerald-400
-          "
-        />
-      )}
-
       <span
         className={`
-          flex
-          h-9
-          w-9
-          items-center
-          justify-center
-          rounded-xl
-          transition-all
-          ${
-            isActive
-              ? "bg-cyan-400/10 text-cyan-300"
-              : "bg-white/[0.03]"
+          flex h-8 w-8 items-center justify-center rounded-xl transition-all
+          ${isActive
+            ? "bg-gradient-to-br from-cyan-400/20 to-emerald-400/15 text-cyan-200"
+            : "text-white/45"
           }
         `}
       >
         <Icon active={isActive} />
       </span>
 
-      <span className="text-[11px] font-semibold tracking-wide">
+      <span className="hidden sm:inline">
         {item.label}
       </span>
+
+      {isActive && (
+        <span className="absolute bottom-1.5 h-1 w-1 rounded-full bg-cyan-300 sm:hidden" />
+      )}
     </button>
   );
 });
@@ -234,79 +202,55 @@ const Header: React.FC<{
   showBack?: boolean;
   onBack?: () => void;
 }> = ({ title, subtitle, showBack, onBack }) => {
+  const productHome = title === "Pulse Transit";
+
   return (
-    <header
-      className="
-        sticky
-        top-0
-        z-30
-        border-b
-        border-white/[0.06]
-        bg-black/70
-        px-4
-        backdrop-blur-2xl
-        safe-top
-      "
-    >
-      <div
-        className="
-          mx-auto
-          flex
-          min-h-[68px]
-          w-full
-          max-w-[1400px]
-          items-center
-          justify-between
-          gap-4
-        "
-      >
-        <div className="flex min-w-0 items-center gap-3">
-          {showBack && (
-            <button
-              type="button"
-              onClick={onBack}
-              aria-label="Go back"
-              className="
-                flex
-                h-10
-                w-10
-                shrink-0
-                items-center
-                justify-center
-                rounded-xl
-                border
-                border-white/10
-                bg-white/[0.04]
-                text-white
-                transition
-                hover:bg-white/[0.08]
-                active:scale-95
-              "
-            >
-              <ArrowLeftIcon />
-            </button>
-          )}
-
-          <div className="min-w-0">
-            {title && (
-              <h1 className="truncate text-lg font-bold text-white sm:text-xl">
-                {title}
-              </h1>
+    <header className="sticky top-0 z-30 safe-top">
+      <div className="border-b border-white/[0.045] bg-[#040813]/80 backdrop-blur-2xl">
+        <div className="mx-auto flex min-h-[62px] w-full max-w-[1400px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 xl:px-10">
+          <div className="flex min-w-0 items-center gap-3">
+            {showBack ? (
+              <button
+                type="button"
+                onClick={onBack}
+                aria-label="Go back"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/[0.055] text-white/80 transition hover:bg-white/[0.09] active:scale-95"
+              >
+                <ArrowLeftIcon />
+              </button>
+            ) : (
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-emerald-400 text-sm font-black text-[#031019] shadow-[0_8px_30px_rgba(34,211,238,0.16)]">
+                P
+              </div>
             )}
 
-            {subtitle && (
-              <p className="truncate text-xs text-white/40 sm:text-sm">
-                {subtitle}
-              </p>
-            )}
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <h1 className="truncate text-[15px] font-black tracking-[-0.02em] text-white sm:text-base">
+                  {productHome ? "Pulse" : title}
+                </h1>
+
+                {productHome && (
+                  <span className="hidden rounded-full bg-white/[0.055] px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-white/35 sm:inline">
+                    Gauteng
+                  </span>
+                )}
+              </div>
+
+              {subtitle && (
+                <p className="truncate text-[10px] font-medium text-white/30 sm:text-[11px]">
+                  {subtitle}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
 
-        <div className="flex shrink-0 items-center gap-2">
-          <span className="live-dot" />
-          <span className="hidden text-[10px] font-semibold tracking-widest text-white/30 sm:block">
-            LIVE
-          </span>
+          <div className="flex shrink-0 items-center gap-2 rounded-full bg-white/[0.04] px-3 py-1.5">
+            <span className="live-dot" />
+            <span className="text-[9px] font-bold uppercase tracking-[0.14em] text-white/35">
+              Ready
+            </span>
+          </div>
         </div>
       </div>
     </header>
@@ -382,112 +326,51 @@ export const Layout = memo<LayoutProps>(
         {/* BOTTOM NAVIGATION */}
         <nav
           className={`
-            fixed
-            bottom-0
-            left-0
-            right-0
-            z-50
-            border-t
-            border-white/[0.08]
-            bg-black/80
-            backdrop-blur-2xl
-            safe-bottom
-            transition-transform
-            duration-300
-            ${
-              isVisible
-                ? "translate-y-0"
-                : "translate-y-full"
-            }
+            fixed bottom-4 left-1/2 z-50
+            w-[calc(100%-24px)] max-w-[430px]
+            -translate-x-1/2
+            rounded-[24px] border border-white/[0.08]
+            bg-[#070c18]/88 p-1.5
+            shadow-[0_20px_60px_rgba(0,0,0,0.48)]
+            backdrop-blur-2xl safe-bottom
+            transition-all duration-300
+            ${isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}
           `}
         >
-          <div className="mx-auto w-full max-w-[900px] px-3 sm:px-6">
-            <div className="flex items-center justify-center gap-2 py-2 sm:gap-8">
-              {NAV_ITEMS.map((item) => (
-                <NavButton
-                  key={item.id}
-                  item={item}
-                  isActive={activeTab === item.id}
-                  onClick={() => {
-                    onNavClick(item.id);
+          <div className="flex items-center gap-1">
+            {NAV_ITEMS.map((item) => (
+              <NavButton
+                key={item.id}
+                item={item}
+                isActive={activeTab === item.id}
+                onClick={() => {
+                  onNavClick(item.id);
 
-                    if (
-                      typeof navigator !== "undefined" &&
-                      "vibrate" in navigator
-                    ) {
-                      navigator.vibrate?.(5);
-                    }
+                  if (
+                    typeof navigator !== "undefined" &&
+                    "vibrate" in navigator
+                  ) {
+                    navigator.vibrate?.(5);
+                  }
+                }}
+              />
+            ))}
+          </div>
+
+          {enableGestures && (
+            <div className="flex justify-center pt-1">
+              <div className="h-0.5 w-12 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full rounded-full bg-cyan-300/70 transition-all duration-300"
+                  style={{
+                    width: `${((NAV_ITEMS.findIndex((i) => i.id === activeTab) + 1) / NAV_ITEMS.length) * 100}%`,
                   }}
                 />
-              ))}
-            </div>
-
-            {enableGestures && (
-              <div className="flex justify-center pb-2">
-                <div className="h-1 w-16 overflow-hidden rounded-full bg-white/10">
-                  <div
-                    className="
-                      h-full
-                      rounded-full
-                      bg-gradient-to-r
-                      from-cyan-400
-                      to-emerald-400
-                      transition-all
-                      duration-300
-                    "
-                    style={{
-                      width: `${
-                        ((NAV_ITEMS.findIndex(
-                          (i) => i.id === activeTab
-                        ) +
-                          1) /
-                          NAV_ITEMS.length) *
-                        100
-                      }%`,
-                    }}
-                  />
-                </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </nav>
 
-        {/* HOME FLOATING ACTION */}
-        {activeTab === "home" && (
-          <button
-            type="button"
-            onClick={() => onNavClick("navigate")}
-            aria-label="Open navigation assistant"
-            className="
-              fixed
-              bottom-24
-              right-4
-              z-40
-              flex
-              h-14
-              w-14
-              items-center
-              justify-center
-              rounded-full
-              border
-              border-white/10
-              bg-gradient-to-br
-              from-cyan-500
-              to-emerald-500
-              text-white
-              shadow-lg
-              shadow-cyan-500/20
-              transition-all
-              duration-200
-              hover:scale-105
-              active:scale-95
-              sm:bottom-28
-              sm:right-8
-            "
-          >
-            <NavigateIcon />
-          </button>
-        )}
       </div>
     );
   }
