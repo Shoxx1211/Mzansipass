@@ -1,154 +1,469 @@
 // src/app/App.tsx
-// Pulse Transit - Premium Production Build
-// Version: 3.0.0 | Enterprise Release
-// Integrates: Enhanced services, AI assistant, habit learning, offline support
+// Pulse Transit - Smart Commuter Intelligence Platform
+// Production-oriented planner + live trip orchestration
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import AuthScreen from "../features/auth/AuthScreen";
 import { Layout } from "./Layout";
 
 import { GeminiNavigator } from "../features/navigation/GeminiNavigator";
-import { DestinationSearch } from "../features/planner/DestinationSearch";
+import {
+  DestinationSearch,
+  type DestinationPlace,
+} from "../features/planner/DestinationSearch";
 import { TransportRecommendation } from "../features/planner/TransportRecommendations";
+import {
+  DevJourneyTestLab,
+  type DevJourneyTestRequest,
+} from "../features/planner/DevJourneyTestLab";
 import { TripTracker } from "../features/trip/TripTracker";
 import { VirtualCard } from "../features/wallet/VirtualCard";
 
 import {
   TripState,
-  type TripData,
+  type Location,
   type TabType,
   type TransitNetwork,
   type TransportRecommendation as RecommendationType,
+  type TripData,
 } from "../types";
 
-import { TRANSIT_NETWORKS, NETWORK_ZONES } from "../constants";
-
-import { FareEngine } from "../services/fareService";
 import { DestinationEngine } from "../services/destinationEngine";
-import { RecommendationEngine } from "../services/recommendationEngine";
+import { FareEngine } from "../services/fareService";
 import { HabitEngine } from "../services/habitEngine";
+import { RecommendationEngine } from "../services/recommendationEngine";
+import { UnifiedCoverageEngine, type UnifiedCoverageReport } from "../services/unifiedCoverage";
+import { UnifiedCoveragePanel } from "../features/planner/UnifiedCoveragePanel";
 
 import { useGeminiNavigation } from "../hooks/useGeminiNavigation";
 import { useLocation } from "../hooks/useLocation";
 
-import { BackgroundTracker } from "../services/backgroundTracker";
-import { detectCity } from "../services/locationZone";
+import {
+  BackgroundTracker,
+  BackgroundTrackerError,
+  type ActiveTripSession,
+  type TrackerLocation,
+} from "../services/backgroundTracker";
 
-import Storage from "../utils/storage";
 import Session from "../utils/session";
+import Storage from "../utils/storage";
+
+// ======================================================
+// TYPES
+// ======================================================
+
+type PlanningStep = "destination" | "transport" | "fare";
+
+type RouteSource =
+  | "mapbox-road"
+  | "destination-engine"
+  | "coordinate-estimate"
+  | null;
+
+interface RoutePlanSummary {
+  distanceKm: number | null;
+  roadDurationSeconds: number | null;
+  source: RouteSource;
+}
+
+interface MapboxDirectionsResponse {
+  routes?: Array<{
+    distance?: number;
+    duration?: number;
+  }>;
+}
+
+interface SavedActiveTrip {
+  currentTrip: Partial<TripData>;
+  tripState: TripState;
+  network: TransitNetwork | null;
+  duration: number;
+  destination: string;
+}
+
+// ======================================================
+// CONSTANTS
+// ======================================================
+
+const EMPTY_ROUTE_PLAN: RoutePlanSummary = {
+  distanceKm: null,
+  roadDurationSeconds: null,
+  source: null,
+};
+
+const MAPBOX_TOKEN = import.meta.env["VITE_MAPBOX_TOKEN"]?.trim() ?? "";
+
+const TRIP_GPS_STALE_MS = 20_000;
+// Hidden developer testing only: the commuter never sees GIS diagnostics.
+const SHOW_NETWORK_LAB = import.meta.env.DEV && typeof window !== "undefined" && new URLSearchParams(window.location.search).get("networkLab") === "1";
+
+// ======================================================
+// HELPERS
+// ======================================================
+
+const toLocation = (point: TrackerLocation): Location => ({
+  lat: point.lat,
+  lng: point.lng,
+  accuracy: point.accuracy,
+  speed: point.speed,
+  heading: point.heading,
+  altitude: point.altitude,
+  timestamp: point.timestamp,
+});
+
+const destinationToLocation = (
+  place: DestinationPlace | null,
+): Location | null => {
+  if (
+    !place ||
+    place.lat === undefined ||
+    place.lng === undefined
+  ) {
+    return null;
+  }
+
+  return {
+    lat: place.lat,
+    lng: place.lng,
+    timestamp: Date.now(),
+  };
+};
+
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof BackgroundTrackerError) {
+    return error.message;
+  }
+
+  if (error instanceof Error && error.message) {
+    return error.message;
+  }
+
+  return "Something went wrong. Please try again.";
+};
+
+const formatDuration = (seconds: number): string => {
+  const safeSeconds = Math.max(0, Math.round(seconds));
+  const hours = Math.floor(safeSeconds / 3600);
+  const minutes = Math.floor((safeSeconds % 3600) / 60);
+
+  if (hours > 0) {
+    return `${hours}h ${minutes}m`;
+  }
+
+  if (minutes > 0) {
+    return `${minutes} min`;
+  }
+
+  return `${safeSeconds}s`;
+};
+
+const formatDistance = (distanceKm: number | null): string => {
+  if (distanceKm === null || !Number.isFinite(distanceKm)) {
+    return "â€”";
+  }
+
+  if (distanceKm < 1) {
+    return `${Math.round(distanceKm * 1000)} m`;
+  }
+
+  return `${distanceKm.toFixed(1)} km`;
+};
+
+const getMapboxRoadBaseline = async (
+  origin: Location,
+  destination: DestinationPlace,
+): Promise<RoutePlanSummary | null> => {
+  if (
+    !MAPBOX_TOKEN ||
+    destination.lat === undefined ||
+    destination.lng === undefined
+  ) {
+    return null;
+  }
+
+  const coordinates = [
+    `${origin.lng},${origin.lat}`,
+    `${destination.lng},${destination.lat}`,
+  ].join(";");
+
+  const params = new URLSearchParams({
+    access_token: MAPBOX_TOKEN,
+    alternatives: "false",
+    geometries: "geojson",
+    overview: "false",
+    steps: "false",
+  });
+
+  const response = await fetch(
+    `https://api.mapbox.com/directions/v5/mapbox/driving/${coordinates}?${params.toString()}`,
+  );
+
+  if (!response.ok) {
+    throw new Error(`Route service returned ${response.status}`);
+  }
+
+  const data = (await response.json()) as MapboxDirectionsResponse;
+  const route = data.routes?.[0];
+
+  if (
+    route?.distance === undefined ||
+    !Number.isFinite(route.distance)
+  ) {
+    return null;
+  }
+
+  return {
+    distanceKm: route.distance / 1000,
+    roadDurationSeconds:
+      route.duration !== undefined && Number.isFinite(route.duration)
+        ? route.duration
+        : null,
+    source: "mapbox-road",
+  };
+};
 
 // ======================================================
 // APP
 // ======================================================
 
 const App = () => {
-  // ======================================================
-  // AUTH STATE
-  // ======================================================
+  // ====================================================
+  // AUTH / NAVIGATION
+  // ====================================================
 
   const [user, setUser] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<TabType>("home");
 
-  // ======================================================
-  // TRIP PLANNING STATE
-  // ======================================================
+  // ====================================================
+  // TRIP PLANNING
+  // ====================================================
 
   const [tripState, setTripState] = useState<TripState>(TripState.IDLE);
-
-  const [network, setNetwork] = useState<TransitNetwork | null>(null);
+  const [planningStep, setPlanningStep] =
+    useState<PlanningStep>("destination");
 
   const [destination, setDestination] = useState("");
+  const [resolvedDestination, setResolvedDestination] =
+    useState<DestinationPlace | null>(null);
 
+  // Development-only deterministic planner origin.
+  // Active-trip tracking always continues to use the real GPS services.
+  const [developmentOriginOverride, setDevelopmentOriginOverride] =
+    useState<Location | null>(null);
+
+  const [network, setNetwork] = useState<TransitNetwork | null>(null);
   const [estimatedFare, setEstimatedFare] = useState<number | null>(null);
-
-  const [, setNetworkEstimates] = useState<
-    Record<TransitNetwork, number>
-  >({} as Record<TransitNetwork, number>);
 
   const [recommendations, setRecommendations] = useState<
     RecommendationType[]
   >([]);
 
+  const [unifiedCoverage, setUnifiedCoverage] = useState<UnifiedCoverageReport | null>(null);
+
   const [selectedRecommendation, setSelectedRecommendation] =
     useState<RecommendationType | null>(null);
 
-  const [, setIsLoadingEstimates] = useState(false);
+  const [networkEstimates, setNetworkEstimates] = useState<
+    Partial<Record<TransitNetwork, number>>
+  >({});
 
-  const [planningStep, setPlanningStep] = useState<
-    "destination" | "transport" | "fare"
-  >("destination");
+  const [routePlan, setRoutePlan] =
+    useState<RoutePlanSummary>(EMPTY_ROUTE_PLAN);
 
-  const [, setInputKey] = useState(Date.now());
-
-  // ======================================================
-  // ACTIVE TRIP STATE
-  // ======================================================
+  // ====================================================
+  // ACTIVE TRIP
+  // ====================================================
 
   const [currentTrip, setCurrentTrip] = useState<Partial<TripData>>({});
-
   const [duration, setDuration] = useState(0);
-
+  const [liveSpeed, setLiveSpeed] = useState(0);
+  const [liveMaxSpeed, setLiveMaxSpeed] = useState(0);
   const [history, setHistory] = useState<TripData[]>([]);
-
   const [verifyTrip, setVerifyTrip] = useState<TripData | null>(null);
-
   const [actualFare, setActualFare] = useState("");
 
-  // ======================================================
+  const [lastTripGpsUpdate, setLastTripGpsUpdate] = useState<number | null>(
+    null,
+  );
+  const [gpsClock, setGpsClock] = useState(Date.now());
+
+  // ====================================================
   // UI STATE
-  // ======================================================
+  // ====================================================
 
   const [error, setError] = useState<string | null>(null);
+  const [isPlanning, setIsPlanning] = useState(false);
+  const [isStartingTrip, setIsStartingTrip] = useState(false);
+  const [isRetryingGps, setIsRetryingGps] = useState(false);
 
-  const [, setIsPlanning] = useState(false);
-
-  // ======================================================
-  // CUSTOM HOOKS
-  // ======================================================
+  // ====================================================
+  // HOOKS
+  // ====================================================
 
   const gemini = useGeminiNavigation();
 
   const location = useLocation({
     debug: false,
+    enableHighAccuracy: true,
+    timeout: 15_000,
+    maximumAge: 5_000,
     batteryOptimized: false,
+    autoStart: false,
+
+    // Do not ask for location on the login screen.
+    // Once the user is authenticated, acquire ONE accurate origin fix.
+    autoLocate: Boolean(user),
   });
 
-  // ======================================================
-  // MEMOIZED VALUES
-  // ======================================================
+  // Tune active-trip tracking for a more responsive live speed display.
+  // The background tracker still applies its own GPS validation and drift filters.
+  useEffect(() => {
+    BackgroundTracker.setConfig({
+      highAccuracy: true,
+      updateInterval: 1500,
+      distanceFilter: 5,
+      batteryOptimized: false,
+    });
+  }, []);
 
-  const availableNetworks = useMemo<readonly TransitNetwork[]>(() => {
-    if (!location.location) {
-      return TRANSIT_NETWORKS;
+  // ====================================================
+  // DERIVED VALUES
+  // ====================================================
+
+  const plannerOrigin =
+    import.meta.env.DEV && developmentOriginOverride
+      ? developmentOriginOverride
+      : location.location;
+
+  const plannerOriginIsTest =
+    import.meta.env.DEV && developmentOriginOverride !== null;
+
+  const plannedDurationSeconds = useMemo(() => {
+  if (
+    selectedRecommendation?.estimatedTime !== null &&
+    selectedRecommendation?.estimatedTime !== undefined &&
+    Number.isFinite(selectedRecommendation.estimatedTime)
+  ) {
+    return Math.max(
+      0,
+      Math.round(selectedRecommendation.estimatedTime * 60),
+    );
+  }
+
+  // Mapbox's duration is currently a driving baseline.
+  // It is only safe to use as the planned trip duration for Taxi.
+  if (
+    network === "Taxi" &&
+    routePlan.source === "mapbox-road" &&
+    routePlan.roadDurationSeconds !== null &&
+    routePlan.roadDurationSeconds > 0
+  ) {
+    return routePlan.roadDurationSeconds;
+  }
+
+  return 0;
+}, [
+  network,
+  routePlan.roadDurationSeconds,
+  routePlan.source,
+  selectedRecommendation,
+]);
+
+  const trustedLiveDistanceKm = useMemo(() => {
+    // Mapbox currently gives Pulse a road-driving baseline, not transit geometry.
+    // Use it for live completion progress only for the road-based Taxi mode.
+    if (
+      network !== "Taxi" ||
+      routePlan.source !== "mapbox-road" ||
+      routePlan.distanceKm === null ||
+      !Number.isFinite(routePlan.distanceKm) ||
+      routePlan.distanceKm <= 0
+    ) {
+      return undefined;
     }
 
-    const city = detectCity(location.location);
+    return routePlan.distanceKm;
+  }, [network, routePlan.distanceKm, routePlan.source]);
 
-    return TRANSIT_NETWORKS.filter((networkName) => {
-      const zones = NETWORK_ZONES[networkName];
+  const trustedLiveDurationSeconds = useMemo(() => {
+    if (
+      network !== "Taxi" ||
+      routePlan.source !== "mapbox-road" ||
+      routePlan.roadDurationSeconds === null ||
+      routePlan.roadDurationSeconds <= 0
+    ) {
+      return undefined;
+    }
 
-      return (
-        zones.includes(city as never) ||
-        zones.includes("Everywhere" as never)
-      );
-    });
-  }, [location.location]);
+    return routePlan.roadDurationSeconds;
+  }, [network, routePlan.roadDurationSeconds, routePlan.source]);
 
-  // ======================================================
-  // HELPER FUNCTIONS
-  // ======================================================
+  const gpsSignalLost = useMemo(() => {
+    if (tripState !== TripState.ACTIVE || !lastTripGpsUpdate) {
+      return false;
+    }
+
+    return gpsClock - lastTripGpsUpdate > TRIP_GPS_STALE_MS;
+  }, [gpsClock, lastTripGpsUpdate, tripState]);
+
+  const plannerGpsLabel = useMemo(() => {
+    if (plannerOriginIsTest && plannerOrigin) {
+      return `Test origin Â· ${plannerOrigin.lat.toFixed(5)}, ${plannerOrigin.lng.toFixed(5)}`;
+    }
+
+    if (location.isLocating) {
+      return "Finding GPS";
+    }
+
+    if (location.location) {
+      if (location.accuracy > 0) {
+        return `GPS ready Â· Â±${Math.round(location.accuracy)} m`;
+      }
+
+      return "GPS ready";
+    }
+
+    switch (location.status) {
+      case "denied":
+        return "Location blocked";
+      case "unavailable":
+        return "GPS unavailable";
+      case "timeout":
+        return "GPS timed out";
+      case "unsupported":
+        return "GPS unsupported";
+      default:
+        return "Waiting for GPS";
+    }
+  }, [
+    location.accuracy,
+    location.isLocating,
+    location.location,
+    location.status,
+    plannerOrigin,
+    plannerOriginIsTest,
+  ]);
+
+  const plannerGpsHealthy = Boolean(plannerOrigin);
+
+  // ====================================================
+  // RESET HELPERS
+  // ====================================================
 
   const resetTripPlanner = useCallback(() => {
     setDestination("");
+    setResolvedDestination(null);
+    setDevelopmentOriginOverride(null);
     setEstimatedFare(null);
     setNetwork(null);
     setSelectedRecommendation(null);
     setRecommendations([]);
+    setNetworkEstimates({});
+    setRoutePlan(EMPTY_ROUTE_PLAN);
     setPlanningStep("destination");
     setError(null);
     setIsPlanning(false);
-    setInputKey(Date.now());
   }, []);
 
   const resetAllTripState = useCallback(() => {
@@ -156,224 +471,731 @@ const App = () => {
     setActualFare("");
     setCurrentTrip({});
     setDuration(0);
+    setLiveSpeed(0);
+    setLiveMaxSpeed(0);
     setTripState(TripState.IDLE);
+    setLastTripGpsUpdate(null);
 
     resetTripPlanner();
-
     Session.clear("active_trip");
   }, [resetTripPlanner]);
 
-  // ======================================================
+  // ====================================================
   // DESTINATION HANDLERS
-  // ======================================================
+  // ====================================================
 
   const handleDestinationChange = useCallback(
     (value: string) => {
       setDestination(value);
+      setDevelopmentOriginOverride(null);
 
-      if (
-        error === "Please enter a destination" ||
-        error === "Destination must be at least 3 characters"
-      ) {
+      // If the commuter edits the text after choosing a geocoded place,
+      // the old coordinates must not be reused for the new text.
+      setResolvedDestination(null);
+      setRecommendations([]);
+      setNetworkEstimates({});
+      setRoutePlan(EMPTY_ROUTE_PLAN);
+      setSelectedRecommendation(null);
+      setNetwork(null);
+      setEstimatedFare(null);
+
+      if (error) {
         setError(null);
       }
     },
-    [error]
+    [error],
+  );
+
+  const handleDestinationResolved = useCallback(
+    (place: DestinationPlace) => {
+      setDevelopmentOriginOverride(null);
+      setResolvedDestination(place);
+      setError(null);
+    },
+    [],
   );
 
   const handleDestinationSelect = useCallback((dest: string) => {
+    // Gemini can set a destination by text. DestinationEngine remains
+    // available as a fallback until that text is geocoded.
+    setDevelopmentOriginOverride(null);
     setDestination(dest);
+    setResolvedDestination(null);
+    setSelectedRecommendation(null);
+    setNetwork(null);
+    setEstimatedFare(null);
+    setRoutePlan(EMPTY_ROUTE_PLAN);
     setPlanningStep("transport");
+    setActiveTab("home");
   }, []);
 
-  const handleSearch = useCallback(() => {
-    if (!destination || !destination.trim()) {
-      setError("Please enter a destination");
+ const handleDevelopmentJourneyTest = useCallback(
+  async (request: DevJourneyTestRequest) => {
+    if (!import.meta.env.DEV) {
       return;
     }
 
-    if (destination.trim().length < 3) {
-      setError("Destination must be at least 3 characters");
+    const testOrigin: Location = {
+      ...request.origin,
+      accuracy: request.origin.accuracy ?? 1,
+      timestamp: Date.now(),
+    };
+
+    const testDestination: DestinationPlace = {
+      ...request.destination,
+      source: "manual",
+    };
+
+    setDevelopmentOriginOverride(testOrigin);
+    setDestination(testDestination.name);
+    setResolvedDestination(testDestination);
+    setEstimatedFare(null);
+    setNetwork(null);
+    setSelectedRecommendation(null);
+    setRecommendations([]);
+    setNetworkEstimates({});
+    setRoutePlan(EMPTY_ROUTE_PLAN);
+    setError(null);
+    setPlanningStep("transport");
+    setActiveTab("home");
+
+    // --------------------------------------------------
+    // PHASE 2E DETERMINISTIC ASSERTION
+    // --------------------------------------------------
+
+    if (!request.expectedCandidate) {
+      console.info(
+        `[Journey Test] ${request.name}: no machine-readable expectation configured.`,
+      );
+      return;
+    }
+
+    const destinationLocation =
+      destinationToLocation(testDestination);
+
+    if (!destinationLocation) {
+      console.error(
+        `[Journey Test] ${request.name}: destination coordinates unavailable.`,
+      );
+      return;
+    }
+
+    try {
+      const report =
+        await UnifiedCoverageEngine.screen(
+          testOrigin,
+          destinationLocation,
+          800,
+        );
+
+      setUnifiedCoverage(report);
+
+      const expected =
+        request.expectedCandidate;
+
+      const matchingCandidate =
+        report.journeyCandidates.find(
+          (candidate) => {
+            if (
+              candidate.operatorId !==
+                expected.operatorId ||
+              candidate.status !==
+                expected.status ||
+              candidate.evidenceKind !==
+                expected.evidenceKind
+            ) {
+              return false;
+            }
+
+            const routesMatch =
+              !expected.routeCodes?.length ||
+              expected.routeCodes.every(
+                (routeCode) =>
+                  candidate.routeCodes.includes(
+                    routeCode,
+                  ),
+              );
+
+            const transferStopsMatch =
+              !expected.transferStopIncludes?.length ||
+              expected.transferStopIncludes.every(
+                (expectedStop) =>
+                  candidate.transferStops.some(
+                    (actualStop) =>
+                      actualStop
+                        .toLowerCase()
+                        .includes(
+                          expectedStop.toLowerCase(),
+                        ),
+                  ),
+              );
+
+            return (
+              routesMatch &&
+              transferStopsMatch
+            );
+          },
+        );
+
+      if (matchingCandidate) {
+        console.log(
+          `✅ PASS — ${request.name}`,
+          {
+            expected:
+              request.expected,
+            candidate:
+              matchingCandidate,
+          },
+        );
+      } else {
+        console.error(
+          `❌ FAIL — ${request.name}`,
+          {
+            expected:
+              request.expectedCandidate,
+            candidates:
+              report.journeyCandidates,
+          },
+        );
+      }
+    } catch (testError) {
+      console.error(
+        `❌ ERROR — ${request.name}`,
+        testError,
+      );
+    }
+  },
+  [],
+);
+
+  const handleSearch = useCallback(async () => {
+    const cleanDestination = destination.trim();
+
+    if (!cleanDestination) {
+      setError("Please enter a destination.");
+      return;
+    }
+
+    if (cleanDestination.length < 3) {
+      setError("Destination must be at least 3 characters.");
       return;
     }
 
     setError(null);
-    setPlanningStep("transport");
-  }, [destination]);
 
-  // ======================================================
-  // RECOMMENDATIONS
-  // ======================================================
+    try {
+      // A commuter route without an origin is not useful.
+      // In development, Journey Test Lab may provide a deterministic origin.
+      if (!plannerOrigin) {
+        await location.requestCurrentLocation();
+      }
+
+      setPlanningStep("transport");
+    } catch (locationError) {
+      setError(
+        getErrorMessage(locationError) ||
+          "Pulse needs your location before it can compare public transport routes.",
+      );
+    }
+  }, [destination, location, plannerOrigin]);
+
+  const retryPlannerLocation = useCallback(async () => {
+    setError(null);
+
+    try {
+      await location.retryLocation();
+    } catch (locationError) {
+      setError(getErrorMessage(locationError));
+    }
+  }, [location]);
+
+  // ====================================================
+  // JOURNEY PLANNING
+  // ====================================================
 
   useEffect(() => {
-    if (!location.location || planningStep !== "transport") {
+    if (
+      planningStep !== "transport" ||
+      !destination.trim() ||
+      !plannerOrigin
+    ) {
       return;
     }
 
-    const getRecommendations = () => {
-      const recs = RecommendationEngine.getRecommendations(
-        location.location!,
-        {
-          destination,
-          userPreferences: {
-            preferFastest: false,
-            preferCheapest: false,
-          },
-        }
-      );
+    let cancelled = false;
 
-      setRecommendations(recs);
-    };
-
-    getRecommendations();
-  }, [location.location, planningStep, destination]);
-
-  const handleSelectRecommendation = useCallback(
-    (rec: RecommendationType) => {
-      setSelectedRecommendation(rec);
-
-      setNetwork(rec.mode as TransitNetwork);
-
-      setEstimatedFare(rec.estimatedFare);
-
-      setPlanningStep("fare");
-    },
-    []
-  );
-
-  // ======================================================
-  // NETWORK ESTIMATES
-  // ======================================================
-
-  useEffect(() => {
-    let isSubscribed = true;
-
-    const generateEstimates = async () => {
-      if (
-        !destination.trim() ||
-        !location.location ||
-        !isSubscribed
-      ) {
-        return;
-      }
-
-      setIsLoadingEstimates(true);
+    const planJourney = async () => {
+      setIsPlanning(true);
+      setError(null);
 
       try {
-        const result = await DestinationEngine.plan({
-          origin: location.location,
-          destination: destination.trim().toLowerCase(),
-        });
+        const origin = plannerOrigin;
 
-        const distance = result.distance;
+        let nextRoutePlan: RoutePlanSummary = EMPTY_ROUTE_PLAN;
 
-        const estimates: Record<TransitNetwork, number> =
-          {} as Record<TransitNetwork, number>;
+        // 1) Best case: resolved destination + Mapbox road geometry.
+        if (resolvedDestination) {
+          try {
+            const mapboxPlan = await getMapboxRoadBaseline(
+              origin,
+              resolvedDestination,
+            );
 
-        await Promise.all(
-          availableNetworks.map(async (networkName) => {
-            const fareResult = await FareEngine.computeFinalFare({
-              network: networkName,
-              distance,
+            if (mapboxPlan) {
+              nextRoutePlan = mapboxPlan;
+            }
+          } catch (mapboxError) {
+            console.warn("Mapbox route baseline unavailable:", mapboxError);
+          }
+        }
+
+        // 2) Existing Pulse DestinationEngine fallback.
+        // Deterministic development tests skip text fallback so the exact
+        // coordinates selected in Journey Test Lab remain the source of truth.
+        if (nextRoutePlan.distanceKm === null && !plannerOriginIsTest) {
+          try {
+            const result = await DestinationEngine.plan({
+              origin,
+              destination: destination.trim().toLowerCase(),
             });
 
-            estimates[networkName] = fareResult.fare;
-          })
+            if (Number.isFinite(result.distance) && result.distance > 0) {
+              nextRoutePlan = {
+                distanceKm: result.distance,
+                roadDurationSeconds: null,
+                source: "destination-engine",
+              };
+            }
+          } catch (destinationEngineError) {
+            console.warn(
+              "DestinationEngine route planning unavailable:",
+              destinationEngineError,
+            );
+          }
+        }
+
+        // 3) Last-resort coordinate estimate. It is deliberately labelled
+        // approximate in the UI and should not be mistaken for road geometry.
+        if (
+          nextRoutePlan.distanceKm === null &&
+          resolvedDestination?.lat !== undefined &&
+          resolvedDestination.lng !== undefined
+        ) {
+          const destinationLocation = destinationToLocation(resolvedDestination);
+
+          if (destinationLocation) {
+            nextRoutePlan = {
+              distanceKm: location.calculateDistance(
+                origin,
+                destinationLocation,
+              ),
+              roadDurationSeconds: null,
+              source: "coordinate-estimate",
+            };
+          }
+        }
+
+        if (cancelled) return;
+
+        setRoutePlan(nextRoutePlan);
+
+        const destinationLocation = destinationToLocation(resolvedDestination);
+
+        // A recommendation now has to fit BOTH ends of the journey. Merely
+        // finding a network near the user's origin is no longer enough.
+        // Unified private coverage audit uses exactly the GPS origin and the selected destination.
+        if (SHOW_NETWORK_LAB && destinationLocation) {
+          try {
+            const report = await UnifiedCoverageEngine.screen(origin, destinationLocation, 800);
+            if (!cancelled) setUnifiedCoverage(report);
+          } catch (coverageError) {
+            console.warn("Private network coverage unavailable:", coverageError);
+            if (!cancelled) setUnifiedCoverage(null);
+          }
+        } else if (!cancelled) {
+          setUnifiedCoverage(null);
+        }
+
+        const baseRecommendations = RecommendationEngine.getRecommendations(
+          origin,
+          {
+            destination,
+            destinationLocation,
+            routeDistanceKm: nextRoutePlan.distanceKm,
+            roadDurationSeconds: nextRoutePlan.roadDurationSeconds,
+            userPreferences: {
+              preferFastest: false,
+              preferCheapest: false,
+            },
+          },
         );
 
-        if (isSubscribed) {
-          setNetworkEstimates(estimates);
-        }
-      } catch (err) {
-        console.error("Estimate generation failed:", err);
+        const estimates: Partial<Record<TransitNetwork, number>> = {};
 
-        if (isSubscribed) {
+        // Fare calculations are now limited to route-fit recommendations, and
+        // use the network leg distance rather than blindly applying the whole
+        // Mapbox road distance to every transport system.
+        const farePairs = await Promise.all(
+          baseRecommendations.map(async (recommendation) => {
+            const networkName = recommendation.mode as TransitNetwork;
+
+            // Evidence-only recommendations must never be priced
+            // using Mapbox's road-driving distance.
+            if (
+              recommendation.fareStatus ===
+              "unverified"
+            ) {
+              return [
+                networkName,
+                null,
+              ] as const;
+            }
+            const fareDistance =
+              recommendation.serviceDistanceKm ?? nextRoutePlan.distanceKm;
+
+            if (!fareDistance || fareDistance <= 0) {
+              return [networkName, null] as const;
+            }
+
+            try {
+              const fareResult = await FareEngine.computeFinalFare({
+                network: networkName,
+                distance: fareDistance,
+              });
+
+              return [networkName, fareResult.fare] as const;
+            } catch (fareError) {
+              console.warn(
+                `Fare estimate failed for ${networkName}:`,
+                fareError,
+              );
+
+              return [networkName, null] as const;
+            }
+          }),
+        );
+
+        for (const [networkName, fare] of farePairs) {
+          if (fare !== null && Number.isFinite(fare)) {
+            estimates[networkName] = fare;
+          }
+        }
+
+        if (cancelled) return;
+
+        setNetworkEstimates(estimates);
+
+        // Prefer the distance-derived FareEngine amount when it exists,
+        // but keep the recommendation engine's own estimate as fallback.
+        const enrichedRecommendations = baseRecommendations.map((rec) => {
+          const calculatedFare = estimates[rec.mode as TransitNetwork];
+
+          if (calculatedFare === undefined) {
+            return rec;
+          }
+
+          return {
+            ...rec,
+            estimatedFare: calculatedFare,
+          };
+        });
+
+        setRecommendations(enrichedRecommendations);
+
+        if (enrichedRecommendations.length === 0) {
           setError(
-            "Failed to load fare estimates. Please try again."
+            "Pulse found the destination, but the current transport evidence does not yet support a public-transport path between both ends of this journey.",
+          );
+        }
+      } catch (planningError) {
+        console.error("Journey planning failed:", planningError);
+
+        if (!cancelled) {
+          setRecommendations([]);
+          setNetworkEstimates({});
+          setError(
+            "Pulse could not build this journey right now. Check your connection and try again.",
           );
         }
       } finally {
-        if (isSubscribed) {
-          setIsLoadingEstimates(false);
+        if (!cancelled) {
+          setIsPlanning(false);
         }
       }
     };
 
-    const debounceTimer = setTimeout(
-      generateEstimates,
-      500
-    );
+    const timer = window.setTimeout(() => {
+      void planJourney();
+    }, 250);
 
     return () => {
-      isSubscribed = false;
-      clearTimeout(debounceTimer);
+      cancelled = true;
+      window.clearTimeout(timer);
     };
-  }, [destination, location.location, availableNetworks]);
+  }, [
+    destination,
+    location.calculateDistance,
+    plannerOrigin,
+    plannerOriginIsTest,
+    planningStep,
+    resolvedDestination,
+  ]);
 
-  // ======================================================
-  // START TRIP
-  // ======================================================
+  // ====================================================
+  // SELECT TRANSPORT
+  // ====================================================
 
-  const startTrip = useCallback(async () => {
-    if (!network || !location.location || !destination) {
-      setError("Missing required trip information");
+ const handleSelectRecommendation = useCallback(
+  (rec: RecommendationType) => {
+    if (rec.selectable === false) {
+      setError(
+        "Pulse can verify this Rea Vaya route fit, but an exact journey fare and travel time are not verified yet, so this option cannot be started as a tracked trip.",
+      );
+
       return;
     }
 
-    setTripState(TripState.ACTIVE);
+    const selectedNetwork =
+      rec.mode as TransitNetwork;
 
-    await BackgroundTracker.start();
+    const recalculatedFare =
+      networkEstimates[selectedNetwork];
 
-    setCurrentTrip({
-      id: Date.now().toString(),
-      network,
-      destination,
-      startTime: Date.now(),
-      distance: 0,
-      avgSpeed: 0,
-      startLocation: location.location,
-      lastTrackedLocation: location.location,
-    });
+    const finalFare =
+      recalculatedFare ??
+      rec.estimatedFare;
 
+    if (
+      finalFare === null ||
+      !Number.isFinite(finalFare)
+    ) {
+      setError(
+        "Pulse does not yet have a usable fare for this journey.",
+      );
+
+      return;
+    }
+
+    setSelectedRecommendation(rec);
+    setNetwork(selectedNetwork);
+    setEstimatedFare(finalFare);
+    setPlanningStep("fare");
     setError(null);
-  }, [network, location.location, destination]);
+  },
+  [networkEstimates],
+);
 
-  // ======================================================
+  // ====================================================
+  // LIVE BACKGROUND TRACKER SUBSCRIPTION
+  // ====================================================
+
+  useEffect(() => {
+    const unsubscribe = BackgroundTracker.subscribe(
+      (trackerLocation, trackerTrip) => {
+        setLastTripGpsUpdate(Date.now());
+
+        setLiveSpeed(Math.max(0, trackerTrip.currentSpeed));
+        setLiveMaxSpeed(Math.max(0, trackerTrip.maxSpeed));
+
+        setCurrentTrip((previous) => ({
+          ...previous,
+          distance: trackerTrip.totalDistance / 1000,
+          avgSpeed: trackerTrip.averageSpeed,
+          lastTrackedLocation: toLocation(trackerLocation),
+        }));
+      },
+    );
+
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    if (tripState !== TripState.ACTIVE) {
+      return;
+    }
+
+    const unsubscribe = BackgroundTracker.subscribeToTrip(
+      (trackerTrip: ActiveTripSession) => {
+        setDuration(Math.max(0, Math.floor(trackerTrip.duration / 1000)));
+        setLiveSpeed(Math.max(0, trackerTrip.currentSpeed));
+        setLiveMaxSpeed(Math.max(0, trackerTrip.maxSpeed));
+
+        setCurrentTrip((previous) => ({
+          ...previous,
+          distance: trackerTrip.totalDistance / 1000,
+          avgSpeed: trackerTrip.averageSpeed,
+        }));
+      },
+    );
+
+    return unsubscribe;
+  }, [tripState]);
+
+  // Keep a small UI clock so GPS staleness can be surfaced even when
+  // no new position callback arrives.
+  useEffect(() => {
+    if (tripState !== TripState.ACTIVE) {
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      setGpsClock(Date.now());
+    }, 5000);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [tripState]);
+
+  // ====================================================
+  // START TRIP
+  // ====================================================
+
+  const startTrip = useCallback(async () => {
+    if (!network) {
+      setError("Choose a transport option before starting your journey.");
+      return;
+    }
+
+    if (!destination.trim()) {
+      setError("Choose a destination before starting your journey.");
+      return;
+    }
+
+    if (isStartingTrip) {
+      return;
+    }
+
+    setIsStartingTrip(true);
+    setError(null);
+
+    try {
+      // Refresh origin at the exact moment the commuter starts travelling.
+      // This avoids starting a trip with an old planning position.
+      const freshOrigin = await location.requestCurrentLocation();
+
+      // BackgroundTracker has its own validated high-accuracy trip watcher.
+      // ACTIVE is set only AFTER this succeeds.
+      await BackgroundTracker.start();
+
+      const trackerTrip = BackgroundTracker.getTrip();
+      const trackerLocation = BackgroundTracker.getLastKnownLocation();
+      const startedAt = trackerTrip?.startedAt ?? Date.now();
+
+      setCurrentTrip({
+        id: startedAt.toString(),
+        network,
+        destination: destination.trim(),
+        startTime: startedAt,
+        distance: trackerTrip ? trackerTrip.totalDistance / 1000 : 0,
+        avgSpeed: trackerTrip?.averageSpeed ?? 0,
+        startLocation: freshOrigin,
+        lastTrackedLocation: trackerLocation
+          ? toLocation(trackerLocation)
+          : freshOrigin,
+      });
+
+      setDuration(0);
+      setLiveSpeed(Math.max(0, trackerTrip?.currentSpeed ?? 0));
+      setLiveMaxSpeed(Math.max(0, trackerTrip?.maxSpeed ?? 0));
+      setLastTripGpsUpdate(Date.now());
+      setGpsClock(Date.now());
+      setTripState(TripState.ACTIVE);
+      setError(null);
+    } catch (startError) {
+      console.error("Could not start trip:", startError);
+
+      setTripState(TripState.IDLE);
+      setError(getErrorMessage(startError));
+    } finally {
+      setIsStartingTrip(false);
+    }
+  }, [
+    destination,
+    isStartingTrip,
+    location,
+    network,
+  ]);
+
+  // ====================================================
+  // RETRY LIVE GPS
+  // ====================================================
+
+  const retryTripGps = useCallback(async () => {
+    if (isRetryingGps) return;
+
+    setIsRetryingGps(true);
+    setError(null);
+
+    try {
+      await BackgroundTracker.restart();
+      setLastTripGpsUpdate(Date.now());
+      setGpsClock(Date.now());
+    } catch (retryError) {
+      setError(getErrorMessage(retryError));
+    } finally {
+      setIsRetryingGps(false);
+    }
+  }, [isRetryingGps]);
+
+  // ====================================================
   // END TRIP
-  // ======================================================
+  // ====================================================
 
   const endTrip = useCallback(async () => {
     if (!currentTrip.startTime || !network) {
       return;
     }
 
-    const fare = estimatedFare || 0;
+    setError(null);
+
+    try {
+      await BackgroundTracker.stop();
+    } catch (stopError) {
+      // We still complete the local trip even if watcher cleanup reports
+      // an error, because losing the user's completed trip is worse.
+      console.warn("Tracker stop reported an error:", stopError);
+    }
+
+    const stats = BackgroundTracker.getTripStats();
+    const finalTrackerLocation = BackgroundTracker.getLastKnownLocation();
+    const endLocation = finalTrackerLocation
+      ? toLocation(finalTrackerLocation)
+      : location.location ?? currentTrip.lastTrackedLocation;
+
+    const fare = estimatedFare ?? 0;
 
     const completedTrip: TripData = {
       ...(currentTrip as TripData),
       endTime: Date.now(),
-      duration,
+      duration: stats?.duration ?? duration,
+      distance: stats?.distance ?? currentTrip.distance ?? 0,
+      avgSpeed: stats?.avgSpeed ?? currentTrip.avgSpeed ?? 0,
       fare,
-      destination,
+      destination: destination.trim(),
       network,
+      ...(endLocation ? { endLocation } : {}),
     };
 
+    setCurrentTrip(completedTrip);
     setVerifyTrip(completedTrip);
-
     setTripState(TripState.COMPLETED);
-
-    await BackgroundTracker.stop();
+    setLiveSpeed(0);
+    setLiveMaxSpeed(0);
+    setLastTripGpsUpdate(null);
+    Session.clear("active_trip");
   }, [
     currentTrip,
-    network,
-    estimatedFare,
-    duration,
     destination,
+    duration,
+    estimatedFare,
+    location.location,
+    network,
   ]);
 
-  // ======================================================
-  // CONFIRM TRIP
-  // ======================================================
+  // ====================================================
+  // CONFIRM COMPLETED TRIP
+  // ====================================================
 
   const confirmTrip = useCallback(() => {
     if (!verifyTrip) {
@@ -383,10 +1205,10 @@ const App = () => {
     let finalFare = verifyTrip.fare;
 
     if (actualFare.trim()) {
-      const parsedFare = parseFloat(actualFare);
+      const parsedFare = Number.parseFloat(actualFare);
 
       if (
-        !isNaN(parsedFare) &&
+        Number.isFinite(parsedFare) &&
         parsedFare > 0 &&
         parsedFare <= 1000
       ) {
@@ -399,8 +1221,8 @@ const App = () => {
       fare: finalFare,
     };
 
-    setHistory((prev) => {
-      const updated = [finalTrip, ...prev];
+    setHistory((previous) => {
+      const updated = [finalTrip, ...previous];
 
       if (user?.email) {
         Storage.save(user.email, "history", updated);
@@ -410,50 +1232,40 @@ const App = () => {
     });
 
     resetAllTripState();
-  }, [
-    verifyTrip,
-    actualFare,
-    user,
-    resetAllTripState,
-  ]);
+  }, [actualFare, resetAllTripState, user, verifyTrip]);
 
-  // ======================================================
-  // DURATION TIMER
-  // ======================================================
+  // ====================================================
+  // FALLBACK DURATION TIMER
+  // ====================================================
 
   useEffect(() => {
-    let interval: ReturnType<typeof setInterval> | null = null;
-
     if (
-      tripState === TripState.ACTIVE &&
-      currentTrip.startTime
+      tripState !== TripState.ACTIVE ||
+      !currentTrip.startTime
     ) {
-      interval = setInterval(() => {
-        if (currentTrip.startTime) {
-          setDuration(
-            Math.floor(
-              (Date.now() - currentTrip.startTime) / 1000
-            )
-          );
-        }
-      }, 1000);
+      return;
     }
 
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [tripState, currentTrip.startTime]);
+    const interval = window.setInterval(() => {
+      if (!currentTrip.startTime) return;
 
-  // ======================================================
+      setDuration(
+        Math.floor((Date.now() - currentTrip.startTime) / 1000),
+      );
+    }, 1000);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [currentTrip.startTime, tripState]);
+
+  // ====================================================
   // HABIT LEARNING
-  // ======================================================
+  // ====================================================
 
   useEffect(() => {
     if (
-      verifyTrip &&
-      verifyTrip.network &&
+      verifyTrip?.network &&
       verifyTrip.startLocation &&
       verifyTrip.endLocation
     ) {
@@ -462,14 +1274,14 @@ const App = () => {
         verifyTrip.startLocation,
         verifyTrip.endLocation,
         verifyTrip.fare,
-        verifyTrip.duration
+        verifyTrip.duration,
       );
     }
   }, [verifyTrip]);
 
-  // ======================================================
-  // LOAD USER & HISTORY
-  // ======================================================
+  // ====================================================
+  // LOAD USER / HISTORY
+  // ====================================================
 
   useEffect(() => {
     const savedUser = Session.load("user");
@@ -486,19 +1298,44 @@ const App = () => {
 
     Session.save("user", user);
 
-    const savedHistory = Storage.load<TripData[]>(
-      user.email,
-      "history"
-    );
+    if (user.email) {
+      const savedHistory = Storage.load<TripData[]>(
+        user.email,
+        "history",
+      );
 
-    if (savedHistory) {
-      setHistory(savedHistory);
+      if (savedHistory) {
+        setHistory(savedHistory);
+      }
     }
   }, [user]);
 
-  // ======================================================
-  // GEMINI NAVIGATION TAB HANDLER
-  // ======================================================
+  // ====================================================
+  // SAVE ACTIVE TRIP
+  // ====================================================
+
+  useEffect(() => {
+    if (
+      tripState !== TripState.ACTIVE ||
+      !currentTrip.id
+    ) {
+      return;
+    }
+
+    const session: SavedActiveTrip = {
+      currentTrip,
+      tripState,
+      network,
+      duration,
+      destination,
+    };
+
+    Session.save("active_trip", session);
+  }, [currentTrip, destination, duration, network, tripState]);
+
+  // ====================================================
+  // GEMINI NAVIGATOR TAB
+  // ====================================================
 
   useEffect(() => {
     if (activeTab === "navigate") {
@@ -506,376 +1343,483 @@ const App = () => {
     } else {
       gemini.closeNavigator();
     }
-  }, [
-    activeTab,
-    gemini.openNavigator,
-    gemini.closeNavigator,
-  ]);
+  }, [activeTab, gemini.closeNavigator, gemini.openNavigator]);
 
-  // ======================================================
-  // ACTIVE SESSION MANAGEMENT
-  // ======================================================
-
-  useEffect(() => {
-    if (
-      tripState === TripState.ACTIVE &&
-      currentTrip.id
-    ) {
-      Session.save("active_trip", {
-        currentTrip,
-        tripState,
-        network,
-        duration,
-        destination,
-      });
-    }
-  }, [
-    currentTrip,
-    tripState,
-    network,
-    duration,
-    destination,
-  ]);
-
-  // ======================================================
+  // ====================================================
   // AUTH SCREEN
-  // ======================================================
+  // ====================================================
 
   if (!user) {
     return <AuthScreen onLogin={setUser} />;
   }
 
-  // ======================================================
+  // ====================================================
   // RENDER
-  // ======================================================
+  // ====================================================
 
   return (
     <>
-      <Layout
-        activeTab={activeTab}
-        onNavClick={setActiveTab}
-      >
-        <div className="w-full max-w-7xl mx-auto">
+      <Layout activeTab={activeTab} onNavClick={setActiveTab}>
+        <div className="mx-auto w-full max-w-7xl">
           <div
-            className="
-              space-y-6
-              px-4
-              md:px-8
-              lg:px-12
-              pb-40
-              min-h-[100dvh]
-              relative
-              z-10
-            "
+            className="relative z-10 min-h-[100dvh] space-y-6 px-4 pb-40 md:px-8 lg:px-12"
             style={{
               WebkitOverflowScrolling: "touch",
               scrollBehavior: "smooth",
             }}
           >
-            {/* ======================================================
+            {/* ==================================================
                 HOME TAB
-            ====================================================== */}
+            ================================================== */}
 
             {activeTab === "home" && (
               <>
-                {/* HERO SECTION */}
+                {/* HERO */}
 
-                {tripState !== TripState.ACTIVE &&
-                  !verifyTrip && (
-                    <div className="pt-4 space-y-2">
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                        <div>
-                          <p className="text-white/40 text-sm">
-                            Welcome back
-                          </p>
+                {tripState !== TripState.ACTIVE && !verifyTrip && (
+                  <div className="space-y-3 pt-4">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <p className="text-sm text-white/40">
+                          Smart commuter intelligence
+                        </p>
 
-                          <h1 className="text-3xl font-black tracking-tight text-white">
-                            Where are you going?
-                          </h1>
-                        </div>
+                        <h1 className="mt-1 text-3xl font-black tracking-tight text-white sm:text-4xl">
+                          Where are you going?
+                        </h1>
 
-                        {/* GPS STATUS */}
+                        <p className="mt-2 max-w-2xl text-sm leading-6 text-white/45">
+                          Compare public transport by cost and travel time,
+                          then track your real journey with live GPS.
+                        </p>
+                      </div>
 
-                        <div className="flex items-center gap-2 text-xs text-white/50">
-                          <span>
-                            {location.location ? "📍" : "⌖"}
-                          </span>
+                      <div
+                        className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-2 text-xs font-medium backdrop-blur-xl ${
+                          plannerGpsHealthy
+                            ? "border-emerald-400/20 bg-emerald-400/[0.08] text-emerald-200"
+                            : location.error
+                              ? "border-amber-400/20 bg-amber-400/[0.08] text-amber-100"
+                              : "border-white/10 bg-white/[0.04] text-white/55"
+                        }`}
+                      >
+                        <span
+                          className={`h-2 w-2 rounded-full ${
+                            plannerGpsHealthy
+                              ? "bg-emerald-400"
+                              : location.isLocating
+                                ? "animate-pulse bg-cyan-400"
+                                : "bg-amber-400"
+                          }`}
+                        />
 
-                          <span>
-                            {location.location
-                              ? "GPS Active"
-                              : "Searching GPS"}
-                          </span>
-                        </div>
+                        <span>{plannerGpsLabel}</span>
                       </div>
                     </div>
-                  )}
 
-                {/* ==================================================
-                    ACTIVE TRIP UI
-                ================================================== */}
-
-                {tripState === TripState.ACTIVE && (
-                  <TripTracker
-                    network={network}
-                    destination={destination}
-                    distance={currentTrip.distance || 0}
-                    duration={duration}
-                    speed={currentTrip.avgSpeed || 0}
-                    onEndTrip={endTrip}
-                  />
-                )}
-
-                {/* ==================================================
-                    PLANNING UI
-                ================================================== */}
-
-                {tripState !== TripState.ACTIVE &&
-                  !verifyTrip && (
-                    <>
-                      {/* ERROR */}
-
-                      {error && (
-                        <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-3">
-                          <p className="text-red-400 text-sm">
-                            {error}
+                    {location.error && !plannerOrigin && (
+                      <div className="flex flex-col gap-3 rounded-2xl border border-amber-400/15 bg-amber-400/[0.06] p-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                          <p className="text-sm font-semibold text-amber-100/90">
+                            We need your location to plan from where you are
+                          </p>
+                          <p className="mt-1 text-xs leading-5 text-amber-100/55">
+                            {location.error}
                           </p>
                         </div>
-                      )}
 
-                      {/* ==================================================
-                          STEP 1: DESTINATION
-                      ================================================== */}
+                        <button
+                          type="button"
+                          onClick={() => void retryPlannerLocation()}
+                          disabled={location.isLocating}
+                          className="min-h-10 shrink-0 rounded-xl border border-amber-300/20 bg-amber-300/10 px-4 text-sm font-bold text-amber-100 transition hover:bg-amber-300/15 disabled:opacity-50"
+                        >
+                          {location.isLocating ? "Finding GPS..." : "Try GPS again"}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
 
-                      {planningStep === "destination" && (
+                {/* ACTIVE TRIP */}
+
+                {tripState === TripState.ACTIVE && (
+                  <div className="space-y-4 pt-4">
+                    {gpsSignalLost && (
+                      <div className="flex flex-col gap-3 rounded-2xl border border-amber-400/20 bg-amber-400/[0.08] p-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                          <p className="font-bold text-amber-100">
+                            GPS signal lost
+                          </p>
+                          <p className="mt-1 text-xs leading-5 text-amber-100/55">
+                            Your trip is still active. Make sure Location/GPS is
+                            turned on, then retry.
+                          </p>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => void retryTripGps()}
+                          disabled={isRetryingGps}
+                          className="min-h-10 rounded-xl border border-amber-300/20 bg-amber-300/10 px-4 text-sm font-bold text-amber-100 transition hover:bg-amber-300/15 disabled:opacity-50"
+                        >
+                          {isRetryingGps ? "Reconnecting..." : "Retry GPS"}
+                        </button>
+                      </div>
+                    )}
+
+                    <TripTracker
+                      network={network}
+                      destination={destination}
+                      distance={currentTrip.distance || 0}
+                      duration={duration}
+                      speed={liveSpeed}
+                      avgSpeed={currentTrip.avgSpeed || 0}
+                      maxSpeed={liveMaxSpeed}
+                      startTime={currentTrip.startTime}
+                      expectedDistance={trustedLiveDistanceKm}
+                      expectedDurationSeconds={trustedLiveDurationSeconds}
+                      gpsStatus={gpsSignalLost ? "stale" : "active"}
+                      onEndTrip={endTrip}
+                    />
+                  </div>
+                )}
+
+                {/* PLANNING */}
+
+                {tripState !== TripState.ACTIVE && !verifyTrip && (
+                  <>
+                    {error && (
+                      <div className="rounded-2xl border border-red-400/20 bg-red-400/[0.07] p-4">
+                        <p className="text-sm leading-6 text-red-200">
+                          {error}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* STEP 1: DESTINATION */}
+
+                    {planningStep === "destination" && (
+                      <div className="space-y-4">
                         <DestinationSearch
                           destination={destination}
-                          setDestination={
-                            handleDestinationChange
-                          }
-                          onSearch={handleSearch}
-                          loading={false}
+                          setDestination={handleDestinationChange}
+                          onSearch={() => void handleSearch()}
+                          loading={location.isLocating && !plannerOriginIsTest}
                           enableVoiceSearch={true}
                           showRecentSearches={true}
                           showFavorites={true}
                           userHome={user?.homeArea}
                           userWork={user?.workArea}
+                          currentLocation={plannerOrigin}
+                          onDestinationResolved={handleDestinationResolved}
                         />
-                      )}
 
-                      {/* ==================================================
-                          STEP 2: TRANSPORT
-                      ================================================== */}
+                        {SHOW_NETWORK_LAB && <DevJourneyTestLab onRun={handleDevelopmentJourneyTest} />}
+                      </div>
+                    )}
 
-                      {planningStep === "transport" && (
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                          {/* LEFT PANEL */}
+                    {/* STEP 2: TRANSPORT */}
 
-                          <div className="hidden lg:block lg:col-span-1">
-                            <div className="glass rounded-3xl p-6 sticky top-24">
-                              <p className="text-white/40 text-sm">
-                                Destination
-                              </p>
+                    {planningStep === "transport" && (
+                      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                        <div className="lg:col-span-1">
+                          <div className="glass rounded-3xl p-5 lg:sticky lg:top-24 lg:p-6">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setPlanningStep("destination");
+                                setError(null);
+                              }}
+                              className="mb-5 text-sm font-semibold text-cyan-300 transition hover:text-cyan-200"
+                            >
+                              â† Change destination
+                            </button>
 
-                              <h2 className="text-2xl font-black text-white mt-2">
-                                {destination}
-                              </h2>
+                            <p className="text-xs uppercase tracking-[0.18em] text-white/35">
+                              Journey
+                            </p>
 
-                              <div className="mt-6 space-y-3">
-                                <div className="glass p-4 rounded-2xl">
-                                  <p className="text-xs text-white/40 uppercase">
-                                    Available Routes
-                                  </p>
+                            <h2 className="mt-2 text-2xl font-black text-white">
+                              {destination}
+                            </h2>
 
-                                  <p className="text-3xl font-black text-cyan-400">
-                                    {recommendations.length}
-                                  </p>
-                                </div>
+                            {resolvedDestination?.label &&
+                              resolvedDestination.label !== destination && (
+                                <p className="mt-2 text-xs leading-5 text-white/40">
+                                  {resolvedDestination.label}
+                                </p>
+                              )}
 
-                                <div className="glass p-4 rounded-2xl">
-                                  <p className="text-xs text-white/40 uppercase">
-                                    GPS Status
-                                  </p>
+                            <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-1">
+                              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                                <p className="text-[10px] uppercase tracking-wider text-white/35">
+                                  {routePlan.source === "mapbox-road"
+  ? "Road baseline"
+  : routePlan.source === "coordinate-estimate"
+    ? "Straight-line estimate"
+    : "Planning distance"}
+                                </p>
+                                <p className="mt-1 text-2xl font-black text-white">
+                                  {isPlanning
+                                    ? "â€¦"
+                                    : formatDistance(routePlan.distanceKm)}
+                                </p>
+                              </div>
 
-                                  <p className="text-lg font-bold text-emerald-400">
-                                    {location.location
-                                      ? "Connected"
-                                      : "Searching"}
-                                  </p>
+                              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                                <p className="text-[10px] uppercase tracking-wider text-white/35">
+                                  Options found
+                                </p>
+                                <p className="mt-1 text-2xl font-black text-cyan-300">
+                                  {isPlanning ? "â€¦" : recommendations.length}
+                                </p>
+                              </div>
+
+                              <div className="col-span-2 rounded-2xl border border-white/10 bg-white/[0.04] p-4 lg:col-span-1">
+                                <div className="flex items-center justify-between gap-3">
+                                  <div>
+                                    <p className="text-[10px] uppercase tracking-wider text-white/35">
+                                      GPS origin
+                                    </p>
+                                    <p
+                                      className={`mt-1 text-sm font-bold ${
+                                        plannerOrigin
+                                          ? plannerOriginIsTest
+                                            ? "text-violet-200"
+                                            : "text-emerald-300"
+                                          : "text-amber-200"
+                                      }`}
+                                    >
+                                      {plannerGpsLabel}
+                                    </p>
+                                  </div>
+
+                                  {!plannerOrigin && (
+                                    <button
+                                      type="button"
+                                      onClick={() => void retryPlannerLocation()}
+                                      className="rounded-xl bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/70"
+                                    >
+                                      Retry
+                                    </button>
+                                  )}
                                 </div>
                               </div>
                             </div>
-                          </div>
 
-                          {/* RIGHT PANEL */}
+                            {routePlan.source === "coordinate-estimate" && (
+                              <p className="mt-4 rounded-xl border border-amber-400/15 bg-amber-400/[0.05] px-3 py-2 text-xs leading-5 text-amber-100/60">
+                                Distance is provisional until live Mapbox routing
+                                is enabled.
+                              </p>
+                            )}
 
-                          <div className="lg:col-span-2 max-w-4xl">
-                            <button
-                              onClick={() =>
-                                setPlanningStep(
-                                  "destination"
-                                )
-                              }
-                              className="text-sm text-cyan-400 mb-4 inline-block"
-                            >
-                              ← Back
-                            </button>
-
-                            <TransportRecommendation
-                              recommendations={
-                                recommendations
-                              }
-                              selected={
-                                selectedRecommendation
-                              }
-                              onSelect={
-                                handleSelectRecommendation
-                              }
-                            />
+                            {routePlan.source === "mapbox-road" && (
+                              <p className="mt-4 text-xs leading-5 text-white/35">
+                                {plannerOriginIsTest
+                                  ? "Road baseline resolved from deterministic development coordinates. Public-transport evidence remains independent of that driving baseline."
+                                  : "Route geometry resolved from your GPS origin to the selected destination. Public-transport ETAs are shown separately on each option."}
+                              </p>
+                            )}
                           </div>
                         </div>
-                      )}
 
-                      {/* ==================================================
-                          STEP 3: FARE CONFIRMATION
-                      ================================================== */}
+                        <div className="max-w-4xl lg:col-span-2">
+                          {SHOW_NETWORK_LAB && <UnifiedCoveragePanel report={unifiedCoverage} />}
 
-                      {planningStep === "fare" &&
-                        estimatedFare !== null && (
-                          <div className="space-y-5 pb-32">
-                            <button
-                              onClick={() =>
-                                setPlanningStep(
-                                  "transport"
-                                )
-                              }
-                              className="text-sm text-cyan-400"
-                            >
-                              ← Back
-                            </button>
+                          <TransportRecommendation
+                            recommendations={recommendations}
+                            selected={selectedRecommendation}
+                            onSelect={handleSelectRecommendation}
+                            isLoading={isPlanning}
+                          />
+                        </div>
+                      </div>
+                    )}
 
-                            <VirtualCard
-                              state={tripState}
-                              network={network}
-                              destination={destination}
-                              distance={0}
-                              duration={0}
-                              estimatedFare={estimatedFare}
-                              variant="compact"
-                              showTilt={false}
-                            />
+                    {/* STEP 3: FARE / START */}
 
-                            <div className="sticky bottom-4 z-40 pt-6">
-                              <button
-                                onClick={startTrip}
-                                className="
-                                  w-full
-                                  h-16
-                                  text-lg
-                                  font-bold
-                                  rounded-3xl
-                                  bg-gradient-to-r
-                                  from-emerald-500
-                                  to-cyan-500
-                                  text-white
-                                  transition-all
-                                  hover:scale-[1.02]
-                                  active:scale-[0.98]
-                                  shadow-xl
-                                  shadow-emerald-500/30
-                                  animate-pulse
-                                "
-                              >
-                                🚀 Start Journey Now
-                              </button>
+                    {planningStep === "fare" && estimatedFare !== null && (
+                      <div className="space-y-5 pb-32">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setPlanningStep("transport");
+                            setError(null);
+                          }}
+                          className="text-sm font-semibold text-cyan-300 transition hover:text-cyan-200"
+                        >
+                          â† Compare other options
+                        </button>
+
+                        <div className="grid gap-4 lg:grid-cols-[1fr_0.7fr]">
+                          <VirtualCard
+                            state={tripState}
+                            network={network}
+                            destination={destination}
+                            distance={routePlan.distanceKm ?? 0}
+                            duration={plannedDurationSeconds}
+                            estimatedFare={estimatedFare}
+                            variant="compact"
+                            showTilt={false}
+                          />
+
+                          <div className="glass rounded-3xl p-5">
+                            <p className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+                              Before you go
+                            </p>
+
+                            <div className="mt-4 space-y-3">
+                              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                                <span className="text-sm text-white/45">
+                                  Transport
+                                </span>
+                                <span className="text-sm font-bold text-white">
+                                  {network}
+                                </span>
+                              </div>
+
+                              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                                <span className="text-sm text-white/45">
+                                  Distance
+                                </span>
+                                <span className="text-sm font-bold text-white">
+                                  {formatDistance(routePlan.distanceKm)}
+                                </span>
+                              </div>
+
+                              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                                <span className="text-sm text-white/45">
+                                  Est. time
+                                </span>
+                                <span className="text-sm font-bold text-white">
+                                  {plannedDurationSeconds > 0
+                                    ? formatDuration(plannedDurationSeconds)
+                                    : "Estimating"}
+                                </span>
+                              </div>
+
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm text-white/45">
+                                  Est. fare
+                                </span>
+                                <span className="text-lg font-black text-emerald-300">
+                                  R{estimatedFare.toFixed(2)}
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        )}
-                    </>
-                  )}
+                        </div>
 
-                {/* ==================================================
-                    VERIFY TRIP UI
-                ================================================== */}
+                        <div className="sticky bottom-4 z-40 pt-3">
+                          <button
+                            type="button"
+                            onClick={() => void startTrip()}
+                            disabled={isStartingTrip}
+                            className="flex h-16 w-full items-center justify-center gap-3 rounded-3xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-lg font-black text-white shadow-xl shadow-emerald-500/20 transition hover:scale-[1.01] active:scale-[0.99] disabled:cursor-wait disabled:opacity-60"
+                          >
+                            {isStartingTrip ? (
+                              <>
+                                <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/35 border-t-white" />
+                                Starting GPS trackerâ€¦
+                              </>
+                            ) : (
+                              <>Start journey</>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {/* VERIFY COMPLETED TRIP */}
 
                 {verifyTrip && (
-                  <div className="space-y-5 pb-32">
-                    <div className="glass p-5 rounded-3xl space-y-4">
-                      <div>
-                        <p className="text-sm text-white/50">
-                          Trip Complete
-                        </p>
-
-                        <p className="text-4xl font-black text-white mt-1">
-                          R{verifyTrip.fare.toFixed(2)}
-                        </p>
-
-                        {verifyTrip.destination && (
-                          <p className="text-xs text-white/40 mt-2">
-                            To: {verifyTrip.destination}
+                  <div className="space-y-5 pb-32 pt-4">
+                    <div className="glass rounded-3xl p-5 sm:p-6">
+                      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                        <div>
+                          <p className="text-sm font-medium text-emerald-300">
+                            Journey complete
                           </p>
-                        )}
+
+                          <h2 className="mt-1 text-3xl font-black text-white">
+                            {verifyTrip.destination}
+                          </h2>
+                        </div>
+
+                        <div className="text-left sm:text-right">
+                          <p className="text-xs uppercase tracking-wider text-white/35">
+                            Estimated fare
+                          </p>
+                          <p className="mt-1 text-4xl font-black text-white">
+                            R{verifyTrip.fare.toFixed(2)}
+                          </p>
+                        </div>
                       </div>
 
-                      <div className="space-y-2">
-                        <p className="text-xs uppercase tracking-widest text-white/40">
-                          Actual Fare Paid (Optional)
-                        </p>
+                      <div className="mt-6 grid grid-cols-3 gap-3">
+                        <div className="rounded-2xl bg-white/[0.04] p-3 text-center">
+                          <p className="text-[10px] uppercase text-white/30">
+                            Distance
+                          </p>
+                          <p className="mt-1 font-bold text-white">
+                            {(verifyTrip.distance || 0).toFixed(2)} km
+                          </p>
+                        </div>
+
+                        <div className="rounded-2xl bg-white/[0.04] p-3 text-center">
+                          <p className="text-[10px] uppercase text-white/30">
+                            Time
+                          </p>
+                          <p className="mt-1 font-bold text-white">
+                            {formatDuration(verifyTrip.duration || 0)}
+                          </p>
+                        </div>
+
+                        <div className="rounded-2xl bg-white/[0.04] p-3 text-center">
+                          <p className="text-[10px] uppercase text-white/30">
+                            Avg speed
+                          </p>
+                          <p className="mt-1 font-bold text-white">
+                            {(verifyTrip.avgSpeed || 0).toFixed(1)} km/h
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="mt-6 space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-widest text-white/40">
+                          Actual fare paid (optional)
+                        </label>
 
                         <input
                           type="text"
                           inputMode="decimal"
                           value={actualFare}
-                          onChange={(e) => {
-                            const value =
-                              e.target.value;
+                          onChange={(event) => {
+                            const value = event.target.value;
 
-                            if (
-                              value === "" ||
-                              /^\d*\.?\d*$/.test(value)
-                            ) {
+                            if (value === "" || /^\d*\.?\d*$/.test(value)) {
                               setActualFare(value);
                             }
                           }}
                           placeholder="Enter actual fare"
-                          className="
-                            w-full
-                            h-14
-                            px-4
-                            bg-white/10
-                            rounded-2xl
-                            outline-none
-                            border-2
-                            border-white/20
-                            focus:border-emerald-400
-                            transition-all
-                            text-white
-                            placeholder-white/50
-                          "
+                          className="h-14 w-full rounded-2xl border-2 border-white/15 bg-white/[0.06] px-4 text-white outline-none transition placeholder:text-white/30 focus:border-emerald-400"
                         />
 
                         <p className="text-[10px] text-white/30">
-                          Leave empty to use estimated fare
+                          Leave this empty to keep Pulse's estimate.
                         </p>
                       </div>
 
                       <button
+                        type="button"
                         onClick={confirmTrip}
-                        className="
-                          w-full
-                          h-14
-                          rounded-2xl
-                          font-bold
-                          bg-gradient-to-r
-                          from-emerald-500
-                          to-cyan-500
-                          text-white
-                          transition-all
-                          hover:scale-[1.02]
-                          active:scale-[0.98]
-                        "
+                        className="mt-5 h-14 w-full rounded-2xl bg-gradient-to-r from-emerald-500 to-cyan-500 font-black text-white transition hover:scale-[1.01] active:scale-[0.99]"
                       >
-                        Confirm Trip
+                        Save trip
                       </button>
                     </div>
                   </div>
@@ -883,92 +1827,117 @@ const App = () => {
               </>
             )}
 
-            {/* ======================================================
+            {/* ==================================================
                 STATS TAB
-            ====================================================== */}
+            ================================================== */}
 
             {activeTab === "stats" && (
-              <div className="space-y-4 pb-8">
+              <div className="space-y-4 pb-8 pt-4">
+                <div>
+                  <p className="text-sm text-white/40">Your commuting</p>
+                  <h1 className="mt-1 text-3xl font-black text-white">
+                    Travel stats
+                  </h1>
+                </div>
+
                 {history.length === 0 ? (
-                  <div className="glass p-8 rounded-3xl text-center">
-                    <p className="text-white/50 text-lg">
+                  <div className="glass rounded-3xl p-8 text-center">
+                    <p className="text-lg font-bold text-white/70">
                       No trips yet
                     </p>
-
-                    <p className="text-sm text-white/30 mt-2">
-                      Complete your first trip to see stats!
+                    <p className="mt-2 text-sm text-white/35">
+                      Complete your first journey and Pulse will start building
+                      your commuter intelligence.
                     </p>
                   </div>
                 ) : (
                   <>
-                    <div className="glass p-4 rounded-3xl bg-gradient-to-r from-cyan-500/10 to-emerald-500/10">
-                      <p className="text-xs uppercase tracking-widest text-white/40">
-                        Total Spend
-                      </p>
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      <div className="glass rounded-3xl bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 p-4 sm:col-span-2">
+                        <p className="text-xs uppercase tracking-widest text-white/40">
+                          Total spend
+                        </p>
+                        <p className="mt-1 text-3xl font-black text-white">
+                          R
+                          {history
+                            .reduce((sum, trip) => sum + (trip.fare || 0), 0)
+                            .toFixed(2)}
+                        </p>
+                        <p className="mt-1 text-xs text-white/30">
+                          Across {history.length} completed trip
+                          {history.length === 1 ? "" : "s"}
+                        </p>
+                      </div>
 
-                      <p className="text-3xl font-black text-white">
-                        R
-                        {history
-                          .reduce(
-                            (sum, t) =>
-                              sum + (t.fare || 0),
-                            0
-                          )
-                          .toFixed(2)}
-                      </p>
-
-                      <p className="text-xs text-white/30 mt-1">
-                        {history.length} trips completed
-                      </p>
+                      <div className="glass rounded-3xl p-4">
+                        <p className="text-xs uppercase tracking-widest text-white/40">
+                          Distance logged
+                        </p>
+                        <p className="mt-1 text-3xl font-black text-white">
+                          {history
+                            .reduce(
+                              (sum, trip) => sum + (trip.distance || 0),
+                              0,
+                            )
+                            .toFixed(1)}
+                          <span className="ml-1 text-sm text-white/35">km</span>
+                        </p>
+                      </div>
                     </div>
 
-                    {history.map((t) => (
-                      <div
-                        key={t.id}
-                        className="
-                          glass
-                          p-4
-                          rounded-3xl
-                          transition-all
-                          hover:scale-[1.02]
-                          active:scale-[0.98]
-                        "
-                      >
-                        <p className="font-bold text-lg text-white">
-                          {t.network}
-                        </p>
+                    <div className="space-y-3">
+                      {history.map((trip) => (
+                        <div
+                          key={trip.id}
+                          className="glass rounded-3xl p-4 transition hover:bg-white/[0.04]"
+                        >
+                          <div className="flex items-start justify-between gap-4">
+                            <div>
+                              <p className="text-lg font-bold text-white">
+                                {trip.network}
+                              </p>
 
-                        {t.destination && (
-                          <p className="text-xs text-white/40 mt-0.5">
-                            📍 {t.destination}
-                          </p>
-                        )}
+                              {trip.destination && (
+                                <p className="mt-0.5 text-xs text-white/40">
+                                  ðŸ“ {trip.destination}
+                                </p>
+                              )}
+                            </div>
 
-                        <p className="text-xs text-white/50 mt-1">
-                          {new Date(
-                            t.startTime
-                          ).toLocaleString()}
-                        </p>
+                            <p className="text-lg font-black text-emerald-300">
+                              R{(trip.fare || 0).toFixed(2)}
+                            </p>
+                          </div>
 
-                        <div className="mt-3 text-xs space-y-1.5">
-                          <p className="flex items-center gap-2 text-white/70">
-                            📏 {(t.distance || 0).toFixed(2)} km
+                          <p className="mt-2 text-xs text-white/35">
+                            {new Date(trip.startTime).toLocaleString()}
                           </p>
 
-                          <p className="flex items-center gap-2 text-white/70">
-                            💰 R{(t.fare || 0).toFixed(2)}
-                          </p>
+                          <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
+                            <div className="rounded-xl bg-white/[0.04] p-3">
+                              <p className="text-white/30">Distance</p>
+                              <p className="mt-1 font-bold text-white/75">
+                                {(trip.distance || 0).toFixed(2)} km
+                              </p>
+                            </div>
 
-                          <p className="flex items-center gap-2 text-white/70">
-                            ⏱️ {t.duration || 0}s
-                          </p>
+                            <div className="rounded-xl bg-white/[0.04] p-3">
+                              <p className="text-white/30">Time</p>
+                              <p className="mt-1 font-bold text-white/75">
+                                {formatDuration(trip.duration || 0)}
+                              </p>
+                            </div>
 
-                          <p className="flex items-center gap-2 text-white/70">
-                            🚗 {(t.avgSpeed || 0).toFixed(1)} km/h
-                          </p>
+                            <div className="rounded-xl bg-white/[0.04] p-3">
+                              <p className="text-white/30">Avg speed</p>
+                              <p className="mt-1 font-bold text-white/75">
+                                {(trip.avgSpeed || 0).toFixed(1)} km/h
+                              </p>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </>
                 )}
               </div>
@@ -977,9 +1946,9 @@ const App = () => {
         </div>
       </Layout>
 
-      {/* ======================================================
+      {/* ====================================================
           GEMINI NAVIGATOR
-      ====================================================== */}
+      ==================================================== */}
 
       <GeminiNavigator
         isOpen={gemini.isOpen}

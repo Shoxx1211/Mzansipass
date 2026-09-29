@@ -1,0 +1,29 @@
+{
+    "generatedAt":  "2026-09-22T16:52:05.6716376Z",
+    "authority":  "City of Johannesburg",
+    "service":  "Transportation",
+    "outputSpatialReference":  4326,
+    "layers":  [
+                   {
+                       "layerId":  22,
+                       "name":  "Metrobus Routes",
+                       "geometryType":  "esriGeometryPolyline",
+                       "features":  110,
+                       "file":  ".\\src\\data\\transit\\gauteng\\metrobus\\gis-raw\\metrobus-routes-wgs84.json"
+                   },
+                   {
+                       "layerId":  52,
+                       "name":  "Metrobus_Stops",
+                       "geometryType":  "esriGeometryPoint",
+                       "features":  1922,
+                       "file":  ".\\src\\data\\transit\\gauteng\\metrobus\\gis-raw\\metrobus-stops-wgs84.json"
+                   }
+               ],
+    "evidencePolicy":  {
+                           "routeGeometry":  "official-city-gis",
+                           "stopGeometry":  "official-city-gis",
+                           "routeStopMembership":  "not-published-in-current-stop-layer",
+                           "spatialStopMatching":  "support-only-until-separately-validated",
+                           "passengerRoutingEnabled":  false
+                       }
+}

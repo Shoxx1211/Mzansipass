@@ -1,35 +1,36 @@
 // src/services/recommendationEngine.ts
-// Pulse Transit - Premium Recommendation Engine
-// Features: Real-time factors, personalization, multi-modal scoring, learning from history
+// Pulse Transit - route-fit recommendation engine
+//
+// This engine deliberately separates "a network is nearby" from
+// "a network can plausibly serve this origin -> destination journey".
+// It only returns direct candidates when BOTH ends are close enough to
+// configured stops for the same network.
 
 import {
   TRANSPORT_ZONES,
-  type TransportNetworkZone
+  getFareForDistance,
+  type TransportNetworkZone,
+  type TransportStop,
 } from "../data/transportZones";
 
 import type {
   Location,
   TransitNetwork,
-  TransportRecommendation
+  TransportRecommendation,
 } from "../types";
 import { HabitEngine } from "./habitEngine";
-
-
-
-// ======================================================
-// TYPES
-// ======================================================
-
-
+import { ReaVayaApplicabilityEngine } from "./reaVayaApplicabilityEngine";
 
 export interface RecommendationOptions {
   destination?: string;
+  destinationLocation?: Location | null;
+  routeDistanceKm?: number | null;
+  roadDurationSeconds?: number | null;
   timeOfDay?: Date;
   userPreferences?: {
     preferFastest?: boolean;
     preferCheapest?: boolean;
-    preferSafest?: boolean;
-    maxWalkingDistance?: number;
+    maxWalkingDistance?: number; // kilometres, total access + egress
     preferredNetworks?: TransitNetwork[];
   };
   includeAlternatives?: boolean;
@@ -41,350 +42,593 @@ export interface ScoredRecommendation extends TransportRecommendation {
   walkingScore: number;
   costScore: number;
   timeScore: number;
-  safetyScore: number;
-  reliabilityScore: number;
+  routeFitScore: number;
 }
-
-// ======================================================
-// CONSTANTS
-// ======================================================
-
-const TIME_WEIGHTS = {
-  PEAK_MULTIPLIER: 1.3,
-  OFF_PEAK_MULTIPLIER: 0.9,
-  NIGHT_MULTIPLIER: 1.2
-};
-
-const SCORE_WEIGHTS = {
-  walking: 0.25,
-  cost: 0.25,
-  time: 0.2,
-  safety: 0.15,
-  reliability: 0.15
-};
 
 const WALKING_SPEED_KMH = 5;
 
-// ======================================================
-// HELPER FUNCTIONS
-// ======================================================
+const SCORE_WEIGHTS = {
+  routeFit: 0.4,
+  walking: 0.25,
+  time: 0.2,
+  cost: 0.15,
+};
+
+const FALLBACK_NETWORK_SPEED_KMH: Record<TransitNetwork, number> = {
+  Taxi: 30,
+  Gautrain: 55,
+  "Rea Vaya": 24,
+  "A Re Yeng": 24,
+  "Tshwane Bus Service": 22,
+  Metrorail: 35,
+};
+
+const ROAD_BASELINE_MULTIPLIER: Record<TransitNetwork, number> = {
+  Taxi: 1,
+  Gautrain: 0.7,
+  "Rea Vaya": 1.15,
+  "A Re Yeng": 1.15,
+  "Tshwane Bus Service": 1.2,
+  Metrorail: 0.95,
+};
 
 const isPeakHour = (date: Date): boolean => {
   const hour = date.getHours();
   return (hour >= 6 && hour <= 9) || (hour >= 16 && hour <= 19);
 };
 
-const isNightTime = (date: Date): boolean => {
-  const hour = date.getHours();
-  return hour >= 20 || hour <= 4;
-};
-
-const isWeekend = (date: Date): boolean => {
-  const day = date.getDay();
-  return day === 0 || day === 6;
-};
-
-// ======================================================
-// MAIN ENGINE
-// ======================================================
+const clamp = (value: number, min: number, max: number): number =>
+  Math.min(max, Math.max(min, value));
 
 export class RecommendationEngine {
-
   static getRecommendations(
     userLocation: Location,
-    options: RecommendationOptions = {}
+    options: RecommendationOptions = {},
   ): TransportRecommendation[] {
-    const { 
+    const {
+      destinationLocation = null,
+      routeDistanceKm = null,
+      roadDurationSeconds = null,
       timeOfDay = new Date(),
       userPreferences = {},
       includeAlternatives = true,
-      maxRecommendations = 5
+      maxRecommendations = 5,
     } = options;
+
+    // Text alone is not enough to claim that a network serves the destination.
+    if (!destinationLocation) {
+      return [];
+    }
 
     const recommendations: ScoredRecommendation[] = [];
     const isPeak = isPeakHour(timeOfDay);
-    const isNight = isNightTime(timeOfDay);
-    const isWeekendDay = isWeekend(timeOfDay);
-
     const habitPrediction = HabitEngine.predict(userLocation, timeOfDay);
 
     for (const zone of TRANSPORT_ZONES) {
-      if (userPreferences.preferredNetworks?.length && 
-          !userPreferences.preferredNetworks.includes(zone.name as TransitNetwork)) {
+      if (!zone.enabled || zone.stops.length === 0) continue;
+
+      const network = zone.canonicalNetwork;
+
+      // Rea Vaya uses the evidence-based runtime engine below.
+      // Never send it through the older configured-stop approximation.
+      if (network === "Rea Vaya") {
         continue;
       }
 
-      const zoneDistance = this.calculateDistance(
-        userLocation.lat, userLocation.lng,
-        zone.center.lat, zone.center.lng
+      if (
+        userPreferences.preferredNetworks?.length &&
+        !userPreferences.preferredNetworks.includes(network)
+      ) {
+        continue;
+      }
+
+      const originStop = this.findClosestStop(userLocation, zone);
+      const destinationStop = this.findClosestStop(destinationLocation, zone);
+
+      // A single nearby stop is not evidence of a usable origin->destination trip.
+      if (originStop.stop.id === destinationStop.stop.id) {
+        continue;
+      }
+
+      if (
+        originStop.distance > zone.maxDirectAccessKm ||
+        destinationStop.distance > zone.maxDirectEgressKm
+      ) {
+        continue;
+      }
+
+      const totalWalkingDistance =
+        originStop.distance + destinationStop.distance;
+
+      if (
+        userPreferences.maxWalkingDistance !== undefined &&
+        totalWalkingDistance > userPreferences.maxWalkingDistance
+      ) {
+        continue;
+      }
+
+      const straightServiceDistance = this.calculateDistance(
+        originStop.stop.location.lat,
+        originStop.stop.location.lng,
+        destinationStop.stop.location.lat,
+        destinationStop.stop.location.lng,
       );
 
-      if (zoneDistance > zone.coverageRadiusKm) {
+      // Configured stops are points, not route geometry. Add a small path factor
+      // rather than pretending the straight-line distance is exact.
+      const serviceDistanceKm = Math.max(0.5, straightServiceDistance * 1.12);
+
+      const configuredFare = getFareForDistance(
+        zone,
+        serviceDistanceKm,
+        isPeak,
+      );
+
+      // Do not invent a fare outside the configured fare table.
+      if (configuredFare === null) {
         continue;
       }
 
-      const closestStop = this.findClosestStop(userLocation, zone);
-      const walkingDistance = closestStop.distance;
+      const estimatedTime = this.estimateTravelTimeMinutes({
+        network,
+        zone,
+        serviceDistanceKm,
+        walkingDistanceKm: totalWalkingDistance,
+        routeDistanceKm,
+        roadDurationSeconds,
+        isPeak,
+      });
 
-      if (userPreferences.maxWalkingDistance && 
-          walkingDistance > userPreferences.maxWalkingDistance) {
-        continue;
-      }
+      const routeFitScore = this.calculateRouteFitScore(
+        originStop.distance,
+        destinationStop.distance,
+        zone,
+      );
+      const walkingScore = this.calculateWalkingScore(totalWalkingDistance);
+      const costScore = this.calculateCostScore(configuredFare);
+      const timeScore = this.calculateTimeScore(estimatedTime);
 
-      let estimatedFare = this.estimateFare(zone.name, walkingDistance);
-      if (isPeak && zone.name === "Gautrain") {
-        estimatedFare *= TIME_WEIGHTS.PEAK_MULTIPLIER;
-      } else if (isNight && zone.name === "Taxi") {
-        estimatedFare *= TIME_WEIGHTS.NIGHT_MULTIPLIER;
-      } else if (isWeekendDay) {
-        estimatedFare *= 0.95;
-      }
-
-      let estimatedTravelTime = this.estimateTravelTime(zone.name, walkingDistance);
-      if (isPeak) {
-        estimatedTravelTime *= TIME_WEIGHTS.PEAK_MULTIPLIER;
-      }
-
-      const walkingScore = this.calculateWalkingScore(walkingDistance, userPreferences.preferFastest);
-      const costScore = this.calculateCostScore(estimatedFare, zone.name, userPreferences.preferCheapest);
-      const timeScore = this.calculateTimeScore(estimatedTravelTime, userPreferences.preferFastest);
-      const safetyScore = this.calculateSafetyScore(zone, isNight, userPreferences.preferSafest);
-      const reliabilityScore = this.calculateReliabilityScore(zone, isPeak);
-
-      const rawScore = (
+      let rawScore =
+        routeFitScore * SCORE_WEIGHTS.routeFit +
         walkingScore * SCORE_WEIGHTS.walking +
-        costScore * SCORE_WEIGHTS.cost +
         timeScore * SCORE_WEIGHTS.time +
-        safetyScore * SCORE_WEIGHTS.safety +
-        reliabilityScore * SCORE_WEIGHTS.reliability
+        costScore * SCORE_WEIGHTS.cost;
+
+      // Habits may break a tie, but they can never make an invalid network valid.
+      if (
+        habitPrediction.network === network &&
+        habitPrediction.confidence > 0.6
+      ) {
+        rawScore += Math.min(4, habitPrediction.confidence * 4);
+      }
+
+      if (userPreferences.preferFastest) {
+        rawScore += timeScore * 0.08;
+      }
+
+      if (userPreferences.preferCheapest) {
+        rawScore += costScore * 0.08;
+      }
+
+      const score = Math.round(clamp(rawScore, 0, 100));
+      const badges = this.generateBadges(
+        zone,
+        totalWalkingDistance,
+        configuredFare,
+        estimatedTime,
       );
-
-      let finalScore = rawScore;
-      if (habitPrediction.network === zone.name && habitPrediction.confidence > 0.6) {
-        finalScore = Math.min(100, finalScore * (1 + habitPrediction.confidence * 0.2));
-      }
-
-      const badges = this.generateBadges(zone, walkingDistance, isPeak, isNight);
-      let reason = this.generateReason(zone.name, walkingDistance, habitPrediction);
-      
-      let peakSurcharge: number | undefined;
-      if ((isPeak && zone.name === "Gautrain") || (isNight && zone.name === "Taxi")) {
-        peakSurcharge = estimatedFare * (isPeak ? 0.1 : 0.15);
-        reason += isPeak ? " (Peak hour pricing applies)" : " (Night surcharge applies)";
-      }
 
       recommendations.push({
-        id: zone.id,
-        mode: zone.name,
-        score: Math.min(100, Math.max(0, Math.round(finalScore))),
+        fareStatus: "unverified",
+selectable: false,
+        id: `${zone.id}:${originStop.stop.id}:${destinationStop.stop.id}`,
+        mode: network,
+        score,
         rawScore,
         walkingScore,
         costScore,
         timeScore,
-        safetyScore,
-        reliabilityScore,
-        estimatedFare: Math.round(estimatedFare * 100) / 100,
-        estimatedTravelTime: Math.round(estimatedTravelTime),
-        walkingDistance: Math.round(walkingDistance * 100) / 100,
-        nearestStop: closestStop.stop.name,
-        reason,
+        routeFitScore,
+        estimatedFare: configuredFare,
+        estimatedTime,
+        estimatedTravelTime: estimatedTime,
+        walkingDistance: Math.round(totalWalkingDistance * 100) / 100,
+        serviceDistanceKm: Math.round(serviceDistanceKm * 10) / 10,
+        nearestStop: originStop.stop.name,
+        destinationStop: destinationStop.stop.name,
+        routeName: `${originStop.stop.name} → ${destinationStop.stop.name}`,
+        subtitle: "Direct network candidate",
+        reason: this.generateReason(
+          zone,
+          originStop.distance,
+          destinationStop.distance,
+        ),
         badges,
-        color: this.getTransportColor(zone.name),
-        confidence: this.calculateConfidence(zone, walkingDistance),
-        alternativeStops: includeAlternatives ? 
-          this.getAlternativeStops(zone, userLocation, closestStop.stop.id) : 
-          undefined,
-        peakSurcharge
+        color: this.getTransportColor(network),
+        confidence: this.calculateConfidence(
+          zone,
+          originStop.distance,
+          destinationStop.distance,
+        ),
+        dataQuality: zone.dataStatus === "verified" ? "verified" : "configured",
+        direct: true,
+        alternativeStops: includeAlternatives
+          ? this.getAlternativeStops(zone, userLocation, originStop.stop.id)
+          : undefined,
       });
     }
 
-    const sorted = recommendations.sort((a, b) => b.score - a.score);
-    
-    if (userPreferences.preferCheapest) {
-      sorted.sort((a, b) => a.estimatedFare - b.estimatedFare);
-    } else if (userPreferences.preferFastest) {
-      sorted.sort((a, b) => a.estimatedTravelTime - b.estimatedTravelTime);
+    // ======================================================
+    // REA VAYA — EVIDENCE-BASED RUNTIME
+    // ======================================================
+
+    const reaVayaAllowed =
+      !userPreferences.preferredNetworks?.length ||
+      userPreferences.preferredNetworks.includes(
+        "Rea Vaya",
+      );
+
+    if (reaVayaAllowed) {
+      const reaVayaResult =
+        ReaVayaApplicabilityEngine.evaluate(
+          {
+            lat: userLocation.lat,
+            lng: userLocation.lng,
+          },
+          {
+            lat: destinationLocation.lat,
+            lng: destinationLocation.lng,
+          },
+          {
+            // Pulse engineering threshold.
+            // This is not an official operator walking rule.
+            maxAccessKm: 0.8,
+          },
+        );
+
+      const totalWalking =
+        reaVayaResult.totalAccessWalkingKm;
+
+      const walkingWithinPreference =
+        totalWalking !== null &&
+        (
+          userPreferences.maxWalkingDistance ===
+            undefined ||
+          totalWalking <=
+            userPreferences.maxWalkingDistance
+        );
+
+      if (
+        reaVayaResult.status !== "unsupported" &&
+        totalWalking !== null &&
+        walkingWithinPreference
+      ) {
+        const walkingScore =
+          this.calculateWalkingScore(
+            totalWalking,
+          );
+
+        const accessKm =
+          reaVayaResult.accessDistanceKm ??
+          0.8;
+
+        const egressKm =
+          reaVayaResult.egressDistanceKm ??
+          0.8;
+
+        const routeFitScore =
+          Math.round(
+            clamp(
+              100 -
+                (
+                  Math.max(
+                    accessKm,
+                    egressKm,
+                  ) /
+                  0.8
+                ) *
+                  45,
+              45,
+              98,
+            ),
+          );
+
+        // Exact fare and journey time are intentionally unknown.
+        // Neutral values are used only inside the ranking calculation.
+        const costScore = 50;
+        const timeScore = 50;
+
+        const rawScore =
+          routeFitScore * 0.65 +
+          walkingScore * 0.35;
+
+        const selectedRoutes =
+          reaVayaResult.selectedRoutes;
+
+        const transferStops =
+          reaVayaResult.transfers.flatMap(
+            (transfer) =>
+              transfer.sharedStopLabels,
+          );
+
+        const applicableFareRange =
+          isPeak
+            ? reaVayaResult.fare.peakRange
+            : reaVayaResult.fare.offPeakRange;
+
+        recommendations.push({
+          id:
+            `reavaya:${selectedRoutes.join(
+              "-",
+            )}`,
+
+          mode:
+            "Rea Vaya",
+
+          score:
+            Math.round(
+              clamp(
+                rawScore,
+                0,
+                100,
+              ),
+            ),
+
+          rawScore,
+          walkingScore,
+          costScore,
+          timeScore,
+          routeFitScore,
+
+          estimatedFare:
+            0,
+
+          estimatedTime:
+            null,
+
+          estimatedTravelTime:
+            null,
+
+          walkingDistance:
+            Math.round(
+              totalWalking *
+                100,
+            ) / 100,
+
+          routeName:
+            selectedRoutes.join(
+              " → ",
+            ),
+
+          subtitle:
+            reaVayaResult.status ===
+            "direct"
+              ? "Verified spatial route fit"
+              : "Published shared-stop connection",
+
+          reason:
+            reaVayaResult.status ===
+            "direct"
+              ? `Official Rea Vaya route geometry for ${selectedRoutes.join(
+                  ", ",
+                )} is within Pulse's 800 m engineering access threshold at both ends. Exact fare, service direction and transit time remain unverified.`
+              : `Pulse found a Rea Vaya path across ${selectedRoutes.join(
+                  " → ",
+                )} using canonical route geometry and published shared-stop connectivity. Timed transfer compatibility remains unverified.`,
+
+          badges:
+            reaVayaResult.status ===
+            "direct"
+              ? [
+                  "DIRECT",
+                  "VERIFIED_ROUTE_FIT",
+                ]
+              : [
+                  "TRANSFER",
+                  "PUBLISHED_CONNECTION",
+                ],
+
+          color:
+            this.getTransportColor(
+              "Rea Vaya",
+            ),
+
+          confidence:
+            reaVayaResult.status ===
+            "direct"
+              ? 0.9
+              : 0.82,
+
+          dataQuality:
+            "verified",
+
+          direct:
+            reaVayaResult.status ===
+            "direct",
+
+          routeCodes:
+            selectedRoutes,
+
+          transferStops,
+
+          fareStatus:
+            "unverified",
+
+          timeStatus:
+            "unverified",
+
+          publishedFareRange:
+            applicableFareRange
+              ? {
+                  currency:
+                    reaVayaResult.fare
+                      .currency,
+
+                  minimum:
+                    applicableFareRange
+                      .minimum,
+
+                  maximum:
+                    applicableFareRange
+                      .maximum,
+
+                  period:
+                    isPeak
+                      ? "peak"
+                      : "offPeak",
+                }
+              : undefined,
+
+          evidenceStatus:
+            reaVayaResult.evidence ===
+            "same-canonical-route"
+              ? "same-canonical-route"
+              : "published-shared-stop-connectivity",
+
+          // Evidence can be shown, but the user cannot start a tracked
+          // trip until a passenger-specific fare/time is defensible.
+          selectable:
+            false,
+        });
+      }
     }
-    
+
+    const sorted = recommendations.sort((a, b) => {
+      if (userPreferences.preferCheapest) {
+        const aFare =
+          a.estimatedFare ??
+          Number.POSITIVE_INFINITY;
+
+        const bFare =
+          b.estimatedFare ??
+          Number.POSITIVE_INFINITY;
+
+        return aFare - bFare;
+      }
+
+      if (userPreferences.preferFastest) {
+        const aTime =
+          a.estimatedTime ??
+          Number.POSITIVE_INFINITY;
+
+        const bTime =
+          b.estimatedTime ??
+          Number.POSITIVE_INFINITY;
+
+        return aTime - bTime;
+      }
+
+      return b.score - a.score;
+    });
+
     return sorted.slice(0, maxRecommendations);
   }
 
   static getBestRecommendation(
     userLocation: Location,
-    options: RecommendationOptions = {}
+    options: RecommendationOptions = {},
   ): TransportRecommendation | null {
-    const recommendations = this.getRecommendations(userLocation, options);
-    return recommendations[0] || null;
+    return this.getRecommendations(userLocation, options)[0] ?? null;
   }
 
   static compareOptions(
     option1: TransportRecommendation,
-    option2: TransportRecommendation
+    option2: TransportRecommendation,
   ): {
     winner: TransportRecommendation;
     differences: string[];
   } {
     const differences: string[] = [];
-    
-    if (option1.estimatedFare < option2.estimatedFare) {
-      differences.push(`${option1.mode} is R${(option2.estimatedFare - option1.estimatedFare).toFixed(2)} cheaper`);
-    } else if (option2.estimatedFare < option1.estimatedFare) {
-      differences.push(`${option2.mode} is R${(option1.estimatedFare - option2.estimatedFare).toFixed(2)} cheaper`);
+
+    if (
+      option1.estimatedFare !== null &&
+      option2.estimatedFare !== null &&
+      option1.estimatedFare !==
+        option2.estimatedFare
+    ) {
+      const cheaper =
+        option1.estimatedFare <
+        option2.estimatedFare
+          ? option1
+          : option2;
+
+      const dearer =
+        cheaper === option1
+          ? option2
+          : option1;
+
+      differences.push(
+        `${this.displayMode(
+          cheaper.mode,
+        )} is about R${Math.abs(
+          dearer.estimatedFare! -
+            cheaper.estimatedFare!,
+        ).toFixed(0)} cheaper`,
+      );
     }
-    
-    if (option1.estimatedTravelTime < option2.estimatedTravelTime) {
-      differences.push(`${option1.mode} is ${option2.estimatedTravelTime - option1.estimatedTravelTime} min faster`);
-    } else if (option2.estimatedTravelTime < option1.estimatedTravelTime) {
-      differences.push(`${option2.mode} is ${option1.estimatedTravelTime - option2.estimatedTravelTime} min faster`);
+
+    if (
+      option1.estimatedTime !== null &&
+      option2.estimatedTime !== null &&
+      option1.estimatedTime !==
+        option2.estimatedTime
+    ) {
+      const faster =
+        option1.estimatedTime <
+        option2.estimatedTime
+          ? option1
+          : option2;
+
+      const slower =
+        faster === option1
+          ? option2
+          : option1;
+
+      differences.push(
+        `${this.displayMode(
+          faster.mode,
+        )} is about ${Math.abs(
+          slower.estimatedTime! -
+            faster.estimatedTime!,
+        )} min quicker`,
+      );
     }
-    
-    if (option1.walkingDistance < option2.walkingDistance) {
-      differences.push(`${option1.mode} has ${(option2.walkingDistance - option1.walkingDistance).toFixed(2)} km less walking`);
+
+    if (option1.walkingDistance !== option2.walkingDistance) {
+      const lessWalking =
+        option1.walkingDistance < option2.walkingDistance ? option1 : option2;
+      const moreWalking = lessWalking === option1 ? option2 : option1;
+      differences.push(
+        `${this.displayMode(lessWalking.mode)} has ${Math.abs(
+          moreWalking.walkingDistance - lessWalking.walkingDistance,
+        ).toFixed(1)} km less access walking`,
+      );
     }
-    
+
     return {
       winner: option1.score >= option2.score ? option1 : option2,
-      differences
+      differences,
     };
   }
 
-  // ======================================================
-  // SCORING METHODS
-  // ======================================================
-
-  private static calculateWalkingScore(
-    walkingDistance: number, 
-    preferFastest?: boolean
-  ): number {
-    let score = 100;
-    
-    if (walkingDistance < 0.2) score = 100;
-    else if (walkingDistance < 0.5) score = 85;
-    else if (walkingDistance < 1) score = 70;
-    else if (walkingDistance < 1.5) score = 50;
-    else if (walkingDistance < 2) score = 30;
-    else score = 15;
-    
-    if (preferFastest && walkingDistance > 0.5) {
-      score *= 0.7;
-    }
-    
-    return Math.min(100, score);
-  }
-
-  private static calculateCostScore(
-    fare: number,
-    _mode: string,
-    preferCheapest?: boolean
-  ): number {
-    let score = 100;
-    
-    if (fare <= 15) score = 100;
-    else if (fare <= 25) score = 85;
-    else if (fare <= 40) score = 70;
-    else if (fare <= 60) score = 50;
-    else if (fare <= 80) score = 35;
-    else if (fare <= 100) score = 20;
-    else score = 10;
-    
-    if (preferCheapest) {
-      score = Math.min(100, score * 1.2);
-    }
-    
-    return score;
-  }
-
-  private static calculateTimeScore(
-    travelTime: number,
-    preferFastest?: boolean
-  ): number {
-    let score = 100;
-    
-    if (travelTime <= 15) score = 100;
-    else if (travelTime <= 25) score = 85;
-    else if (travelTime <= 40) score = 65;
-    else if (travelTime <= 60) score = 45;
-    else if (travelTime <= 90) score = 30;
-    else score = 15;
-    
-    if (preferFastest) {
-      score = Math.min(100, score * 1.2);
-    }
-    
-    return score;
-  }
-
-  private static calculateSafetyScore(
-    zone: TransportNetworkZone,
-    isNight: boolean,
-    preferSafest?: boolean
-  ): number {
-    let score = 70;
-    
-    if (zone.strengths.safest) score += 20;
-    if (zone.name === "Gautrain") score += 15;
-    if (zone.name === "Rea Vaya") score += 10;
-    
-    if (isNight && zone.name === "Taxi") {
-      score -= 15;
-    }
-    
-    if (preferSafest) {
-      score = Math.min(100, score * 1.15);
-    }
-    
-    return Math.min(100, Math.max(0, score));
-  }
-
-  private static calculateReliabilityScore(
-    zone: TransportNetworkZone,
-    isPeak: boolean
-  ): number {
-    let score = 70;
-    
-    if (zone.strengths.reliable) score += 20;
-    if (zone.name === "Gautrain") score += 15;
-    if (zone.name === "Rea Vaya") score += 10;
-    
-    if (isPeak && zone.name === "Metrorail") {
-      score -= 15;
-    }
-    
-    return Math.min(100, Math.max(0, score));
-  }
-
-  private static calculateConfidence(
-    zone: TransportNetworkZone,
-    walkingDistance: number
-  ): number {
-    let confidence = 0.7;
-    
-    if (walkingDistance < 0.3) confidence += 0.1;
-    if (zone.strengths.reliable) confidence += 0.1;
-    if (zone.name === "Gautrain") confidence += 0.05;
-    
-    return Math.min(0.95, confidence);
-  }
-
-  // ======================================================
-  // UTILITY METHODS
-  // ======================================================
-
   private static findClosestStop(
-    userLocation: Location,
-    zone: TransportNetworkZone
-  ): { stop: typeof zone.stops[0]; distance: number } {
+    location: Location,
+    zone: TransportNetworkZone,
+  ): { stop: TransportStop; distance: number } {
     let closest = zone.stops[0];
-    let closestDistance = Infinity;
+    let closestDistance = Number.POSITIVE_INFINITY;
 
     for (const stop of zone.stops) {
       const distance = this.calculateDistance(
-        userLocation.lat, userLocation.lng,
-        stop.location.lat, stop.location.lng
+        location.lat,
+        location.lng,
+        stop.location.lat,
+        stop.location.lng,
       );
+
       if (distance < closestDistance) {
-        closestDistance = distance;
         closest = stop;
+        closestDistance = distance;
       }
     }
 
@@ -393,119 +637,193 @@ export class RecommendationEngine {
 
   private static getAlternativeStops(
     zone: TransportNetworkZone,
-    _userLocation: Location,
-    currentStopId: string
+    userLocation: Location,
+    currentStopId: string,
   ): string[] {
     return zone.stops
-      .filter(stop => stop.id !== currentStopId)
-      .map(stop => stop.name)
-      .slice(0, 3);
+      .filter((stop) => stop.id !== currentStopId)
+      .map((stop) => ({
+        name: stop.name,
+        distance: this.calculateDistance(
+          userLocation.lat,
+          userLocation.lng,
+          stop.location.lat,
+          stop.location.lng,
+        ),
+      }))
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, 3)
+      .map((item) => item.name);
   }
 
-  private static estimateFare(mode: string, walkingDistance: number): number {
-    const baseFare: Record<string, number> = {
-      "Rea Vaya": 18,
-      "A Re Yeng": 16,
-      "Gautrain": 65,
-      "Metrorail": 12,
-      "Minibus Taxi": 20,
-      "Taxi": 20,
-      "Tshwane Bus Service": 14
-    };
-    
-    let fare = baseFare[mode] || 25;
-    
-    if (walkingDistance < 0.2) {
-      fare *= 0.95;
+  private static estimateTravelTimeMinutes(args: {
+    network: TransitNetwork;
+    zone: TransportNetworkZone;
+    serviceDistanceKm: number;
+    walkingDistanceKm: number;
+    routeDistanceKm: number | null;
+    roadDurationSeconds: number | null;
+    isPeak: boolean;
+  }): number {
+    const {
+      network,
+      zone,
+      serviceDistanceKm,
+      walkingDistanceKm,
+      routeDistanceKm,
+      roadDurationSeconds,
+      isPeak,
+    } = args;
+
+    const walkingMinutes = (walkingDistanceKm / WALKING_SPEED_KMH) * 60;
+
+    const frequency = zone.averageFrequency
+      ? isPeak
+        ? zone.averageFrequency.peak
+        : zone.averageFrequency.offPeak
+      : 16;
+
+    const expectedWaitMinutes = clamp(frequency / 2, 2, 20);
+
+    let inVehicleMinutes: number;
+
+    if (
+      roadDurationSeconds !== null &&
+      routeDistanceKm !== null &&
+      routeDistanceKm > 0 &&
+      roadDurationSeconds > 0
+    ) {
+      const roadMinutesPerKm = roadDurationSeconds / 60 / routeDistanceKm;
+      inVehicleMinutes =
+        serviceDistanceKm *
+        roadMinutesPerKm *
+        ROAD_BASELINE_MULTIPLIER[network];
+    } else {
+      inVehicleMinutes =
+        (serviceDistanceKm / FALLBACK_NETWORK_SPEED_KMH[network]) * 60;
     }
-    
-    return fare;
+
+    return Math.max(
+      1,
+      Math.round(walkingMinutes + expectedWaitMinutes + inVehicleMinutes),
+    );
   }
 
-  private static estimateTravelTime(mode: string, walkingDistance: number): number {
-    const walkingMinutes = Math.round((walkingDistance / WALKING_SPEED_KMH) * 60);
-    const baseTime: Record<string, number> = {
-      "Gautrain": 20,
-      "Rea Vaya": 35,
-      "A Re Yeng": 30,
-      "Metrorail": 40,
-      "Minibus Taxi": 25,
-      "Taxi": 25,
-      "Tshwane Bus Service": 35
-    };
-    
-    return (baseTime[mode] || 30) + walkingMinutes;
+  private static calculateRouteFitScore(
+    accessKm: number,
+    egressKm: number,
+    zone: TransportNetworkZone,
+  ): number {
+    const accessRatio = accessKm / Math.max(zone.maxDirectAccessKm, 0.1);
+    const egressRatio = egressKm / Math.max(zone.maxDirectEgressKm, 0.1);
+    const worstRatio = Math.max(accessRatio, egressRatio);
+    return clamp(100 - worstRatio * 55, 35, 100);
+  }
+
+  private static calculateWalkingScore(walkingDistanceKm: number): number {
+    if (walkingDistanceKm <= 0.4) return 100;
+    if (walkingDistanceKm <= 0.8) return 90;
+    if (walkingDistanceKm <= 1.5) return 75;
+    if (walkingDistanceKm <= 2.5) return 55;
+    if (walkingDistanceKm <= 4) return 35;
+    return 20;
+  }
+
+  private static calculateCostScore(fare: number): number {
+    if (fare <= 15) return 100;
+    if (fare <= 25) return 90;
+    if (fare <= 45) return 75;
+    if (fare <= 70) return 60;
+    if (fare <= 120) return 45;
+    return 30;
+  }
+
+  private static calculateTimeScore(minutes: number): number {
+    if (minutes <= 20) return 100;
+    if (minutes <= 35) return 85;
+    if (minutes <= 50) return 70;
+    if (minutes <= 75) return 55;
+    if (minutes <= 105) return 40;
+    return 25;
+  }
+
+  private static calculateConfidence(
+    zone: TransportNetworkZone,
+    accessKm: number,
+    egressKm: number,
+  ): number {
+    const base = zone.dataStatus === "verified" ? 0.86 : 0.52;
+    const accessBonus =
+      accessKm <= 0.5 && egressKm <= 0.5
+        ? 0.1
+        : accessKm <= 1 && egressKm <= 1
+          ? 0.05
+          : 0;
+
+    return Math.round(clamp(base + accessBonus, 0.4, 0.95) * 100) / 100;
   }
 
   private static generateBadges(
     zone: TransportNetworkZone,
-    walkingDistance: number,
-    isPeak: boolean,
-    isNight: boolean
+    walkingDistanceKm: number,
+    fare: number,
+    estimatedTime: number,
   ): string[] {
-    const badges: string[] = [];
+    const badges = ["DIRECT"];
 
-    if (walkingDistance < 0.3) badges.push("🚶 Close");
-    if (zone.strengths.fastest) badges.push("⚡ Fast");
-    if (zone.strengths.cheapest) badges.push("💰 Affordable");
-    if (zone.strengths.reliable) badges.push("✅ Reliable");
-    if (zone.strengths.safest) badges.push("🛡️ Safe");
-    if (zone.name === "Gautrain") badges.push("🚆 Premium");
-    
-    if (isPeak && zone.name === "Gautrain") badges.push("📈 Peak");
-    if (isNight && zone.name === "Taxi") badges.push("🌙 Night");
-    
+    if (walkingDistanceKm <= 1) badges.push("LOW_WALK");
+    if (fare <= 25) badges.push("LOW_FARE");
+    if (estimatedTime <= 35) badges.push("QUICK_ESTIMATE");
+    if (zone.dataStatus === "seed") badges.push("CONFIGURED_DATA");
+
     return badges.slice(0, 4);
   }
 
   private static generateReason(
-    mode: string,
-    walkingDistance: number,
-    habitPrediction?: { network: TransitNetwork | null; confidence: number }
+    zone: TransportNetworkZone,
+    accessKm: number,
+    egressKm: number,
   ): string {
-    if (walkingDistance < 0.2) {
-      return `${mode} stop is steps away`;
-    }
-    
-    if (habitPrediction?.network === mode && habitPrediction.confidence > 0.7) {
-      return `Matches your usual ${mode} routine`;
-    }
-    
-    const reasons: Record<string, string> = {
-      "Gautrain": "Fastest option for longer trips",
-      "Minibus Taxi": "Flexible with many pickup points",
-      "Rea Vaya": "Dedicated BRT lanes avoid traffic",
-      "Metrorail": "Most affordable option",
-      "Taxi": "Convenient door-to-door service"
-    };
-    
-    return reasons[mode] || `${mode} available nearby`;
+    const accessText =
+      accessKm < 0.1 ? "under 100 m" : `${accessKm.toFixed(1)} km`;
+    const egressText =
+      egressKm < 0.1 ? "under 100 m" : `${egressKm.toFixed(1)} km`;
+
+    return `Configured ${zone.name} stops are ${accessText} from your origin and ${egressText} from your destination. Pulse is treating this as a direct candidate, not a live operator-confirmed route.`;
   }
 
-  private static getTransportColor(mode: string): string {
-    const colors: Record<string, string> = {
-      "Gautrain": "from-yellow-500 to-orange-500",
+  private static getTransportColor(network: TransitNetwork): string {
+    const colors: Record<TransitNetwork, string> = {
+      Taxi: "from-amber-600 to-orange-600",
+      Gautrain: "from-yellow-500 to-orange-500",
       "Rea Vaya": "from-blue-500 to-cyan-500",
       "A Re Yeng": "from-purple-500 to-pink-500",
-      "Metrorail": "from-green-500 to-emerald-500",
-      "Minibus Taxi": "from-amber-600 to-orange-600",
-      "Taxi": "from-amber-600 to-orange-600",
-      "Tshwane Bus Service": "from-teal-500 to-emerald-500"
+      "Tshwane Bus Service": "from-teal-500 to-emerald-500",
+      Metrorail: "from-green-500 to-emerald-500",
     };
-    
-    return colors[mode] || "from-slate-500 to-slate-700";
+
+    return colors[network];
+  }
+
+  private static displayMode(mode: TransitNetwork): string {
+    return mode === "Taxi" ? "Minibus Taxi" : mode;
   }
 
   private static calculateDistance(
-    lat1: number, lon1: number,
-    lat2: number, lon2: number
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number,
   ): number {
     const R = 6371;
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLon = ((lon2 - lon1) * Math.PI) / 180;
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) *
-              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   }

@@ -1,6 +1,6 @@
 // src/types.ts
 // Pulse Transit - Enterprise Type Definitions
-// Version: 3.0.0 | Production Ready
+// Version: 3.1.0 | Shared application types
 
 // ======================================================
 // 🧠 CORE ENUM-LIKE CONSTANTS
@@ -289,36 +289,80 @@ export type RecommendationBadge =
 // 🚇 TRANSPORT RECOMMENDATION
 // ======================================================
 export interface TransportRecommendation {
-  routeName: ReactNode;
-  subtitle: import("react/jsx-runtime").JSX.Element;
-  estimatedTime: ReactNode;
-  reliabilityScore: number;
-  affordabilityScore: number;
-  speedScore: number;
   id: string;
-  mode: string;
+  mode: TransitNetwork;
 
+    /**
+   * Indicates how defensible the fare information is.
+   */
+  fareStatus?:
+    | "verified"
+    | "configured"
+    | "learned"
+    | "estimated"
+    | "unverified";
+
+  /**
+   * Whether Pulse currently allows this recommendation
+   * to be selected for an actual tracked trip.
+   */
+  selectable?: boolean;
+
+  /** Internal ranking score. It is not a safety or reliability percentage. */
   score: number;
 
-  estimatedFare: number;
-  estimatedTravelTime: number;
+  /** Estimated fare in ZAR from configured or learned fare data. */
+  estimatedFare: number | null;
 
+  /** Estimated end-to-end journey time in minutes. */
+  estimatedTime: number | null;
+
+  /** Legacy-compatible alias for estimatedTime. */
+  estimatedTravelTime: number | null;
+
+  /** Total access + egress walking distance in kilometres. */
   walkingDistance: number;
 
+  /** Approximate distance travelled on the recommended network in kilometres. */
+  serviceDistanceKm?: number;
+
   nearestStop?: string;
+  destinationStop?: string;
+  routeName?: string;
+  subtitle?: string;
 
   reason: string;
-
   badges: string[];
-
   color: string;
 
+  /** Confidence in route fit based on the configured network dataset. */
   confidence: number;
+  dataQuality?: "verified" | "configured" | "limited" | "learned";
+  direct?: boolean;
 
   alternativeStops?: string[];
-
   peakSurcharge?: number;
-}
+
+  /* Legacy optional fields retained so older components keep compiling. */
+  reliabilityScore?: number;
+  affordabilityScore?: number;
+  speedScore?: number;
+
+  routeCodes?: string[];
+  transferStops?: string[];
+  publishedFareRange?: {
+    currency: string;
+    minimum: number;
+    maximum: number;
+    period: "peak" | "offPeak";
+  };
+  timeStatus?: "verified" | "estimated" | "unverified";
+    evidenceStatus?:
+    | "same-canonical-route"
+    | "published-shared-stop-connectivity"
+    | "insufficient-evidence"
+    | "configured";
+};
 
 // ======================================================
 // 📍 DESTINATION SUGGESTION
@@ -472,7 +516,7 @@ export interface FareEstimateResult {
   fare: number;
   originalFare?: number;
   confidence: number;
-  source: "distance" | "learned" | "cached";
+  source: "configured" | "learned" | "cached";
   breakdown?: {
     baseFare: number;
     distanceCharge: number;

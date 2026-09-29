@@ -1,0 +1,438 @@
+{
+  "schemaVersion": 1,
+  "operatorId": "gautrain",
+  "sourceAuthority": "Gautrain",
+  "stationCount": 10,
+  "stations": [
+    {
+      "id": "gautrain-station-park",
+      "operatorId": "gautrain",
+      "name": "Park",
+      "type": "rail-station",
+      "modes": [
+        "rail"
+      ],
+      "location": {
+        "lat": -26.1955333,
+        "lng": 28.04155
+      },
+      "coordinateSource": {
+        "authority": "Gautrain",
+        "sourceType": "official-station-page",
+        "sourceFile": "station-park.html",
+        "sourceUrl": "https://www.gautrain.co.za/commuter/stationinfo?stationName=Park",
+        "rawGps": "GPS S:26°11.732', E:28°02.493'",
+        "sourceFormat": {
+          "latitude": {
+            "hemisphere": "S",
+            "degrees": 26,
+            "minutes": 11.732
+          },
+          "longitude": {
+            "hemisphere": "E",
+            "degrees": 28,
+            "minutes": 2.493
+          }
+        },
+        "conversionMethod": "degrees-decimal-minutes-to-decimal-degrees",
+        "confidence": "official"
+      },
+      "sourceValidation": {
+        "expectedStationName": "Park",
+        "h1Headings": [
+          "Park",
+          "Access",
+          "Parking"
+        ],
+        "expectedHeadingFound": true
+      }
+    },
+    {
+      "id": "gautrain-station-rosebank",
+      "operatorId": "gautrain",
+      "name": "Rosebank",
+      "type": "rail-station",
+      "modes": [
+        "rail"
+      ],
+      "location": {
+        "lat": -26.14525,
+        "lng": 28.0438667
+      },
+      "coordinateSource": {
+        "authority": "Gautrain",
+        "sourceType": "official-station-page",
+        "sourceFile": "station-rosebank.html",
+        "sourceUrl": "https://www.gautrain.co.za/commuter/stationinfo?stationName=Rosebank",
+        "rawGps": "GPS S:26°08.715', E:28°02.632'",
+        "sourceFormat": {
+          "latitude": {
+            "hemisphere": "S",
+            "degrees": 26,
+            "minutes": 8.715
+          },
+          "longitude": {
+            "hemisphere": "E",
+            "degrees": 28,
+            "minutes": 2.632
+          }
+        },
+        "conversionMethod": "degrees-decimal-minutes-to-decimal-degrees",
+        "confidence": "official"
+      },
+      "sourceValidation": {
+        "expectedStationName": "Rosebank",
+        "h1Headings": [
+          "Rosebank",
+          "Access",
+          "Parking"
+        ],
+        "expectedHeadingFound": true
+      }
+    },
+    {
+      "id": "gautrain-station-sandton",
+      "operatorId": "gautrain",
+      "name": "Sandton",
+      "type": "rail-station",
+      "modes": [
+        "rail"
+      ],
+      "location": {
+        "lat": -26.1078,
+        "lng": 28.0575
+      },
+      "coordinateSource": {
+        "authority": "Gautrain",
+        "sourceType": "official-station-page",
+        "sourceFile": "station-sandton.html",
+        "sourceUrl": "https://www.gautrain.co.za/commuter/stationinfo?stationName=Sandton",
+        "rawGps": "GPS S:26°06.468', E:28°03.450'",
+        "sourceFormat": {
+          "latitude": {
+            "hemisphere": "S",
+            "degrees": 26,
+            "minutes": 6.468
+          },
+          "longitude": {
+            "hemisphere": "E",
+            "degrees": 28,
+            "minutes": 3.45
+          }
+        },
+        "conversionMethod": "degrees-decimal-minutes-to-decimal-degrees",
+        "confidence": "official"
+      },
+      "sourceValidation": {
+        "expectedStationName": "Sandton",
+        "h1Headings": [
+          "Sandton",
+          "Access",
+          "Parking"
+        ],
+        "expectedHeadingFound": true
+      }
+    },
+    {
+      "id": "gautrain-station-marlboro",
+      "operatorId": "gautrain",
+      "name": "Marlboro",
+      "type": "rail-station",
+      "modes": [
+        "rail"
+      ],
+      "location": {
+        "lat": -26.0839167,
+        "lng": 28.1116333
+      },
+      "coordinateSource": {
+        "authority": "Gautrain",
+        "sourceType": "official-station-page",
+        "sourceFile": "station-marlboro.html",
+        "sourceUrl": "https://www.gautrain.co.za/commuter/stationinfo?stationName=Marlboro",
+        "rawGps": "GPS S:26°05.035', E:28°06.698'",
+        "sourceFormat": {
+          "latitude": {
+            "hemisphere": "S",
+            "degrees": 26,
+            "minutes": 5.035
+          },
+          "longitude": {
+            "hemisphere": "E",
+            "degrees": 28,
+            "minutes": 6.698
+          }
+        },
+        "conversionMethod": "degrees-decimal-minutes-to-decimal-degrees",
+        "confidence": "official"
+      },
+      "sourceValidation": {
+        "expectedStationName": "Marlboro",
+        "h1Headings": [
+          "Marlboro",
+          "Access",
+          "Parking"
+        ],
+        "expectedHeadingFound": true
+      }
+    },
+    {
+      "id": "gautrain-station-midrand",
+      "operatorId": "gautrain",
+      "name": "Midrand",
+      "type": "rail-station",
+      "modes": [
+        "rail"
+      ],
+      "location": {
+        "lat": -25.9964833,
+        "lng": 28.1375833
+      },
+      "coordinateSource": {
+        "authority": "Gautrain",
+        "sourceType": "official-station-page",
+        "sourceFile": "station-midrand.html",
+        "sourceUrl": "https://www.gautrain.co.za/commuter/stationinfo?stationName=Midrand",
+        "rawGps": "GPS S:25°59.789', E:28°08.255'",
+        "sourceFormat": {
+          "latitude": {
+            "hemisphere": "S",
+            "degrees": 25,
+            "minutes": 59.789
+          },
+          "longitude": {
+            "hemisphere": "E",
+            "degrees": 28,
+            "minutes": 8.255
+          }
+        },
+        "conversionMethod": "degrees-decimal-minutes-to-decimal-degrees",
+        "confidence": "official"
+      },
+      "sourceValidation": {
+        "expectedStationName": "Midrand",
+        "h1Headings": [
+          "Midrand",
+          "Access",
+          "Parking"
+        ],
+        "expectedHeadingFound": true
+      }
+    },
+    {
+      "id": "gautrain-station-centurion",
+      "operatorId": "gautrain",
+      "name": "Centurion",
+      "type": "rail-station",
+      "modes": [
+        "rail"
+      ],
+      "location": {
+        "lat": -25.8516167,
+        "lng": 28.1897333
+      },
+      "coordinateSource": {
+        "authority": "Gautrain",
+        "sourceType": "official-station-page",
+        "sourceFile": "station-centurion.html",
+        "sourceUrl": "https://www.gautrain.co.za/commuter/stationinfo?stationName=Centurion",
+        "rawGps": "GPS S:25°51,097', E:28°11,384'",
+        "sourceFormat": {
+          "latitude": {
+            "hemisphere": "S",
+            "degrees": 25,
+            "minutes": 51.097
+          },
+          "longitude": {
+            "hemisphere": "E",
+            "degrees": 28,
+            "minutes": 11.384
+          }
+        },
+        "conversionMethod": "degrees-decimal-minutes-to-decimal-degrees",
+        "confidence": "official"
+      },
+      "sourceValidation": {
+        "expectedStationName": "Centurion",
+        "h1Headings": [
+          "Centurion",
+          "Access",
+          "Parking"
+        ],
+        "expectedHeadingFound": true
+      }
+    },
+    {
+      "id": "gautrain-station-pretoria",
+      "operatorId": "gautrain",
+      "name": "Pretoria",
+      "type": "rail-station",
+      "modes": [
+        "rail"
+      ],
+      "location": {
+        "lat": -25.7581667,
+        "lng": 28.1894667
+      },
+      "coordinateSource": {
+        "authority": "Gautrain",
+        "sourceType": "official-station-page",
+        "sourceFile": "station-pretoria.html",
+        "sourceUrl": "https://www.gautrain.co.za/commuter/stationinfo?stationName=Pretoria",
+        "rawGps": "GPS S:25°45.490', E:28°11.368'",
+        "sourceFormat": {
+          "latitude": {
+            "hemisphere": "S",
+            "degrees": 25,
+            "minutes": 45.49
+          },
+          "longitude": {
+            "hemisphere": "E",
+            "degrees": 28,
+            "minutes": 11.368
+          }
+        },
+        "conversionMethod": "degrees-decimal-minutes-to-decimal-degrees",
+        "confidence": "official"
+      },
+      "sourceValidation": {
+        "expectedStationName": "Pretoria",
+        "h1Headings": [
+          "Pretoria",
+          "Access",
+          "Parking"
+        ],
+        "expectedHeadingFound": true
+      }
+    },
+    {
+      "id": "gautrain-station-hatfield",
+      "operatorId": "gautrain",
+      "name": "Hatfield",
+      "type": "rail-station",
+      "modes": [
+        "rail"
+      ],
+      "location": {
+        "lat": -25.74765,
+        "lng": 28.238
+      },
+      "coordinateSource": {
+        "authority": "Gautrain",
+        "sourceType": "official-station-page",
+        "sourceFile": "station-hatfield.html",
+        "sourceUrl": "https://www.gautrain.co.za/commuter/stationinfo?stationName=Hatfield",
+        "rawGps": "GPS S:25°44.859', E:28°14.280'",
+        "sourceFormat": {
+          "latitude": {
+            "hemisphere": "S",
+            "degrees": 25,
+            "minutes": 44.859
+          },
+          "longitude": {
+            "hemisphere": "E",
+            "degrees": 28,
+            "minutes": 14.28
+          }
+        },
+        "conversionMethod": "degrees-decimal-minutes-to-decimal-degrees",
+        "confidence": "official"
+      },
+      "sourceValidation": {
+        "expectedStationName": "Hatfield",
+        "h1Headings": [
+          "Hatfield",
+          "Access",
+          "Parking"
+        ],
+        "expectedHeadingFound": true
+      }
+    },
+    {
+      "id": "gautrain-station-rhodesfield",
+      "operatorId": "gautrain",
+      "name": "Rhodesfield",
+      "type": "rail-station",
+      "modes": [
+        "rail"
+      ],
+      "location": {
+        "lat": -26.1283333,
+        "lng": 28.2252333
+      },
+      "coordinateSource": {
+        "authority": "Gautrain",
+        "sourceType": "official-station-page",
+        "sourceFile": "station-rhodesfield.html",
+        "sourceUrl": "https://www.gautrain.co.za/commuter/stationinfo?stationName=Rhodesfield",
+        "rawGps": "GPS S:26°07.700', E:28°13.514'",
+        "sourceFormat": {
+          "latitude": {
+            "hemisphere": "S",
+            "degrees": 26,
+            "minutes": 7.7
+          },
+          "longitude": {
+            "hemisphere": "E",
+            "degrees": 28,
+            "minutes": 13.514
+          }
+        },
+        "conversionMethod": "degrees-decimal-minutes-to-decimal-degrees",
+        "confidence": "official"
+      },
+      "sourceValidation": {
+        "expectedStationName": "Rhodesfield",
+        "h1Headings": [
+          "Rhodesfield",
+          "Access",
+          "Parking"
+        ],
+        "expectedHeadingFound": true
+      }
+    },
+    {
+      "id": "gautrain-station-or-tambo",
+      "operatorId": "gautrain",
+      "name": "OR Tambo",
+      "type": "rail-station",
+      "modes": [
+        "rail"
+      ],
+      "location": {
+        "lat": -26.1329333,
+        "lng": 28.2315667
+      },
+      "coordinateSource": {
+        "authority": "Gautrain",
+        "sourceType": "official-station-page",
+        "sourceFile": "station-or-tambo.html",
+        "sourceUrl": "https://www.gautrain.co.za/commuter/stationinfo?stationName=OR%20Tambo",
+        "rawGps": "GPS S:26°07.976', E:28°13.894'",
+        "sourceFormat": {
+          "latitude": {
+            "hemisphere": "S",
+            "degrees": 26,
+            "minutes": 7.976
+          },
+          "longitude": {
+            "hemisphere": "E",
+            "degrees": 28,
+            "minutes": 13.894
+          }
+        },
+        "conversionMethod": "degrees-decimal-minutes-to-decimal-degrees",
+        "confidence": "official"
+      },
+      "sourceValidation": {
+        "expectedStationName": "OR Tambo",
+        "h1Headings": [
+          "OR Tambo",
+          "Access",
+          "Parking"
+        ],
+        "expectedHeadingFound": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "generatedAt": "2026-09-17T18:56:32.474Z",
+  "operatorId": "reavaya",
+  "effectiveFrom": "2026-07-01",
+  "effectiveTo": "2027-06-30",
+  "sourceFile": "raw/fares.html",
+  "sourceBytes": 147619,
+  "fareBandCount": 7,
+  "peakFareRange": {
+    "minimum": 11.5,
+    "maximum": 28.5
+  },
+  "offPeakFareRange": {
+    "minimum": 10,
+    "maximum": 26.5
+  },
+  "distanceBandsContiguous": true,
+  "offPeakNeverExceedsPeak": true,
+  "boundaryTestsPassed": true,
+  "sourceChecks": [
+    {
+      "label": "2026/27 fare period",
+      "value": "1 July 2026"
+    },
+    {
+      "label": "minimum peak fare",
+      "value": "R11.50"
+    },
+    {
+      "label": "maximum peak fare",
+      "value": "R28.50"
+    },
+    {
+      "label": "ABT card price",
+      "value": "R30"
+    },
+    {
+      "label": "off-peak section",
+      "value": "OFF PEAK"
+    }
+  ],
+  "warningCount": 0,
+  "warnings": [],
+  "errorCount": 0,
+  "errors": [],
+  "qaPassed": true,
+  "notes": [
+    "Current fares are effective 1 July 2026 through 30 June 2027.",
+    "Seven official distance-based peak and off-peak fare values are stored.",
+    "The official source labels are retained even where wording differs between the main fare table and off-peak table.",
+    "A deterministic contiguous threshold representation is included for future application logic, but is explicitly marked as normalized rather than a claim about the internal Rea Vaya fare engine.",
+    "No route distance, stop sequence, timetable, GPS geometry or ETA is inferred."
+  ]
+}

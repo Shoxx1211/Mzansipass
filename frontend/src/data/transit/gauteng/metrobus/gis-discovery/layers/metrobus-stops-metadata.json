@@ -1,0 +1,224 @@
+﻿{
+    "currentVersion":  10.91,
+    "id":  52,
+    "name":  "Metrobus_Stops",
+    "type":  "Feature Layer",
+    "description":  "",
+    "geometryType":  "esriGeometryPoint",
+    "sourceSpatialReference":  {
+                                   "wkt":  "PROJCS[\"Wgs84 Lo29\",GEOGCS[\"GCS_Hartebeesthoek_1994\",DATUM[\"D_Hartebeesthoek_1994\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",29.0],PARAMETER[\"Scale_Factor\",1.0],PARAMETER[\"Latitude_Of_Origin\",0.0],UNIT[\"Meter\",1.0]]"
+                               },
+    "copyrightText":  "",
+    "parentLayer":  {
+                        "id":  36,
+                        "name":  "Bus Services"
+                    },
+    "subLayers":  [
+
+                  ],
+    "minScale":  150000,
+    "maxScale":  0,
+    "drawingInfo":  {
+                        "renderer":  {
+                                         "type":  "simple",
+                                         "symbol":  {
+                                                        "type":  "esriSMS",
+                                                        "style":  "esriSMSCircle",
+                                                        "color":  [
+                                                                      95,
+                                                                      135,
+                                                                      0,
+                                                                      255
+                                                                  ],
+                                                        "size":  4,
+                                                        "angle":  0,
+                                                        "xoffset":  0,
+                                                        "yoffset":  0,
+                                                        "outline":  {
+                                                                        "color":  [
+                                                                                      0,
+                                                                                      0,
+                                                                                      0,
+                                                                                      255
+                                                                                  ],
+                                                                        "width":  1
+                                                                    }
+                                                    },
+                                         "label":  "",
+                                         "description":  ""
+                                     },
+                        "transparency":  0,
+                        "labelingInfo":  null
+                    },
+    "defaultVisibility":  false,
+    "extent":  {
+                   "xmin":  -118266.72090091744,
+                   "ymin":  -2914024.898601731,
+                   "xmax":  -86765.64950393308,
+                   "ymax":  -2871636.433205524,
+                   "spatialReference":  {
+                                            "wkt":  "PROJCS[\"TM_29_Hartebeesthoek\",GEOGCS[\"GCS_Hartebeesthoek_1994\",DATUM[\"D_Hartebeesthoek_1994\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",29.0],PARAMETER[\"Scale_Factor\",1.0],PARAMETER[\"Latitude_Of_Origin\",0.0],UNIT[\"Meter\",1.0]],VERTCS[\"EGM96_Geoid\",VDATUM[\"EGM96_Geoid\"],PARAMETER[\"Vertical_Shift\",0.0],PARAMETER[\"Direction\",1.0],UNIT[\"Meter\",1.0]]"
+                                        }
+               },
+    "hasAttachments":  false,
+    "htmlPopupType":  "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField":  "PHOTONAME",
+    "typeIdField":  null,
+    "subtypeFieldName":  null,
+    "subtypeField":  null,
+    "defaultSubtypeCode":  null,
+    "fields":  [
+                   {
+                       "name":  "OBJECTID",
+                       "type":  "esriFieldTypeOID",
+                       "alias":  "OBJECTID",
+                       "domain":  null
+                   },
+                   {
+                       "name":  "EXIF_GPSAL",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "EXIF_GPSAL",
+                       "domain":  null
+                   },
+                   {
+                       "name":  "EXIF_GPS_1",
+                       "type":  "esriFieldTypeSmallInteger",
+                       "alias":  "EXIF_GPS_1",
+                       "domain":  null
+                   },
+                   {
+                       "name":  "EXIF_GPSIM",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "EXIF_GPSIM",
+                       "domain":  null
+                   },
+                   {
+                       "name":  "EXIF_GPS_2",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "EXIF_GPS_2",
+                       "length":  1,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "EXIF_GPSDE",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "EXIF_GPSDE",
+                       "domain":  null
+                   },
+                   {
+                       "name":  "EXIF_GPS_3",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "EXIF_GPS_3",
+                       "domain":  null
+                   },
+                   {
+                       "name":  "EXIF_GPS_4",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "EXIF_GPS_4",
+                       "domain":  null
+                   },
+                   {
+                       "name":  "EXIF_GPS_5",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "EXIF_GPS_5",
+                       "length":  1,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "EXIF_GPS_6",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "EXIF_GPS_6",
+                       "domain":  null
+                   },
+                   {
+                       "name":  "EXIF_GPS_7",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "EXIF_GPS_7",
+                       "length":  1,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "EXIF_DATET",
+                       "type":  "esriFieldTypeDate",
+                       "alias":  "EXIF_DATET",
+                       "length":  8,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "PHOTONAME",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "PHOTONAME",
+                       "length":  254,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "LOCATION",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "LOCATION",
+                       "length":  50,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "SHAPE",
+                       "type":  "esriFieldTypeGeometry",
+                       "alias":  "Shape",
+                       "domain":  null
+                   }
+               ],
+    "geometryField":  {
+                          "name":  "SHAPE",
+                          "type":  "esriFieldTypeGeometry",
+                          "alias":  "Shape"
+                      },
+    "indexes":  [
+                    {
+                        "name":  "R1013_pk",
+                        "fields":  "OBJECTID",
+                        "isAscending":  true,
+                        "isUnique":  true,
+                        "description":  ""
+                    },
+                    {
+                        "name":  "S972_idx",
+                        "fields":  "SHAPE",
+                        "isAscending":  true,
+                        "isUnique":  true,
+                        "description":  ""
+                    }
+                ],
+    "subtypes":  [
+
+                 ],
+    "relationships":  [
+
+                      ],
+    "canModifyLayer":  true,
+    "canScaleSymbols":  false,
+    "hasLabels":  false,
+    "capabilities":  "Map,Query,Data",
+    "maxRecordCount":  1000,
+    "supportsStatistics":  true,
+    "supportsAdvancedQueries":  true,
+    "supportedQueryFormats":  "JSON, geoJSON",
+    "isDataVersioned":  false,
+    "ownershipBasedAccessControlForFeatures":  {
+                                                   "allowOthersToQuery":  true
+                                               },
+    "useStandardizedQueries":  true,
+    "advancedQueryCapabilities":  {
+                                      "useStandardizedQueries":  true,
+                                      "supportsStatistics":  true,
+                                      "supportsHavingClause":  true,
+                                      "supportsCountDistinct":  true,
+                                      "supportsOrderBy":  true,
+                                      "supportsDistinct":  true,
+                                      "supportsPagination":  true,
+                                      "supportsTrueCurve":  true,
+                                      "supportsReturningQueryExtent":  true,
+                                      "supportsQueryWithDistance":  true,
+                                      "supportsSqlExpression":  true
+                                  },
+    "supportsDatumTransformation":  true,
+    "dateFieldsTimeReference":  null,
+    "supportsCoordinatesQuantization":  true
+}

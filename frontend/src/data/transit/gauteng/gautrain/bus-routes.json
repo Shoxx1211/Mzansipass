@@ -1,0 +1,1828 @@
+{
+  "schemaVersion": 1,
+  "operatorId": "gautrain",
+  "generatedAt": "2026-09-17T17:21:50.565Z",
+  "routeCount": 45,
+  "busRouteCount": 27,
+  "midibusRouteCount": 18,
+  "routes": [
+    {
+      "id": "gautrain-bus-centurion-c2",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-centurion",
+      "stationKey": "centurion",
+      "stationName": "Centurion",
+      "routeCode": "C2",
+      "officialTitle": "Centurion - Rooihuiskraal - C2",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/centurion-centurion-rooihuiskraal-c2.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/CENTURION/centurion-rooihuiskraal-c2.pdf",
+        "pdfValidated": true,
+        "bytes": 2071609
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-centurion-c3",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-centurion",
+      "stationKey": "centurion",
+      "stationName": "Centurion",
+      "routeCode": "C3",
+      "officialTitle": "Centurion - Wierda Park - C3",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/centurion-centurion-wierda-park-c3.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/CENTURION/centurion-wierdapark-c3.pdf",
+        "pdfValidated": true,
+        "bytes": 2131057
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-centurion-c1",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-centurion",
+      "stationKey": "centurion",
+      "stationName": "Centurion",
+      "routeCode": "C1",
+      "officialTitle": "Centurion- Techno Park - C1",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/centurion-centurion-techno-park-c1.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/CENTURION/centurion-technopark-c1.pdf",
+        "pdfValidated": true,
+        "bytes": 750706
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-centurion-c4",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-centurion",
+      "stationKey": "centurion",
+      "stationName": "Centurion",
+      "routeCode": "C4",
+      "officialTitle": "Centurion-Southdowns-C4",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/centurion-centurion-southdowns-c4.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/CENTURION/centurion-southdowns-c4.pdf",
+        "pdfValidated": true,
+        "bytes": 706932
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-centurion-midibus-route-map-celtis-ridge",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-centurion",
+      "stationKey": "centurion",
+      "stationName": "Centurion",
+      "routeCode": null,
+      "officialTitle": "Midibus Route Map Celtis Ridge",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/centurion-midibus-route-map-celtis-ridge.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/CENTURION/midibusroutemapceltisridge.pdf",
+        "pdfValidated": true,
+        "bytes": 1676376
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "not-published-in-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "not-available",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-centurion-midibus-route-map-highveld",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-centurion",
+      "stationKey": "centurion",
+      "stationName": "Centurion",
+      "routeCode": null,
+      "officialTitle": "Midibus Route Map Highveld",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/centurion-midibus-route-map-highveld.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/CENTURION/midibusroutemaphighveld.pdf",
+        "pdfValidated": true,
+        "bytes": 207901
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "not-published-in-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "not-available",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-centurion-midibus-route-map-midstream",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-centurion",
+      "stationKey": "centurion",
+      "stationName": "Centurion",
+      "routeCode": null,
+      "officialTitle": "Midibus Route Map Midstream",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/centurion-midibus-route-map-midstream.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/CENTURION/midibusroutemapmidstream.pdf",
+        "pdfValidated": true,
+        "bytes": 321926
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "not-published-in-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "not-available",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-centurion-midibus-route-map-samrand",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-centurion",
+      "stationKey": "centurion",
+      "stationName": "Centurion",
+      "routeCode": null,
+      "officialTitle": "Midibus Route Map Samrand",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/centurion-midibus-route-map-samrand.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/CENTURION/midibusroutemapsamrand.pdf",
+        "pdfValidated": true,
+        "bytes": 541496
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "not-published-in-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "not-available",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-centurion-midibus-route-map-stone-ridge",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-centurion",
+      "stationKey": "centurion",
+      "stationName": "Centurion",
+      "routeCode": null,
+      "officialTitle": "Midibus Route Map Stone Ridge",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/centurion-midibus-route-map-stone-ridge.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/CENTURION/midibusroutemapstoneridge.PDF",
+        "pdfValidated": true,
+        "bytes": 1039860
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "not-published-in-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "not-available",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-centurion-midibus-route-map-thatchfield",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-centurion",
+      "stationKey": "centurion",
+      "stationName": "Centurion",
+      "routeCode": null,
+      "officialTitle": "Midibus Route Map Thatchfield",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/centurion-midibus-route-map-thatchfield.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/CENTURION/midibusroutemapthatchfield.pdf",
+        "pdfValidated": true,
+        "bytes": 1680078
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "not-published-in-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "not-available",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-hatfield-h3",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-hatfield",
+      "stationKey": "hatfield",
+      "stationName": "Hatfield",
+      "routeCode": "H3",
+      "officialTitle": "Hatfield-Arcadia-H3",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/hatfield-hatfield-arcadia-h3.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/HATFIELD/hatfield-arcadia-h3.pdf",
+        "pdfValidated": true,
+        "bytes": 686831
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-hatfield-h1",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-hatfield",
+      "stationKey": "hatfield",
+      "stationName": "Hatfield",
+      "routeCode": "H1",
+      "officialTitle": "Hatfield-Brooklyn-H1",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/hatfield-hatfield-brooklyn-h1.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/HATFIELD/hatfield-brooklyn-h1.pdf",
+        "pdfValidated": true,
+        "bytes": 740802
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-hatfield-h2",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-hatfield",
+      "stationKey": "hatfield",
+      "stationName": "Hatfield",
+      "routeCode": "H2",
+      "officialTitle": "Hatfield-Lynnwood-H2",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/hatfield-hatfield-lynnwood-h2.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/HATFIELD/hatfield-lynnwood-h2.pdf",
+        "pdfValidated": true,
+        "bytes": 642744
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-hatfield-h5",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-hatfield",
+      "stationKey": "hatfield",
+      "stationName": "Hatfield",
+      "routeCode": "H5",
+      "officialTitle": "Hatfield-Menlyn-H5",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/hatfield-hatfield-menlyn-h5.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/HATFIELD/hatfield-menlyn-h5.pdf",
+        "pdfValidated": true,
+        "bytes": 661324
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-hatfield-midibus-route-queenswood",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-hatfield",
+      "stationKey": "hatfield",
+      "stationName": "Hatfield",
+      "routeCode": null,
+      "officialTitle": "Midibus Route Queenswood",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/hatfield-midibus-route-queenswood.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/HATFIELD/midibusroutequeenswood.pdf",
+        "pdfValidated": true,
+        "bytes": 413520
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "not-published-in-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "not-available",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-marlboro-midibus-route-kelvin",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-marlboro",
+      "stationKey": "marlboro",
+      "stationName": "Marlboro",
+      "routeCode": null,
+      "officialTitle": "Midibus Route Kelvin",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/marlboro-midibus-route-kelvin.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/MARLBORO/midibusroutekelvin.pdf",
+        "pdfValidated": true,
+        "bytes": 1788809
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "not-published-in-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "not-available",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-marlboro-midibus-route-map-buccleuch",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-marlboro",
+      "stationKey": "marlboro",
+      "stationName": "Marlboro",
+      "routeCode": null,
+      "officialTitle": "Midibus Route Map Buccleuch",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/marlboro-midibus-route-map-buccleuch.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/MARLBORO/midibusroutemapbuccleuch.pdf",
+        "pdfValidated": true,
+        "bytes": 306345
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "not-published-in-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "not-available",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-marlboro-midibus-route-map-lakeside",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-marlboro",
+      "stationKey": "marlboro",
+      "stationName": "Marlboro",
+      "routeCode": null,
+      "officialTitle": "Midibus Route Map Lakeside",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/marlboro-midibus-route-map-lakeside.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/MARLBORO/midibusroutemaplakeside.pdf",
+        "pdfValidated": true,
+        "bytes": 1659271
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "not-published-in-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "not-available",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-marlboro-midibus-route-map-to-linbro",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-marlboro",
+      "stationKey": "marlboro",
+      "stationName": "Marlboro",
+      "routeCode": null,
+      "officialTitle": "Midibus Route Map to Linbro",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/marlboro-midibus-route-map-to-linbro.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/MARLBORO/midibusroutemaptolinbro.pdf",
+        "pdfValidated": true,
+        "bytes": 1824912
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "not-published-in-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "not-available",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-marlboro-midibus-route-to-greenstone",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-marlboro",
+      "stationKey": "marlboro",
+      "stationName": "Marlboro",
+      "routeCode": null,
+      "officialTitle": "Midibus Route to Greenstone",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/marlboro-midibus-route-to-greenstone.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/MARLBORO/midibusroutetogreenstone.pdf",
+        "pdfValidated": true,
+        "bytes": 240992
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "not-published-in-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "not-available",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-marlboro-midibus-route-to-longlake",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-marlboro",
+      "stationKey": "marlboro",
+      "stationName": "Marlboro",
+      "routeCode": null,
+      "officialTitle": "Midibus Route to Longlake",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/marlboro-midibus-route-to-longlake.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/MARLBORO/midibusroutetolonglake.pdf",
+        "pdfValidated": true,
+        "bytes": 177711
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "not-published-in-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "not-available",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-marlboro-midibus-route-woodlands-office-park",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-marlboro",
+      "stationKey": "marlboro",
+      "stationName": "Marlboro",
+      "routeCode": null,
+      "officialTitle": "Midibus Route Woodlands Office Park",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/marlboro-midibus-route-woodlands-office-park.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/MARLBORO/midibusroutewoodlandsofficepark.pdf",
+        "pdfValidated": true,
+        "bytes": 253090
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "not-published-in-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "not-available",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-midrand-hms1",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-midrand",
+      "stationKey": "midrand",
+      "stationName": "Midrand",
+      "routeCode": "HMS1",
+      "officialTitle": "Midi-bus Map Halfway Gardens HMS1",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/midrand-midi-bus-map-halfway-gardens-hms1.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/MIDRAND/midi-busmaphalfwaygardenshms1.pdf",
+        "pdfValidated": true,
+        "bytes": 1516202
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-midrand-sms1",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-midrand",
+      "stationKey": "midrand",
+      "stationName": "Midrand",
+      "routeCode": "SMS1",
+      "officialTitle": "Midi-bus Map Summerset SMS1",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/midrand-midi-bus-map-summerset-sms1.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/MIDRAND/midi-busmapsummersetsms1.pdf",
+        "pdfValidated": true,
+        "bytes": 1666465
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-midrand-m4-1",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-midrand",
+      "stationKey": "midrand",
+      "stationName": "Midrand",
+      "routeCode": "M4-1",
+      "officialTitle": "Midrand Mall of Africa-M4-1",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/midrand-midrand-mall-of-africa-m4-1.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/MIDRAND/midrandmallofafrica-m4-1.pdf",
+        "pdfValidated": true,
+        "bytes": 1477768
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-midrand-m2",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-midrand",
+      "stationKey": "midrand",
+      "stationName": "Midrand",
+      "routeCode": "M2",
+      "officialTitle": "Midrand Noordwyk-M2",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/midrand-midrand-noordwyk-m2.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/MIDRAND/midrandnoordwyk-m2.pdf",
+        "pdfValidated": true,
+        "bytes": 1219664
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-midrand-m1",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-midrand",
+      "stationKey": "midrand",
+      "stationName": "Midrand",
+      "routeCode": "M1",
+      "officialTitle": "Midrand Randjespark-M1",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/midrand-midrand-randjespark-m1.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/MIDRAND/midrandrandjespark-m1.pdf",
+        "pdfValidated": true,
+        "bytes": 690786
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-midrand-m3",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-midrand",
+      "stationKey": "midrand",
+      "stationName": "Midrand",
+      "routeCode": "M3",
+      "officialTitle": "Midrand Sunninghill-M3",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/midrand-midrand-sunninghill-m3.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/MIDRAND/midrandsunninghill-m3.pdf",
+        "pdfValidated": true,
+        "bytes": 2364518
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-park-j2",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-park",
+      "stationKey": "park",
+      "stationName": "Park",
+      "routeCode": "J2",
+      "officialTitle": "Park Station- CBD-J2",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/park-park-station-cbd-j2.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/PARK/parkstation-cbd-j2.pdf",
+        "pdfValidated": true,
+        "bytes": 704934
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-park-j1",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-park",
+      "stationKey": "park",
+      "stationName": "Park",
+      "routeCode": "J1",
+      "officialTitle": "Park Station-Parktown-J1",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/park-park-station-parktown-j1.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/PARK/parkstation-parktown-j1.pdf",
+        "pdfValidated": true,
+        "bytes": 1628546
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-pretoria-pretoria-cbd",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-pretoria",
+      "stationKey": "pretoria",
+      "stationName": "Pretoria",
+      "routeCode": null,
+      "officialTitle": "Pretoria- CBD",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/pretoria-pretoria-cbd.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/PRETORIA/pretoria-cbd.pdf",
+        "pdfValidated": true,
+        "bytes": 1431570
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "not-published-in-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "not-available",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-pretoria-p5",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-pretoria",
+      "stationKey": "pretoria",
+      "stationName": "Pretoria",
+      "routeCode": "P5",
+      "officialTitle": "Pretoria-Zoo-P5",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/pretoria-pretoria-zoo-p5.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/PRETORIA/pretoria-zoo-p5.pdf",
+        "pdfValidated": true,
+        "bytes": 1024527
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-rhodesfield-rf2-1",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-rhodesfield",
+      "stationKey": "rhodesfield",
+      "stationName": "Rhodesfield",
+      "routeCode": "RF2_1",
+      "officialTitle": "Rhodesfield Emperors Palace-RF2_1",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/rhodesfield-rhodesfield-emperors-palace-rf2-1.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/RHODESFIELD/rhodesfieldemperorspalace-rf2_1.pdf",
+        "pdfValidated": true,
+        "bytes": 1123990
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-rhodesfield-rf1",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-rhodesfield",
+      "stationKey": "rhodesfield",
+      "stationName": "Rhodesfield",
+      "routeCode": "RF1",
+      "officialTitle": "Rhodesfield Kempton Park CBD-RF1",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/rhodesfield-rhodesfield-kempton-park-cbd-rf1.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/RHODESFIELD/rhodesfieldkemptonparkcbd-rf1.pdf",
+        "pdfValidated": true,
+        "bytes": 1192254
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-rhodesfield-rf3",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-rhodesfield",
+      "stationKey": "rhodesfield",
+      "stationName": "Rhodesfield",
+      "routeCode": "RF3",
+      "officialTitle": "Rhodesfield Kempton Park Express-RF3",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/rhodesfield-rhodesfield-kempton-park-express-rf3.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/RHODESFIELD/rhodesfieldkemptonparkexpress-rf3.pdf",
+        "pdfValidated": true,
+        "bytes": 1336579
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-rosebank-rps1",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-rosebank",
+      "stationKey": "rosebank",
+      "stationName": "Rosebank",
+      "routeCode": "RPS1",
+      "officialTitle": "Midi-bus Map Parkhurst RPS1",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/rosebank-midi-bus-map-parkhurst-rps1.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/ROSEBANK/midi-busmapparkhurstrps1.pdf",
+        "pdfValidated": true,
+        "bytes": 1514370
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-rosebank-rb4",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-rosebank",
+      "stationKey": "rosebank",
+      "stationName": "Rosebank",
+      "routeCode": "RB4",
+      "officialTitle": "Rosebank Hyde Park-RB4",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/rosebank-rosebank-hyde-park-rb4.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/ROSEBANK/rosebankhydepark-rb4.pdf",
+        "pdfValidated": true,
+        "bytes": 649891
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-rosebank-rb3",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-rosebank",
+      "stationKey": "rosebank",
+      "stationName": "Rosebank",
+      "routeCode": "RB3",
+      "officialTitle": "Rosebank Illovo-RB3",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/rosebank-rosebank-illovo-rb3.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/ROSEBANK/rosebankillovo-rb3.pdf",
+        "pdfValidated": true,
+        "bytes": 637589
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-rosebank-rb5",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-rosebank",
+      "stationKey": "rosebank",
+      "stationName": "Rosebank",
+      "routeCode": "RB5",
+      "officialTitle": "Rosebank Killarney-RB5",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/rosebank-rosebank-killarney-rb5.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/ROSEBANK/rosebankkillarney-rb5.pdf",
+        "pdfValidated": true,
+        "bytes": 650944
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-rosebank-rb2",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-rosebank",
+      "stationKey": "rosebank",
+      "stationName": "Rosebank",
+      "routeCode": "RB2",
+      "officialTitle": "Rosebank Melrose Arch-RB2",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/rosebank-rosebank-melrose-arch-rb2.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/ROSEBANK/rosebankmelrosearch-rb2.pdf",
+        "pdfValidated": true,
+        "bytes": 633116
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-midibus-sandton-midibus-route-map-montecasino",
+      "operatorId": "gautrain",
+      "mode": "midibus",
+      "stationId": "gautrain-station-sandton",
+      "stationKey": "sandton",
+      "stationName": "Sandton",
+      "routeCode": null,
+      "officialTitle": "Midibus Route Map Montecasino",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/sandton-midibus-route-map-montecasino.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/SANDTON/midibusroutemapmontecasino.pdf",
+        "pdfValidated": true,
+        "bytes": 1670409
+      },
+      "classification": {
+        "vehicleType": "midibus",
+        "method": "explicit-official-title",
+        "confidence": "official",
+        "routeCodeMethod": "not-published-in-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "not-available",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-sandton-s5",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-sandton",
+      "stationKey": "sandton",
+      "stationName": "Sandton",
+      "routeCode": "S5",
+      "officialTitle": "Sandton Fourways-S5",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/sandton-sandton-fourways-s5.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/SANDTON/sandtonfourways-s5.pdf",
+        "pdfValidated": true,
+        "bytes": 893703
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-sandton-s2",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-sandton",
+      "stationKey": "sandton",
+      "stationName": "Sandton",
+      "routeCode": "S2",
+      "officialTitle": "Sandton Gallo Manor-S2",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/sandton-sandton-gallo-manor-s2.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/SANDTON/sandtongallomanor-s2.pdf",
+        "pdfValidated": true,
+        "bytes": 651310
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-sandton-s4",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-sandton",
+      "stationKey": "sandton",
+      "stationName": "Sandton",
+      "routeCode": "S4",
+      "officialTitle": "Sandton Randburg-S4",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/sandton-sandton-randburg-s4.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/SANDTON/sandtonrandburg-s4.pdf",
+        "pdfValidated": true,
+        "bytes": 944159
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    },
+    {
+      "id": "gautrain-bus-sandton-s3",
+      "operatorId": "gautrain",
+      "mode": "bus",
+      "stationId": "gautrain-station-sandton",
+      "stationKey": "sandton",
+      "stationName": "Sandton",
+      "routeCode": "S3",
+      "officialTitle": "Sandton Rivonia-S3",
+      "routeMap": {
+        "sourceFile": "raw/bus-routes/sandton-sandton-rivonia-s3.pdf",
+        "sourceUrl": "https://s3-eu-west-1.amazonaws.com/busroutes/SANDTON/sandtonrivonia-s3.pdf",
+        "pdfValidated": true,
+        "bytes": 743979
+      },
+      "classification": {
+        "vehicleType": "bus",
+        "method": "official-bus-route-download-collection",
+        "confidence": "official-context",
+        "routeCodeMethod": "explicit-token-in-official-title"
+      },
+      "verification": {
+        "routeExists": "official",
+        "stationAssociation": "official",
+        "routeCode": "official-title",
+        "routeMap": "official-validated-pdf",
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "timetable": false,
+        "travelTime": false,
+        "liveVehicleLocation": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "relationship": "official-route-map-download",
+        "stationAssignmentMethod": "official-source-url-folder",
+        "sourceSnapshot": "raw/bus-route-source-manifest.json"
+      }
+    }
+  ],
+  "capabilities": {
+    "officialRouteInventory": true,
+    "officialStationAssociation": true,
+    "validatedOfficialRouteMaps": true,
+    "routeCodesWherePublished": true,
+    "completeStopSequences": false,
+    "stopCoordinates": false,
+    "routeGeometry": false,
+    "timetable": false,
+    "realtime": false
+  },
+  "notes": [
+    "Each record represents an official Gautrain downloadable route map.",
+    "Route codes are populated only where an explicit code appears in the official route title.",
+    "Code-less midi-bus routes are preserved with routeCode null rather than assigning invented codes.",
+    "Bus versus midi-bus classification uses explicit official midi-bus wording where present; remaining maps belong to Gautrain's official bus-route collection.",
+    "No stop sequence, route geometry, timetable, duration or ETA is inferred in this phase."
+  ]
+}

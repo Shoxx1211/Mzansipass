@@ -1,0 +1,851 @@
+{
+  "generatedAt": "2026-09-22T17:05:26.126Z",
+  "phase": "metrobus-gis-normalization-1c",
+  "authority": "City of Johannesburg GIS; present-day Metrobus operations NOT validated",
+  "rawSource": {
+    "routeLayer": 22,
+    "stopLayer": 52,
+    "routeSnapshotSha256": "44c11386ce4a0568c1a88799b98dcc8d30732fc4a3ee7cd6ca1a8b3a3024afb9",
+    "stopSnapshotSha256": "df75b89caca78b2c911bc05359e8aaa33727752cdb02f9176c21927a62194524",
+    "routeMetadataSha256": "52622b1e5692e286467d049d6118196b3b598dec09333cdb63019240140d7de3",
+    "stopMetadataSha256": "93d7619b99155df515ff68baeafb1f3be24f69babbb7381d1070b7afc4faedb6",
+    "syncReportSha256": "089dd6a60afa848dc3770094514897f547f083ffa108aa0a276a430de6b93e6f",
+    "retrievedAtRoutes": "2026-09-22T16:52:03.2087149Z",
+    "retrievedAtStops": "2026-09-22T16:52:05.4080513Z",
+    "routeLayerCopyrightText": "CoJ to decide",
+    "stopLayerCopyrightText": ""
+  },
+  "routes": {
+    "gisFeatures": 110,
+    "validPolylineFeatures": 110,
+    "uniqueCodesExtractedFromNAME": 110,
+    "featuresWithoutParsedRouteCode": 0,
+    "routeCodeGroups": {
+      "1": [
+        25
+      ],
+      "2": [
+        26
+      ],
+      "3": [
+        27
+      ],
+      "4": [
+        28
+      ],
+      "5": [
+        30
+      ],
+      "8": [
+        35
+      ],
+      "9": [
+        36
+      ],
+      "10": [
+        37
+      ],
+      "12": [
+        13
+      ],
+      "13": [
+        78
+      ],
+      "16": [
+        14
+      ],
+      "18": [
+        38
+      ],
+      "19": [
+        81
+      ],
+      "23": [
+        15
+      ],
+      "24": [
+        16
+      ],
+      "25": [
+        17
+      ],
+      "32": [
+        39
+      ],
+      "33": [
+        40
+      ],
+      "34": [
+        41
+      ],
+      "35": [
+        42
+      ],
+      "38": [
+        18
+      ],
+      "42": [
+        19
+      ],
+      "43": [
+        20
+      ],
+      "44": [
+        21
+      ],
+      "45": [
+        43
+      ],
+      "47": [
+        44
+      ],
+      "48": [
+        22
+      ],
+      "55": [
+        1
+      ],
+      "59": [
+        46
+      ],
+      "62": [
+        47
+      ],
+      "63": [
+        2
+      ],
+      "66": [
+        3
+      ],
+      "67": [
+        4
+      ],
+      "71": [
+        5
+      ],
+      "74": [
+        48
+      ],
+      "77": [
+        49
+      ],
+      "79": [
+        50
+      ],
+      "80": [
+        66
+      ],
+      "82": [
+        6
+      ],
+      "83": [
+        7
+      ],
+      "84": [
+        51
+      ],
+      "85": [
+        52
+      ],
+      "87": [
+        53
+      ],
+      "88": [
+        8
+      ],
+      "260": [
+        9
+      ],
+      "412": [
+        10
+      ],
+      "413": [
+        11
+      ],
+      "420": [
+        12
+      ],
+      "436": [
+        54
+      ],
+      "522": [
+        45
+      ],
+      "552": [
+        55
+      ],
+      "553": [
+        56
+      ],
+      "49F": [
+        23
+      ],
+      "1A": [
+        24
+      ],
+      "5C": [
+        29
+      ],
+      "6A": [
+        31
+      ],
+      "6B": [
+        32
+      ],
+      "6C": [
+        33
+      ],
+      "6D": [
+        34
+      ],
+      "54A": [
+        57
+      ],
+      "55A": [
+        58
+      ],
+      "55B": [
+        59
+      ],
+      "57A": [
+        60
+      ],
+      "69A": [
+        61
+      ],
+      "80A": [
+        62
+      ],
+      "80B": [
+        63
+      ],
+      "80D": [
+        64
+      ],
+      "80F": [
+        65
+      ],
+      "83C": [
+        67
+      ],
+      "412A": [
+        68
+      ],
+      "430A": [
+        69
+      ],
+      "49J": [
+        70
+      ],
+      "56A": [
+        71
+      ],
+      "56B": [
+        72
+      ],
+      "57B": [
+        73
+      ],
+      "13A": [
+        74
+      ],
+      "13B": [
+        75
+      ],
+      "13C": [
+        76
+      ],
+      "13D": [
+        77
+      ],
+      "15B": [
+        79
+      ],
+      "15F": [
+        80
+      ],
+      "19B": [
+        82
+      ],
+      "22A": [
+        83
+      ],
+      "22B": [
+        84
+      ],
+      "32D": [
+        85
+      ],
+      "32E": [
+        86
+      ],
+      "46A": [
+        87
+      ],
+      "46B": [
+        88
+      ],
+      "47A": [
+        89
+      ],
+      "47B": [
+        90
+      ],
+      "47C": [
+        91
+      ],
+      "49A": [
+        92
+      ],
+      "49B": [
+        93
+      ],
+      "52A": [
+        94
+      ],
+      "52B": [
+        95
+      ],
+      "52C": [
+        96
+      ],
+      "71A": [
+        97
+      ],
+      "78B": [
+        98
+      ],
+      "78C": [
+        99
+      ],
+      "78D": [
+        100
+      ],
+      "79A": [
+        101
+      ],
+      "82A": [
+        102
+      ],
+      "84A": [
+        103
+      ],
+      "84B": [
+        104
+      ],
+      "86A": [
+        105
+      ],
+      "86B": [
+        106
+      ],
+      "86C": [
+        107
+      ],
+      "551A": [
+        108
+      ],
+      "551B": [
+        109
+      ],
+      "551C": [
+        110
+      ]
+    },
+    "routeNameVersusRouteIdDisagreements": [
+      {
+        "gisObjectId": 1,
+        "gisName": "ROUTE 55",
+        "routeCodeFromName": "55",
+        "rawRouteIdField": 60
+      },
+      {
+        "gisObjectId": 3,
+        "gisName": "ROUTE 66",
+        "routeCodeFromName": "66",
+        "rawRouteIdField": 64
+      },
+      {
+        "gisObjectId": 4,
+        "gisName": "ROUTE 67",
+        "routeCodeFromName": "67",
+        "rawRouteIdField": 65
+      },
+      {
+        "gisObjectId": 5,
+        "gisName": "ROUTE 71",
+        "routeCodeFromName": "71",
+        "rawRouteIdField": 67
+      },
+      {
+        "gisObjectId": 6,
+        "gisName": "ROUTE 82",
+        "routeCodeFromName": "82",
+        "rawRouteIdField": 74
+      },
+      {
+        "gisObjectId": 7,
+        "gisName": "ROUTE 83",
+        "routeCodeFromName": "83",
+        "rawRouteIdField": 75
+      },
+      {
+        "gisObjectId": 8,
+        "gisName": "ROUTE 88",
+        "routeCodeFromName": "88",
+        "rawRouteIdField": 77
+      },
+      {
+        "gisObjectId": 9,
+        "gisName": "ROUTE 260",
+        "routeCodeFromName": "260",
+        "rawRouteIdField": 78
+      },
+      {
+        "gisObjectId": 10,
+        "gisName": "ROUTE 412",
+        "routeCodeFromName": "412",
+        "rawRouteIdField": 80
+      },
+      {
+        "gisObjectId": 11,
+        "gisName": "ROUTE 413",
+        "routeCodeFromName": "413",
+        "rawRouteIdField": 81
+      },
+      {
+        "gisObjectId": 12,
+        "gisName": "ROUTE 420",
+        "routeCodeFromName": "420",
+        "rawRouteIdField": 82
+      },
+      {
+        "gisObjectId": 13,
+        "gisName": "ROUTE 12",
+        "routeCodeFromName": "12",
+        "rawRouteIdField": 84
+      },
+      {
+        "gisObjectId": 14,
+        "gisName": "ROUTE 16",
+        "routeCodeFromName": "16",
+        "rawRouteIdField": 87
+      },
+      {
+        "gisObjectId": 15,
+        "gisName": "ROUTE 23",
+        "routeCodeFromName": "23",
+        "rawRouteIdField": 88
+      },
+      {
+        "gisObjectId": 16,
+        "gisName": "ROUTE 24",
+        "routeCodeFromName": "24",
+        "rawRouteIdField": 89
+      },
+      {
+        "gisObjectId": 17,
+        "gisName": "ROUTE 25",
+        "routeCodeFromName": "25",
+        "rawRouteIdField": 90
+      },
+      {
+        "gisObjectId": 18,
+        "gisName": "ROUTE 38",
+        "routeCodeFromName": "38",
+        "rawRouteIdField": 91
+      },
+      {
+        "gisObjectId": 19,
+        "gisName": "ROUTE 42",
+        "routeCodeFromName": "42",
+        "rawRouteIdField": 92
+      },
+      {
+        "gisObjectId": 20,
+        "gisName": "ROUTE 43",
+        "routeCodeFromName": "43",
+        "rawRouteIdField": 93
+      },
+      {
+        "gisObjectId": 21,
+        "gisName": "ROUTE 44",
+        "routeCodeFromName": "44",
+        "rawRouteIdField": 94
+      },
+      {
+        "gisObjectId": 22,
+        "gisName": "ROUTE 48",
+        "routeCodeFromName": "48",
+        "rawRouteIdField": 95
+      },
+      {
+        "gisObjectId": 25,
+        "gisName": "ROUTE 1",
+        "routeCodeFromName": "1",
+        "rawRouteIdField": 2
+      },
+      {
+        "gisObjectId": 26,
+        "gisName": "ROUTE 2",
+        "routeCodeFromName": "2",
+        "rawRouteIdField": 3
+      },
+      {
+        "gisObjectId": 27,
+        "gisName": "ROUTE 3",
+        "routeCodeFromName": "3",
+        "rawRouteIdField": 4
+      },
+      {
+        "gisObjectId": 28,
+        "gisName": "ROUTE 4",
+        "routeCodeFromName": "4",
+        "rawRouteIdField": 5
+      },
+      {
+        "gisObjectId": 30,
+        "gisName": "ROUTE 5",
+        "routeCodeFromName": "5",
+        "rawRouteIdField": 8
+      },
+      {
+        "gisObjectId": 35,
+        "gisName": "ROUTE 8",
+        "routeCodeFromName": "8",
+        "rawRouteIdField": 13
+      },
+      {
+        "gisObjectId": 36,
+        "gisName": "ROUTE 9",
+        "routeCodeFromName": "9",
+        "rawRouteIdField": 14
+      },
+      {
+        "gisObjectId": 37,
+        "gisName": "ROUTE 10",
+        "routeCodeFromName": "10",
+        "rawRouteIdField": 15
+      },
+      {
+        "gisObjectId": 38,
+        "gisName": "ROUTE 18",
+        "routeCodeFromName": "18",
+        "rawRouteIdField": 23
+      },
+      {
+        "gisObjectId": 39,
+        "gisName": "ROUTE 32",
+        "routeCodeFromName": "32",
+        "rawRouteIdField": 35
+      },
+      {
+        "gisObjectId": 40,
+        "gisName": "ROUTE 33",
+        "routeCodeFromName": "33",
+        "rawRouteIdField": 36
+      },
+      {
+        "gisObjectId": 41,
+        "gisName": "ROUTE 34",
+        "routeCodeFromName": "34",
+        "rawRouteIdField": 37
+      },
+      {
+        "gisObjectId": 42,
+        "gisName": "ROUTE 35",
+        "routeCodeFromName": "35",
+        "rawRouteIdField": 38
+      },
+      {
+        "gisObjectId": 43,
+        "gisName": "ROUTE 45",
+        "routeCodeFromName": "45",
+        "rawRouteIdField": 40
+      },
+      {
+        "gisObjectId": 45,
+        "gisName": "ROUTE 522",
+        "routeCodeFromName": "522",
+        "rawRouteIdField": 102
+      },
+      {
+        "gisObjectId": 46,
+        "gisName": "ROUTE 59",
+        "routeCodeFromName": "59",
+        "rawRouteIdField": 103
+      },
+      {
+        "gisObjectId": 47,
+        "gisName": "ROUTE 62",
+        "routeCodeFromName": "62",
+        "rawRouteIdField": 104
+      },
+      {
+        "gisObjectId": 48,
+        "gisName": "ROUTE 74",
+        "routeCodeFromName": "74",
+        "rawRouteIdField": 106
+      },
+      {
+        "gisObjectId": 49,
+        "gisName": "ROUTE 77",
+        "routeCodeFromName": "77",
+        "rawRouteIdField": 107
+      },
+      {
+        "gisObjectId": 50,
+        "gisName": "ROUTE 79",
+        "routeCodeFromName": "79",
+        "rawRouteIdField": 112
+      },
+      {
+        "gisObjectId": 51,
+        "gisName": "ROUTE 84",
+        "routeCodeFromName": "84",
+        "rawRouteIdField": 116
+      },
+      {
+        "gisObjectId": 52,
+        "gisName": "ROUTE 85",
+        "routeCodeFromName": "85",
+        "rawRouteIdField": 117
+      },
+      {
+        "gisObjectId": 53,
+        "gisName": "ROUTE 87",
+        "routeCodeFromName": "87",
+        "rawRouteIdField": 121
+      },
+      {
+        "gisObjectId": 54,
+        "gisName": "ROUTE 436",
+        "routeCodeFromName": "436",
+        "rawRouteIdField": 122
+      },
+      {
+        "gisObjectId": 55,
+        "gisName": "ROUTE 552",
+        "routeCodeFromName": "552",
+        "rawRouteIdField": 127
+      },
+      {
+        "gisObjectId": 56,
+        "gisName": "ROUTE 553",
+        "routeCodeFromName": "553",
+        "rawRouteIdField": 128
+      },
+      {
+        "gisObjectId": 66,
+        "gisName": "ROUTE 80",
+        "routeCodeFromName": "80",
+        "rawRouteIdField": 0
+      },
+      {
+        "gisObjectId": 78,
+        "gisName": "ROUTE 13",
+        "routeCodeFromName": "13",
+        "rawRouteIdField": 0
+      },
+      {
+        "gisObjectId": 81,
+        "gisName": "ROUTE 19",
+        "routeCodeFromName": "19",
+        "rawRouteIdField": 0
+      }
+    ],
+    "totalLineSegments": 17535
+  },
+  "stops": {
+    "gisFeatures": 1922,
+    "validCoordinates": 1922,
+    "stopsWithLocationDescription": 1920,
+    "duplicateCoordinatesRoundedToSixDecimals": [
+      {
+        "key": "28.043495,-26.201957",
+        "count": 2
+      },
+      {
+        "key": "28.043517,-26.204129",
+        "count": 2
+      },
+      {
+        "key": "28.038411,-26.195069",
+        "count": 2
+      },
+      {
+        "key": "28.035889,-26.193500",
+        "count": 2
+      },
+      {
+        "key": "28.044418,-26.250925",
+        "count": 2
+      },
+      {
+        "key": "28.110416,-26.201783",
+        "count": 2
+      }
+    ],
+    "recordsWithEXIFCaptureDate": 1922,
+    "earliestReportedEXIFCaptureDate": "2012-01-16T00:00:00.000Z",
+    "latestReportedEXIFCaptureDate": "2012-02-07T00:00:00.000Z",
+    "caution": "The GIS stop layer provides points/photos, not route membership or proof of currently active boarding stops."
+  },
+  "partialInventoryReconciliation": {
+    "referenceKind": "partial-indexed-operator-route-excerpt",
+    "partialInventoryRouteCodes": 33,
+    "labelCodeOverlap": [
+      "15B",
+      "15F",
+      "16",
+      "2",
+      "3",
+      "33",
+      "34",
+      "38",
+      "42",
+      "436",
+      "45",
+      "57B",
+      "80",
+      "82",
+      "83",
+      "83C",
+      "84",
+      "85"
+    ],
+    "partialCodesWithoutGISNameMatch": [
+      "32A",
+      "32C",
+      "421D",
+      "421F",
+      "421G",
+      "421H",
+      "421R",
+      "547D",
+      "56",
+      "71B",
+      "84C",
+      "85B",
+      "90",
+      "91",
+      "91B"
+    ],
+    "gisCodesOutsidePartialExcerpt": [
+      "1",
+      "10",
+      "12",
+      "13",
+      "13A",
+      "13B",
+      "13C",
+      "13D",
+      "18",
+      "19",
+      "19B",
+      "1A",
+      "22A",
+      "22B",
+      "23",
+      "24",
+      "25",
+      "260",
+      "32",
+      "32D",
+      "32E",
+      "35",
+      "4",
+      "412",
+      "412A",
+      "413",
+      "420",
+      "43",
+      "430A",
+      "44",
+      "46A",
+      "46B",
+      "47",
+      "47A",
+      "47B",
+      "47C",
+      "48",
+      "49A",
+      "49B",
+      "49F",
+      "49J",
+      "5",
+      "522",
+      "52A",
+      "52B",
+      "52C",
+      "54A",
+      "55",
+      "551A",
+      "551B",
+      "551C",
+      "552",
+      "553",
+      "55A",
+      "55B",
+      "56A",
+      "56B",
+      "57A",
+      "59",
+      "5C",
+      "62",
+      "63",
+      "66",
+      "67",
+      "69A",
+      "6A",
+      "6B",
+      "6C",
+      "6D",
+      "71",
+      "71A",
+      "74",
+      "77",
+      "78B",
+      "78C",
+      "78D",
+      "79",
+      "79A",
+      "8",
+      "80A",
+      "80B",
+      "80D",
+      "80F",
+      "82A",
+      "84A",
+      "84B",
+      "86A",
+      "86B",
+      "86C",
+      "87",
+      "88",
+      "9"
+    ],
+    "caution": "Code-level label match only. Does not establish route shape equivalence, direction or current service."
+  },
+  "spatialSupport": {
+    "screeningThresholdMetres": 75,
+    "candidatePairs": 8492,
+    "stopsNearAtLeastOneGISRouteFeature": 1548,
+    "stopsNearMultipleGISRouteFeatures": 1078,
+    "instruction": "Candidates are proximity ONLY; never turn these into transfer/boarding/stop-order edges."
+  },
+  "errors": [],
+  "warnings": [],
+  "policy": {
+    "completeCurrentOperatorInventory": false,
+    "validatedRouteStopMembership": false,
+    "verifiedDirection": false,
+    "verifiedOperatingStatus": false,
+    "verifiedFares": false,
+    "verifiedTimetables": false,
+    "permissionForAppRedistributionConfirmed": false,
+    "passengerRoutingEnabled": false,
+    "transferInstructionsEnabled": false,
+    "sourceLicenceReviewRequired": true
+  }
+}

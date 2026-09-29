@@ -1,0 +1,3601 @@
+[
+  {
+    "id": "tshwane-bus-terminal-1",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "WBM2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.669511493085114,
+      "lng": 28.21799093159222
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WONDERBOOM 2",
+    "routeDescription": "Bosman, Boom, Paul Kruger, Lavender, Sefako Makhatho (Zambesi), Parsley, Marjoram and Saliehout to cnr Bloulelie.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 1
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-2",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "WBM1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.658915535160478,
+      "lng": 28.235129171426447
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WONDERBOOM 1",
+    "routeDescription": "Bosman, Boom, Paul Kruger, Lavender, Sefako Makgatho (Zambesi), Parsley, Rosemary, George Anton, Marico, Miriana, Steenbras, Orsula, Roeloe, Watsonia, Jan Bantjies and HO Mönnig.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 2
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-4",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "DNP1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.648457983899796,
+      "lng": 28.232234056734857
+    },
+    "locationType": "City",
+    "rawRouteLabel": "DOORNPOORT 1",
+    "routeDescription": "Bosman, Boom, Paul Kruger, Lavender, Sefako Makgatho, Vinko, Luce, Konavle, Nerina, Babiana, Pointsettia, Ruspolia, Zambesi, Veronica, 6th Road, Dr Swanepoel, Amandelboom, Wattle, Katjiepiering, Foxglove, Airport and Olienhoutboom Road.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 4
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-5",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "WBM3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.68953444430732,
+      "lng": 28.27048588229184
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WONDERBOOM 3",
+    "routeDescription": "Bosman, Boom, Paul Kruger, Lavender, Braam Pretorius, Gryshout, Kaberoe, Geranium, Granaat, Veronica, Stephan, Dr Van der Merwe, Braam Pretorius, Enkeldoorn and Besembiesie .",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 5
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-6",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "WBM4"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.674793989570144,
+      "lng": 28.25504619360743
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WONDERBOOM 4",
+    "routeDescription": "Bosman, Boom, Paul Kruger, Lavender, Braam Pretorius, Gryshout, Kaberoe, Geranium, Granaat, Veronica, Sefako Makgatho (Zambesi) and Enkeldoorn",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 6
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-7",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "DNP2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.65508760867886,
+      "lng": 28.248845169642532
+    },
+    "locationType": "City",
+    "rawRouteLabel": "DOORNPOORT 2",
+    "routeDescription": "Bosman, Boom, Paul Kruger, Lavender, Braam Pretorius, Marija, Sefako Makgatho, Veronica, 6th Road, Dr Swanepoel, Amandelboom.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 7
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-8",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "DNP3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.651505053374375,
+      "lng": 28.271508552525898
+    },
+    "locationType": "City",
+    "rawRouteLabel": "DOORNPOORT 3",
+    "routeDescription": "Bosman, Boom, Paul Kruger, Lavender, Sefako Makgatho, Breed, Rivea, up to Hessea Street.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 8
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-9",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "MNV2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.695961188527832,
+      "lng": 28.1569999837632
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MOUNTAIN VIEW 2",
+    "routeDescription": "Bosman, Boom, Paul Kruge, Franzina, Smook, Booysens, Bruins, Burlington, Green, Lambert Lee, Denyssen, Barnato, Daphne, cnr Daniel and Daphne.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 9
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-10",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "ELN1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.70431999593507,
+      "lng": 28.276325987461863
+    },
+    "locationType": "City",
+    "rawRouteLabel": "EASTLYNNE 1",
+    "routeDescription": "Madiba (Vermeulen), Steve Biko, Soutpansberg, CR Swart, Lynette, Anna Wilson, Stormvoël, Baviaanspoort, Stegman Street.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 10
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-11",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "ELN2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.70787840033369,
+      "lng": 28.308151974400104
+    },
+    "locationType": "City",
+    "rawRouteLabel": "EASTLYNNE 2",
+    "routeDescription": "Madiba (Vermeulen), Steve Biko, Soutpansberg, Wilkinson, Gane, Hastie, Rayner, Bellis, CR Swart, Lynette, Anna Wilson, Stormvoël, Hans Coverdale West, St Joseph, Hans Coverdale East, John Sydney, Hans Coverdale West, Soutrivier Street.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 11
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-12",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "BKN9"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.788258727005044,
+      "lng": 28.274994812428353
+    },
+    "locationType": "City",
+    "rawRouteLabel": "BROOKLYN 9",
+    "routeDescription": "Madiba, Sisulu, Jeff Masemola, Rissik, Justice Mahomed, Brooklyn, Hazelwood, 26th, Selati, Garsfontein, Lois.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 12
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-13",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "BKN10"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.80280630551141,
+      "lng": 28.287025327516503
+    },
+    "locationType": "City",
+    "rawRouteLabel": "BROOKLYN 10",
+    "routeDescription": "Thabo Sehume, Jeff Masemola, Rissik, Justice Mahomed, Atterbury, Lois, Garsfontein, Corobay, Tucker, Gina, Corobay, Garsfontein, Anton van Wouw, Beethoven, Chopin, Duvernoy.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 13
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-14",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "BKN8"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.776626738279305,
+      "lng": 28.241637450145756
+    },
+    "locationType": "City",
+    "rawRouteLabel": "BROOKLYN 8",
+    "routeDescription": "Madiba (Vermeulen), Du Toit, Francis Baard, Park, Festival, Arcadia, Hilda, Park, Jan Shoba, Fehrsen, Waterkloof, Crown as far as Julius Jeppe.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 14
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-15",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "BKN5"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.770338823405687,
+      "lng": 28.235181370768174
+    },
+    "locationType": "City",
+    "rawRouteLabel": "BROOKLYN 5",
+    "routeDescription": "Madiba (Vermeulen), Du Toit, Francis Baard, Park, Festival, Arcadia, Hilda, Park, Jan Shoba.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 15
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-17",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "CPK"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.72715235745947,
+      "lng": 28.17917798850527
+    },
+    "locationType": "City",
+    "rawRouteLabel": "CAPITAL PARK",
+    "routeDescription": "Bosman, Boom, Paul Kruger, Flower, 2nd.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 17
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-18",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "CEN"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.859428220372774,
+      "lng": 28.191287473570384
+    },
+    "locationType": "City",
+    "rawRouteLabel": "CENTURION",
+    "routeDescription": "Pretorius, Sophie du Bruyn, Kgosi Mampuru, Old Johannesburg Road, Trichardt, Snake Valley, Trichardt, Selborne, Zircon, North, Glover, Rabie, Jean, Lenchen and Embankment.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 18
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-19",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "COL4"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.744379872967492,
+      "lng": 28.23956650040245
+    },
+    "locationType": "City",
+    "rawRouteLabel": "COLBYN 4",
+    "routeDescription": "Madiba (Vermeulen), Du Toit, Helen Joseph, Stanza Bopape, Hill, Francis Baard, Jan Shoba.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 19
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-20",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "COL5"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.739724288428846,
+      "lng": 28.247638779425817
+    },
+    "locationType": "City",
+    "rawRouteLabel": "COLBYN 5",
+    "routeDescription": "Madiba (Vermeulen), Du Toit, Helen Joseph, Stanza Bopape, Hill, Francis Baard, Jan Shoba, Gordon and Amos.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 20
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-21",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "COL6"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.7278356179301,
+      "lng": 28.275948153128
+    },
+    "locationType": "City",
+    "rawRouteLabel": "COLBYN 6",
+    "routeDescription": "Madiba (Vermeulen), Du Toit, Helen Joseph, Stanza Bopape, Hill, Francis Baard, Jan Shoba, Gordon and Amos, Route back to Pretoria, East to Cresswell.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 21
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-22",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "DAN2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.741270611329604,
+      "lng": 28.137632880295495
+    },
+    "locationType": "City",
+    "rawRouteLabel": "DANVILLE 2",
+    "routeDescription": "Pretorius, Kgosi Mampuru, WF Nkomo, Transoranje, Ashley,  Albertyn, Dan, Ferris, Van Broekhuizen, Osler, Marsburg, Morkel, Sytze Wierda and Pretoria West Hospital.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 22
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-23",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "DAN1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.742472680152197,
+      "lng": 28.125212737652014
+    },
+    "locationType": "City",
+    "rawRouteLabel": "DANVILLE 1",
+    "routeDescription": "Pretorius, Kgosi Mampuru, WF Nkomo, Transoranje, Ashley, Albertyn, south of Van den Berg.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 23
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-24",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "DAN3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.748951436089527,
+      "lng": 28.143426793461096
+    },
+    "locationType": "City",
+    "rawRouteLabel": "DANVILLE 3",
+    "routeDescription": "Pretorius, Kgosi Mampuru, WF Nkomo, Molengraaf Street.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 24
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-25",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "DAN4"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.73818313879107,
+      "lng": 28.132868605333158
+    },
+    "locationType": "City",
+    "rawRouteLabel": "DANVILLE 4",
+    "routeDescription": "Pretorius, Kgosi Mampuru, WF Nkomo, Transoranje, Ashley, Dan, Ferris, Van Broekhuizen, Osler, Marsburg.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 25
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-26",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "DAN5"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.734805110780975,
+      "lng": 28.14344048095142
+    },
+    "locationType": "City",
+    "rawRouteLabel": "DANVILLE 5",
+    "routeDescription": "Pretorius, Kgosi Mampuru, WF Nkomo, Transoranje, Ashley, Dan, Ferris, Van Broekhuizen, Osler, Marsburg, Morkel, Staatsartillerie Road.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 26
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-27",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "ERS2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.809697532487654,
+      "lng": 28.096699940274643
+    },
+    "locationType": "City",
+    "rawRouteLabel": "ERASMIA 2",
+    "routeDescription": "Pretorius, Sophie De Bruyn, Nana Sita, Charlotte Maxeke, Oliewen, Trans Oranje, Quagga, Main, Helena Street.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 27
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-28",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "ERS3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.79760312071931,
+      "lng": 28.106695163160136
+    },
+    "locationType": "City",
+    "rawRouteLabel": "ERASMIA 3",
+    "routeDescription": "Pretorius, Sophie De Bruyn, Nana Sita, Charlotte Maxeke, Quagga, bypass to Laudium, 2nd Avenue, Cuprene west of 2nd Avenue.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 28
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-29",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "FRG"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.778903168051492,
+      "lng": 28.302097799276684
+    },
+    "locationType": "City",
+    "rawRouteLabel": "FAERIE GLEN",
+    "routeDescription": "Madiba (Vermeulen), Du Toit, Francis Baard, Park, Troye, Robert Sobukwe, Bourke, Spuy, Walton Jameson, University, Justice Mohamed, Roper, Lynnwood, Glenwood as far as Manitoba Drive.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 29
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-30",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "GRS1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.793283058256467,
+      "lng": 28.307194465773758
+    },
+    "locationType": "City",
+    "rawRouteLabel": "GARSFONTEIN 1",
+    "routeDescription": "Madiba (Vermeulen), Du Toit, Francis Baard (Schoeman), Park, Troye, Robert Sobukwe (Esselen), Bourke, Spuy, Walten Jameson, University, Justice Mahomed, Roper, Lynnwood, Brooklyn, Anderson, 11th Street, Atterbury, Jacqueline, Trevor Gething, Albert Adamson, Snowy Walker, Alsation, Jacqueline, Adela, Cicely, Elvira, Hesteleen, Windsor Road.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 30
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-31",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "GRS2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.803445919358936,
+      "lng": 28.310706192167896
+    },
+    "locationType": "City",
+    "rawRouteLabel": "GARSFONTEIN 2",
+    "routeDescription": "Madiba (Vermeulen), Du Toit, Francis Baard (Schoeman), Park, Troye, Robert Sobukwe (Esselen), Bourke, Spuy, Walten Jameson, University, Justice Mahomed, Roper, Lynnwood, Brooklyn, Anderson, 11th Street, Atterbury, Jacqueline, St Bernard, Borzoi Street.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 31
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-32",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "LWM"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.751576099680445,
+      "lng": 28.289531080046494
+    },
+    "locationType": "City",
+    "rawRouteLabel": "LYNNWOOD MANOR",
+    "routeDescription": "Madiba (Vermeulen), Du Toit, Francis Baard (Schoeman), Park, Troye, Robert Sobukwe (Esselen), Bourke, Spuy, Walton Jameson, Jorissen, Lynnwood, Kings Highway, Mimosa, Rodericks, Kings Highway, Meiring Naude, Lynburn, Homer, Larch, Wildevy.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 32
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-33",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "LWR"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.749781558793547,
+      "lng": 28.32126044144753
+    },
+    "locationType": "City",
+    "rawRouteLabel": "LYNNWOOD RIDGE",
+    "routeDescription": "Madiba (Vermeulen), Du Toit, Francis Baard (Schoeman), Park, Festival, Arcadia, Hilda, Park, Jan Shoba (Duncan), Lynnwood, Camelia, Lancia, Jacobson, Camelia, Gloudina, Theuns, Rossouw, Gordon Verster, Shirley East, Kandelaar, Lexton, Frangipani.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 33
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-34",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "WBS20"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.69667091587281,
+      "lng": 28.216071652459753
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WONDERBOOM SOUTH 20",
+    "routeDescription": "Bosman, Madiba (Vermeulen), Steve Biko (Beatrix, Voortrekkers), De Beer and 20th Avenue.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 34
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-35",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "MRP"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74035759851124,
+      "lng": 28.308490242901033
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MEYERSPARK",
+    "routeDescription": "Bosman, Madiba (Vermeulen), du Toit, Helen Joseph (Church), Stanza Bopape (Church), Cussonia, Watermeyer, Van Wyk, Pienaar.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 35
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-36",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "MPK2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.827838920668807,
+      "lng": 28.25558779075654
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MONUMENTPARK 2",
+    "routeDescription": "Thabo Sehume,, Nelson Mandela, Elephant, Tiger, Skilpad, Cliff, Koedoesnek, Solomon Mahlangu (Hans Strijdom), Boeing.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 36
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-37",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "MPK1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.808063651138433,
+      "lng": 28.24532299709972
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MONUMENTPARK 1",
+    "routeDescription": "Thabo Sehume, Nelson Mandela, Makou, Coetzer, Kolgans, Windswawel, Kransduif, Piet-my-vrou, Diedrikkie, Kelkiewyn, Kuikendief, Kalkoen, Veldpou, Visarend, Makou, Nelson Mandela, Elephant, Lion, Bushbuck, Skilpad, Impala, Njala, Elephant, Cygnus, Aquila.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 37
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-39",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "MGD1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.71131241087413,
+      "lng": 28.25553881610304
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MOREGLOED 1",
+    "routeDescription": "Bosman, Madiba (Vermeulen), Steve Biko (Beatrix, Voortrekkers), Ben Swart, Erfurt.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 39
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-40",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "MLP"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.814955855914715,
+      "lng": 28.295396145993234
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MORELETAPARK",
+    "routeDescription": "Thabo Sehume, left along Jeff Masemola (Jacob Maré), Rissik, Justice Mahomed (Walker, Charles), Atterbury, Lois, Garsfontein, Hans Strijdom, Delfi, Rubenstein.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 40
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-41",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "MNV1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.70132511240525,
+      "lng": 28.165796203956
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MOUNTAIN VIEW 1",
+    "routeDescription": "Pretorius, Kgosi Mampuru (Potgieter), WF Nkomo (Church), Es’kia Mphahlele (DF Malan), Moot, Redelinghuys, Keyter, Henry Nourse, De Villiers, Frieda, Dorp, Seattle, Dunedin, Enterprise, Dorp, Karel Trichardt, Felix, Irvine.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 41
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-42",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "MNV4"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.696180575616637,
+      "lng": 28.156829478084102
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MOUNTAIN VIEW 4",
+    "routeDescription": "Bosman, Boom, Paul Kruge, Franzina, Smook, Booysens, Bruins, Burlington, Green, Lambert Lee, Denyssen, Barnato, Daphne, Daniel, Denyssen, Borwa, Belmont, Muzilakazi, Bulawayo, Jethro Mathunyane, Dovhula, Bulawayo, Denyssen, Sannaspos.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 42
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-43",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "MNK7"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.77109318239915,
+      "lng": 28.214263869743093
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MUCKLENEUK 7",
+    "routeDescription": "Madiba (Vermeulen), Thabo Sehume (Andries), Jeff Masemola (Jacob Maré), Rissik, Justice Mahomed (Walker), Florence Ribeiro (Queen Wilhelmina), Totius just before George Storrar.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 43
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-44",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "MRF"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.744341510306153,
+      "lng": 28.327624908588486
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MURRYFIELD",
+    "routeDescription": "Bosman, Madiba (Vermeulen), du Toit, Helen Joseph (Church), Stanza Bopape (Church), Cussonia, Samson, Brummeria, Orpen, Mispel, Ysterhout, Boekenhout, Tamboti, Watermeyer, Naboom, Hardekool, Grace, Clyde, Natalie, Joan, Albertus.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 44
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-45",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "ORC2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.651239715494967,
+      "lng": 28.102301219385105
+    },
+    "locationType": "City",
+    "rawRouteLabel": "THE ORCHARDS 2",
+    "routeDescription": "Doreen, Eerste, Boshoff, Adkins, Kruger, Boshoff, Eerste, Dieffenbachia, Camelia, Heinrich, Brits Road, Mabopane Highway, Es’kia Mphahlele (DF Malan) and WF Nkomo.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 45
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-46",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "ORC1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.648089784785665,
+      "lng": 28.125693094387298
+    },
+    "locationType": "City",
+    "rawRouteLabel": "THE ORCHARDS 1",
+    "routeDescription": "Daan de Wet Nel, Theron, Nelson, Luttig, Theron, André, du Plessis, Stevens, Marimba, Theron, Daan de Wet Nel, Jensen, JD Roos, Seymore, Kirkness, Wolmarans, Bosman, Dorfling, Jensen, Hulton, Orange, Garden, Fairwood, Hulton, Ribbon, Wiechers, Ribbon, Deeks, Hulton, Doreen, Brits, Mabopane, Es’kia Mphahlele (DF Malan), WF Nkomo.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 46
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-47",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "ORC3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.637824792407187,
+      "lng": 28.08379966746007
+    },
+    "locationType": "City",
+    "rawRouteLabel": "THE ORCHARDS 3",
+    "routeDescription": "Pretorius, Kgosi Mampuru (Potgieter), WF Nkomo (Church), Es’kia Mphahlele (DF Malan), Mabopane Highway, Brits Road, Longmore and Deetlefs up to cnr Ryegrass.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 47
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-49",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "PNH2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.678537234249102,
+      "lng": 28.156404456540134
+    },
+    "locationType": "City",
+    "rawRouteLabel": "PRETORIA NORTH 2",
+    "routeDescription": "Bosman, Boom, Paul Kruger, Rachel de Beer, Brits Road, Francois, Punctata, Makkie, Lucas Meyer, Pruinosa, Ciliaris, Blouaalwyn, Verecunda, Petronella, Angelica, Castanea, Lineata, Vaandrager, Barbara, Francois.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 49
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-50",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "PNH3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.665060135578354,
+      "lng": 28.159266338107393
+    },
+    "locationType": "City",
+    "rawRouteLabel": "PRETORIA NORTH 3",
+    "routeDescription": "Bosman, Boom, Paul Kruger, Rachel de Beer, Eeufees, Pres Steyn, Horn and Wonderboom Street.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 50
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-51",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "PNH4"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.659146269511456,
+      "lng": 28.1561307971726
+    },
+    "locationType": "City",
+    "rawRouteLabel": "PRETORIA NORTH 4",
+    "routeDescription": "Bosman, Boom, Paul Kruger, Rachel de Beer, Danie Theron, Wonderboom, Bakenkloof and Pagel.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 51
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-52",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "QWD"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.723256474287297,
+      "lng": 28.242304688760044
+    },
+    "locationType": "City",
+    "rawRouteLabel": "QUEENSWOOD",
+    "routeDescription": "Bosman, Madiba (Vermeulen), Steve Biko (Beatrix, Voortrekkers), Jacob, Pierneef, Stead and Dormer.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 52
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-53",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "RTN21"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.70090168123452,
+      "lng": 28.272869939721907
+    },
+    "locationType": "City",
+    "rawRouteLabel": "RIETFONTEIN 21",
+    "routeDescription": "Bosman, Madiba (Vermeulen), Steve Biko (Beatrix, Voortrekkers), Fredrika, 13th Avenue, Swemmer, 14th Avenue, Meyer, Codonia, Walter, Darling, Breyer, Ooievaar, Varing, Bergarend and Koekoek.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 53
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-54",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "SCA"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.75646795104735,
+      "lng": 28.275169685873518
+    },
+    "locationType": "City",
+    "rawRouteLabel": "INOVATION HUB (MURRYFIELD 2)",
+    "routeDescription": "Madiba (Vermeulen), Helen Joseph (du Toit), Stanza Bopape (Church), Pretoria, Cussonia, Meiring Naudé, Hotel, Max Theiler, Aaron Klug, Allan Cormack, Mark Shuttleworth.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 54
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-55",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "SVN1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.73285018538226,
+      "lng": 28.316473346247445
+    },
+    "locationType": "City",
+    "rawRouteLabel": "SILVERTON 1",
+    "routeDescription": "Bosman, Madiba (Vermeulen), Du Toit, Helen Joseph (Church), Stanza Bopape (Church), National Road, Pretoria, Waltloo, Flamink, Service Road.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 55
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-56",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "SVN2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.728733549406417,
+      "lng": 28.33232995160575
+    },
+    "locationType": "City",
+    "rawRouteLabel": "SILVERTON 2",
+    "routeDescription": "Bosman, Madiba (Vermeulen), Du Toit, Helen Joseph (Church), Stanza Bopape (Church), National Road, Pretoria, Waltloo, Simon Vermoten.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 56
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-57",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "SVN3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.739879386651868,
+      "lng": 28.32562594196627
+    },
+    "locationType": "City",
+    "rawRouteLabel": "SILVERTON 3",
+    "routeDescription": "Bosman, Madiba (Vermeulen), Du Toit, Helen Joseph (Church), Stanza Bopape (Church), National Road, Pretoria, Watermeyer, Keuning, Anne Marie, Simmetrie, Kegel, Ellips Street",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 57
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-58",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "TRP"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.657587808214068,
+      "lng": 28.143395392156503
+    },
+    "locationType": "City",
+    "rawRouteLabel": "THERESAPARK",
+    "routeDescription": "Pretorius, Kgosi Mampuru (Potgieter), WF Nkomo (Church), Es’kia Mphahlele (DF Malan), Mabopane Highway, Brits Road, Waterbok, Leopard, Barbara, Bokmakierie, Waterbok, Grysbok, Porcupine, Pangolin, Dolphin, Daphne, Willem Cruywagen, Joan, Ivor, Daan de Wet Nel, Waterbok, Bokser, Great Dane, Greyhound, Bontbok, Waterbok",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 58
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-59",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "TUI1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.723899597171602,
+      "lng": 28.13260111583198
+    },
+    "locationType": "City",
+    "rawRouteLabel": "TUINE 1",
+    "routeDescription": "Pretorius, Kgosi Mampuru (Potgieter), WF Nkomo (Church), Es’kia Mphahlele (DF Malan), Van der Hoff, Schurmanns, Lotty, Weir, Tuin, Louise and Diamond Street.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 59
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-60",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "VAL"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.79948983873768,
+      "lng": 28.157517226699436
+    },
+    "locationType": "City",
+    "rawRouteLabel": "VALHALLA",
+    "routeDescription": "Pretorius, Sophie de Bruyn (Schubart), Kgosi Mampuru (Potgieter), Jan Smuts, Paul Kruger, Fjord.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 60
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-61",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "VIL1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.71850510214832,
+      "lng": 28.24060592609073
+    },
+    "locationType": "City",
+    "rawRouteLabel": "VILLIERIA 1",
+    "routeDescription": "Bosman, Madiba (Vermeulen), Steve Biko (Beatrix, Voortrekkers), Fredrika, Frates, Niko Smit, 33rd.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 61
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-62",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "VIL2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.718211993193055,
+      "lng": 28.246863268389298
+    },
+    "locationType": "City",
+    "rawRouteLabel": "VILLIERIA 2",
+    "routeDescription": "Bosman, Madiba (Vermeulen), Steve Biko (Beatrix, Voortrekkers), Fredrika, Frates, Nico Smith (Michael Brink), Bloubokkie, Eland.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 62
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-63",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "VIL3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.715090315758495,
+      "lng": 28.253855747233967
+    },
+    "locationType": "City",
+    "rawRouteLabel": "VILLIERIA 3",
+    "routeDescription": "Bosman, Madiba (Vermeulen), Steve Biko (Beatrix, Voortrekkers), Fredrika, Frates, Niko Smit, Grant.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 63
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-64",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "VRT"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.788889890473502,
+      "lng": 28.132638262634526
+    },
+    "locationType": "City",
+    "rawRouteLabel": "THABA TSHWANE (VOORTREKKERHOOGTE)",
+    "routeDescription": "Pretorius, Sophie de Bruyn (Schubart), Kgosi Mampuru (Potgieter), Jan Smuts, Voortrekkerhoogte bypass, Voortrekker, De Wet, Voortrekker, Helwan, Bardia, Hendrik Potgieter, Van Riebeeck, Henry Williams, Jacobus Jooste, Stephanus Schoeman, Frederik Ernst, Andries Pretorius, Hendrik Alberts and Tobias Smuts Road.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 64
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-65",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "WKG"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.80435633808513,
+      "lng": 28.273738470956648
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WATERKLOOF GLEN",
+    "routeDescription": "Thabo Sehume, Jeff Masemola (Jacob Maré), Rissik, Justice Mahomed (Walker), Florence Ribeiro (Queen Wilhelmina), Main, Crown, Albert, Dely, Garstfontein, Selati, Club, Matroosberg, Lois, Dwyka and Jonathan to just east of Clarence Street.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 65
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-66",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "WKR"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.82529946159146,
+      "lng": 28.26382650852417
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WATERKLOOF RIDGE",
+    "routeDescription": "Madiba (Vermeulen), Du Toit, Francis Baard (Schoeman), Park, Leyds, Rissik, Justice Mahomed (Walker), Florence Ribeiro (Queen Wilhelmina), Main, Kloof, Rigel, Eridanus, Pleiades, Jupiter, Polaris, Neptune, Rigel, Schoongezicht, Cliff, Koedoesnek, Solomon Mahlangu (Hans Strijdom), Boeing, Alandale, Barnard and Klipbank.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 66
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-67",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "WVL6"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.700902458200936,
+      "lng": 28.272876418690768
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WAVERLEY 6",
+    "routeDescription": "Bosman, Madiba (Vermeulen), Steve Biko (Beatrix, Voortrekkers), Hertzog, Codonia, Starkey, Trumper, Lawson, Darling and Koekoek as far as Bergarand Street.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 67
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-68",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "WPK1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.76131988737571,
+      "lng": 28.121639563420196
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WEST PARK 1",
+    "routeDescription": "Pretorius, Sophie De Bruyn, Nana Sita, Charlotte Maxeke, Oliewen, Cobalt, Mica, Oliewen, Middle Crescent, Iscor, Inner Crescent, Van Dalsen, Rod and Kraai.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 68
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-69",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "WPK2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.75598556565692,
+      "lng": 28.127706037667387
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WEST PARK 2",
+    "routeDescription": "Pretorius, Kgosi Mampuru (Potgieter), WF Nkomo (Church) and Iscor, north of Bosbok Road.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 69
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-70",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "WPK7"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74657742526403,
+      "lng": 28.08972658242371
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WEST PARK 7",
+    "routeDescription": "Pretorius, Kgosi Mampuru (Potgieter), WF Nkomo (Church), Acridian, Anthesis and Cyme Crescent, north of Anthesis.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 70
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-71",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "WPK8"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.75446691127449,
+      "lng": 28.071290291779437
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WEST PARK 8",
+    "routeDescription": "Pretorius, Kgosi Mampuru (Potgieter), WF Nkomo (Church) and Citron to just before Ruth.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 71
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-73",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "DWS"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.7587644046458,
+      "lng": 28.311018889358053
+    },
+    "locationType": "City",
+    "rawRouteLabel": "DIE WILGERS",
+    "routeDescription": "Madiba (Vermeulen), Du Toit, Francis Baard, Park, Festival, Arcadia, Hilda, Park, Jan Shoba, Lynnwood, Camelia, Freesia, Hibiscus, Saligna, Spitskop, Lezard, Susan Soendal, Piet Louw and Rossouw Street, east of Gordon Verster Road",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 73
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-74",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "SUN3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.761606420844764,
+      "lng": 28.230057977799955
+    },
+    "locationType": "City",
+    "rawRouteLabel": "SUNNYSIDE 3",
+    "routeDescription": "Madiba (Vermeulen), Du Toit, Francis Baard (Schoeman), Park, Troye, Walker, Justice Mahomed, Roper",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 74
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-77",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "GRS3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.799694742390226,
+      "lng": 28.29592808542325
+    },
+    "locationType": "City",
+    "rawRouteLabel": "GARSFONTEIN 3",
+    "routeDescription": "Madiba (Vermeulen), Du Toit, Francis Baard (Schoeman), Park, Troye, Robert Sobukwe (Esselen), Bourke, Spuy, Walton Jameson, Jorissen, Lynnwood, Atterbury, The Village, The Hillside, Klarinet, Atterbury, Lois, Garsfontein, Corobay, Aramist, Serene, Landi, Keeshond, Issie Smuts, Serene, Velddrif and Windsor Street.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 77
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-78",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "TUI2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.717502654993602,
+      "lng": 28.127005018700824
+    },
+    "locationType": "City",
+    "rawRouteLabel": "TUINE 2",
+    "routeDescription": "Pretorius, Kgosi Mampuru (Potgieter), WF Nkomo (Church), Es’kia Mphahlele (DF Malan), Van der Hoff, Schurmanns, Alter, Ernest, Tuin, Commercial, Luderitz.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 78
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-79",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "DAN6"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.738165670985484,
+      "lng": 28.09559171762488
+    },
+    "locationType": "City",
+    "rawRouteLabel": "DANVILLE 6",
+    "routeDescription": "Pretorius, Kgosi Mampuru, WF Nkomo, Transoranje, Ashley,  Albertyn, Schmidt, Strachan, Sekelgras, Van den Berg.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 79
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-80",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "ROUTE4"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.87781611223448,
+      "lng": 28.20091190465101
+    },
+    "locationType": "Olievenhoutbos",
+    "rawRouteLabel": "ROUTE 4",
+    "routeDescription": "Waterberg, Modisane, Serenade, Samrand, Ikati, Cycad, Legong, Umhlume, Bohlale, Motolo, Lindani, Marudi, Motolo, R55, N14, John Vorster, Nellmapius, John Vorster, Luton, Logan, Tegel, Oak, Witch-Hazel, Olievenhoutbosch, John Vorster, N14, R55.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 80
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-81",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "ROUTE7"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.842239826345185,
+      "lng": 28.161810606489933
+    },
+    "locationType": "Olievenhoutbos",
+    "rawRouteLabel": "ROUTE 7",
+    "routeDescription": "Waterberg, Modisane, Serenade, Samrand, Ikati, Cycad, Legong, Umhlume, Bohlale, Motolo, Lindani, Marudi, Motolo, R55, Ruimte, Aletta, Louisa, Rooihuiskraal, right along Ruimte, right along Saxby, Lyttleton, Harvard, Blackwood, Galway, Hendrik Verwoerd, Willem Botha circle, Ruimte, Chris Hougaard, Ruimte, Rooihuiskraal, Louisa, Aletta, Ruimte, R55, Waterberg.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 81
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-82",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "WBS19"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.69639162576697,
+      "lng": 28.202043196333204
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WONDERBOOM SOUTH 19",
+    "routeDescription": "Bosman, Madiba (Vermeulen), Steve Biko (Beatrix, Voortrekkers), De Beer, 10th Avenue.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 82
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-83",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "MNK7"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.7480772445054,
+      "lng": 28.190658338407637
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MUCKLENEUK 7",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 83
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-84",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "MLP"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.748516421569214,
+      "lng": 28.19069520644907
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MORELETAPARK",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 84
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-85",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "WKG",
+      "MPK2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.748334401685817,
+      "lng": 28.19064359456586
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MONUMENTPARK 2, WATERKLOOF GLEN",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 85
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-86",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "BKN10"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74863099777948,
+      "lng": 28.19070482513304
+    },
+    "locationType": "City",
+    "rawRouteLabel": "BROOKLYN 10",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 86
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-87",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "MNV1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.747830869851946,
+      "lng": 28.189554551842363
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MOUNTAIN VIEW 1",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 87
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-88",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "VRT"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74781952614972,
+      "lng": 28.189718242767924
+    },
+    "locationType": "City",
+    "rawRouteLabel": "THABA TSHWANE (VOORTREKKERHOOGTE)",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 88
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-89",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "VAL"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.747825719053466,
+      "lng": 28.18962873407053
+    },
+    "locationType": "City",
+    "rawRouteLabel": "VALHALLA",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 89
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-90",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "ORC1",
+      "ORC2",
+      "ORC3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.747841852419004,
+      "lng": 28.189396065819775
+    },
+    "locationType": "City",
+    "rawRouteLabel": "THE ORCHARDS 1, THE ORCHARDS 2, THE ORCHARDS 3",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 90
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-92",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "ERS2",
+      "ERS3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74784715075535,
+      "lng": 28.1889859379697
+    },
+    "locationType": "City",
+    "rawRouteLabel": "ERASMIA 2, ERASMIA 3",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 92
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-93",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "WPK6",
+      "WPK7",
+      "WPK8"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.747895501619315,
+      "lng": 28.18861965399805
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WEST PARK 6, WEST PARK 7, WEST PARK 8",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 93
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-94",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "DAN1",
+      "DAN3",
+      "DAN6"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.747949320544286,
+      "lng": 28.187851276359034
+    },
+    "locationType": "City",
+    "rawRouteLabel": "DANVILLE 1, DANVILLE 3, DANVILLE 6",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 94
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-95",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "DAN2",
+      "DAN4",
+      "DAN5"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.747979733827616,
+      "lng": 28.18742577549255
+    },
+    "locationType": "City",
+    "rawRouteLabel": "DANVILLE 2, DANVILLE 4, DANVILLE 5",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 95
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-97",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "TUI2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.748016643214513,
+      "lng": 28.18688444204643
+    },
+    "locationType": "City",
+    "rawRouteLabel": "TUINE 2",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 97
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-98",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "TUI1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74801969659569,
+      "lng": 28.186839646005055
+    },
+    "locationType": "City",
+    "rawRouteLabel": "TUINE 1",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 98
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-101",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "WBS19",
+      "WBS20",
+      "RTN21"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74736903575947,
+      "lng": 28.185683168657054
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WONDERBOOM SOUTH 19, WONDERBOOM SOUTH 20, RIETFONT",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 101
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-102",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "VIL1",
+      "VIL2",
+      "VIL3",
+      "WVL6"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.747174221248045,
+      "lng": 28.185666827451147
+    },
+    "locationType": "City",
+    "rawRouteLabel": "VILLIERIA 1, VILLIERIA 2, VILLIERIA 3, WAVERLEY 6",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 102
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-104",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "MRP",
+      "SVN3",
+      "COL4",
+      "COL5",
+      "COL6"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.747405583803104,
+      "lng": 28.185686235302548
+    },
+    "locationType": "City",
+    "rawRouteLabel": "COLBYN 4, COLBYN 5, COLBYN 6, MEYERSPARK, SILVERTON 1",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 104
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-105",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "SVN1",
+      "SVN2",
+      "MRF"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.744727223044226,
+      "lng": 28.190873084183238
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MEYERSPARK, SILVERTON 1, SILVERTON 2",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 105
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-107",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "WBM1",
+      "WBM2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74478239777427,
+      "lng": 28.185466319197953
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WONDERBOOM 1, WONDERBOOM 2",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 107
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-108",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "WBM3",
+      "WBM4"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.744385938960836,
+      "lng": 28.185433052715133
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WONDERBOOM 3, WONDERBOOM 4",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 108
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-109",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "PNH1",
+      "PNH2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.744391234288987,
+      "lng": 28.185433496974948
+    },
+    "locationType": "City",
+    "rawRouteLabel": "PRETORIA NORTH 1, PRETORIA NORTH 2",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 109
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-110",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "PNH3",
+      "PNH4"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74416795545519,
+      "lng": 28.185414761338816
+    },
+    "locationType": "City",
+    "rawRouteLabel": "PRETORIA NORTH 3, PRETORIA NORTH 4",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 110
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-111",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "DNP1",
+      "DNP2",
+      "DNP3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.744061804159088,
+      "lng": 28.18540585392624
+    },
+    "locationType": "City",
+    "rawRouteLabel": "DOORNPOORT 1, DOORNPOORT 2, DOORNPOORT 3",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 111
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-112",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "ELN1",
+      "WKR"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74500582400488,
+      "lng": 28.186269661448694
+    },
+    "locationType": "City",
+    "rawRouteLabel": "EASTLYNNE 1, WATERKLOOF RIDGE",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 112
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-114",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "BKN9"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.744968200454228,
+      "lng": 28.186772124053544
+    },
+    "locationType": "City",
+    "rawRouteLabel": "BROOKLYN 9",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 114
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-115",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "MNK7"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.745040388723815,
+      "lng": 28.187155171744415
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MUCKLENEUK 7",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 115
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-116",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "GRS1",
+      "GRS2",
+      "GRS3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.745084354416864,
+      "lng": 28.18653555591181
+    },
+    "locationType": "City",
+    "rawRouteLabel": "GARSFONTEIN 1, GARSFONTEIN 2, GARSFONTEIN 3",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 116
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-117",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "DWS"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74494889256437,
+      "lng": 28.188464754865066
+    },
+    "locationType": "City",
+    "rawRouteLabel": "DIE WILGERS",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 117
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-118",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "LWR"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74484704683,
+      "lng": 28.18853878691684
+    },
+    "locationType": "City",
+    "rawRouteLabel": "LYNNWOOD RIDGE",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 118
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-119",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "BKN5",
+      "BKN8"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74483203212287,
+      "lng": 28.188758488761117
+    },
+    "locationType": "City",
+    "rawRouteLabel": "BROOKLYN 5, BROOKLYN 8",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 119
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-120",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "FRG"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74491274127138,
+      "lng": 28.18900620541095
+    },
+    "locationType": "City",
+    "rawRouteLabel": "FAERIE GLEN",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 120
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-121",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "LWM"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.744909247335666,
+      "lng": 28.18905532457478
+    },
+    "locationType": "City",
+    "rawRouteLabel": "LYNNWOOD MANOR",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 121
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-122",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "ELN1",
+      "ELN2",
+      "BKN9"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74458360702561,
+      "lng": 28.193245494447282
+    },
+    "locationType": "City",
+    "rawRouteLabel": "EASTLYNNE 1, EASTLYNNE 2, BROOKLYN 9",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 122
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-123",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "RTN21",
+      "WVL6",
+      "WBS19",
+      "WBS20"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.744616622007786,
+      "lng": 28.19326580079662
+    },
+    "locationType": "City",
+    "rawRouteLabel": "RIETFONTEIN 21, WAVERLEY 6, WONDERBOOM SOUTH 19, WONDERBOOM SOUTH 20",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 123
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-125",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "GRS1",
+      "GRS2",
+      "GRS3",
+      "SUN3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74455093945846,
+      "lng": 28.19422753299901
+    },
+    "locationType": "City",
+    "rawRouteLabel": "GARSFONTEIN 1, GARSFONTEIN 2, GARSFONTEIN 3, SUNNYSIDE 3",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 125
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-126",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "DWS",
+      "LWR"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74452839943565,
+      "lng": 28.19455301258929
+    },
+    "locationType": "City",
+    "rawRouteLabel": "DIE WILGERS, LYNNWOOD RIDGE",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 126
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-127",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "FRG",
+      "LWM"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.744516659048177,
+      "lng": 28.194722554433476
+    },
+    "locationType": "City",
+    "rawRouteLabel": "FAERIE GLEN, LYNNWOOD MANOR",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 127
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-128",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "BKN5",
+      "BKN8",
+      "WKR"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74441304227034,
+      "lng": 28.19490915763396
+    },
+    "locationType": "City",
+    "rawRouteLabel": "BROOKLYN 5, BROOKLYN 8, WATERKLOOF RIDGE",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 128
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-129",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "MRP",
+      "MRF"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.744494835569625,
+      "lng": 28.195036128436417
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MEYERSPARK, MURRYFIELD",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 129
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-130",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "COL4",
+      "COL5",
+      "COL6",
+      "SVN1",
+      "SVN2",
+      "SVN3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74446577027047,
+      "lng": 28.195461040265098
+    },
+    "locationType": "City",
+    "rawRouteLabel": "COLBYN 4, COLBYN 5, COLBYN 6, SILVERTON 1, SILVERTON 2, SILVERTON 3",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 130
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-131",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "ELN1",
+      "ELN2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.744411206169755,
+      "lng": 28.196092289495116
+    },
+    "locationType": "City",
+    "rawRouteLabel": "EASTLYNNE 1, EASTLYNNE 2",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 131
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-132",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "SUN3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.745068024066956,
+      "lng": 28.186738774270786
+    },
+    "locationType": "City",
+    "rawRouteLabel": "SUNNYSIDE 3",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 132
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-133",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "SCA"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.7486310113235,
+      "lng": 28.190704826037912
+    },
+    "locationType": "City",
+    "rawRouteLabel": "INOVATION HUB (MURRYFIELD 2)",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 133
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-134",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "CEN"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.747985209226847,
+      "lng": 28.188580460492023
+    },
+    "locationType": "City",
+    "rawRouteLabel": "CENTURION",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 134
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-135",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "WPK1",
+      "WPK2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.747950263833015,
+      "lng": 28.189106221464844
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WEST PARK 1, WEST PARK 2",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 135
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-136",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "TRP"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.747825809205857,
+      "lng": 28.18962757934582
+    },
+    "locationType": "City",
+    "rawRouteLabel": "THERESAPARK",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 136
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-137",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "ROUTE4",
+      "ROUTE7",
+      "OLIV"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.906790037808857,
+      "lng": 28.101985112838868
+    },
+    "locationType": "Olievenhoutbos",
+    "rawRouteLabel": "ROUTE 4, ROUTE 7, OLIEVENHOUTBOSCH",
+    "routeDescription": "DEPARTURE POINT IN OLIEVENHOUTBOS",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 137
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-144",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "OLIV"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.8716363352577,
+      "lng": 28.19523436968938
+    },
+    "locationType": "Olievenhoutbos",
+    "rawRouteLabel": "OLIEVENHOUTBOSCH",
+    "routeDescription": "Waterberg, Serenade, Symphony, Samrand, Ikati, Cycad, Legong, Umhlume, Bohlale, Waterberg, Marudi, Waterberg, R55, N14, John Voster, Olivenhoutbosh, Jean avenue, Nellmapius, Main, Botha Avenue, Cantoment, Jean",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 144
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-147",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "ELN2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74507279223242,
+      "lng": 28.186668579763026
+    },
+    "locationType": "City",
+    "rawRouteLabel": "EASTLYNNE 2",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 147
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-148",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "MRF",
+      "SVN1",
+      "SVN2"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.747427971913528,
+      "lng": 28.185641370431664
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MURRYFIELD, SILVERTON 1, SILVERTON 2",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 148
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-150",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "SCA"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.744890214583062,
+      "lng": 28.189322896443684
+    },
+    "locationType": "City",
+    "rawRouteLabel": "INOVATION HUB (MURRYFIELD 2)",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 150
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-151",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "WPK6"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.75437430174744,
+      "lng": 28.097171607621625
+    },
+    "locationType": "City",
+    "rawRouteLabel": "WEST PARK 6",
+    "routeDescription": "Pretorius, Kgosi Mampuru (Potgieter), WF Nkomo (Church) and Mhiri up to Manhatting flats.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 151
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-156",
+    "operatorId": "tshwane-bus",
+    "role": "to",
+    "routeIds": [
+      "PNH1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.686407950047993,
+      "lng": 28.162033107035022
+    },
+    "locationType": "City",
+    "rawRouteLabel": "PRETORIA NORTH 1",
+    "routeDescription": "Bosman, Boom, Paul Kruger, Rachel de Beer, Jan van Riebeeck, Suider, West, Brits Road, Tolbos, Nunanda, Oxalis, Berg, Grysduiker and Florauna Road.",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "To Location",
+      "departureDesc": "T"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 156
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-158",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "QWD",
+      "MGD1"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74723852546945,
+      "lng": 28.18567221638102
+    },
+    "locationType": "City",
+    "rawRouteLabel": "QUEENSWOOD, MOREGLOED 1",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 158
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-159",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "MNV2",
+      "MNV4",
+      "CPK"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74587076318078,
+      "lng": 28.1855575478019
+    },
+    "locationType": "City",
+    "rawRouteLabel": "CAPITAL PARK, MOUNTAIN VIEW 2, MOUNTAIN VIEW 4",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 159
+    }
+  },
+  {
+    "id": "tshwane-bus-terminal-162",
+    "operatorId": "tshwane-bus",
+    "role": "from",
+    "routeIds": [
+      "MGD1",
+      "QWD",
+      "VIL1",
+      "VIL2",
+      "VIL3"
+    ],
+    "routeReferenceMethod": "official-route-id",
+    "location": {
+      "lat": -25.74460219686791,
+      "lng": 28.193487313638165
+    },
+    "locationType": "City",
+    "rawRouteLabel": "MOREGLOED 1, QUEENSWOOD, VILLIERIA 1, VILLIERIA 2, VILLIERIA 3",
+    "routeDescription": "DEPARTURE POINT IN TOWN",
+    "status": "Approved",
+    "sourceFields": {
+      "stopType": "From Location",
+      "departureDesc": "DP"
+    },
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "Tshwane Bus Service Stops / Route Locations",
+      "sourceType": "official-gis",
+      "rawObjectId": 162
+    }
+  }
+]

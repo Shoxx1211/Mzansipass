@@ -1,0 +1,5 @@
+# Never commit generated City GIS geometry. Developer-only license review.
+/runtime.json
+/reports/
+
+/phase2d-evidence.json

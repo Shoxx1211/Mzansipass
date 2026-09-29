@@ -1,0 +1,3292 @@
+{
+  "schemaVersion": 1,
+  "operatorId": "putco",
+  "serviceArea": "soshanguve",
+  "generatedAt": "2026-09-17T12:49:21.011Z",
+  "capabilities": {
+    "officialPhysicalZones": true,
+    "officialPlaceZoneReferences": true,
+    "officialGpsZonePolygons": false,
+    "official2026Fares": true,
+    "officialTripCodes": true,
+    "officialTransferPoints": true,
+    "routeGeometry": false,
+    "timetable": false,
+    "realtime": false
+  },
+  "zones": {
+    "physical": [
+      {
+        "id": "L4",
+        "fareGroup": "L3/4",
+        "places": [
+          "F4",
+          "Zone MM",
+          "Zone P",
+          "Zone R",
+          "Zone T",
+          "Zone W",
+          "Zone X",
+          "ZTE"
+        ]
+      },
+      {
+        "id": "L3",
+        "fareGroup": "L3/4",
+        "places": [
+          "Mabopane Interchange",
+          "Padisago P School",
+          "PP (Makgabo)",
+          "Zone HH & PP",
+          "Zone JJ",
+          "Block BB",
+          "Block DD",
+          "Block FFW",
+          "Block GG",
+          "Block NN",
+          "Central City-Mabopane"
+        ]
+      },
+      {
+        "id": "L2",
+        "fareGroup": "L2",
+        "places": [
+          "Block M",
+          "Commissioner",
+          "Crossing Mall",
+          "L Ext",
+          "L Extension (Technical Z)",
+          "Praise Tabernacle Church",
+          "Ruth 1st Entrance",
+          "Transfer",
+          "Zone M"
+        ]
+      },
+      {
+        "id": "L1",
+        "fareGroup": "L1",
+        "places": [
+          "Block XX",
+          "Central School-WW",
+          "Ext 13",
+          "Ext 3 & 4 Cross",
+          "Rodney Mokoena",
+          "SA Hardware/ Block XX",
+          "Southview Mall",
+          "Vicks Ext 2",
+          "XX Entrance",
+          "Zone XX"
+        ]
+      },
+      {
+        "id": "C1",
+        "fareGroup": "1",
+        "places": [
+          "Akasia Town Council",
+          "Akasiaboom Street",
+          "Hornsnek",
+          "Orchards",
+          "Rosslyn",
+          "Wonderpark",
+          "Wonderpark Mall"
+        ]
+      },
+      {
+        "id": "B1",
+        "fareGroup": "1",
+        "places": [
+          "Annlin",
+          "Kolonade",
+          "Doornpoort(1),(2)",
+          "Lavender (R566)",
+          "Military Air Base T/Off",
+          "Montana",
+          "Onderstepoort",
+          "Pretoria North",
+          "Pyramid",
+          "Sinoville",
+          "Wonderboom"
+        ]
+      },
+      {
+        "id": "A2",
+        "fareGroup": "2",
+        "places": [
+          "Eastlynne"
+        ]
+      },
+      {
+        "id": "B2",
+        "fareGroup": "2",
+        "places": [
+          "Academic Hosp",
+          "Arcadia City",
+          "Atteridgeville",
+          "Belle Ombre Stn",
+          "Capital Park",
+          "Eldoglen",
+          "Erasmusrand",
+          "Fountains Valley",
+          "Gezina",
+          "Hatfield",
+          "Hazelwood",
+          "Hornsnek",
+          "Kloofsig",
+          "Koedoespoort",
+          "Laudium",
+          "Mahem",
+          "Malawi",
+          "Manhattan Hotel",
+          "Marabastad",
+          "Mayville Mall",
+          "Menlopark / Menlopark High School",
+          "Monument Park / Extention 2",
+          "Muckleneuk",
+          "Pretoria Stn /Pretoria Zoo",
+          "Quaggasrand T/Off",
+          "Queenswood Spar",
+          "Pretoria West",
+          "Thaba Tshwane",
+          "TUT",
+          "UNISA",
+          "Valhalla",
+          "Voortrekkerhoogte",
+          "Waterkloof",
+          "Waverley"
+        ]
+      },
+      {
+        "id": "A3",
+        "fareGroup": "3",
+        "places": [
+          "Baviaanspoort",
+          "Denneboom",
+          "Derdepoort",
+          "Edendale Cross",
+          "Eersterus",
+          "Jan Niemand Park",
+          "Kameeldrift SAPS",
+          "Roodeplaat Spar",
+          "Mamelodi",
+          "SAMCOR (FORD)",
+          "Silverton"
+        ]
+      },
+      {
+        "id": "H8",
+        "fareGroup": "3",
+        "places": [
+          "Bynerspoort",
+          "Cavalier",
+          "De Wagendrift",
+          "H/Skraal",
+          "Krokodilspruit Skietbaan",
+          "Landbou ARC T/Off",
+          "Mamakara",
+          "Mutango Lodge",
+          "Pebblerock",
+          "Pienaars River Bridge",
+          "Roodeplaat",
+          "RR Butchery",
+          "Ruah Park",
+          "Tweefontein Fork",
+          "Walmanstal T/Off"
+        ]
+      },
+      {
+        "id": "B4",
+        "fareGroup": "4",
+        "places": [
+          "Armscor",
+          "Atterbury",
+          "Boardwalk",
+          "Boschkop",
+          "Constantia Park",
+          "CSIR",
+          "Equestria",
+          "Erasmuskloof",
+          "Faerie Glen",
+          "Glenvillage",
+          "Lynwood",
+          "Menlyn",
+          "Silverlakes",
+          "SuperSpar Willow Way",
+          "The Groove",
+          "Watermeyer",
+          "Wilgers"
+        ]
+      },
+      {
+        "id": "C4",
+        "fareGroup": "4",
+        "places": [
+          "Basheewa Centre",
+          "Bronberick",
+          "Bushiwa",
+          "Centurion",
+          "Doringkloof",
+          "Eco Park",
+          "Elardus Park",
+          "Eldo Glen",
+          "Faerie Glen X28",
+          "Garsfontein",
+          "Gateway",
+          "Irene",
+          "Lyttelton",
+          "Midrand Estates",
+          "Midstream",
+          "Rooihuiskraal",
+          "Southdowns",
+          "Sunderland Ridge",
+          "The Reeds",
+          "Wierda Park"
+        ]
+      },
+      {
+        "id": "D5",
+        "fareGroup": "5",
+        "places": [
+          "Boulders",
+          "Bryanston",
+          "Buccleuch",
+          "Chloorkop",
+          "Diepsloot",
+          "Freedom Park",
+          "Kyasand",
+          "Megawat Park",
+          "Midrand",
+          "SA Mint",
+          "Samrand",
+          "Strijdom Park",
+          "Voda World",
+          "Waterfall",
+          "Witkoppen 4 Ways",
+          "Woodmead Mall",
+          "Wynberg"
+        ]
+      }
+    ],
+    "fareGroups": {
+      "1": [
+        "B1",
+        "C1"
+      ],
+      "2": [
+        "A2",
+        "B2"
+      ],
+      "3": [
+        "A3",
+        "H8"
+      ],
+      "4": [
+        "B4",
+        "C4"
+      ],
+      "5": [
+        "D5"
+      ],
+      "L1": [
+        "L1"
+      ],
+      "L2": [
+        "L2"
+      ],
+      "L3/4": [
+        "L3",
+        "L4"
+      ]
+    },
+    "placeIndex": [
+      {
+        "normalizedName": "academic hosp",
+        "displayNames": [
+          "Academic Hosp"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "akasia town council",
+        "displayNames": [
+          "Akasia Town Council"
+        ],
+        "zoneIds": [
+          "C1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "akasiaboom street",
+        "displayNames": [
+          "Akasiaboom Street"
+        ],
+        "zoneIds": [
+          "C1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "annlin",
+        "displayNames": [
+          "Annlin"
+        ],
+        "zoneIds": [
+          "B1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "arcadia city",
+        "displayNames": [
+          "Arcadia City"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "armscor",
+        "displayNames": [
+          "Armscor"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "atterbury",
+        "displayNames": [
+          "Atterbury"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "atteridgeville",
+        "displayNames": [
+          "Atteridgeville"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "basheewa centre",
+        "displayNames": [
+          "Basheewa Centre"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "baviaanspoort",
+        "displayNames": [
+          "Baviaanspoort"
+        ],
+        "zoneIds": [
+          "A3"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "belle ombre stn",
+        "displayNames": [
+          "Belle Ombre Stn"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "block bb",
+        "displayNames": [
+          "Block BB"
+        ],
+        "zoneIds": [
+          "L3"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "block dd",
+        "displayNames": [
+          "Block DD"
+        ],
+        "zoneIds": [
+          "L3"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "block ffw",
+        "displayNames": [
+          "Block FFW"
+        ],
+        "zoneIds": [
+          "L3"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "block gg",
+        "displayNames": [
+          "Block GG"
+        ],
+        "zoneIds": [
+          "L3"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "block m",
+        "displayNames": [
+          "Block M"
+        ],
+        "zoneIds": [
+          "L2"
+        ],
+        "fareGroups": [
+          "L2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "block nn",
+        "displayNames": [
+          "Block NN"
+        ],
+        "zoneIds": [
+          "L3"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "block xx",
+        "displayNames": [
+          "Block XX"
+        ],
+        "zoneIds": [
+          "L1"
+        ],
+        "fareGroups": [
+          "L1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "boardwalk",
+        "displayNames": [
+          "Boardwalk"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "boschkop",
+        "displayNames": [
+          "Boschkop"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "boulders",
+        "displayNames": [
+          "Boulders"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "bronberick",
+        "displayNames": [
+          "Bronberick"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "bryanston",
+        "displayNames": [
+          "Bryanston"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "buccleuch",
+        "displayNames": [
+          "Buccleuch"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "bushiwa",
+        "displayNames": [
+          "Bushiwa"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "bynerspoort",
+        "displayNames": [
+          "Bynerspoort"
+        ],
+        "zoneIds": [
+          "H8"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "capital park",
+        "displayNames": [
+          "Capital Park"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "cavalier",
+        "displayNames": [
+          "Cavalier"
+        ],
+        "zoneIds": [
+          "H8"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "central city-mabopane",
+        "displayNames": [
+          "Central City-Mabopane"
+        ],
+        "zoneIds": [
+          "L3"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "central school-ww",
+        "displayNames": [
+          "Central School-WW"
+        ],
+        "zoneIds": [
+          "L1"
+        ],
+        "fareGroups": [
+          "L1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "centurion",
+        "displayNames": [
+          "Centurion"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "chloorkop",
+        "displayNames": [
+          "Chloorkop"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "commissioner",
+        "displayNames": [
+          "Commissioner"
+        ],
+        "zoneIds": [
+          "L2"
+        ],
+        "fareGroups": [
+          "L2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "constantia park",
+        "displayNames": [
+          "Constantia Park"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "crossing mall",
+        "displayNames": [
+          "Crossing Mall"
+        ],
+        "zoneIds": [
+          "L2"
+        ],
+        "fareGroups": [
+          "L2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "csir",
+        "displayNames": [
+          "CSIR"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "de wagendrift",
+        "displayNames": [
+          "De Wagendrift"
+        ],
+        "zoneIds": [
+          "H8"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "denneboom",
+        "displayNames": [
+          "Denneboom"
+        ],
+        "zoneIds": [
+          "A3"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "derdepoort",
+        "displayNames": [
+          "Derdepoort"
+        ],
+        "zoneIds": [
+          "A3"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "diepsloot",
+        "displayNames": [
+          "Diepsloot"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "doornpoort12",
+        "displayNames": [
+          "Doornpoort(1),(2)"
+        ],
+        "zoneIds": [
+          "B1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "doringkloof",
+        "displayNames": [
+          "Doringkloof"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "eastlynne",
+        "displayNames": [
+          "Eastlynne"
+        ],
+        "zoneIds": [
+          "A2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "eco park",
+        "displayNames": [
+          "Eco Park"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "edendale cross",
+        "displayNames": [
+          "Edendale Cross"
+        ],
+        "zoneIds": [
+          "A3"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "eersterus",
+        "displayNames": [
+          "Eersterus"
+        ],
+        "zoneIds": [
+          "A3"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "elardus park",
+        "displayNames": [
+          "Elardus Park"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "eldo glen",
+        "displayNames": [
+          "Eldo Glen"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "eldoglen",
+        "displayNames": [
+          "Eldoglen"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "equestria",
+        "displayNames": [
+          "Equestria"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "erasmuskloof",
+        "displayNames": [
+          "Erasmuskloof"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "erasmusrand",
+        "displayNames": [
+          "Erasmusrand"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "ext 13",
+        "displayNames": [
+          "Ext 13"
+        ],
+        "zoneIds": [
+          "L1"
+        ],
+        "fareGroups": [
+          "L1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "ext 3 4 cross",
+        "displayNames": [
+          "Ext 3 & 4 Cross"
+        ],
+        "zoneIds": [
+          "L1"
+        ],
+        "fareGroups": [
+          "L1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "f4",
+        "displayNames": [
+          "F4"
+        ],
+        "zoneIds": [
+          "L4"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "faerie glen",
+        "displayNames": [
+          "Faerie Glen"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "faerie glen x28",
+        "displayNames": [
+          "Faerie Glen X28"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "fountains valley",
+        "displayNames": [
+          "Fountains Valley"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "freedom park",
+        "displayNames": [
+          "Freedom Park"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "garsfontein",
+        "displayNames": [
+          "Garsfontein"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "gateway",
+        "displayNames": [
+          "Gateway"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "gezina",
+        "displayNames": [
+          "Gezina"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "glenvillage",
+        "displayNames": [
+          "Glenvillage"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "h/skraal",
+        "displayNames": [
+          "H/Skraal"
+        ],
+        "zoneIds": [
+          "H8"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "hatfield",
+        "displayNames": [
+          "Hatfield"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "hazelwood",
+        "displayNames": [
+          "Hazelwood"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "hornsnek",
+        "displayNames": [
+          "Hornsnek"
+        ],
+        "zoneIds": [
+          "C1",
+          "B2"
+        ],
+        "fareGroups": [
+          "1",
+          "2"
+        ],
+        "ambiguous": true
+      },
+      {
+        "normalizedName": "irene",
+        "displayNames": [
+          "Irene"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "jan niemand park",
+        "displayNames": [
+          "Jan Niemand Park"
+        ],
+        "zoneIds": [
+          "A3"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "kameeldrift saps",
+        "displayNames": [
+          "Kameeldrift SAPS"
+        ],
+        "zoneIds": [
+          "A3"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "kloofsig",
+        "displayNames": [
+          "Kloofsig"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "koedoespoort",
+        "displayNames": [
+          "Koedoespoort"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "kolonade",
+        "displayNames": [
+          "Kolonade"
+        ],
+        "zoneIds": [
+          "B1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "krokodilspruit skietbaan",
+        "displayNames": [
+          "Krokodilspruit Skietbaan"
+        ],
+        "zoneIds": [
+          "H8"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "kyasand",
+        "displayNames": [
+          "Kyasand"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "l ext",
+        "displayNames": [
+          "L Ext"
+        ],
+        "zoneIds": [
+          "L2"
+        ],
+        "fareGroups": [
+          "L2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "l extension technical z",
+        "displayNames": [
+          "L Extension (Technical Z)"
+        ],
+        "zoneIds": [
+          "L2"
+        ],
+        "fareGroups": [
+          "L2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "landbou arc t/off",
+        "displayNames": [
+          "Landbou ARC T/Off"
+        ],
+        "zoneIds": [
+          "H8"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "laudium",
+        "displayNames": [
+          "Laudium"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "lavender r566",
+        "displayNames": [
+          "Lavender (R566)"
+        ],
+        "zoneIds": [
+          "B1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "lynwood",
+        "displayNames": [
+          "Lynwood"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "lyttelton",
+        "displayNames": [
+          "Lyttelton"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "mabopane interchange",
+        "displayNames": [
+          "Mabopane Interchange"
+        ],
+        "zoneIds": [
+          "L3"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "mahem",
+        "displayNames": [
+          "Mahem"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "malawi",
+        "displayNames": [
+          "Malawi"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "mamakara",
+        "displayNames": [
+          "Mamakara"
+        ],
+        "zoneIds": [
+          "H8"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "mamelodi",
+        "displayNames": [
+          "Mamelodi"
+        ],
+        "zoneIds": [
+          "A3"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "manhattan hotel",
+        "displayNames": [
+          "Manhattan Hotel"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "marabastad",
+        "displayNames": [
+          "Marabastad"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "mayville mall",
+        "displayNames": [
+          "Mayville Mall"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "megawat park",
+        "displayNames": [
+          "Megawat Park"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "menlopark / menlopark high school",
+        "displayNames": [
+          "Menlopark / Menlopark High School"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "menlyn",
+        "displayNames": [
+          "Menlyn"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "midrand",
+        "displayNames": [
+          "Midrand"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "midrand estates",
+        "displayNames": [
+          "Midrand Estates"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "midstream",
+        "displayNames": [
+          "Midstream"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "military air base t/off",
+        "displayNames": [
+          "Military Air Base T/Off"
+        ],
+        "zoneIds": [
+          "B1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "montana",
+        "displayNames": [
+          "Montana"
+        ],
+        "zoneIds": [
+          "B1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "monument park / extention 2",
+        "displayNames": [
+          "Monument Park / Extention 2"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "muckleneuk",
+        "displayNames": [
+          "Muckleneuk"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "mutango lodge",
+        "displayNames": [
+          "Mutango Lodge"
+        ],
+        "zoneIds": [
+          "H8"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "onderstepoort",
+        "displayNames": [
+          "Onderstepoort"
+        ],
+        "zoneIds": [
+          "B1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "orchards",
+        "displayNames": [
+          "Orchards"
+        ],
+        "zoneIds": [
+          "C1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "padisago p school",
+        "displayNames": [
+          "Padisago P School"
+        ],
+        "zoneIds": [
+          "L3"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "pebblerock",
+        "displayNames": [
+          "Pebblerock"
+        ],
+        "zoneIds": [
+          "H8"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "pienaars river bridge",
+        "displayNames": [
+          "Pienaars River Bridge"
+        ],
+        "zoneIds": [
+          "H8"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "pp makgabo",
+        "displayNames": [
+          "PP (Makgabo)"
+        ],
+        "zoneIds": [
+          "L3"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "praise tabernacle church",
+        "displayNames": [
+          "Praise Tabernacle Church"
+        ],
+        "zoneIds": [
+          "L2"
+        ],
+        "fareGroups": [
+          "L2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "pretoria north",
+        "displayNames": [
+          "Pretoria North"
+        ],
+        "zoneIds": [
+          "B1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "pretoria stn /pretoria zoo",
+        "displayNames": [
+          "Pretoria Stn /Pretoria Zoo"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "pretoria west",
+        "displayNames": [
+          "Pretoria West"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "pyramid",
+        "displayNames": [
+          "Pyramid"
+        ],
+        "zoneIds": [
+          "B1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "quaggasrand t/off",
+        "displayNames": [
+          "Quaggasrand T/Off"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "queenswood spar",
+        "displayNames": [
+          "Queenswood Spar"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "rodney mokoena",
+        "displayNames": [
+          "Rodney Mokoena"
+        ],
+        "zoneIds": [
+          "L1"
+        ],
+        "fareGroups": [
+          "L1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "roodeplaat",
+        "displayNames": [
+          "Roodeplaat"
+        ],
+        "zoneIds": [
+          "H8"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "roodeplaat spar",
+        "displayNames": [
+          "Roodeplaat Spar"
+        ],
+        "zoneIds": [
+          "A3"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "rooihuiskraal",
+        "displayNames": [
+          "Rooihuiskraal"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "rosslyn",
+        "displayNames": [
+          "Rosslyn"
+        ],
+        "zoneIds": [
+          "C1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "rr butchery",
+        "displayNames": [
+          "RR Butchery"
+        ],
+        "zoneIds": [
+          "H8"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "ruah park",
+        "displayNames": [
+          "Ruah Park"
+        ],
+        "zoneIds": [
+          "H8"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "ruth 1st entrance",
+        "displayNames": [
+          "Ruth 1st Entrance"
+        ],
+        "zoneIds": [
+          "L2"
+        ],
+        "fareGroups": [
+          "L2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "sa hardware/ block xx",
+        "displayNames": [
+          "SA Hardware/ Block XX"
+        ],
+        "zoneIds": [
+          "L1"
+        ],
+        "fareGroups": [
+          "L1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "sa mint",
+        "displayNames": [
+          "SA Mint"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "samcor ford",
+        "displayNames": [
+          "SAMCOR (FORD)"
+        ],
+        "zoneIds": [
+          "A3"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "samrand",
+        "displayNames": [
+          "Samrand"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "silverlakes",
+        "displayNames": [
+          "Silverlakes"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "silverton",
+        "displayNames": [
+          "Silverton"
+        ],
+        "zoneIds": [
+          "A3"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "sinoville",
+        "displayNames": [
+          "Sinoville"
+        ],
+        "zoneIds": [
+          "B1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "southdowns",
+        "displayNames": [
+          "Southdowns"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "southview mall",
+        "displayNames": [
+          "Southview Mall"
+        ],
+        "zoneIds": [
+          "L1"
+        ],
+        "fareGroups": [
+          "L1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "strijdom park",
+        "displayNames": [
+          "Strijdom Park"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "sunderland ridge",
+        "displayNames": [
+          "Sunderland Ridge"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "superspar willow way",
+        "displayNames": [
+          "SuperSpar Willow Way"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "thaba tshwane",
+        "displayNames": [
+          "Thaba Tshwane"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "the groove",
+        "displayNames": [
+          "The Groove"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "the reeds",
+        "displayNames": [
+          "The Reeds"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "transfer",
+        "displayNames": [
+          "Transfer"
+        ],
+        "zoneIds": [
+          "L2"
+        ],
+        "fareGroups": [
+          "L2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "tut",
+        "displayNames": [
+          "TUT"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "tweefontein fork",
+        "displayNames": [
+          "Tweefontein Fork"
+        ],
+        "zoneIds": [
+          "H8"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "unisa",
+        "displayNames": [
+          "UNISA"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "valhalla",
+        "displayNames": [
+          "Valhalla"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "vicks ext 2",
+        "displayNames": [
+          "Vicks Ext 2"
+        ],
+        "zoneIds": [
+          "L1"
+        ],
+        "fareGroups": [
+          "L1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "voda world",
+        "displayNames": [
+          "Voda World"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "voortrekkerhoogte",
+        "displayNames": [
+          "Voortrekkerhoogte"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "walmanstal t/off",
+        "displayNames": [
+          "Walmanstal T/Off"
+        ],
+        "zoneIds": [
+          "H8"
+        ],
+        "fareGroups": [
+          "3"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "waterfall",
+        "displayNames": [
+          "Waterfall"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "waterkloof",
+        "displayNames": [
+          "Waterkloof"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "watermeyer",
+        "displayNames": [
+          "Watermeyer"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "waverley",
+        "displayNames": [
+          "Waverley"
+        ],
+        "zoneIds": [
+          "B2"
+        ],
+        "fareGroups": [
+          "2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "wierda park",
+        "displayNames": [
+          "Wierda Park"
+        ],
+        "zoneIds": [
+          "C4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "wilgers",
+        "displayNames": [
+          "Wilgers"
+        ],
+        "zoneIds": [
+          "B4"
+        ],
+        "fareGroups": [
+          "4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "witkoppen 4 ways",
+        "displayNames": [
+          "Witkoppen 4 Ways"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "wonderboom",
+        "displayNames": [
+          "Wonderboom"
+        ],
+        "zoneIds": [
+          "B1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "wonderpark",
+        "displayNames": [
+          "Wonderpark"
+        ],
+        "zoneIds": [
+          "C1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "wonderpark mall",
+        "displayNames": [
+          "Wonderpark Mall"
+        ],
+        "zoneIds": [
+          "C1"
+        ],
+        "fareGroups": [
+          "1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "woodmead mall",
+        "displayNames": [
+          "Woodmead Mall"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "wynberg",
+        "displayNames": [
+          "Wynberg"
+        ],
+        "zoneIds": [
+          "D5"
+        ],
+        "fareGroups": [
+          "5"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "xx entrance",
+        "displayNames": [
+          "XX Entrance"
+        ],
+        "zoneIds": [
+          "L1"
+        ],
+        "fareGroups": [
+          "L1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "zone hh pp",
+        "displayNames": [
+          "Zone HH & PP"
+        ],
+        "zoneIds": [
+          "L3"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "zone jj",
+        "displayNames": [
+          "Zone JJ"
+        ],
+        "zoneIds": [
+          "L3"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "zone m",
+        "displayNames": [
+          "Zone M"
+        ],
+        "zoneIds": [
+          "L2"
+        ],
+        "fareGroups": [
+          "L2"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "zone mm",
+        "displayNames": [
+          "Zone MM"
+        ],
+        "zoneIds": [
+          "L4"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "zone p",
+        "displayNames": [
+          "Zone P"
+        ],
+        "zoneIds": [
+          "L4"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "zone r",
+        "displayNames": [
+          "Zone R"
+        ],
+        "zoneIds": [
+          "L4"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "zone t",
+        "displayNames": [
+          "Zone T"
+        ],
+        "zoneIds": [
+          "L4"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "zone w",
+        "displayNames": [
+          "Zone W"
+        ],
+        "zoneIds": [
+          "L4"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "zone x",
+        "displayNames": [
+          "Zone X"
+        ],
+        "zoneIds": [
+          "L4"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "zone xx",
+        "displayNames": [
+          "Zone XX"
+        ],
+        "zoneIds": [
+          "L1"
+        ],
+        "fareGroups": [
+          "L1"
+        ],
+        "ambiguous": false
+      },
+      {
+        "normalizedName": "zte",
+        "displayNames": [
+          "ZTE"
+        ],
+        "zoneIds": [
+          "L4"
+        ],
+        "fareGroups": [
+          "L3/4"
+        ],
+        "ambiguous": false
+      }
+    ]
+  },
+  "fares": {
+    "currency": "ZAR",
+    "effectiveFrom": "2026-06-01",
+    "products": [
+      {
+        "code": "S101",
+        "fromZone": "L4",
+        "toZone": "L1",
+        "cash": 20,
+        "trips": {
+          "1": 17,
+          "2": 34,
+          "4": 58,
+          "10": 92,
+          "12": 111,
+          "44": 386,
+          "52": 456
+        },
+        "sourceFromLabel": "L4",
+        "sourceToLabel": "L1",
+        "inferredFromFareGroup": "L3/4",
+        "inferredToFareGroup": "L1",
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S102",
+        "fromZone": "L4",
+        "toZone": "B1/C1",
+        "cash": 25,
+        "trips": {
+          "1": 25,
+          "2": 51,
+          "4": 102,
+          "10": 243,
+          "12": 291,
+          "44": 1014,
+          "52": 1198
+        },
+        "sourceFromLabel": "L4",
+        "sourceToLabel": "B1/C1",
+        "inferredFromFareGroup": "L3/4",
+        "inferredToFareGroup": "1",
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S103",
+        "fromZone": "L4",
+        "toZone": "A2/B2",
+        "cash": 28,
+        "trips": {
+          "1": 27,
+          "2": 53,
+          "4": 106,
+          "10": 248,
+          "12": 298,
+          "44": 1038,
+          "52": 1228
+        },
+        "sourceFromLabel": "L4",
+        "sourceToLabel": "A2/B2",
+        "inferredFromFareGroup": "L3/4",
+        "inferredToFareGroup": "2",
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S104",
+        "fromZone": "L4",
+        "toZone": "A3",
+        "cash": 45,
+        "trips": {
+          "1": 42,
+          "2": 83,
+          "4": 166,
+          "10": 376,
+          "12": 450,
+          "44": 1570,
+          "52": 1856
+        },
+        "sourceFromLabel": "L4",
+        "sourceToLabel": "A3",
+        "inferredFromFareGroup": "L3/4",
+        "inferredToFareGroup": "3",
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S105",
+        "fromZone": "L4",
+        "toZone": "B4/C4",
+        "cash": 49,
+        "trips": {
+          "1": 46,
+          "2": 92,
+          "4": 184,
+          "10": 416,
+          "12": 499,
+          "44": 1738,
+          "52": 2054
+        },
+        "sourceFromLabel": "L4",
+        "sourceToLabel": "B4/C4",
+        "inferredFromFareGroup": "L3/4",
+        "inferredToFareGroup": "4",
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S106",
+        "fromZone": "L4",
+        "toZone": "D5",
+        "cash": 52,
+        "trips": {
+          "1": 51,
+          "2": 100,
+          "4": 199,
+          "10": 450,
+          "12": 541,
+          "44": 1883,
+          "52": 2226
+        },
+        "sourceFromLabel": "L4",
+        "sourceToLabel": "D5",
+        "inferredFromFareGroup": "L3/4",
+        "inferredToFareGroup": "5",
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S107",
+        "fromZone": "L2",
+        "toZone": "B1/C1",
+        "cash": 24,
+        "trips": {
+          "1": 25,
+          "2": 50,
+          "4": 98,
+          "10": 231,
+          "12": 277,
+          "44": 966,
+          "52": 1142
+        },
+        "sourceFromLabel": "L2",
+        "sourceToLabel": "B1/C1",
+        "inferredFromFareGroup": "L2",
+        "inferredToFareGroup": "1",
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S108",
+        "fromZone": "L2",
+        "toZone": "A2/B2",
+        "cash": 25,
+        "trips": {
+          "1": 26,
+          "2": 52,
+          "4": 102,
+          "10": 238,
+          "12": 285,
+          "44": 990,
+          "52": 1170
+        },
+        "sourceFromLabel": "L2",
+        "sourceToLabel": "A2/B2",
+        "inferredFromFareGroup": "L2",
+        "inferredToFareGroup": "2",
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S109",
+        "fromZone": "L2",
+        "toZone": "A3",
+        "cash": 39,
+        "trips": {
+          "1": 36,
+          "2": 72,
+          "4": 144,
+          "10": 330,
+          "12": 396,
+          "44": 1376,
+          "52": 1627
+        },
+        "sourceFromLabel": "L2",
+        "sourceToLabel": "A3",
+        "inferredFromFareGroup": "L2",
+        "inferredToFareGroup": "3",
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S110",
+        "fromZone": "L2",
+        "toZone": "B4/C4",
+        "cash": 43,
+        "trips": {
+          "1": 37,
+          "2": 75,
+          "4": 149,
+          "10": 335,
+          "12": 403,
+          "44": 1400,
+          "52": 1655
+        },
+        "sourceFromLabel": "L2",
+        "sourceToLabel": "B4/C4",
+        "inferredFromFareGroup": "L2",
+        "inferredToFareGroup": "4",
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S111",
+        "fromZone": "L2",
+        "toZone": "D5",
+        "cash": 50,
+        "trips": {
+          "1": 41,
+          "2": 81,
+          "4": 163,
+          "10": 370,
+          "12": 444,
+          "44": 1545,
+          "52": 1827
+        },
+        "sourceFromLabel": "L2",
+        "sourceToLabel": "D5",
+        "inferredFromFareGroup": "L2",
+        "inferredToFareGroup": "5",
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S112",
+        "fromZone": "L1",
+        "toZone": "B1/C1",
+        "cash": 23,
+        "trips": {
+          "1": 22,
+          "2": 44,
+          "4": 88,
+          "10": 215,
+          "12": 257,
+          "44": 893,
+          "52": 1056
+        },
+        "sourceFromLabel": "L1",
+        "sourceToLabel": "B1/C1",
+        "inferredFromFareGroup": "L1",
+        "inferredToFareGroup": "1",
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S113",
+        "fromZone": "L1",
+        "toZone": "A2/B2",
+        "cash": 24,
+        "trips": {
+          "1": 23,
+          "2": 46,
+          "4": 92,
+          "10": 219,
+          "12": 264,
+          "44": 917,
+          "52": 1085
+        },
+        "sourceFromLabel": "L1",
+        "sourceToLabel": "A2/B2",
+        "inferredFromFareGroup": "L1",
+        "inferredToFareGroup": "2",
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S114",
+        "fromZone": "L1",
+        "toZone": "A3",
+        "cash": 38,
+        "trips": {
+          "1": 35,
+          "2": 69,
+          "4": 139,
+          "10": 318,
+          "12": 381,
+          "44": 1328,
+          "52": 1570
+        },
+        "sourceFromLabel": "L1",
+        "sourceToLabel": "A3",
+        "inferredFromFareGroup": "L1",
+        "inferredToFareGroup": "3",
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S115",
+        "fromZone": "L1",
+        "toZone": "B4/C4",
+        "cash": 42,
+        "trips": {
+          "1": 36,
+          "2": 72,
+          "4": 144,
+          "10": 323,
+          "12": 388,
+          "44": 1351,
+          "52": 1598
+        },
+        "sourceFromLabel": "L1",
+        "sourceToLabel": "B4/C4",
+        "inferredFromFareGroup": "L1",
+        "inferredToFareGroup": "4",
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S116",
+        "fromZone": "L1",
+        "toZone": "D5",
+        "cash": 49,
+        "trips": {
+          "1": 40,
+          "2": 79,
+          "4": 158,
+          "10": 358,
+          "12": 430,
+          "44": 1497,
+          "52": 1768
+        },
+        "sourceFromLabel": "L1",
+        "sourceToLabel": "D5",
+        "inferredFromFareGroup": "L1",
+        "inferredToFareGroup": "5",
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S117",
+        "fromZone": "B1/A2/A3/B4",
+        "toZone": "B1/A2/A3/B4",
+        "cash": 20,
+        "trips": {
+          "1": 18,
+          "2": 36,
+          "4": 73,
+          "10": 162,
+          "12": 195,
+          "44": 677,
+          "52": 799
+        },
+        "sourceFromLabel": "B1/A2/A3/B4",
+        "sourceToLabel": "B1/A2/A3/B4",
+        "inferredFromFareGroup": null,
+        "inferredToFareGroup": null,
+        "provenance": "official-2026-putco-fare-table"
+      },
+      {
+        "code": "S120",
+        "fromZone": "B1/A2/A3/B4",
+        "toZone": "D5",
+        "cash": 27,
+        "trips": {
+          "1": 24,
+          "2": 49,
+          "4": 98,
+          "10": 219,
+          "12": 264,
+          "44": 917,
+          "52": 1085
+        },
+        "sourceFromLabel": "B1/A2/A3/B4",
+        "sourceToLabel": "D5",
+        "inferredFromFareGroup": null,
+        "inferredToFareGroup": "5",
+        "provenance": "official-2026-putco-fare-table"
+      }
+    ],
+    "cashMatrix": {
+      "zones": [
+        "L1",
+        "L2",
+        "L3/4",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "matrix": {
+        "1": {
+          "1": 20,
+          "2": 20,
+          "3": 20,
+          "4": 20,
+          "5": 26,
+          "L1": 23,
+          "L2": 24,
+          "L3/4": 25
+        },
+        "2": {
+          "1": 20,
+          "2": 20,
+          "3": 20,
+          "4": 20,
+          "5": 26,
+          "L1": 24,
+          "L2": 25,
+          "L3/4": 26
+        },
+        "3": {
+          "1": 20,
+          "2": 20,
+          "3": 20,
+          "4": 20,
+          "5": 26,
+          "L1": 39,
+          "L2": 40,
+          "L3/4": 45
+        },
+        "4": {
+          "1": 20,
+          "2": 20,
+          "3": 20,
+          "4": 20,
+          "5": 26,
+          "L1": 42,
+          "L2": 43,
+          "L3/4": 48
+        },
+        "5": {
+          "1": 26,
+          "2": 26,
+          "3": 26,
+          "4": 26,
+          "5": 20,
+          "L1": 48,
+          "L2": 50,
+          "L3/4": 52
+        },
+        "L1": {
+          "1": 23,
+          "2": 24,
+          "3": 43,
+          "4": 42,
+          "5": 48,
+          "L1": 20,
+          "L2": 20,
+          "L3/4": 20
+        },
+        "L2": {
+          "1": 24,
+          "2": 25,
+          "3": 40,
+          "4": 43,
+          "5": 50,
+          "L1": 20,
+          "L2": 20,
+          "L3/4": 20
+        },
+        "L3/4": {
+          "1": 25,
+          "2": 26,
+          "3": 45,
+          "4": 48,
+          "5": 52,
+          "L1": 20,
+          "L2": 20,
+          "L3/4": 20
+        }
+      }
+    }
+  },
+  "tripCodes": [
+    {
+      "originZones": [
+        "L3",
+        "L4"
+      ],
+      "destinationZone": "A3/H8",
+      "tripCode": "S104",
+      "originFareGroups": [
+        "L3/4"
+      ],
+      "destinationPhysicalZones": [
+        "A3",
+        "H8"
+      ],
+      "destinationFareGroups": [
+        "3"
+      ],
+      "fareProductCode": "S104",
+      "fareProductFound": true,
+      "relationship": "official-putco-trip-code-notice"
+    },
+    {
+      "originZones": [
+        "L2"
+      ],
+      "destinationZone": "A3/H8",
+      "tripCode": "S109",
+      "originFareGroups": [
+        "L2"
+      ],
+      "destinationPhysicalZones": [
+        "A3",
+        "H8"
+      ],
+      "destinationFareGroups": [
+        "3"
+      ],
+      "fareProductCode": "S109",
+      "fareProductFound": true,
+      "relationship": "official-putco-trip-code-notice"
+    },
+    {
+      "originZones": [
+        "L1"
+      ],
+      "destinationZone": "A3/H8",
+      "tripCode": "S114",
+      "originFareGroups": [
+        "L1"
+      ],
+      "destinationPhysicalZones": [
+        "A3",
+        "H8"
+      ],
+      "destinationFareGroups": [
+        "3"
+      ],
+      "fareProductCode": "S114",
+      "fareProductFound": true,
+      "relationship": "official-putco-trip-code-notice"
+    },
+    {
+      "originZones": [
+        "L3",
+        "L4"
+      ],
+      "destinationZone": "B4/C4",
+      "tripCode": "S105",
+      "originFareGroups": [
+        "L3/4"
+      ],
+      "destinationPhysicalZones": [
+        "B4",
+        "C4"
+      ],
+      "destinationFareGroups": [
+        "4"
+      ],
+      "fareProductCode": "S105",
+      "fareProductFound": true,
+      "relationship": "official-putco-trip-code-notice"
+    },
+    {
+      "originZones": [
+        "L2"
+      ],
+      "destinationZone": "B4/C4",
+      "tripCode": "S110",
+      "originFareGroups": [
+        "L2"
+      ],
+      "destinationPhysicalZones": [
+        "B4",
+        "C4"
+      ],
+      "destinationFareGroups": [
+        "4"
+      ],
+      "fareProductCode": "S110",
+      "fareProductFound": true,
+      "relationship": "official-putco-trip-code-notice"
+    },
+    {
+      "originZones": [
+        "L1"
+      ],
+      "destinationZone": "B4/C4",
+      "tripCode": "S115",
+      "originFareGroups": [
+        "L1"
+      ],
+      "destinationPhysicalZones": [
+        "B4",
+        "C4"
+      ],
+      "destinationFareGroups": [
+        "4"
+      ],
+      "fareProductCode": "S115",
+      "fareProductFound": true,
+      "relationship": "official-putco-trip-code-notice"
+    }
+  ],
+  "transfers": {
+    "policy": {
+      "officialTransferPointsOnly": true,
+      "maxTransferOpportunitiesPerOneWayJourney": 3
+    },
+    "points": [
+      {
+        "id": "mabopane-station",
+        "name": "Mabopane Station",
+        "zoneId": null,
+        "candidateZoneId": "L3",
+        "zoneMatchMethod": "related-place-name",
+        "zoneMatchConfidence": "medium",
+        "notes": [
+          "The zone map names Mabopane Interchange in L3; the transfer notice uses Mabopane Station. Pulse does not treat these names as exactly identical without further location verification."
+        ],
+        "physicalZone": null,
+        "candidatePhysicalZone": {
+          "id": "L3",
+          "fareGroup": "L3/4",
+          "places": [
+            "Mabopane Interchange",
+            "Padisago P School",
+            "PP (Makgabo)",
+            "Zone HH & PP",
+            "Zone JJ",
+            "Block BB",
+            "Block DD",
+            "Block FFW",
+            "Block GG",
+            "Block NN",
+            "Central City-Mabopane"
+          ]
+        },
+        "relationship": "official-putco-transfer-point"
+      },
+      {
+        "id": "belle-ombre",
+        "name": "Belle Ombre",
+        "zoneId": "B2",
+        "zoneMatchMethod": "normalized-place-name",
+        "zoneMatchConfidence": "high",
+        "zoneMapReference": "Belle Ombre Stn",
+        "physicalZone": {
+          "id": "B2",
+          "fareGroup": "2",
+          "places": [
+            "Academic Hosp",
+            "Arcadia City",
+            "Atteridgeville",
+            "Belle Ombre Stn",
+            "Capital Park",
+            "Eldoglen",
+            "Erasmusrand",
+            "Fountains Valley",
+            "Gezina",
+            "Hatfield",
+            "Hazelwood",
+            "Hornsnek",
+            "Kloofsig",
+            "Koedoespoort",
+            "Laudium",
+            "Mahem",
+            "Malawi",
+            "Manhattan Hotel",
+            "Marabastad",
+            "Mayville Mall",
+            "Menlopark / Menlopark High School",
+            "Monument Park / Extention 2",
+            "Muckleneuk",
+            "Pretoria Stn /Pretoria Zoo",
+            "Quaggasrand T/Off",
+            "Queenswood Spar",
+            "Pretoria West",
+            "Thaba Tshwane",
+            "TUT",
+            "UNISA",
+            "Valhalla",
+            "Voortrekkerhoogte",
+            "Waterkloof",
+            "Waverley"
+          ]
+        },
+        "candidatePhysicalZone": null,
+        "relationship": "official-putco-transfer-point"
+      },
+      {
+        "id": "eastlynne",
+        "name": "Eastlynne",
+        "zoneId": "A2",
+        "zoneMatchMethod": "exact-place-name",
+        "zoneMatchConfidence": "high",
+        "physicalZone": {
+          "id": "A2",
+          "fareGroup": "2",
+          "places": [
+            "Eastlynne"
+          ]
+        },
+        "candidatePhysicalZone": null,
+        "relationship": "official-putco-transfer-point"
+      },
+      {
+        "id": "block-xx",
+        "name": "Block XX",
+        "zoneId": "L1",
+        "zoneMatchMethod": "exact-place-name",
+        "zoneMatchConfidence": "high",
+        "physicalZone": {
+          "id": "L1",
+          "fareGroup": "L1",
+          "places": [
+            "Block XX",
+            "Central School-WW",
+            "Ext 13",
+            "Ext 3 & 4 Cross",
+            "Rodney Mokoena",
+            "SA Hardware/ Block XX",
+            "Southview Mall",
+            "Vicks Ext 2",
+            "XX Entrance",
+            "Zone XX"
+          ]
+        },
+        "candidatePhysicalZone": null,
+        "relationship": "official-putco-transfer-point"
+      },
+      {
+        "id": "constantia-park",
+        "name": "Constantia Park",
+        "zoneId": "B4",
+        "zoneMatchMethod": "exact-place-name",
+        "zoneMatchConfidence": "high",
+        "physicalZone": {
+          "id": "B4",
+          "fareGroup": "4",
+          "places": [
+            "Armscor",
+            "Atterbury",
+            "Boardwalk",
+            "Boschkop",
+            "Constantia Park",
+            "CSIR",
+            "Equestria",
+            "Erasmuskloof",
+            "Faerie Glen",
+            "Glenvillage",
+            "Lynwood",
+            "Menlyn",
+            "Silverlakes",
+            "SuperSpar Willow Way",
+            "The Groove",
+            "Watermeyer",
+            "Wilgers"
+          ]
+        },
+        "candidatePhysicalZone": null,
+        "relationship": "official-putco-transfer-point"
+      },
+      {
+        "id": "menlyn",
+        "name": "Menlyn",
+        "zoneId": "B4",
+        "zoneMatchMethod": "exact-place-name",
+        "zoneMatchConfidence": "high",
+        "physicalZone": {
+          "id": "B4",
+          "fareGroup": "4",
+          "places": [
+            "Armscor",
+            "Atterbury",
+            "Boardwalk",
+            "Boschkop",
+            "Constantia Park",
+            "CSIR",
+            "Equestria",
+            "Erasmuskloof",
+            "Faerie Glen",
+            "Glenvillage",
+            "Lynwood",
+            "Menlyn",
+            "Silverlakes",
+            "SuperSpar Willow Way",
+            "The Groove",
+            "Watermeyer",
+            "Wilgers"
+          ]
+        },
+        "candidatePhysicalZone": null,
+        "relationship": "official-putco-transfer-point"
+      }
+    ]
+  }
+}

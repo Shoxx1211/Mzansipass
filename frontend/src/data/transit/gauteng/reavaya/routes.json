@@ -1,0 +1,762 @@
+{
+  "schemaVersion": 1,
+  "operatorId": "reavaya",
+  "generatedAt": "2026-09-17T18:59:56.584Z",
+  "sourceSnapshot": "raw/operating-routes.html",
+  "codedRouteCount": 21,
+  "routeFamilies": {
+    "trunk": {
+      "prefix": "T",
+      "routeCount": 3
+    },
+    "complementary": {
+      "prefix": "C",
+      "routeCount": 6
+    },
+    "feeder": {
+      "prefix": "F",
+      "routeCount": 12
+    }
+  },
+  "routes": [
+    {
+      "id": "reavaya-t1",
+      "operatorId": "reavaya",
+      "routeCode": "T1",
+      "routeFamily": "trunk",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 3,
+        "publishedOffPeakHeadwayMinutes": 15,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-t2",
+      "operatorId": "reavaya",
+      "routeCode": "T2",
+      "routeFamily": "trunk",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": null,
+        "offPeakServicePublished": false,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-t3",
+      "operatorId": "reavaya",
+      "routeCode": "T3",
+      "routeFamily": "trunk",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 3,
+        "publishedOffPeakHeadwayMinutes": 15,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-c1",
+      "operatorId": "reavaya",
+      "routeCode": "C1",
+      "routeFamily": "complementary",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 5,
+        "publishedOffPeakHeadwayMinutes": 15,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-c2",
+      "operatorId": "reavaya",
+      "routeCode": "C2",
+      "routeFamily": "complementary",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 15,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-c3",
+      "operatorId": "reavaya",
+      "routeCode": "C3",
+      "routeFamily": "complementary",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 20,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-c4",
+      "operatorId": "reavaya",
+      "routeCode": "C4",
+      "routeFamily": "complementary",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 8,
+        "publishedOffPeakHeadwayMinutes": 20,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-c5",
+      "operatorId": "reavaya",
+      "routeCode": "C5",
+      "routeFamily": "complementary",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 15,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-c6",
+      "operatorId": "reavaya",
+      "routeCode": "C6",
+      "routeFamily": "complementary",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-f1",
+      "operatorId": "reavaya",
+      "routeCode": "F1",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 5,
+        "publishedOffPeakHeadwayMinutes": 20,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-f2",
+      "operatorId": "reavaya",
+      "routeCode": "F2",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 5,
+        "publishedOffPeakHeadwayMinutes": 20,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-f3",
+      "operatorId": "reavaya",
+      "routeCode": "F3",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 15,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-f4",
+      "operatorId": "reavaya",
+      "routeCode": "F4",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-f5",
+      "operatorId": "reavaya",
+      "routeCode": "F5",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 15,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-f6",
+      "operatorId": "reavaya",
+      "routeCode": "F6",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-f7",
+      "operatorId": "reavaya",
+      "routeCode": "F7",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-f8",
+      "operatorId": "reavaya",
+      "routeCode": "F8",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 15,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-f9",
+      "operatorId": "reavaya",
+      "routeCode": "F9",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-f10",
+      "operatorId": "reavaya",
+      "routeCode": "F10",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-f11",
+      "operatorId": "reavaya",
+      "routeCode": "F11",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 20,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    },
+    {
+      "id": "reavaya-f12",
+      "operatorId": "reavaya",
+      "routeCode": "F12",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 20,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "verification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "source": {
+        "authority": "Rea Vaya / City of Johannesburg",
+        "sourceFile": "raw/operating-routes.html",
+        "sourceUrl": "https://reavaya.org.za/rea-vaya-operating-routes/",
+        "confidence": "official"
+      }
+    }
+  ],
+  "phase1C": {
+    "operational": true,
+    "serviceStartDate": "2025-12-01",
+    "statusSource": "City of Johannesburg Phase 1C(a) operating announcement",
+    "routeCodeCoverageStatus": "not-proven-by-this-coded-route-inventory",
+    "integrationRule": "Do not automatically assign Phase 1C corridor services to existing T/C/F codes without route-level official evidence."
+  },
+  "capabilities": {
+    "codedRouteInventory": true,
+    "publishedFamilyHeadways": true,
+    "exactGenericPeakWindow": false,
+    "exactGenericOffPeakWindow": false,
+    "completeStopSequences": false,
+    "stopCoordinates": false,
+    "routeGeometry": false,
+    "exactTimetable": false,
+    "realtime": false
+  },
+  "appRules": [
+    "Use route-specific published headways as descriptive frequency information, not live ETA.",
+    "Do not infer exact peak/off-peak time applicability from the conflicting generic wording on the current operating-routes page.",
+    "Do not assume the 21 coded T/C/F routes represent all currently operating Phase 1C(a) services.",
+    "Do not invent Phase 1C route codes.",
+    "Do not invent endpoints, stops or route geometry from the route code alone."
+  ]
+}

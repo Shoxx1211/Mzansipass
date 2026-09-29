@@ -323,4 +323,9 @@ temp/
 !.env.example
 !.env.template
 !*.sample
-!*.example
+!*.example.local-dev/
+dev-dist/
+*.backup
+*.backup-*
+*.before-*
+src/data/transit/**/raw/

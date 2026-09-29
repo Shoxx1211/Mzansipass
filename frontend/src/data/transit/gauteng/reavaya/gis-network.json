@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "operatorId": "reavaya",
+  "generatedAt": "2026-09-17T19:36:40.334Z",
+  "authority": "City of Johannesburg",
+  "coordinateReferenceSystem": "EPSG:4326",
+  "sourceCounts": {
+    "brtRoutes": 99,
+    "brtStations": 58,
+    "brtStops": 0,
+    "feederRoutes": 12,
+    "trunkRoutes": 3,
+    "phase1cStations": 14
+  },
+  "canonicalGeometry": {
+    "routeCount": 15,
+    "feederCount": 12,
+    "trunkCount": 3,
+    "complementaryCount": 0,
+    "routeCodes": [
+      "F1",
+      "F2",
+      "F3",
+      "F4",
+      "F5",
+      "F6",
+      "F7",
+      "F8",
+      "F9",
+      "F10",
+      "F11",
+      "F12",
+      "T1",
+      "T2",
+      "T3"
+    ],
+    "sourceFiles": [
+      "raw/gis/brt-feeder-routes.geojson",
+      "raw/gis/brt-trunk-routes.geojson"
+    ],
+    "outputFile": "canonical-route-geometries.geojson",
+    "status": "official-coded-route-geometry",
+    "directionVerified": false,
+    "stopSequenceVerified": false
+  },
+  "complementaryGeometry": {
+    "canonicalCodedRoutes": [],
+    "supplementalCodedRoutes": [
+      "C1"
+    ],
+    "missingCanonicalCodes": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C5",
+      "C6"
+    ],
+    "rule": "Do not invent complementary route geometry. C1 remains supplemental until segment topology is verified."
+  },
+  "stations": {
+    "generalOfficialPointCount": 58,
+    "generalNamedPointCount": 0,
+    "phase1cNamedPointCount": 14,
+    "generalStationOutput": "brt-station-points.geojson",
+    "phase1cOutput": "phase1c-stations.geojson",
+    "stationNamesForGeneralLayer": "not-available-in-source-layer"
+  },
+  "supplementalGeometry": {
+    "routeCodes": [
+      "C1",
+      "F11",
+      "T1",
+      "T2",
+      "T3"
+    ],
+    "segmentCounts": {
+      "C1": 6,
+      "F11": 3,
+      "T1": 22,
+      "T2": 17,
+      "T3": 4
+    },
+    "outputFile": "supplemental-route-segments.geojson",
+    "ordered": false,
+    "directionVerified": false
+  },
+  "genericBrtGeometry": {
+    "sourceFeatureCount": 99,
+    "phaseCounts": {
+      "Phase 1B": 70,
+      "unknown": 10,
+      "Phase 1A": 19
+    },
+    "typeCounts": {
+      "Complementary": 12,
+      "Clockwise": 5,
+      "Anticlockwise": 5,
+      "Feeder": 35,
+      "Trunk": 42
+    },
+    "role": "official corridor/segment evidence; not treated as coded route inventory"
+  },
+  "capabilities": {
+    "namedFeederGeometry": true,
+    "namedTrunkGeometry": true,
+    "namedComplementaryCanonicalGeometry": false,
+    "officialGeneralStationCoordinates": true,
+    "officialGeneralStationNames": false,
+    "officialPhase1cStationCoordinates": true,
+    "officialPhase1cStationNames": true,
+    "completeStopSequence": false,
+    "routeDirection": false,
+    "exactTimetable": false,
+    "realtime": false
+  },
+  "appRules": [
+    "Use canonical F1-F12 and T1-T3 geometry for spatial route proximity checks.",
+    "Do not infer service direction from GeoJSON coordinate ordering.",
+    "Do not assign names to the general BRT station points until a reliable source relationship is established.",
+    "Do not treat TransportationMaster feature order as passenger stop order.",
+    "Do not treat feature count as route count.",
+    "Do not construct C2-C6 geometry from generic BRT segments without route-level evidence.",
+    "C1 supplemental geometry may be used for map/reference analysis but not ordered journey traversal until topology is verified.",
+    "GIS geometry does not supply fares, timetables or live ETA."
+  ]
+}

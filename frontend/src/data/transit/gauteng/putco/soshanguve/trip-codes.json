@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "operatorId": "putco",
+  "serviceArea": "soshanguve",
+  "sourceConfidence": "official",
+  "mappings": [
+    {
+      "originZones": ["L3", "L4"],
+      "destinationZone": "A3/H8",
+      "tripCode": "S104"
+    },
+    {
+      "originZones": ["L2"],
+      "destinationZone": "A3/H8",
+      "tripCode": "S109"
+    },
+    {
+      "originZones": ["L1"],
+      "destinationZone": "A3/H8",
+      "tripCode": "S114"
+    },
+    {
+      "originZones": ["L3", "L4"],
+      "destinationZone": "B4/C4",
+      "tripCode": "S105"
+    },
+    {
+      "originZones": ["L2"],
+      "destinationZone": "B4/C4",
+      "tripCode": "S110"
+    },
+    {
+      "originZones": ["L1"],
+      "destinationZone": "B4/C4",
+      "tripCode": "S115"
+    }
+  ],
+  "destinationReferences": [
+    {
+      "place": "Supply Chain",
+      "zone": "A3/H8"
+    },
+    {
+      "place": "CSIR",
+      "zone": "B4/C4"
+    },
+    {
+      "place": "Meyers Park",
+      "zone": "B4/C4"
+    }
+  ]
+}

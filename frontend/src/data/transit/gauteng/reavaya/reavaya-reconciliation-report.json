@@ -1,0 +1,187 @@
+{
+  "generatedAt": "2026-09-17T19:46:38.120Z",
+  "operatorId": "reavaya",
+  "routeCoverage": {
+    "currentInventoryCount": 21,
+    "currentRouteCodes": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C5",
+      "C6",
+      "F1",
+      "F2",
+      "F3",
+      "F4",
+      "F5",
+      "F6",
+      "F7",
+      "F8",
+      "F9",
+      "F10",
+      "F11",
+      "F12",
+      "T1",
+      "T2",
+      "T3"
+    ],
+    "canonicalGeometryCount": 15,
+    "canonicalGeometryCodes": [
+      "F1",
+      "F2",
+      "F3",
+      "F4",
+      "F5",
+      "F6",
+      "F7",
+      "F8",
+      "F9",
+      "F10",
+      "F11",
+      "F12",
+      "T1",
+      "T2",
+      "T3"
+    ],
+    "phase1bDetailCount": 12,
+    "phase1bDetailCodes": [
+      "C4",
+      "C5",
+      "C6",
+      "F6",
+      "F7",
+      "F8",
+      "F9",
+      "F10",
+      "F11",
+      "F12",
+      "T2",
+      "T3"
+    ],
+    "supplementalOnlyCodes": [
+      "C1"
+    ],
+    "noSpatialGeometryCodes": [
+      "C2",
+      "C3",
+      "C4",
+      "C5",
+      "C6"
+    ]
+  },
+  "stationCoverage": {
+    "generalOfficialStationPoints": 58,
+    "generalStationsAttachedToAtLeastOneCanonicalRoute": 45,
+    "generalStationsNotAttachedAtThreshold": 13,
+    "generalStationsNearMultipleCanonicalRoutes": 21,
+    "phase1cNamedStations": 14,
+    "phase1cStationsNearExistingCanonicalRoutes": 4,
+    "generalAttachmentThresholdMeters": 50,
+    "phase1cAttachmentThresholdMeters": 60
+  },
+  "publishedStopEvidence": {
+    "uniqueNormalizedStopNodes": 150,
+    "routeStopEvidenceEdges": 181,
+    "nodesSharedByMultipleRoutes": 14
+  },
+  "routeConnectivity": {
+    "candidateCount": 43,
+    "candidatesWithPublishedSharedStop": 21,
+    "candidatesWithSharedOfficialStationPoint": 29,
+    "conservativeConnectivitySupportedCount": 43,
+    "userFacingVerifiedTransferCount": 0
+  },
+  "distanceComparisons": [
+    {
+      "routeCode": "F6",
+      "officialScheduleDistanceKm": 10,
+      "derivedGisGeometryLengthKm": 5.357,
+      "differenceKm": -4.643,
+      "differencePercentOfSchedule": -46.4,
+      "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+    },
+    {
+      "routeCode": "F7",
+      "officialScheduleDistanceKm": 10,
+      "derivedGisGeometryLengthKm": 6.653,
+      "differenceKm": -3.347,
+      "differencePercentOfSchedule": -33.5,
+      "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+    },
+    {
+      "routeCode": "F8",
+      "officialScheduleDistanceKm": 7,
+      "derivedGisGeometryLengthKm": 4.875,
+      "differenceKm": -2.125,
+      "differencePercentOfSchedule": -30.4,
+      "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+    },
+    {
+      "routeCode": "F9",
+      "officialScheduleDistanceKm": 4.6,
+      "derivedGisGeometryLengthKm": 4.928,
+      "differenceKm": 0.328,
+      "differencePercentOfSchedule": 7.1,
+      "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+    },
+    {
+      "routeCode": "F10",
+      "officialScheduleDistanceKm": 4,
+      "derivedGisGeometryLengthKm": 3.492,
+      "differenceKm": -0.508,
+      "differencePercentOfSchedule": -12.7,
+      "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+    },
+    {
+      "routeCode": "F11",
+      "officialScheduleDistanceKm": 6.6,
+      "derivedGisGeometryLengthKm": 6.287,
+      "differenceKm": -0.313,
+      "differencePercentOfSchedule": -4.7,
+      "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+    },
+    {
+      "routeCode": "F12",
+      "officialScheduleDistanceKm": 5.1,
+      "derivedGisGeometryLengthKm": 7.469,
+      "differenceKm": 2.369,
+      "differencePercentOfSchedule": 46.5,
+      "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+    },
+    {
+      "routeCode": "T2",
+      "officialScheduleDistanceKm": 22.5,
+      "derivedGisGeometryLengthKm": 22.315,
+      "differenceKm": -0.185,
+      "differencePercentOfSchedule": -0.8,
+      "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+    },
+    {
+      "routeCode": "T3",
+      "officialScheduleDistanceKm": 23,
+      "derivedGisGeometryLengthKm": 23.601,
+      "differenceKm": 0.601,
+      "differencePercentOfSchedule": 2.6,
+      "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+    }
+  ],
+  "fares": {
+    "effectiveFrom": "2026-07-01",
+    "effectiveTo": "2027-06-30",
+    "bandCount": 7,
+    "journeyFareCalculationReady": false
+  },
+  "errorCount": 0,
+  "errors": [],
+  "warningCount": 6,
+  "warnings": [
+    "Complementary routes do not yet have canonical coded route geometry. C1 has supplemental segments only; C2-C6 are not traversed spatially by this graph.",
+    "The 58 general BRT station points have official coordinates but no reliable names in their GIS source layer.",
+    "Route direction remains unverified. Network connectivity is therefore non-directional in this evidence graph.",
+    "Spatial station-to-route associations use derived GIS tolerances and are not official service-assignment fields.",
+    "A route-to-route connectivity candidate is not automatically a guaranteed operational transfer or timed connection.",
+    "GIS geometry length is QA/reference information only and must not replace the published Rea Vaya journey-distance basis for fare calculation."
+  ],
+  "qaPassed": true
+}

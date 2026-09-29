@@ -1,0 +1,329 @@
+{
+  "schemaVersion": 1,
+  "operatorId": "gautrain",
+  "generatedAt": "2026-09-17T16:33:55.837Z",
+  "stationCount": 10,
+  "serviceCount": 3,
+  "services": [
+    {
+      "id": "gautrain-north-south",
+      "operatorId": "gautrain",
+      "mode": "rail",
+      "name": "North-South Commuter Service",
+      "serviceClass": "commuter",
+      "corridor": "north-south",
+      "stations": [
+        {
+          "stationId": "gautrain-station-park",
+          "name": "Park",
+          "location": {
+            "lat": -26.1955333,
+            "lng": 28.04155
+          }
+        },
+        {
+          "stationId": "gautrain-station-rosebank",
+          "name": "Rosebank",
+          "location": {
+            "lat": -26.14525,
+            "lng": 28.0438667
+          }
+        },
+        {
+          "stationId": "gautrain-station-sandton",
+          "name": "Sandton",
+          "location": {
+            "lat": -26.1078,
+            "lng": 28.0575
+          }
+        },
+        {
+          "stationId": "gautrain-station-midrand",
+          "name": "Midrand",
+          "location": {
+            "lat": -25.9964833,
+            "lng": 28.1375833
+          }
+        },
+        {
+          "stationId": "gautrain-station-centurion",
+          "name": "Centurion",
+          "location": {
+            "lat": -25.8516167,
+            "lng": 28.1897333
+          }
+        },
+        {
+          "stationId": "gautrain-station-pretoria",
+          "name": "Pretoria",
+          "location": {
+            "lat": -25.7581667,
+            "lng": 28.1894667
+          }
+        },
+        {
+          "stationId": "gautrain-station-hatfield",
+          "name": "Hatfield",
+          "location": {
+            "lat": -25.74765,
+            "lng": 28.238
+          }
+        }
+      ],
+      "sourceStationOrder": [
+        "gautrain-station-park",
+        "gautrain-station-rosebank",
+        "gautrain-station-sandton",
+        "gautrain-station-midrand",
+        "gautrain-station-centurion",
+        "gautrain-station-pretoria",
+        "gautrain-station-hatfield"
+      ],
+      "sourceOrderMeaning": "stations-listed-by-official-source",
+      "verification": {
+        "serviceMembership": "official",
+        "physicalAdjacency": false,
+        "completeStoppingPattern": false,
+        "timetable": false,
+        "travelTimes": false,
+        "routeGeometry": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "sourceFile": "general-information.html",
+        "sourceType": "official-current-service-description",
+        "retrievedFromOfficialSite": true
+      }
+    },
+    {
+      "id": "gautrain-east-west",
+      "operatorId": "gautrain",
+      "mode": "rail",
+      "name": "East-West Commuter Service",
+      "serviceClass": "commuter",
+      "corridor": "east-west",
+      "stations": [
+        {
+          "stationId": "gautrain-station-rhodesfield",
+          "name": "Rhodesfield",
+          "location": {
+            "lat": -26.1283333,
+            "lng": 28.2252333
+          }
+        },
+        {
+          "stationId": "gautrain-station-marlboro",
+          "name": "Marlboro",
+          "location": {
+            "lat": -26.0839167,
+            "lng": 28.1116333
+          }
+        },
+        {
+          "stationId": "gautrain-station-sandton",
+          "name": "Sandton",
+          "location": {
+            "lat": -26.1078,
+            "lng": 28.0575
+          }
+        }
+      ],
+      "sourceStationOrder": [
+        "gautrain-station-rhodesfield",
+        "gautrain-station-marlboro",
+        "gautrain-station-sandton"
+      ],
+      "sourceOrderMeaning": "stations-listed-by-official-source",
+      "verification": {
+        "serviceMembership": "official",
+        "physicalAdjacency": false,
+        "completeStoppingPattern": false,
+        "timetable": false,
+        "travelTimes": false,
+        "routeGeometry": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "sourceFile": "general-information.html",
+        "sourceType": "official-current-service-description",
+        "retrievedFromOfficialSite": true
+      }
+    },
+    {
+      "id": "gautrain-airport",
+      "operatorId": "gautrain",
+      "mode": "rail",
+      "name": "Airport Service",
+      "serviceClass": "airport",
+      "corridor": "east-west-airport",
+      "stations": [
+        {
+          "stationId": "gautrain-station-sandton",
+          "name": "Sandton",
+          "location": {
+            "lat": -26.1078,
+            "lng": 28.0575
+          }
+        },
+        {
+          "stationId": "gautrain-station-marlboro",
+          "name": "Marlboro",
+          "location": {
+            "lat": -26.0839167,
+            "lng": 28.1116333
+          }
+        },
+        {
+          "stationId": "gautrain-station-or-tambo",
+          "name": "OR Tambo",
+          "location": {
+            "lat": -26.1329333,
+            "lng": 28.2315667
+          }
+        }
+      ],
+      "sourceStationOrder": [
+        "gautrain-station-sandton",
+        "gautrain-station-marlboro",
+        "gautrain-station-or-tambo"
+      ],
+      "sourceOrderMeaning": "service-membership-only",
+      "verification": {
+        "serviceMembership": "official",
+        "physicalAdjacency": false,
+        "completeStoppingPattern": false,
+        "timetable": false,
+        "travelTimes": false,
+        "routeGeometry": false
+      },
+      "provenance": {
+        "authority": "Gautrain",
+        "sourceFile": "general-information.html",
+        "sourceType": "official-current-service-description",
+        "retrievedFromOfficialSite": true
+      }
+    }
+  ],
+  "stationServiceMembership": [
+    {
+      "stationId": "gautrain-station-centurion",
+      "stationName": "Centurion",
+      "serviceIds": [
+        "gautrain-north-south"
+      ],
+      "serviceCount": 1,
+      "sharedServiceStation": false,
+      "transferRuleVerified": false
+    },
+    {
+      "stationId": "gautrain-station-hatfield",
+      "stationName": "Hatfield",
+      "serviceIds": [
+        "gautrain-north-south"
+      ],
+      "serviceCount": 1,
+      "sharedServiceStation": false,
+      "transferRuleVerified": false
+    },
+    {
+      "stationId": "gautrain-station-marlboro",
+      "stationName": "Marlboro",
+      "serviceIds": [
+        "gautrain-east-west",
+        "gautrain-airport"
+      ],
+      "serviceCount": 2,
+      "sharedServiceStation": true,
+      "transferRuleVerified": false
+    },
+    {
+      "stationId": "gautrain-station-midrand",
+      "stationName": "Midrand",
+      "serviceIds": [
+        "gautrain-north-south"
+      ],
+      "serviceCount": 1,
+      "sharedServiceStation": false,
+      "transferRuleVerified": false
+    },
+    {
+      "stationId": "gautrain-station-or-tambo",
+      "stationName": "OR Tambo",
+      "serviceIds": [
+        "gautrain-airport"
+      ],
+      "serviceCount": 1,
+      "sharedServiceStation": false,
+      "transferRuleVerified": false
+    },
+    {
+      "stationId": "gautrain-station-park",
+      "stationName": "Park",
+      "serviceIds": [
+        "gautrain-north-south"
+      ],
+      "serviceCount": 1,
+      "sharedServiceStation": false,
+      "transferRuleVerified": false
+    },
+    {
+      "stationId": "gautrain-station-pretoria",
+      "stationName": "Pretoria",
+      "serviceIds": [
+        "gautrain-north-south"
+      ],
+      "serviceCount": 1,
+      "sharedServiceStation": false,
+      "transferRuleVerified": false
+    },
+    {
+      "stationId": "gautrain-station-rhodesfield",
+      "stationName": "Rhodesfield",
+      "serviceIds": [
+        "gautrain-east-west"
+      ],
+      "serviceCount": 1,
+      "sharedServiceStation": false,
+      "transferRuleVerified": false
+    },
+    {
+      "stationId": "gautrain-station-rosebank",
+      "stationName": "Rosebank",
+      "serviceIds": [
+        "gautrain-north-south"
+      ],
+      "serviceCount": 1,
+      "sharedServiceStation": false,
+      "transferRuleVerified": false
+    },
+    {
+      "stationId": "gautrain-station-sandton",
+      "stationName": "Sandton",
+      "serviceIds": [
+        "gautrain-north-south",
+        "gautrain-east-west",
+        "gautrain-airport"
+      ],
+      "serviceCount": 3,
+      "sharedServiceStation": true,
+      "transferRuleVerified": false
+    }
+  ],
+  "capabilities": {
+    "officialStationCoordinates": true,
+    "officialServiceMembership": true,
+    "verifiedPhysicalTrackEdges": false,
+    "verifiedCompleteStoppingPatterns": false,
+    "verifiedTransferRules": false,
+    "routeGeometry": false,
+    "timetable": false,
+    "liveTrainPosition": false
+  },
+  "notes": [
+    "The current Gautrain general-information page is used for service/corridor membership.",
+    "The order of station names in an official description is preserved but is not automatically treated as physical track adjacency.",
+    "Shared service membership does not by itself prove a transfer is required or permitted.",
+    "No rail travel time is calculated from straight-line or Mapbox driving distance.",
+    "No route geometry, timetable or live train position is inferred."
+  ]
+}

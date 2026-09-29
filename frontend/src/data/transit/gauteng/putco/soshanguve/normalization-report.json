@@ -1,0 +1,37 @@
+{
+  "generatedAt": "2026-09-17T12:49:21.015Z",
+  "operatorId": "putco",
+  "serviceArea": "soshanguve",
+  "physicalZoneCount": 13,
+  "fareGroupCount": 8,
+  "uniquePlaceReferenceCount": 170,
+  "ambiguousPlaceCount": 1,
+  "ambiguousPlaces": [
+    {
+      "place": "Hornsnek",
+      "zoneIds": [
+        "C1",
+        "B2"
+      ],
+      "fareGroups": [
+        "1",
+        "2"
+      ]
+    }
+  ],
+  "fareProductCount": 18,
+  "tripCodeMappingCount": 6,
+  "transferPointCount": 6,
+  "missingFareProducts": [],
+  "badTripOriginZones": [],
+  "badTripDestinationZones": [],
+  "badTransferZones": [],
+  "gpsPolygonsAvailable": false,
+  "warnings": [
+    "PUTCO Soshanguve zone boundaries come from a schematic map, not official GIS polygons.",
+    "Place names can be associated with zones, but arbitrary GPS coordinates must not be assigned to a zone solely from the schematic map.",
+    "Ambiguous place names are preserved and must not be silently resolved.",
+    "PUTCO fare products, trip-code notices and the zoned cash-fare matrix are separate official source structures and may use different zone labels.",
+    "No timetable, route geometry or real-time arrival information is created by this normalizer."
+  ]
+}

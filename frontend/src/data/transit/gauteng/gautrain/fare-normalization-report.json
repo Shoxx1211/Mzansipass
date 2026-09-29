@@ -1,0 +1,44 @@
+{
+  "generatedAt": "2026-09-17T17:09:56.495Z",
+  "operatorId": "gautrain",
+  "effectiveFrom": "2026-09-01",
+  "officialPdfValidated": true,
+  "officialPdfBytes": 320295,
+  "matrixChecks": {
+    "peakPayAsYouGo": {
+      "stations": 10,
+      "valid": true
+    },
+    "offPeakPayAsYouGo": {
+      "stations": 10,
+      "valid": true
+    },
+    "weekly": {
+      "stations": 9,
+      "valid": true
+    },
+    "monthly": {
+      "stations": 9,
+      "valid": true
+    },
+    "singleTrip": {
+      "stations": 10,
+      "valid": true
+    },
+    "returnTrip": {
+      "stations": 10,
+      "valid": true
+    }
+  },
+  "singleTripMatchesPeakTable": true,
+  "returnTripIsDoubleSingleTrip": true,
+  "offPeakNeverExceedsPeak": true,
+  "errorCount": 0,
+  "errors": [],
+  "notes": [
+    "Fare values were transcribed from the official one-page Gautrain fare guide effective 1 September 2026.",
+    "Matrices were checked for dimensions, symmetry, null diagonals and positive integer fares.",
+    "Single Trip and Return Trip relationships were QA-checked but the official product tables remain the source of record.",
+    "No journey duration, route geometry or live service information is inferred here."
+  ]
+}

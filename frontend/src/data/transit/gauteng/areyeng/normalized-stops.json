@@ -1,0 +1,4287 @@
+[
+  {
+    "id": "areyeng-stop-1",
+    "operatorId": "areyeng",
+    "name": "HECTOR PIETERSON",
+    "location": {
+      "lat": -25.681824823588176,
+      "lng": 28.183806999215573
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 1
+    }
+  },
+  {
+    "id": "areyeng-stop-2",
+    "operatorId": "areyeng",
+    "name": "MOSES MORUDU",
+    "location": {
+      "lat": -25.7069852117704,
+      "lng": 28.186814788939536
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 2
+    }
+  },
+  {
+    "id": "areyeng-stop-3",
+    "operatorId": "areyeng",
+    "name": "ENOCH SONTONGA",
+    "location": {
+      "lat": -25.72806247568359,
+      "lng": 28.188760999356617
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 3,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 3,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 3
+    }
+  },
+  {
+    "id": "areyeng-stop-4",
+    "operatorId": "areyeng",
+    "name": "ANTON LEMBEDE",
+    "location": {
+      "lat": -25.73845815114639,
+      "lng": 28.187311495283115
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 4
+    }
+  },
+  {
+    "id": "areyeng-stop-5",
+    "operatorId": "areyeng",
+    "name": "RIVONIA TRIAL",
+    "location": {
+      "lat": -25.742780992422148,
+      "lng": 28.18775905503739
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 1,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 4,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 5
+    }
+  },
+  {
+    "id": "areyeng-stop-6",
+    "operatorId": "areyeng",
+    "name": "MOLEFE MAKINTA",
+    "location": {
+      "lat": -25.747523035914625,
+      "lng": 28.18815908118719
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-10",
+        "routeCode": "Line 2A",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 6
+    }
+  },
+  {
+    "id": "areyeng-stop-7",
+    "operatorId": "areyeng",
+    "name": "CENTRAL",
+    "location": {
+      "lat": -25.75069350364293,
+      "lng": 28.189233166929085
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-10",
+        "routeCode": "Line 2A",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 12,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 7
+    }
+  },
+  {
+    "id": "areyeng-stop-8",
+    "operatorId": "areyeng",
+    "name": "PRETORIA STATION",
+    "location": {
+      "lat": -25.756897391732085,
+      "lng": 28.187933074012783
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 8
+    }
+  },
+  {
+    "id": "areyeng-stop-9",
+    "operatorId": "areyeng",
+    "name": "LAND AFFAIRS",
+    "location": {
+      "lat": -25.75530236762167,
+      "lng": 28.187222798102272
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 5,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 9
+    }
+  },
+  {
+    "id": "areyeng-stop-10",
+    "operatorId": "areyeng",
+    "name": "CITY HALL",
+    "location": {
+      "lat": -25.752883402141,
+      "lng": 28.188488165989888
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 12,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 10
+    }
+  },
+  {
+    "id": "areyeng-stop-11",
+    "operatorId": "areyeng",
+    "name": "HECTOR PIETERSON",
+    "location": {
+      "lat": -25.681824823588176,
+      "lng": 28.183806999215573
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 11
+    }
+  },
+  {
+    "id": "areyeng-stop-12",
+    "operatorId": "areyeng",
+    "name": "LOWER FRED NICHOLSON SOUTH",
+    "location": {
+      "lat": -25.706666237625715,
+      "lng": 28.172374097092604
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 12
+    }
+  },
+  {
+    "id": "areyeng-stop-13",
+    "operatorId": "areyeng",
+    "name": "MOOT SOUTH",
+    "location": {
+      "lat": -25.717949863269105,
+      "lng": 28.16963327006162
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 13
+    }
+  },
+  {
+    "id": "areyeng-stop-14",
+    "operatorId": "areyeng",
+    "name": "PPC SOUTH",
+    "location": {
+      "lat": -25.722183021756347,
+      "lng": 28.171334328269914
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 14,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 14
+    }
+  },
+  {
+    "id": "areyeng-stop-15",
+    "operatorId": "areyeng",
+    "name": "TSHWANE MARKET SOUTH",
+    "location": {
+      "lat": -25.73738092505845,
+      "lng": 28.17182461282103
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 15
+    }
+  },
+  {
+    "id": "areyeng-stop-16",
+    "operatorId": "areyeng",
+    "name": "TSHWANE MARKET NORTH",
+    "location": {
+      "lat": -25.73895389372854,
+      "lng": 28.171614570782697
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 16
+    }
+  },
+  {
+    "id": "areyeng-stop-17",
+    "operatorId": "areyeng",
+    "name": "PPC NORTH",
+    "location": {
+      "lat": -25.721089684852476,
+      "lng": 28.170224704718375
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 17
+    }
+  },
+  {
+    "id": "areyeng-stop-18",
+    "operatorId": "areyeng",
+    "name": "MOOT NORTH",
+    "location": {
+      "lat": -25.715218329535144,
+      "lng": 28.169761646764872
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 18
+    }
+  },
+  {
+    "id": "areyeng-stop-19",
+    "operatorId": "areyeng",
+    "name": "LOWER FRED NICHOLSON NORTH",
+    "location": {
+      "lat": -25.705812269176985,
+      "lng": 28.17195058735362
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 19
+    }
+  },
+  {
+    "id": "areyeng-stop-20",
+    "operatorId": "areyeng",
+    "name": "MAYVILLE EAST",
+    "location": {
+      "lat": -25.697501687611332,
+      "lng": 28.18326927074436
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 20
+    }
+  },
+  {
+    "id": "areyeng-stop-21",
+    "operatorId": "areyeng",
+    "name": "HECTOR PIETERSON",
+    "location": {
+      "lat": -25.681824823588176,
+      "lng": 28.183806999215573
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 21
+    }
+  },
+  {
+    "id": "areyeng-stop-22",
+    "operatorId": "areyeng",
+    "name": "MOSES MORUDU",
+    "location": {
+      "lat": -25.7069852117704,
+      "lng": 28.186814788939536
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 22
+    }
+  },
+  {
+    "id": "areyeng-stop-23",
+    "operatorId": "areyeng",
+    "name": "MIDDLE FRED NICHOLSON EAST",
+    "location": {
+      "lat": -25.70797399265578,
+      "lng": 28.190074764408926
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 23
+    }
+  },
+  {
+    "id": "areyeng-stop-24",
+    "operatorId": "areyeng",
+    "name": "EUGENE MARAIS",
+    "location": {
+      "lat": -25.708439646168788,
+      "lng": 28.194665240186744
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 24
+    }
+  },
+  {
+    "id": "areyeng-stop-25",
+    "operatorId": "areyeng",
+    "name": "UPPER FRED NICHOLSON EAST",
+    "location": {
+      "lat": -25.70882190544792,
+      "lng": 28.198434780752986
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 4,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 4,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 25
+    }
+  },
+  {
+    "id": "areyeng-stop-26",
+    "operatorId": "areyeng",
+    "name": "LOWER GEZINA SOUTH",
+    "location": {
+      "lat": -25.709357050702415,
+      "lng": 28.20265098273453
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 11,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 26
+    }
+  },
+  {
+    "id": "areyeng-stop-27",
+    "operatorId": "areyeng",
+    "name": "BEN SWART",
+    "location": {
+      "lat": -25.71472886288122,
+      "lng": 28.20358918934078
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 27
+    }
+  },
+  {
+    "id": "areyeng-stop-28",
+    "operatorId": "areyeng",
+    "name": "MIDDLE GEZINA SOUTH",
+    "location": {
+      "lat": -25.718922233574254,
+      "lng": 28.204282036786534
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 11,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 28
+    }
+  },
+  {
+    "id": "areyeng-stop-29",
+    "operatorId": "areyeng",
+    "name": "UPPER GEZINA SOUTH",
+    "location": {
+      "lat": -25.725340721627457,
+      "lng": 28.205284380613406
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 29
+    }
+  },
+  {
+    "id": "areyeng-stop-30",
+    "operatorId": "areyeng",
+    "name": "STEVE BIKO HOSPITAL",
+    "location": {
+      "lat": -25.73113869575932,
+      "lng": 28.204426278656815
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 30
+    }
+  },
+  {
+    "id": "areyeng-stop-31",
+    "operatorId": "areyeng",
+    "name": "ANNIE BOTHA",
+    "location": {
+      "lat": -25.73255729319047,
+      "lng": 28.204797536124925
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 25,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 31
+    }
+  },
+  {
+    "id": "areyeng-stop-32",
+    "operatorId": "areyeng",
+    "name": "HARVEST HOUSE",
+    "location": {
+      "lat": -25.736704407834665,
+      "lng": 28.205323952079983
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 12,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 12,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 32
+    }
+  },
+  {
+    "id": "areyeng-stop-33",
+    "operatorId": "areyeng",
+    "name": "PENSION HOUSE",
+    "location": {
+      "lat": -25.73897687825344,
+      "lng": 28.20551279852695
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 12,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 12,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 33
+    }
+  },
+  {
+    "id": "areyeng-stop-34",
+    "operatorId": "areyeng",
+    "name": "LOWER HAMILTON",
+    "location": {
+      "lat": -25.741358041016372,
+      "lng": 28.20570957772209
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 11,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 11,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 34
+    }
+  },
+  {
+    "id": "areyeng-stop-35",
+    "operatorId": "areyeng",
+    "name": "UPPER HAMILTON",
+    "location": {
+      "lat": -25.747047078342163,
+      "lng": 28.206173555024293
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 35
+    }
+  },
+  {
+    "id": "areyeng-stop-36",
+    "operatorId": "areyeng",
+    "name": "SUNNYSIDE",
+    "location": {
+      "lat": -25.750353359200492,
+      "lng": 28.206062923971785
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 36
+    }
+  },
+  {
+    "id": "areyeng-stop-37",
+    "operatorId": "areyeng",
+    "name": "RUTH MAMPATI",
+    "location": {
+      "lat": -25.75214127130994,
+      "lng": 28.200372651014618
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 5,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 5,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-10",
+        "routeCode": "Line 2A",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 37
+    }
+  },
+  {
+    "id": "areyeng-stop-38",
+    "operatorId": "areyeng",
+    "name": "TUT ARCADIA",
+    "location": {
+      "lat": -25.74332403069192,
+      "lng": 28.199653763579608
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 5,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 5,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 13,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 38
+    }
+  },
+  {
+    "id": "areyeng-stop-39",
+    "operatorId": "areyeng",
+    "name": "NELSON MANDELA",
+    "location": {
+      "lat": -25.741490898104452,
+      "lng": 28.200176286245057
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 39
+    }
+  },
+  {
+    "id": "areyeng-stop-40",
+    "operatorId": "areyeng",
+    "name": "ENVIRONMENT HOUSE",
+    "location": {
+      "lat": -25.73926909247018,
+      "lng": 28.203194658546426
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 13,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 13,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 40
+    }
+  },
+  {
+    "id": "areyeng-stop-41",
+    "operatorId": "areyeng",
+    "name": "SOUTPANSBERG",
+    "location": {
+      "lat": -25.736939119906026,
+      "lng": 28.20300322589263
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 14,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 14,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 41
+    }
+  },
+  {
+    "id": "areyeng-stop-42",
+    "operatorId": "areyeng",
+    "name": "DR SAVAGE",
+    "location": {
+      "lat": -25.73368765751754,
+      "lng": 28.20392072031272
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 42
+    }
+  },
+  {
+    "id": "areyeng-stop-43",
+    "operatorId": "areyeng",
+    "name": "FLOWERS",
+    "location": {
+      "lat": -25.728215959925226,
+      "lng": 28.204028708867984
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 43
+    }
+  },
+  {
+    "id": "areyeng-stop-44",
+    "operatorId": "areyeng",
+    "name": "UPPER GEZINA NORTH",
+    "location": {
+      "lat": -25.724537539374538,
+      "lng": 28.203426719863398
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 44
+    }
+  },
+  {
+    "id": "areyeng-stop-45",
+    "operatorId": "areyeng",
+    "name": "MIDDLE GEZINA NORTH",
+    "location": {
+      "lat": -25.71947516023522,
+      "lng": 28.202558776028383
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 13,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 13,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 45
+    }
+  },
+  {
+    "id": "areyeng-stop-46",
+    "operatorId": "areyeng",
+    "name": "LOWER GEZINA NORTH",
+    "location": {
+      "lat": -25.710517554076734,
+      "lng": 28.201146794494143
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 46
+    }
+  },
+  {
+    "id": "areyeng-stop-47",
+    "operatorId": "areyeng",
+    "name": "UPPER FRED NICHOLSON WEST",
+    "location": {
+      "lat": -25.709002585353705,
+      "lng": 28.199350968837187
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 5,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 5,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 47
+    }
+  },
+  {
+    "id": "areyeng-stop-48",
+    "operatorId": "areyeng",
+    "name": "EUGENE MARAIS WEST",
+    "location": {
+      "lat": -25.70856049173501,
+      "lng": 28.19492479925382
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 5,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 5,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 48
+    }
+  },
+  {
+    "id": "areyeng-stop-49",
+    "operatorId": "areyeng",
+    "name": "MIDDLE FRED NICHOLSON WEST",
+    "location": {
+      "lat": -25.70805583650483,
+      "lng": 28.189964163778196
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 4,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 4,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 49
+    }
+  },
+  {
+    "id": "areyeng-stop-50",
+    "operatorId": "areyeng",
+    "name": "PRETORIA ZOO",
+    "location": {
+      "lat": -25.739075910811952,
+      "lng": 28.18862100623452
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 50
+    }
+  },
+  {
+    "id": "areyeng-stop-51",
+    "operatorId": "areyeng",
+    "name": "MENLYN TAXI ASSOCIATION",
+    "location": {
+      "lat": -25.741255363900382,
+      "lng": 28.195078983793078
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 51
+    }
+  },
+  {
+    "id": "areyeng-stop-52",
+    "operatorId": "areyeng",
+    "name": "BLOED STREET MALL",
+    "location": {
+      "lat": -25.739717971580248,
+      "lng": 28.19241099422073
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 1,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 52
+    }
+  },
+  {
+    "id": "areyeng-stop-53",
+    "operatorId": "areyeng",
+    "name": "CENTRAL",
+    "location": {
+      "lat": -25.750696757871637,
+      "lng": 28.189234041836787
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-10",
+        "routeCode": "Line 2A",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 12,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 53
+    }
+  },
+  {
+    "id": "areyeng-stop-54",
+    "operatorId": "areyeng",
+    "name": "NANA SITA",
+    "location": {
+      "lat": -25.750183783130154,
+      "lng": 28.196492969045035
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-10",
+        "routeCode": "Line 2A",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 13,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 54
+    }
+  },
+  {
+    "id": "areyeng-stop-55",
+    "operatorId": "areyeng",
+    "name": "RUTH MAMPATI",
+    "location": {
+      "lat": -25.75214127130994,
+      "lng": 28.200372651014618
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 5,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 5,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-10",
+        "routeCode": "Line 2A",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 55
+    }
+  },
+  {
+    "id": "areyeng-stop-56",
+    "operatorId": "areyeng",
+    "name": "MAHATMA GHANDI",
+    "location": {
+      "lat": -25.755698882929824,
+      "lng": 28.208421838859657
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-10",
+        "routeCode": "Line 2A",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 56
+    }
+  },
+  {
+    "id": "areyeng-stop-57",
+    "operatorId": "areyeng",
+    "name": "GENERAL PITSO",
+    "location": {
+      "lat": -25.757110284891525,
+      "lng": 28.21280779331883
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 3,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-10",
+        "routeCode": "Line 2A",
+        "distanceToRouteM": 4,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 57
+    }
+  },
+  {
+    "id": "areyeng-stop-58",
+    "operatorId": "areyeng",
+    "name": "LOFTUS VERSVELD",
+    "location": {
+      "lat": -25.755704685588118,
+      "lng": 28.222837990694867
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-10",
+        "routeCode": "Line 2A",
+        "distanceToRouteM": 3,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 58
+    }
+  },
+  {
+    "id": "areyeng-stop-59",
+    "operatorId": "areyeng",
+    "name": "TUKKIES NORTH",
+    "location": {
+      "lat": -25.75075949531348,
+      "lng": 28.231754546718523
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-10",
+        "routeCode": "Line 2A",
+        "distanceToRouteM": 5,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 59
+    }
+  },
+  {
+    "id": "areyeng-stop-60",
+    "operatorId": "areyeng",
+    "name": "ARCADIA",
+    "location": {
+      "lat": -25.747723113550112,
+      "lng": 28.233257253986462
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-10",
+        "routeCode": "Line 2A",
+        "distanceToRouteM": 3,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 60
+    }
+  },
+  {
+    "id": "areyeng-stop-61",
+    "operatorId": "areyeng",
+    "name": "GENERAL M SIYOTHULA",
+    "location": {
+      "lat": -25.74755578219575,
+      "lng": 28.236379213492516
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-10",
+        "routeCode": "Line 2A",
+        "distanceToRouteM": 3,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 61
+    }
+  },
+  {
+    "id": "areyeng-stop-62",
+    "operatorId": "areyeng",
+    "name": "SIPHO KOMANE",
+    "location": {
+      "lat": -25.75053848512323,
+      "lng": 28.237152318535138
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-10",
+        "routeCode": "Line 2A",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 62
+    }
+  },
+  {
+    "id": "areyeng-stop-63",
+    "operatorId": "areyeng",
+    "name": "TUKKIES SOUTH",
+    "location": {
+      "lat": -25.750915093373038,
+      "lng": 28.23226877519821
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-10",
+        "routeCode": "Line 2A",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 63
+    }
+  },
+  {
+    "id": "areyeng-stop-64",
+    "operatorId": "areyeng",
+    "name": "RISSIK",
+    "location": {
+      "lat": -25.75507422717359,
+      "lng": 28.203607760815913
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 64
+    }
+  },
+  {
+    "id": "areyeng-stop-65",
+    "operatorId": "areyeng",
+    "name": "JUSTICE MAHOMED",
+    "location": {
+      "lat": -25.75706422498721,
+      "lng": 28.20257978657839
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 65
+    }
+  },
+  {
+    "id": "areyeng-stop-66",
+    "operatorId": "areyeng",
+    "name": "BEREA",
+    "location": {
+      "lat": -25.758886629924813,
+      "lng": 28.20014866354402
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 66
+    }
+  },
+  {
+    "id": "areyeng-stop-67",
+    "operatorId": "areyeng",
+    "name": "MEARS SOUTH",
+    "location": {
+      "lat": -25.762088577120814,
+      "lng": 28.199271220593996
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 23,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 67
+    }
+  },
+  {
+    "id": "areyeng-stop-68",
+    "operatorId": "areyeng",
+    "name": "UNISA EAST",
+    "location": {
+      "lat": -25.765575805287945,
+      "lng": 28.19927215770232
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 4,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 4,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 68
+    }
+  },
+  {
+    "id": "areyeng-stop-69",
+    "operatorId": "areyeng",
+    "name": "SANPARK SOUTH",
+    "location": {
+      "lat": -25.765724852925494,
+      "lng": 28.204750481612376
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 69
+    }
+  },
+  {
+    "id": "areyeng-stop-70",
+    "operatorId": "areyeng",
+    "name": "PRELLER EAST",
+    "location": {
+      "lat": -25.767079532370317,
+      "lng": 28.207075110358716
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 70
+    }
+  },
+  {
+    "id": "areyeng-stop-71",
+    "operatorId": "areyeng",
+    "name": "TUKS GROENKLOOF SOUTH",
+    "location": {
+      "lat": -25.7694759155222,
+      "lng": 28.210056005855844
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 71
+    }
+  },
+  {
+    "id": "areyeng-stop-72",
+    "operatorId": "areyeng",
+    "name": "STEGER NORTH",
+    "location": {
+      "lat": -25.77019179989809,
+      "lng": 28.215117993612193
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 13,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 72
+    }
+  },
+  {
+    "id": "areyeng-stop-73",
+    "operatorId": "areyeng",
+    "name": "SIBELIUS",
+    "location": {
+      "lat": -25.766328266769566,
+      "lng": 28.22136314195513
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 73
+    }
+  },
+  {
+    "id": "areyeng-stop-74",
+    "operatorId": "areyeng",
+    "name": "MAGNOLIA DAL",
+    "location": {
+      "lat": -25.763893740832188,
+      "lng": 28.220374448751063
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 74
+    }
+  },
+  {
+    "id": "areyeng-stop-75",
+    "operatorId": "areyeng",
+    "name": "JACARANDA HOSPITAL",
+    "location": {
+      "lat": -25.75977479905921,
+      "lng": 28.21293718212024
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 75
+    }
+  },
+  {
+    "id": "areyeng-stop-76",
+    "operatorId": "areyeng",
+    "name": "RELLY",
+    "location": {
+      "lat": -25.75923550686331,
+      "lng": 28.208938601700947
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 76
+    }
+  },
+  {
+    "id": "areyeng-stop-77",
+    "operatorId": "areyeng",
+    "name": "VAN LENNEP",
+    "location": {
+      "lat": -25.752456163583417,
+      "lng": 28.196049932038285
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 12,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 77
+    }
+  },
+  {
+    "id": "areyeng-stop-78",
+    "operatorId": "areyeng",
+    "name": "JOUBERT",
+    "location": {
+      "lat": -25.755685249763616,
+      "lng": 28.20021392938946
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 78
+    }
+  },
+  {
+    "id": "areyeng-stop-79",
+    "operatorId": "areyeng",
+    "name": "JUSTICE MAHOMED",
+    "location": {
+      "lat": -25.75706422498721,
+      "lng": 28.20257978657839
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 79
+    }
+  },
+  {
+    "id": "areyeng-stop-80",
+    "operatorId": "areyeng",
+    "name": "UNISA SUNNYSIDE",
+    "location": {
+      "lat": -25.757742974249965,
+      "lng": 28.19791266002811
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 80
+    }
+  },
+  {
+    "id": "areyeng-stop-81",
+    "operatorId": "areyeng",
+    "name": "MELROSE HOUSE",
+    "location": {
+      "lat": -25.75652734868188,
+      "lng": 28.19321407423505
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 81
+    }
+  },
+  {
+    "id": "areyeng-stop-82",
+    "operatorId": "areyeng",
+    "name": "PRETORIA STATION",
+    "location": {
+      "lat": -25.756897391732085,
+      "lng": 28.187933074012783
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 82
+    }
+  },
+  {
+    "id": "areyeng-stop-83",
+    "operatorId": "areyeng",
+    "name": "BOSMAN TAXI RANK WEST",
+    "location": {
+      "lat": -25.755675656691498,
+      "lng": 28.184212430524212
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 83
+    }
+  },
+  {
+    "id": "areyeng-stop-84",
+    "operatorId": "areyeng",
+    "name": "VISAGIE",
+    "location": {
+      "lat": -25.753729881342537,
+      "lng": 28.181163834992287
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 13,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 84
+    }
+  },
+  {
+    "id": "areyeng-stop-85",
+    "operatorId": "areyeng",
+    "name": "UPPER KGOSI MAMPURU",
+    "location": {
+      "lat": -25.750174294035563,
+      "lng": 28.180898339998333
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 85
+    }
+  },
+  {
+    "id": "areyeng-stop-86",
+    "operatorId": "areyeng",
+    "name": "MIDDLE KGOSI MAMPURU",
+    "location": {
+      "lat": -25.745996323188862,
+      "lng": 28.180585963174888
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 86
+    }
+  },
+  {
+    "id": "areyeng-stop-87",
+    "operatorId": "areyeng",
+    "name": "LOWER KGOSI MAMPURU",
+    "location": {
+      "lat": -25.741257997924592,
+      "lng": 28.179724759305675
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 87
+    }
+  },
+  {
+    "id": "areyeng-stop-88",
+    "operatorId": "areyeng",
+    "name": "JERUSALEM",
+    "location": {
+      "lat": -25.741509589252644,
+      "lng": 28.175223950776317
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 88
+    }
+  },
+  {
+    "id": "areyeng-stop-89",
+    "operatorId": "areyeng",
+    "name": "UPPER BLOED",
+    "location": {
+      "lat": -25.741686168641777,
+      "lng": 28.172515934342112
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 89
+    }
+  },
+  {
+    "id": "areyeng-stop-90",
+    "operatorId": "areyeng",
+    "name": "UPPER MARABASTAD",
+    "location": {
+      "lat": -25.740104236200192,
+      "lng": 28.174020722792765
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 11,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 90
+    }
+  },
+  {
+    "id": "areyeng-stop-91",
+    "operatorId": "areyeng",
+    "name": "MIDDLE MARABASTAD",
+    "location": {
+      "lat": -25.739911246714406,
+      "lng": 28.17689881259843
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 91
+    }
+  },
+  {
+    "id": "areyeng-stop-92",
+    "operatorId": "areyeng",
+    "name": "LOWER MARABASTAD",
+    "location": {
+      "lat": -25.73964235364147,
+      "lng": 28.17976676806684
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 13,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 14,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 14,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 92
+    }
+  },
+  {
+    "id": "areyeng-stop-93",
+    "operatorId": "areyeng",
+    "name": "BELLE OMBRE STATION NORTH",
+    "location": {
+      "lat": -25.73943472353827,
+      "lng": 28.18269951049177
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 13,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 19,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 19,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 93
+    }
+  },
+  {
+    "id": "areyeng-stop-94",
+    "operatorId": "areyeng",
+    "name": "PRETORIA ZOO",
+    "location": {
+      "lat": -25.739075910811952,
+      "lng": 28.18862100623452
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 94
+    }
+  },
+  {
+    "id": "areyeng-stop-95",
+    "operatorId": "areyeng",
+    "name": "PRINSHOF",
+    "location": {
+      "lat": -25.73949217914725,
+      "lng": 28.193602966306667
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 11,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 95
+    }
+  },
+  {
+    "id": "areyeng-stop-96",
+    "operatorId": "areyeng",
+    "name": "TUT ARTS",
+    "location": {
+      "lat": -25.740634139584053,
+      "lng": 28.196226710640026
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 96
+    }
+  },
+  {
+    "id": "areyeng-stop-97",
+    "operatorId": "areyeng",
+    "name": "TUT ARCADIA",
+    "location": {
+      "lat": -25.74485308778024,
+      "lng": 28.20048947637646
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 11,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 23,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-8",
+        "routeCode": "Line 1A - C02*",
+        "distanceToRouteM": 23,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 97
+    }
+  },
+  {
+    "id": "areyeng-stop-98",
+    "operatorId": "areyeng",
+    "name": "UPPER DU TOIT",
+    "location": {
+      "lat": -25.748356640799006,
+      "lng": 28.19796866712173
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 4,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 98
+    }
+  },
+  {
+    "id": "areyeng-stop-99",
+    "operatorId": "areyeng",
+    "name": "STANZA BOPAPE",
+    "location": {
+      "lat": -25.74630868521737,
+      "lng": 28.197796555728218
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 4,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 99
+    }
+  },
+  {
+    "id": "areyeng-stop-100",
+    "operatorId": "areyeng",
+    "name": "LOWER DU TOIT",
+    "location": {
+      "lat": -25.743903088490878,
+      "lng": 28.19758740150329
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 5,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 100
+    }
+  },
+  {
+    "id": "areyeng-stop-101",
+    "operatorId": "areyeng",
+    "name": "RAMO 1",
+    "location": {
+      "lat": -25.742993798470458,
+      "lng": 28.196138239702535
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 101
+    }
+  },
+  {
+    "id": "areyeng-stop-102",
+    "operatorId": "areyeng",
+    "name": "LILIAN NGOYI",
+    "location": {
+      "lat": -25.74316066480269,
+      "lng": 28.1940391969552
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 102
+    }
+  },
+  {
+    "id": "areyeng-stop-103",
+    "operatorId": "areyeng",
+    "name": "THABO SEHUME",
+    "location": {
+      "lat": -25.74333905998208,
+      "lng": 28.19162275159294
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 103
+    }
+  },
+  {
+    "id": "areyeng-stop-104",
+    "operatorId": "areyeng",
+    "name": "LOWER BLOED",
+    "location": {
+      "lat": -25.740912465490347,
+      "lng": 28.183725199302973
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 104
+    }
+  },
+  {
+    "id": "areyeng-stop-105",
+    "operatorId": "areyeng",
+    "name": "LOWER KGOSI MAMPURU",
+    "location": {
+      "lat": -25.741257997924592,
+      "lng": 28.179724759305675
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 105
+    }
+  },
+  {
+    "id": "areyeng-stop-106",
+    "operatorId": "areyeng",
+    "name": "JERUSALEM",
+    "location": {
+      "lat": -25.741509589252644,
+      "lng": 28.175223950776317
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 106
+    }
+  },
+  {
+    "id": "areyeng-stop-107",
+    "operatorId": "areyeng",
+    "name": "UPPER BLOED",
+    "location": {
+      "lat": -25.741686168641777,
+      "lng": 28.172515934342112
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 107
+    }
+  },
+  {
+    "id": "areyeng-stop-108",
+    "operatorId": "areyeng",
+    "name": "UPPER MARABASTAD",
+    "location": {
+      "lat": -25.740104236200192,
+      "lng": 28.174020722792765
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 11,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 108
+    }
+  },
+  {
+    "id": "areyeng-stop-109",
+    "operatorId": "areyeng",
+    "name": "MIDDLE MARABASTAD",
+    "location": {
+      "lat": -25.739911246714406,
+      "lng": 28.17689881259843
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 109
+    }
+  },
+  {
+    "id": "areyeng-stop-110",
+    "operatorId": "areyeng",
+    "name": "LOWER MARABASTAD",
+    "location": {
+      "lat": -25.73964235364147,
+      "lng": 28.17976676806684
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 13,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 14,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 14,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 110
+    }
+  },
+  {
+    "id": "areyeng-stop-111",
+    "operatorId": "areyeng",
+    "name": "BELLE OMBRE STATION SOUTH",
+    "location": {
+      "lat": -25.73987616475925,
+      "lng": 28.18268672743586
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 111
+    }
+  },
+  {
+    "id": "areyeng-stop-112",
+    "operatorId": "areyeng",
+    "name": "SCHUBART PARK",
+    "location": {
+      "lat": -25.74480660166947,
+      "lng": 28.183138102825627
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 12,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 112
+    }
+  },
+  {
+    "id": "areyeng-stop-113",
+    "operatorId": "areyeng",
+    "name": "MADIBA",
+    "location": {
+      "lat": -25.746510368556972,
+      "lng": 28.183264635517435
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 11,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 113
+    }
+  },
+  {
+    "id": "areyeng-stop-114",
+    "operatorId": "areyeng",
+    "name": "PRETORIUS",
+    "location": {
+      "lat": -25.75020231788055,
+      "lng": 28.18354682511202
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 114
+    }
+  },
+  {
+    "id": "areyeng-stop-115",
+    "operatorId": "areyeng",
+    "name": "DITSONG MUSEUM",
+    "location": {
+      "lat": -25.754494882581348,
+      "lng": 28.183410121549198
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 12,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 115
+    }
+  },
+  {
+    "id": "areyeng-stop-116",
+    "operatorId": "areyeng",
+    "name": "BOSMAN TAXI RANK EAST",
+    "location": {
+      "lat": -25.75551631267661,
+      "lng": 28.184495138743596
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 116
+    }
+  },
+  {
+    "id": "areyeng-stop-117",
+    "operatorId": "areyeng",
+    "name": "PRETORIA STATION",
+    "location": {
+      "lat": -25.756897391732085,
+      "lng": 28.187933074012783
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 117
+    }
+  },
+  {
+    "id": "areyeng-stop-118",
+    "operatorId": "areyeng",
+    "name": "LAND AFFAIRS",
+    "location": {
+      "lat": -25.75530236762167,
+      "lng": 28.187222798102272
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 5,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 118
+    }
+  },
+  {
+    "id": "areyeng-stop-119",
+    "operatorId": "areyeng",
+    "name": "CITY HALL",
+    "location": {
+      "lat": -25.752883402141,
+      "lng": 28.188488165989888
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 12,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 119
+    }
+  },
+  {
+    "id": "areyeng-stop-120",
+    "operatorId": "areyeng",
+    "name": "MAGNOLIA DAL SOUTH",
+    "location": {
+      "lat": -25.763959333182285,
+      "lng": 28.220580965361176
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 120
+    }
+  },
+  {
+    "id": "areyeng-stop-121",
+    "operatorId": "areyeng",
+    "name": "QUINNS",
+    "location": {
+      "lat": -25.76777639659425,
+      "lng": 28.220155596827254
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 11,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 11,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 121
+    }
+  },
+  {
+    "id": "areyeng-stop-122",
+    "operatorId": "areyeng",
+    "name": "STEGER SOUTH",
+    "location": {
+      "lat": -25.77037258845124,
+      "lng": 28.215223512650006
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 14,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 122
+    }
+  },
+  {
+    "id": "areyeng-stop-123",
+    "operatorId": "areyeng",
+    "name": "TUKS GROENKLOOF NORTH",
+    "location": {
+      "lat": -25.768967248946428,
+      "lng": 28.20977449718025
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 123
+    }
+  },
+  {
+    "id": "areyeng-stop-124",
+    "operatorId": "areyeng",
+    "name": "PRELLER WEST",
+    "location": {
+      "lat": -25.767178884623632,
+      "lng": 28.206522833826284
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 124
+    }
+  },
+  {
+    "id": "areyeng-stop-125",
+    "operatorId": "areyeng",
+    "name": "SANPARK NORTH",
+    "location": {
+      "lat": -25.76558934561602,
+      "lng": 28.204558202889707
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 5,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 5,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 125
+    }
+  },
+  {
+    "id": "areyeng-stop-126",
+    "operatorId": "areyeng",
+    "name": "UNISA WEST",
+    "location": {
+      "lat": -25.765630923545668,
+      "lng": 28.19945022390946
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 4,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 4,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 126
+    }
+  },
+  {
+    "id": "areyeng-stop-127",
+    "operatorId": "areyeng",
+    "name": "MEARS NORTH",
+    "location": {
+      "lat": -25.76181054762652,
+      "lng": 28.199187041240194
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 19,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 127
+    }
+  },
+  {
+    "id": "areyeng-stop-128",
+    "operatorId": "areyeng",
+    "name": "WALKER",
+    "location": {
+      "lat": -25.759763956397947,
+      "lng": 28.214417622829306
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-1",
+        "routeCode": "Line 2A - F04",
+        "distanceToRouteM": 13,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-2",
+        "routeCode": "Line 2A - F07",
+        "distanceToRouteM": 13,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 128
+    }
+  },
+  {
+    "id": "areyeng-stop-129",
+    "operatorId": "areyeng",
+    "name": "LOWER KGOSI MAMPURU",
+    "location": {
+      "lat": -25.741257997924592,
+      "lng": 28.179724759305675
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 129
+    }
+  },
+  {
+    "id": "areyeng-stop-130",
+    "operatorId": "areyeng",
+    "name": "JERUSALEM",
+    "location": {
+      "lat": -25.741509589252644,
+      "lng": 28.175223950776317
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 130
+    }
+  },
+  {
+    "id": "areyeng-stop-131",
+    "operatorId": "areyeng",
+    "name": "UPPER BLOED",
+    "location": {
+      "lat": -25.741686168641777,
+      "lng": 28.172515934342112
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 8,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 131
+    }
+  },
+  {
+    "id": "areyeng-stop-132",
+    "operatorId": "areyeng",
+    "name": "UPPER MARABASTAD",
+    "location": {
+      "lat": -25.740104236200192,
+      "lng": 28.174020722792765
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 10,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 11,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 132
+    }
+  },
+  {
+    "id": "areyeng-stop-133",
+    "operatorId": "areyeng",
+    "name": "MIDDLE MARABASTAD",
+    "location": {
+      "lat": -25.739911246714406,
+      "lng": 28.17689881259843
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 133
+    }
+  },
+  {
+    "id": "areyeng-stop-134",
+    "operatorId": "areyeng",
+    "name": "LOWER MARABASTAD",
+    "location": {
+      "lat": -25.73964235364147,
+      "lng": 28.17976676806684
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 13,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 14,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 14,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 134
+    }
+  },
+  {
+    "id": "areyeng-stop-135",
+    "operatorId": "areyeng",
+    "name": "MAYVILLE WEST",
+    "location": {
+      "lat": -25.697882738434448,
+      "lng": 28.18297874067719
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 9,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 135
+    }
+  },
+  {
+    "id": "areyeng-stop-136",
+    "operatorId": "areyeng",
+    "name": "BELLE OMBRE STATION NORTH",
+    "location": {
+      "lat": -25.73943472353827,
+      "lng": 28.18269951049177
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-3",
+        "routeCode": "Line 2A - F05",
+        "distanceToRouteM": 13,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-4",
+        "routeCode": "Line 2A - F06",
+        "distanceToRouteM": 19,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 19,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 136
+    }
+  },
+  {
+    "id": "areyeng-stop-137",
+    "operatorId": "areyeng",
+    "name": "HECTOR PIETERSON",
+    "location": {
+      "lat": -25.681824823588176,
+      "lng": 28.183806999215573
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-6",
+        "routeCode": "Line 1A - C01",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-7",
+        "routeCode": "Line 1A - C02",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-9",
+        "routeCode": "Line 1A - C03",
+        "distanceToRouteM": 6,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 137
+    }
+  },
+  {
+    "id": "areyeng-stop-138",
+    "operatorId": "areyeng",
+    "name": "MOLEFE MAKINTA",
+    "location": {
+      "lat": -25.747523035914625,
+      "lng": 28.18815908118719
+    },
+    "candidateRoutes": [
+      {
+        "routeId": "areyeng-route-5",
+        "routeCode": "Line 1A",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      },
+      {
+        "routeId": "areyeng-route-10",
+        "routeCode": "Line 2A",
+        "distanceToRouteM": 7,
+        "confidence": "high",
+        "matchMethod": "spatial-proximity"
+      }
+    ],
+    "source": {
+      "authority": "City of Tshwane",
+      "dataset": "A Re Yeng Station or Stop",
+      "sourceType": "official-gis",
+      "rawObjectId": 138
+    }
+  }
+]

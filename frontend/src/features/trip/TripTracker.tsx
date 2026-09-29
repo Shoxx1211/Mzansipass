@@ -1,23 +1,21 @@
-// src/components/TripTracker.tsx
-// Pulse Transit - Premium Live Trip Tracker Component
-// Features: Real-time metrics, ETA predictions, speed quality analysis, network visualization
+// src/features/trip/TripTracker.tsx
+// Pulse Transit - Premium Live Trip Tracker
+// Focus: truthful live metrics, mobile-first spacing, resilient GPS UX
 
-import React, { useState, useEffect, useMemo, memo } from "react";
+import { memo, useEffect, useMemo, type ReactNode } from "react";
 import {
-  Timer,
-  Route,
-  Zap,
   Activity,
-  MapPinned,
-  Wifi,
-  Signal,
-  Gauge,
-  Battery,
-  Compass,
   AlertTriangle,
   CheckCircle2,
-  TrendingUp,
-  Clock} from "lucide-react";
+  Clock,
+  Gauge,
+  MapPinned,
+  Route,
+  Signal,
+  Timer,
+  Wifi,
+  Zap,
+} from "lucide-react";
 
 import type { TransitNetwork } from "../../types";
 import { NETWORK_UI } from "../../constants";
@@ -25,529 +23,652 @@ import { NETWORK_UI } from "../../constants";
 // ======================================================
 // TYPES
 // ======================================================
+
 interface TripTrackerProps {
   network: TransitNetwork | null;
   destination: string;
+
+  /** Actual GPS distance travelled so far, in kilometres. */
   distance: number;
+
+  /** Elapsed trip time, in seconds. */
   duration: number;
+
+  /** Current validated GPS speed, in km/h. */
   speed: number;
+
+  /** Average speed for the trip so far, in km/h. */
+  avgSpeed?: number;
+
+  /** Maximum validated speed for the trip so far, in km/h. */
   maxSpeed?: number;
+
   startTime?: number;
+
+  /**
+   * Only pass this when the planned distance is trustworthy.
+   * App.tsx currently limits this to Mapbox road-routing results.
+   */
   expectedDistance?: number;
+
+  /**
+   * Planned journey duration in seconds. Used only as a stable countdown
+   * estimate; it is deliberately not recalculated from noisy instant speed.
+   */
+  expectedDurationSeconds?: number;
+
+  /** Optional measured values. Nothing fake is displayed when absent. */
   routeQuality?: number;
-  signalStrength?: 'excellent' | 'good' | 'fair' | 'poor';
+  signalStrength?: "excellent" | "good" | "fair" | "poor";
   batteryLevel?: number;
   isBackgroundTracking?: boolean;
-  onEtaUpdate?: (eta: number) => void;
+
+  gpsStatus?: "active" | "stale";
+
+  onEtaUpdate?: (etaMinutes: number) => void;
   onEndTrip: () => void | Promise<void>;
 }
 
 interface SpeedQuality {
   label: string;
-  color: string;
-  icon: React.ReactNode;
   description: string;
+  color: string;
+  icon: ReactNode;
   minSpeed: number;
   maxSpeed: number;
 }
 
 interface EtaPrediction {
   minutes: number;
-  confidence: 'high' | 'medium' | 'low';
   arrivalTime: Date;
 }
 
 // ======================================================
 // CONSTANTS
 // ======================================================
+
 const SPEED_QUALITIES: SpeedQuality[] = [
-  { 
-    label: "Express", 
-    color: "text-red-400", 
-    icon: <Zap size={14} />,
+  {
+    label: "Express",
     description: "High-speed travel",
+    color: "text-rose-300",
+    icon: <Zap size={14} />,
     minSpeed: 70,
-    maxSpeed: Infinity
+    maxSpeed: Number.POSITIVE_INFINITY,
   },
-  { 
-    label: "Fast", 
-    color: "text-emerald-400", 
-    icon: <TrendingUp size={14} />,
-    description: "Good pace",
-    minSpeed: 40,
-    maxSpeed: 70
-  },
-  { 
-    label: "Smooth", 
-    color: "text-cyan-400", 
+  {
+    label: "Fast",
+    description: "Moving well",
+    color: "text-emerald-300",
     icon: <Activity size={14} />,
+    minSpeed: 40,
+    maxSpeed: 70,
+  },
+  {
+    label: "Smooth",
     description: "Steady movement",
+    color: "text-cyan-300",
+    icon: <Activity size={14} />,
     minSpeed: 20,
-    maxSpeed: 40
+    maxSpeed: 40,
   },
-  { 
-    label: "Moderate", 
-    color: "text-yellow-400", 
+  {
+    label: "Moderate",
+    description: "Urban traffic pace",
+    color: "text-amber-300",
     icon: <Clock size={14} />,
-    description: "Normal traffic pace",
-    minSpeed: 10,
-    maxSpeed: 20
+    minSpeed: 8,
+    maxSpeed: 20,
   },
-  { 
-    label: "Slow", 
-    color: "text-white/40", 
+  {
+    label: "Slow",
+    description: "Stopped or moving slowly",
+    color: "text-white/50",
     icon: <AlertTriangle size={14} />,
-    description: "Heavy traffic or stops",
     minSpeed: 0,
-    maxSpeed: 10
-  }
+    maxSpeed: 8,
+  },
 ];
 
 const SIGNAL_CONFIG = {
-  excellent: { icon: <Signal size={16} className="text-emerald-400" />, label: "Excellent", bars: 4 },
-  good: { icon: <Signal size={16} className="text-cyan-400" />, label: "Good", bars: 3 },
-  fair: { icon: <Signal size={16} className="text-yellow-400" />, label: "Fair", bars: 2 },
-  poor: { icon: <Signal size={16} className="text-red-400" />, label: "Poor", bars: 1 }
-};
+  excellent: { label: "Excellent", bars: 4, className: "text-emerald-300" },
+  good: { label: "Good", bars: 3, className: "text-cyan-300" },
+  fair: { label: "Fair", bars: 2, className: "text-amber-300" },
+  poor: { label: "Poor", bars: 1, className: "text-rose-300" },
+} as const;
 
 // ======================================================
-// CUSTOM HOOKS
+// HELPERS
 // ======================================================
-const useEtaPrediction = (
-  distance: number, 
-  speed: number, 
-  expectedDistance?: number
+
+const clamp = (value: number, min: number, max: number): number =>
+  Math.min(max, Math.max(min, value));
+
+const formatDuration = (seconds: number): string => {
+  const safe = Math.max(0, Math.floor(seconds || 0));
+  const hours = Math.floor(safe / 3600);
+  const minutes = Math.floor((safe % 3600) / 60);
+  const secs = safe % 60;
+
+  if (hours > 0) return `${hours}h ${minutes}m`;
+  if (minutes > 0) return `${minutes}m ${secs}s`;
+  return `${secs}s`;
+};
+
+const formatStartTime = (startTime: number): string =>
+  new Date(startTime).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+const usePlannedEta = (
+  duration: number,
+  expectedDurationSeconds?: number,
 ): EtaPrediction | null => {
   return useMemo(() => {
-    if (!speed || speed <= 1 || distance === 0) return null;
-    
-    const remainingDistance = Math.max(0, (expectedDistance || distance * 1.2) - distance);
-    const hoursRemaining = remainingDistance / speed;
-    const minutesRemaining = Math.round(hoursRemaining * 60);
-    
-    if (minutesRemaining === 0 || minutesRemaining > 180) return null;
-    
-    let confidence: 'high' | 'medium' | 'low' = 'medium';
-    if (speed > 30 && remainingDistance < 5) confidence = 'high';
-    if (speed < 10) confidence = 'low';
-    
-    const arrivalTime = new Date(Date.now() + minutesRemaining * 60000);
-    
+    if (
+      expectedDurationSeconds === undefined ||
+      !Number.isFinite(expectedDurationSeconds) ||
+      expectedDurationSeconds <= 0
+    ) {
+      return null;
+    }
+
+    const remainingSeconds = expectedDurationSeconds - Math.max(0, duration);
+
+    // Once the original estimate has elapsed, do not manufacture a new ETA.
+    if (remainingSeconds <= 0) {
+      return null;
+    }
+
+    const minutes = Math.max(1, Math.ceil(remainingSeconds / 60));
+
     return {
-      minutes: minutesRemaining,
-      confidence,
-      arrivalTime
+      minutes,
+      arrivalTime: new Date(Date.now() + remainingSeconds * 1000),
     };
-  }, [distance, speed, expectedDistance]);
+  }, [duration, expectedDurationSeconds]);
 };
 
 // ======================================================
 // SUB-COMPONENTS
 // ======================================================
-const GaugeMeter: React.FC<{ value: number; max: number; label: string; color: string }> = ({ 
-  value, max, label, color 
-}) => {
-  const percentage = (value / max) * 100;
-  
-  return (
-    <div className="space-y-1">
-      <div className="flex justify-between text-[10px] text-white/40">
-        <span>{label}</span>
-        <span>{value.toFixed(0)}/{max}</span>
-      </div>
-      <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-        <div 
-          className={`h-full rounded-full transition-all duration-500 ${color}`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-    </div>
-  );
-};
 
-const MetricCard: React.FC<{
-  icon: React.ReactNode;
-  label: string;
-  value: string | number;
-  unit?: string;
-  trend?: 'up' | 'down' | null;
-  color?: string;
-}> = ({ icon, label, value, unit, trend, color = "text-white" }) => (
-  <div className="glass rounded-2xl p-4 border border-white/10 hover:border-white/20 transition-all group">
-    <div className="flex items-center gap-2 mb-3">
-      <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-        {icon}
-      </div>
-      <p className="text-[10px] text-white/40 uppercase tracking-wider">{label}</p>
-    </div>
-    <div className="flex items-baseline gap-1">
-      <p className={`text-3xl font-black ${color}`}>{value}</p>
-      {unit && <span className="text-xs text-white/40">{unit}</span>}
-      {trend && (
-        <span className={`text-xs ml-2 ${trend === 'up' ? 'text-green-400' : 'text-red-400'}`}>
-          {trend === 'up' ? 'ÃŽâ€œÃƒÂ¥ÃƒÂ¦' : 'ÃŽâ€œÃƒÂ¥ÃƒÂ´'}
-        </span>
-      )}
-    </div>
-  </div>
-);
-
-const SignalBars: React.FC<{ strength: number }> = ({ strength }) => (
-  <div className="flex items-end gap-0.5 h-4">
+const SignalBars = ({ strength }: { strength: number }) => (
+  <div className="flex h-4 items-end gap-0.5" aria-hidden="true">
     {[1, 2, 3, 4].map((bar) => (
-      <div
+      <span
         key={bar}
-        className="w-1 bg-current rounded-full transition-all"
-        style={{ 
+        className="w-1 rounded-full bg-current transition-opacity"
+        style={{
           height: `${bar * 3}px`,
-          opacity: bar <= strength ? 1 : 0.3,
-          backgroundColor: bar <= strength ? 'currentColor' : 'rgba(255,255,255,0.3)'
+          opacity: bar <= strength ? 1 : 0.2,
         }}
       />
     ))}
   </div>
 );
 
+const SmallMetricCard = ({
+  icon,
+  label,
+  value,
+  unit,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: string;
+  unit?: string;
+}) => (
+  <div className="min-w-0 rounded-2xl border border-white/10 bg-white/[0.045] p-4 backdrop-blur-xl">
+    <div className="flex items-center gap-2">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white/[0.07]">
+        {icon}
+      </span>
+      <span className="truncate text-[10px] font-semibold uppercase tracking-[0.14em] text-white/40">
+        {label}
+      </span>
+    </div>
+
+    <div className="mt-3 min-w-0">
+      <div className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
+        <span className="max-w-full break-words text-[clamp(1.45rem,7vw,2rem)] font-black leading-none tracking-tight text-white">
+          {value}
+        </span>
+        {unit && (
+          <span className="shrink-0 text-[11px] font-semibold text-white/35">
+            {unit}
+          </span>
+        )}
+      </div>
+    </div>
+  </div>
+);
+
+const OptionalGauge = ({
+  value,
+  label,
+}: {
+  value: number;
+  label: string;
+}) => {
+  const safeValue = clamp(value, 0, 100);
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
+      <div className="flex items-center justify-between gap-3 text-xs">
+        <span className="text-white/45">{label}</span>
+        <span className="font-bold text-white/75">{Math.round(safeValue)}%</span>
+      </div>
+      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/10">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-emerald-400 transition-all duration-500"
+          style={{ width: `${safeValue}%` }}
+        />
+      </div>
+    </div>
+  );
+};
+
 // ======================================================
 // MAIN COMPONENT
 // ======================================================
-export const TripTracker = memo<TripTrackerProps>(({
-  network,
-  destination,
-  distance,
-  duration,
-  speed,
-  maxSpeed = 0,
-  startTime,
-  expectedDistance,
-  routeQuality = 85,
-  signalStrength = 'good',
-  batteryLevel = 85,
-  isBackgroundTracking = false,
-  onEtaUpdate,
-  onEndTrip
-}) => {
-  const [isAnimating] = useState(true);
-  const etaPrediction = useEtaPrediction(distance, speed, expectedDistance);
-  
-  // Update ETA when prediction changes
-  useEffect(() => {
-    if (etaPrediction && onEtaUpdate) {
-      onEtaUpdate(etaPrediction.minutes);
-    }
-  }, [etaPrediction, onEtaUpdate]);
-  
-  // Format duration helper
-  const formatDuration = (seconds: number): string => {
-    if (!seconds || seconds === 0) return '0s';
-    const hrs = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    const secs = Math.floor(seconds % 60);
-    
-    if (hrs > 0) return `${hrs}h ${mins}m`;
-    if (mins > 0) return `${mins}m ${secs}s`;
-    return `${secs}s`;
-  };
-  
-  // Get speed quality
-  const speedQuality = useMemo(() => {
-    return SPEED_QUALITIES.find(q => speed >= q.minSpeed && speed < q.maxSpeed) || SPEED_QUALITIES[4];
-  }, [speed]);
-  
-  // Get network UI config
-  const networkUI = network ? NETWORK_UI[network] : null;
-  
-  // Get signal config
-  const signalConfig = SIGNAL_CONFIG[signalStrength];
-  
-  // Calculate progress percentage (assuming average trip is 15km)
-  const progressPercentage = Math.min(100, (distance / (expectedDistance || 15)) * 100);
-  
-  // Calculate average speed from duration and distance
-  const avgSpeed = duration > 0 ? (distance / (duration / 3600)) : 0;
-  
-  // Determine if trip is efficient
-  const isEfficient = avgSpeed > 25 && routeQuality > 70;
-  
-  return (
-    <div className="space-y-4 animate-fadeIn">
-      {/* ====================================================== */}
-      {/* MAIN TRACKER CARD */}
-      {/* ====================================================== */}
-      <div className={`
-        relative overflow-hidden rounded-3xl border-2
-        bg-gradient-to-br ${networkUI?.color || 'from-zinc-900 to-black'}
-        border-white/20 shadow-2xl
-        transition-all duration-300
-      `}>
-        {/* Live Background Animation */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent animate-pulse" />
-        
-        {/* Backdrop Blur */}
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
-        
-        {/* Content */}
-        <div className="relative z-10 p-5 space-y-5">
-          {/* Header */}
-          <div className="flex items-start justify-between">
-            <div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                <p className="text-[10px] uppercase tracking-[0.2em] text-white/50 font-mono">
-                  LIVE TRACKING
-                </p>
-              </div>
-              
-              <div className="flex items-center gap-3 mt-3">
-                <div className={`
-                  relative w-16 h-16 rounded-2xl 
-                  bg-white/10 border-2 border-white/20
-                  flex items-center justify-center text-3xl
-                  transition-all duration-300
-                `}>
-                  {networkUI?.icon || "Ã¢â€°Â¡Ã†â€™ÃƒÅ“ÃƒÂ®"}
-                  {isAnimating && (
-                    <div className="absolute -inset-1 rounded-2xl bg-cyan-500/20 animate-ping" />
-                  )}
+
+export const TripTracker = memo<TripTrackerProps>(
+  ({
+    network,
+    destination,
+    distance,
+    duration,
+    speed,
+    avgSpeed,
+    maxSpeed = 0,
+    startTime,
+    expectedDistance,
+    expectedDurationSeconds,
+    routeQuality,
+    signalStrength,
+    batteryLevel,
+    isBackgroundTracking = false,
+    gpsStatus = "active",
+    onEtaUpdate,
+    onEndTrip,
+  }) => {
+    const networkUI = network ? NETWORK_UI[network] : null;
+    const speedQuality = useMemo(
+      () =>
+        SPEED_QUALITIES.find(
+          (quality) =>
+            speed >= quality.minSpeed && speed < quality.maxSpeed,
+        ) ?? SPEED_QUALITIES[SPEED_QUALITIES.length - 1],
+      [speed],
+    );
+
+    const calculatedAverageSpeed =
+      duration > 0 ? distance / (duration / 3600) : 0;
+
+    const displayAverageSpeed =
+      avgSpeed !== undefined && Number.isFinite(avgSpeed)
+        ? Math.max(0, avgSpeed)
+        : Math.max(0, calculatedAverageSpeed);
+
+    const hasTrustedDistancePlan =
+      expectedDistance !== undefined &&
+      Number.isFinite(expectedDistance) &&
+      expectedDistance > 0;
+
+    // While the trip is active, Pulse must never claim the trip is complete.
+    // 100% belongs to the completed-trip screen, not live tracking.
+    const progressPercentage = hasTrustedDistancePlan
+      ? clamp((distance / expectedDistance!) * 100, 0, 99)
+      : null;
+
+    const remainingDistance = hasTrustedDistancePlan
+      ? Math.max(0, expectedDistance! - distance)
+      : null;
+
+    const etaPrediction = usePlannedEta(
+      duration,
+      expectedDurationSeconds,
+    );
+
+    const signalConfig = signalStrength
+      ? SIGNAL_CONFIG[signalStrength]
+      : null;
+
+    useEffect(() => {
+      if (etaPrediction && onEtaUpdate) {
+        onEtaUpdate(etaPrediction.minutes);
+      }
+    }, [etaPrediction, onEtaUpdate]);
+
+    const gpsHealthy = gpsStatus === "active";
+
+    return (
+      <section className="space-y-4" aria-label="Live trip tracker">
+        <div
+          className={`relative overflow-hidden rounded-[1.75rem] border border-white/15 bg-gradient-to-br ${
+            networkUI?.color || "from-slate-900 via-zinc-950 to-black"
+          } shadow-2xl`}
+        >
+          <div className="absolute inset-0 bg-black/45 backdrop-blur-sm" />
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white/[0.06] to-transparent" />
+
+          <div className="relative z-10 space-y-5 p-4 sm:p-6">
+            {/* Header */}
+            <div className="flex min-w-0 items-start justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/15 bg-white/[0.08]">
+                  <Route size={22} className="text-cyan-200" />
                 </div>
-                
-                <div>
-                  <h2 className="text-2xl font-black text-white">
+
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`h-2 w-2 shrink-0 rounded-full ${
+                        gpsHealthy
+                          ? "animate-pulse bg-emerald-400"
+                          : "bg-amber-400"
+                      }`}
+                    />
+                    <p className="truncate text-[10px] font-bold uppercase tracking-[0.18em] text-white/45">
+                      {gpsHealthy ? "Live journey" : "GPS reconnecting"}
+                    </p>
+                  </div>
+
+                  <h2 className="mt-1 truncate text-xl font-black tracking-tight text-white sm:text-2xl">
                     {network || "Transit"}
                   </h2>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className={speedQuality.color}>
-                      {speedQuality.icon}
+                </div>
+              </div>
+
+              <div
+                className={`shrink-0 rounded-full border px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] ${
+                  gpsHealthy
+                    ? "border-emerald-300/20 bg-emerald-300/10 text-emerald-200"
+                    : "border-amber-300/20 bg-amber-300/10 text-amber-100"
+                }`}
+              >
+                {gpsHealthy ? "GPS live" : "Signal lost"}
+              </div>
+            </div>
+
+            {/* Current speed hero */}
+            <div className="rounded-3xl border border-white/10 bg-black/25 p-5 sm:p-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 text-white/45">
+                    <Gauge size={16} />
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.16em]">
+                      Current GPS speed
                     </span>
-                    <p className={`text-sm font-semibold ${speedQuality.color}`}>
+                  </div>
+
+                  <div className="mt-2 flex flex-wrap items-end gap-x-2 gap-y-1">
+                    <span
+                      className={`text-[clamp(3rem,16vw,5rem)] font-black leading-[0.9] tracking-[-0.06em] ${speedQuality.color}`}
+                    >
+                      {Math.max(0, speed).toFixed(0)}
+                    </span>
+                    <span className="pb-1 text-sm font-bold text-white/45 sm:pb-2 sm:text-base">
+                      km/h
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex min-w-0 items-center gap-2 rounded-2xl bg-white/[0.055] px-3 py-2.5">
+                  <span className={speedQuality.color}>{speedQuality.icon}</span>
+                  <div className="min-w-0">
+                    <p className={`text-xs font-bold ${speedQuality.color}`}>
                       {speedQuality.label}
                     </p>
-                    <p className="text-[10px] text-white/30">
+                    <p className="truncate text-[10px] text-white/35">
                       {speedQuality.description}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-            
-            {/* Live Badge */}
-            <div className="flex flex-col items-end gap-2">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/30">
-                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-wider">
-                  LIVE
-                </span>
-              </div>
-              {isBackgroundTracking && (
-                <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-white/10">
-                  <span className="text-[8px] text-white/40">Ã¢â€°Â¡Ã†â€™ÃƒÂ´Ã¢â€“â€™ BG</span>
-                </div>
-              )}
-            </div>
-          </div>
-          
-          {/* Progress Bar */}
-          <div className="space-y-2">
-            <div className="flex justify-between text-[10px] text-white/40">
-              <span>Journey Progress</span>
-              <span>{progressPercentage.toFixed(0)}%</span>
-            </div>
-            <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 rounded-full transition-all duration-500"
-                style={{ width: `${progressPercentage}%` }}
-              />
-            </div>
-          </div>
-          
-          {/* Destination */}
-          <div className="bg-black/30 rounded-2xl p-4 border border-white/10">
-            <p className="text-[10px] text-white/40 uppercase tracking-wider mb-2 flex items-center gap-2">
-              <MapPinned size={12} />
-              DESTINATION
-            </p>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center">
-                <MapPinned size={18} className="text-cyan-400" />
-              </div>
-              <div className="flex-1">
-                <p className="text-base font-bold text-white">
-                  {destination || "Tracking route..."}
-                </p>
-                <div className="flex items-center gap-2 mt-1">
-                  <div className="w-16 h-1 bg-white/20 rounded-full overflow-hidden">
-                    <div className="w-full h-full bg-cyan-400/50 rounded-full animate-pulse" />
-                  </div>
-                  <p className="text-[10px] text-white/30">GPS locked</p>
-                </div>
-              </div>
-              {etaPrediction && (
-                <div className="text-right">
-                  <p className="text-[10px] text-white/40">ETA</p>
-                  <p className="text-lg font-black text-white">{etaPrediction.minutes}m</p>
-                </div>
-              )}
-            </div>
-          </div>
-          
-          {/* Stats Grid */}
-          <div className="grid grid-cols-3 gap-2">
-            <MetricCard
-              icon={<Route size={16} className="text-cyan-400" />}
-              label="Distance"
-              value={distance.toFixed(1)}
-              unit="km"
-              trend={distance > 0 ? 'up' : null}
-            />
-            <MetricCard
-              icon={<Timer size={16} className="text-orange-400" />}
-              label="Duration"
-              value={formatDuration(duration)}
-            />
-            <MetricCard
-              icon={<Gauge size={16} className="text-yellow-400" />}
-              label="Speed"
-              value={speed.toFixed(1)}
-              unit="km/h"
-              color={speedQuality.color}
-            />
-          </div>
-        </div>
-      </div>
-      
-      {/* ====================================================== */}
-      {/* LIVE STATUS PANEL */}
-      {/* ====================================================== */}
-      <div className="glass rounded-2xl p-4 border border-white/10">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-              <Activity size={20} className="text-emerald-400" />
-            </div>
-            <div>
-              <p className="font-semibold text-white">Real-time Telemetry</p>
-              <p className="text-[10px] text-white/40">Live GPS & motion analysis</p>
-            </div>
-          </div>
-          <div className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">
-            ACTIVE
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-2 gap-3">
-          <div className="flex items-center gap-2">
-            <Signal size={14} className="text-white/40" />
-            <span className="text-xs text-white/70">Signal:</span>
-            <div className="flex items-center gap-1 text-emerald-400">
-              <SignalBars strength={signalConfig.bars} />
-              <span className="text-[10px] ml-1">{signalConfig.label}</span>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Wifi size={14} className="text-white/40" />
-            <span className="text-xs text-white/70">Tracking:</span>
-            <span className="text-xs text-cyan-400">Continuous</span>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Battery size={14} className="text-white/40" />
-            <span className="text-xs text-white/70">Battery:</span>
-            <div className="flex-1 h-1.5 bg-white/20 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-yellow-400 to-green-400 rounded-full"
-                style={{ width: `${batteryLevel}%` }}
-              />
-            </div>
-            <span className="text-[10px] text-white/40">{batteryLevel}%</span>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Compass size={14} className="text-white/40" />
-            <span className="text-xs text-white/70">Route:</span>
-            <span className="text-xs text-white/60">Optimized</span>
-          </div>
-        </div>
-      </div>
 
-      <button
-  onClick={onEndTrip}
-  className="
-    w-full h-14 rounded-2xl
-    bg-gradient-to-r from-red-500 to-orange-500
-    text-white font-bold
-    transition-all hover:scale-[1.02] active:scale-[0.98]
-  "
->
-  Ã¢â€°Â¡Ã†â€™Ã‚Â¢ÃƒÂ¦ End Trip
-</button>
-      
-      {/* ====================================================== */}
-      {/* PERFORMANCE METRICS */}
-      {/* ====================================================== */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <p className="text-xs text-white/40 uppercase tracking-wider">Journey Analytics</p>
-          {isEfficient && (
-            <div className="flex items-center gap-1">
-              <CheckCircle2 size={12} className="text-emerald-400" />
-              <span className="text-[10px] text-emerald-400">Efficient Route</span>
+            {/* Distance + duration */}
+            <div className="grid grid-cols-2 gap-3">
+              <SmallMetricCard
+                icon={<Route size={16} className="text-cyan-300" />}
+                label="Distance"
+                value={Math.max(0, distance).toFixed(1)}
+                unit="km"
+              />
+
+              <SmallMetricCard
+                icon={<Timer size={16} className="text-orange-300" />}
+                label="Elapsed"
+                value={formatDuration(duration)}
+              />
+            </div>
+
+            {/* Progress - only when we have a trusted planned distance */}
+            <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
+              {progressPercentage !== null ? (
+                <>
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/40">
+                        Estimated trip progress
+                      </p>
+                      <p className="mt-1 text-xs text-white/35">
+                        Based on the planned road distance
+                      </p>
+                    </div>
+
+                    <span className="shrink-0 text-lg font-black text-white">
+                      {Math.round(progressPercentage)}%
+                    </span>
+                  </div>
+
+                  <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-emerald-400 transition-all duration-700"
+                      style={{ width: `${progressPercentage}%` }}
+                    />
+                  </div>
+
+                  {remainingDistance !== null && (
+                    <p className="mt-2 text-[10px] text-white/35">
+                      Approximately {remainingDistance.toFixed(1)} km of the planned distance remains.
+                    </p>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/40">
+                        Journey in progress
+                      </p>
+                      <p className="mt-1 text-xs leading-5 text-white/35">
+                        Pulse is tracking your real movement. Route percentage will appear once a trusted route baseline is available.
+                      </p>
+                    </div>
+                    <Activity size={18} className="shrink-0 text-cyan-300" />
+                  </div>
+
+                  <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+                    <div className="h-full w-1/3 animate-pulse rounded-full bg-gradient-to-r from-cyan-400/50 to-emerald-400/70" />
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Destination */}
+            <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
+              <div className="flex min-w-0 items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-400/10">
+                  <MapPinned size={18} className="text-cyan-300" />
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
+                    Destination
+                  </p>
+                  <p className="mt-1 break-words text-base font-bold leading-5 text-white">
+                    {destination || "Destination not set"}
+                  </p>
+                </div>
+
+                {etaPrediction && (
+                  <div className="shrink-0 text-right">
+                    <p className="text-[10px] uppercase tracking-wider text-white/35">
+                      Est. remaining
+                    </p>
+                    <p className="mt-1 text-lg font-black text-white">
+                      {etaPrediction.minutes}m
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Live status */}
+        <div className="glass rounded-3xl border border-white/10 p-4 sm:p-5">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-3">
+              <div
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+                  gpsHealthy ? "bg-emerald-400/10" : "bg-amber-400/10"
+                }`}
+              >
+                {gpsHealthy ? (
+                  <Activity size={19} className="text-emerald-300" />
+                ) : (
+                  <AlertTriangle size={19} className="text-amber-300" />
+                )}
+              </div>
+              <div className="min-w-0">
+                <p className="truncate font-bold text-white">
+                  Real-time telemetry
+                </p>
+                <p className="text-[10px] text-white/35">
+                  Live GPS movement data
+                </p>
+              </div>
+            </div>
+
+            <span
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${
+                gpsHealthy
+                  ? "bg-emerald-400/10 text-emerald-300"
+                  : "bg-amber-400/10 text-amber-200"
+              }`}
+            >
+              {gpsHealthy ? "Active" : "Reconnecting"}
+            </span>
+          </div>
+
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="min-w-0 rounded-2xl bg-white/[0.035] p-3">
+              <Wifi size={14} className="text-cyan-300" />
+              <p className="mt-2 text-[9px] uppercase tracking-wider text-white/35">
+                Tracking
+              </p>
+              <p className="mt-1 truncate text-xs font-bold text-white/75">
+                Continuous
+              </p>
+            </div>
+
+            <div className="min-w-0 rounded-2xl bg-white/[0.035] p-3">
+              <Gauge size={14} className="text-amber-300" />
+              <p className="mt-2 text-[9px] uppercase tracking-wider text-white/35">
+                Avg speed
+              </p>
+              <p className="mt-1 truncate text-xs font-bold text-white/75">
+                {displayAverageSpeed.toFixed(1)} km/h
+              </p>
+            </div>
+
+            <div className="min-w-0 rounded-2xl bg-white/[0.035] p-3">
+              <Zap size={14} className="text-rose-300" />
+              <p className="mt-2 text-[9px] uppercase tracking-wider text-white/35">
+                Max speed
+              </p>
+              <p className="mt-1 truncate text-xs font-bold text-white/75">
+                {Math.max(0, maxSpeed).toFixed(1)} km/h
+              </p>
+            </div>
+
+            <div className="min-w-0 rounded-2xl bg-white/[0.035] p-3">
+              <Signal size={14} className={gpsHealthy ? "text-emerald-300" : "text-amber-300"} />
+              <p className="mt-2 text-[9px] uppercase tracking-wider text-white/35">
+                GPS
+              </p>
+              <p className="mt-1 truncate text-xs font-bold text-white/75">
+                {gpsHealthy ? "Live" : "Signal lost"}
+              </p>
+            </div>
+          </div>
+
+          {signalConfig && (
+            <div className="mt-3 flex items-center justify-between rounded-2xl bg-white/[0.025] px-3 py-2.5">
+              <span className="text-xs text-white/40">Measured signal quality</span>
+              <div className={`flex items-center gap-2 ${signalConfig.className}`}>
+                <SignalBars strength={signalConfig.bars} />
+                <span className="text-xs font-bold">{signalConfig.label}</span>
+              </div>
+            </div>
+          )}
+
+          {batteryLevel !== undefined && Number.isFinite(batteryLevel) && (
+            <OptionalGauge value={batteryLevel} label="Battery" />
+          )}
+
+          {routeQuality !== undefined && Number.isFinite(routeQuality) && (
+            <div className="mt-3">
+              <OptionalGauge value={routeQuality} label="Route quality" />
+            </div>
+          )}
+
+          {isBackgroundTracking && (
+            <div className="mt-3 flex items-center gap-2 rounded-xl bg-white/[0.03] px-3 py-2 text-[10px] text-white/40">
+              <CheckCircle2 size={13} className="text-emerald-300" />
+              Background tracking is enabled for this trip.
             </div>
           )}
         </div>
-        
-        <div className="grid grid-cols-2 gap-3">
-          <div className="glass rounded-xl p-3">
-            <p className="text-[9px] text-white/40">MAX SPEED</p>
-            <p className="text-xl font-black text-white mt-1">{maxSpeed.toFixed(1)} <span className="text-xs text-white/40">km/h</span></p>
-          </div>
-          <div className="glass rounded-xl p-3">
-            <p className="text-[9px] text-white/40">AVG SPEED</p>
-            <p className="text-xl font-black text-white mt-1">{avgSpeed.toFixed(1)} <span className="text-xs text-white/40">km/h</span></p>
-          </div>
+
+        <button
+          type="button"
+          onClick={() => void onEndTrip()}
+          className="min-h-14 w-full rounded-2xl border border-rose-300/15 bg-gradient-to-r from-rose-500 to-orange-500 px-5 py-3.5 text-base font-black text-white shadow-lg shadow-rose-950/20 transition active:scale-[0.985]"
+        >
+          End trip
+        </button>
+
+        <div className="flex flex-col gap-2 px-1 text-[10px] text-white/30 sm:flex-row sm:items-center sm:justify-between">
+          {startTime ? (
+            <span>Started {formatStartTime(startTime)}</span>
+          ) : (
+            <span>Trip start time unavailable</span>
+          )}
+
+          {etaPrediction ? (
+            <span>
+              Planned arrival around {etaPrediction.arrivalTime.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </span>
+          ) : expectedDurationSeconds && duration >= expectedDurationSeconds ? (
+            <span>Original time estimate passed — continuing live tracking</span>
+          ) : (
+            <span>Live distance and speed are GPS-derived</span>
+          )}
         </div>
-        
-        <GaugeMeter value={routeQuality} max={100} label="Route Quality" color="bg-gradient-to-r from-cyan-400 to-emerald-400" />
-        
-        {startTime && (
-          <div className="flex items-center justify-between text-[10px] text-white/30 pt-2">
-            <span>Started: {new Date(startTime).toLocaleTimeString()}</span>
-            {etaPrediction && (
-              <span>Est. arrival: {etaPrediction.arrivalTime.toLocaleTimeString()}</span>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-});
+      </section>
+    );
+  },
+);
 
 TripTracker.displayName = "TripTracker";
 
-// ======================================================
-// EXPORT
-// ======================================================
 export type { TripTrackerProps, SpeedQuality, EtaPrediction };
-
-// ======================================================
-// CSS ANIMATIONS (Add to global CSS)
-// ======================================================
-// @keyframes fadeIn {
-//   from { opacity: 0; transform: translateY(10px); }
-//   to { opacity: 1; transform: translateY(0); }
-// }
-// 
-// @keyframes ping {
-//   75%, 100% {
-//     transform: scale(1.5);
-//     opacity: 0;
-//   }
-// }
-// 
-// .animate-fadeIn {
-//   animation: fadeIn 0.3s ease-out forwards;
-// }
-// 
-// .animate-ping {
-//   animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
-// }

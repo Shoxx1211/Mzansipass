@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "incremental": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2022",
     "useDefineForClassFields": true,
@@ -18,7 +19,6 @@
 
     /* Path aliases - for cleaner imports */
     "baseUrl": ".",
-    "ignoreDeprecations": "6.0",  // ← Silences the baseUrl deprecation warning
     "paths": {
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],

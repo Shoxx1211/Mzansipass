@@ -1,0 +1,226 @@
+{
+    "currentVersion":  10.91,
+    "id":  22,
+    "name":  "Metrobus Routes",
+    "type":  "Feature Layer",
+    "description":  "The routes indicated are based on the metrobus route description that was supplied by Metrobus, the information was traced in Google Earth by Freda a data capturer and converted to a shapefile by Arup.",
+    "geometryType":  "esriGeometryPolyline",
+    "sourceSpatialReference":  {
+                                   "wkt":  "PROJCS[\"Wgs84 Lo29\",GEOGCS[\"GCS_Hartebeesthoek_1994\",DATUM[\"D_Hartebeesthoek_1994\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",29.0],PARAMETER[\"Scale_Factor\",1.0],PARAMETER[\"Latitude_Of_Origin\",0.0],UNIT[\"Meter\",1.0]]"
+                               },
+    "copyrightText":  "CoJ to decide",
+    "parentLayer":  {
+                        "id":  36,
+                        "name":  "Bus Services"
+                    },
+    "subLayers":  [
+
+                  ],
+    "minScale":  150000,
+    "maxScale":  0,
+    "drawingInfo":  {
+                        "renderer":  {
+                                         "type":  "simple",
+                                         "symbol":  {
+                                                        "type":  "esriSLS",
+                                                        "style":  "esriSLSSolid",
+                                                        "color":  [
+                                                                      235,
+                                                                      99,
+                                                                      0,
+                                                                      255
+                                                                  ],
+                                                        "width":  2
+                                                    },
+                                         "label":  "",
+                                         "description":  ""
+                                     },
+                        "transparency":  0,
+                        "labelingInfo":  [
+                                             {
+                                                 "labelPlacement":  "esriServerLinePlacementAboveAlong",
+                                                 "where":  null,
+                                                 "labelExpression":  "[ROUTE_ID]",
+                                                 "useCodedValues":  true,
+                                                 "symbol":  {
+                                                                "type":  "esriTS",
+                                                                "color":  [
+                                                                              255,
+                                                                              255,
+                                                                              255,
+                                                                              255
+                                                                          ],
+                                                                "backgroundColor":  null,
+                                                                "borderLineColor":  null,
+                                                                "borderLineSize":  null,
+                                                                "verticalAlignment":  "baseline",
+                                                                "horizontalAlignment":  "left",
+                                                                "rightToLeft":  false,
+                                                                "angle":  0,
+                                                                "xoffset":  0,
+                                                                "yoffset":  0,
+                                                                "kerning":  true,
+                                                                "haloColor":  null,
+                                                                "haloSize":  null,
+                                                                "font":  {
+                                                                             "family":  "Arial",
+                                                                             "size":  8,
+                                                                             "style":  "normal",
+                                                                             "weight":  "bold",
+                                                                             "decoration":  "none"
+                                                                         }
+                                                            },
+                                                 "minScale":  0,
+                                                 "maxScale":  0
+                                             }
+                                         ]
+                    },
+    "defaultVisibility":  false,
+    "extent":  {
+                   "xmin":  -118631.42749685528,
+                   "ymin":  -2913297.224398651,
+                   "xmax":  -83212.67690376287,
+                   "ymax":  -2875142.049298354,
+                   "spatialReference":  {
+                                            "wkt":  "PROJCS[\"TM_29_Hartebeesthoek\",GEOGCS[\"GCS_Hartebeesthoek_1994\",DATUM[\"D_Hartebeesthoek_1994\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",29.0],PARAMETER[\"Scale_Factor\",1.0],PARAMETER[\"Latitude_Of_Origin\",0.0],UNIT[\"Meter\",1.0]],VERTCS[\"EGM96_Geoid\",VDATUM[\"EGM96_Geoid\"],PARAMETER[\"Vertical_Shift\",0.0],PARAMETER[\"Direction\",1.0],UNIT[\"Meter\",1.0]]"
+                                        }
+               },
+    "hasAttachments":  false,
+    "htmlPopupType":  "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField":  "NAME",
+    "typeIdField":  null,
+    "subtypeFieldName":  null,
+    "subtypeField":  null,
+    "defaultSubtypeCode":  null,
+    "fields":  [
+                   {
+                       "name":  "OBJECTID",
+                       "type":  "esriFieldTypeOID",
+                       "alias":  "OBJECTID",
+                       "domain":  null
+                   },
+                   {
+                       "name":  "NAME",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "Name",
+                       "length":  254,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "ROUTE_ID",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "Route ID",
+                       "domain":  null
+                   },
+                   {
+                       "name":  "NAME_OF_RO",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "Name of Route",
+                       "length":  254,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "ROUTE_ORIG",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "Route Origin",
+                       "length":  254,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "ORIGIN_ADD",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "Origin Address",
+                       "length":  254,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "ROUTE_DEST",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "Route Destination",
+                       "length":  254,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "DESTINATIO",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "Destination",
+                       "length":  254,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "SHAPE",
+                       "type":  "esriFieldTypeGeometry",
+                       "alias":  "Shape",
+                       "domain":  null
+                   },
+                   {
+                       "name":  "SHAPE.STLength()",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "SHAPE.STLength()",
+                       "domain":  null
+                   }
+               ],
+    "geometryField":  {
+                          "name":  "SHAPE",
+                          "type":  "esriFieldTypeGeometry",
+                          "alias":  "Shape"
+                      },
+    "indexes":  [
+                    {
+                        "name":  "R1281_pk",
+                        "fields":  "OBJECTID",
+                        "isAscending":  true,
+                        "isUnique":  true,
+                        "description":  ""
+                    },
+                    {
+                        "name":  "S1233_idx",
+                        "fields":  "SHAPE",
+                        "isAscending":  true,
+                        "isUnique":  true,
+                        "description":  ""
+                    }
+                ],
+    "subtypes":  [
+
+                 ],
+    "relationships":  [
+
+                      ],
+    "canModifyLayer":  true,
+    "canScaleSymbols":  false,
+    "hasLabels":  true,
+    "capabilities":  "Map,Query,Data",
+    "maxRecordCount":  1000,
+    "supportsStatistics":  true,
+    "supportsAdvancedQueries":  true,
+    "hasZ":  true,
+    "hasM":  true,
+    "supportedQueryFormats":  "JSON, geoJSON",
+    "isDataVersioned":  false,
+    "ownershipBasedAccessControlForFeatures":  {
+                                                   "allowOthersToQuery":  true
+                                               },
+    "useStandardizedQueries":  true,
+    "advancedQueryCapabilities":  {
+                                      "useStandardizedQueries":  true,
+                                      "supportsStatistics":  true,
+                                      "supportsHavingClause":  true,
+                                      "supportsCountDistinct":  true,
+                                      "supportsOrderBy":  true,
+                                      "supportsDistinct":  true,
+                                      "supportsPagination":  true,
+                                      "supportsTrueCurve":  true,
+                                      "supportsReturningQueryExtent":  true,
+                                      "supportsQueryWithDistance":  true,
+                                      "supportsSqlExpression":  true
+                                  },
+    "supportsDatumTransformation":  true,
+    "hasGeometryProperties":  true,
+    "geometryProperties":  {
+                               "shapeLengthFieldName":  "SHAPE.STLength()",
+                               "units":  "esriMeters"
+                           },
+    "dateFieldsTimeReference":  null,
+    "supportsCoordinatesQuantization":  true
+}

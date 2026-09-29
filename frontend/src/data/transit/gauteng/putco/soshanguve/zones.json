@@ -1,0 +1,276 @@
+{
+  "schemaVersion": 1,
+  "operatorId": "putco",
+  "serviceArea": "soshanguve",
+  "sourceConfidence": "official",
+  "zoneAssignmentMode": "official-place-reference",
+  "gpsPolygonsAvailable": false,
+  "zones": [
+    {
+      "id": "L4",
+      "fareGroup": "L3/4",
+      "places": [
+        "F4",
+        "Zone MM",
+        "Zone P",
+        "Zone R",
+        "Zone T",
+        "Zone W",
+        "Zone X",
+        "ZTE"
+      ]
+    },
+    {
+      "id": "L3",
+      "fareGroup": "L3/4",
+      "places": [
+        "Mabopane Interchange",
+        "Padisago P School",
+        "PP (Makgabo)",
+        "Zone HH & PP",
+        "Zone JJ",
+        "Block BB",
+        "Block DD",
+        "Block FFW",
+        "Block GG",
+        "Block NN",
+        "Central City-Mabopane"
+      ]
+    },
+    {
+      "id": "L2",
+      "fareGroup": "L2",
+      "places": [
+        "Block M",
+        "Commissioner",
+        "Crossing Mall",
+        "L Ext",
+        "L Extension (Technical Z)",
+        "Praise Tabernacle Church",
+        "Ruth 1st Entrance",
+        "Transfer",
+        "Zone M"
+      ]
+    },
+    {
+      "id": "L1",
+      "fareGroup": "L1",
+      "places": [
+        "Block XX",
+        "Central School-WW",
+        "Ext 13",
+        "Ext 3 & 4 Cross",
+        "Rodney Mokoena",
+        "SA Hardware/ Block XX",
+        "Southview Mall",
+        "Vicks Ext 2",
+        "XX Entrance",
+        "Zone XX"
+      ]
+    },
+    {
+      "id": "C1",
+      "fareGroup": "1",
+      "places": [
+        "Akasia Town Council",
+        "Akasiaboom Street",
+        "Hornsnek",
+        "Orchards",
+        "Rosslyn",
+        "Wonderpark",
+        "Wonderpark Mall"
+      ]
+    },
+    {
+      "id": "B1",
+      "fareGroup": "1",
+      "places": [
+        "Annlin",
+        "Kolonade",
+        "Doornpoort(1),(2)",
+        "Lavender (R566)",
+        "Military Air Base T/Off",
+        "Montana",
+        "Onderstepoort",
+        "Pretoria North",
+        "Pyramid",
+        "Sinoville",
+        "Wonderboom"
+      ]
+    },
+    {
+      "id": "A2",
+      "fareGroup": "2",
+      "places": [
+        "Eastlynne"
+      ]
+    },
+    {
+      "id": "B2",
+      "fareGroup": "2",
+      "places": [
+        "Academic Hosp",
+        "Arcadia City",
+        "Atteridgeville",
+        "Belle Ombre Stn",
+        "Capital Park",
+        "Eldoglen",
+        "Erasmusrand",
+        "Fountains Valley",
+        "Gezina",
+        "Hatfield",
+        "Hazelwood",
+        "Hornsnek",
+        "Kloofsig",
+        "Koedoespoort",
+        "Laudium",
+        "Mahem",
+        "Malawi",
+        "Manhattan Hotel",
+        "Marabastad",
+        "Mayville Mall",
+        "Menlopark / Menlopark High School",
+        "Monument Park / Extention 2",
+        "Muckleneuk",
+        "Pretoria Stn /Pretoria Zoo",
+        "Quaggasrand T/Off",
+        "Queenswood Spar",
+        "Pretoria West",
+        "Thaba Tshwane",
+        "TUT",
+        "UNISA",
+        "Valhalla",
+        "Voortrekkerhoogte",
+        "Waterkloof",
+        "Waverley"
+      ]
+    },
+    {
+      "id": "A3",
+      "fareGroup": "3",
+      "places": [
+        "Baviaanspoort",
+        "Denneboom",
+        "Derdepoort",
+        "Edendale Cross",
+        "Eersterus",
+        "Jan Niemand Park",
+        "Kameeldrift SAPS",
+        "Roodeplaat Spar",
+        "Mamelodi",
+        "SAMCOR (FORD)",
+        "Silverton"
+      ]
+    },
+    {
+      "id": "H8",
+      "fareGroup": "3",
+      "places": [
+        "Bynerspoort",
+        "Cavalier",
+        "De Wagendrift",
+        "H/Skraal",
+        "Krokodilspruit Skietbaan",
+        "Landbou ARC T/Off",
+        "Mamakara",
+        "Mutango Lodge",
+        "Pebblerock",
+        "Pienaars River Bridge",
+        "Roodeplaat",
+        "RR Butchery",
+        "Ruah Park",
+        "Tweefontein Fork",
+        "Walmanstal T/Off"
+      ]
+    },
+    {
+      "id": "B4",
+      "fareGroup": "4",
+      "places": [
+        "Armscor",
+        "Atterbury",
+        "Boardwalk",
+        "Boschkop",
+        "Constantia Park",
+        "CSIR",
+        "Equestria",
+        "Erasmuskloof",
+        "Faerie Glen",
+        "Glenvillage",
+        "Lynwood",
+        "Menlyn",
+        "Silverlakes",
+        "SuperSpar Willow Way",
+        "The Groove",
+        "Watermeyer",
+        "Wilgers"
+      ]
+    },
+    {
+      "id": "C4",
+      "fareGroup": "4",
+      "places": [
+        "Basheewa Centre",
+        "Bronberick",
+        "Bushiwa",
+        "Centurion",
+        "Doringkloof",
+        "Eco Park",
+        "Elardus Park",
+        "Eldo Glen",
+        "Faerie Glen X28",
+        "Garsfontein",
+        "Gateway",
+        "Irene",
+        "Lyttelton",
+        "Midrand Estates",
+        "Midstream",
+        "Rooihuiskraal",
+        "Southdowns",
+        "Sunderland Ridge",
+        "The Reeds",
+        "Wierda Park"
+      ]
+    },
+    {
+      "id": "D5",
+      "fareGroup": "5",
+      "places": [
+        "Boulders",
+        "Bryanston",
+        "Buccleuch",
+        "Chloorkop",
+        "Diepsloot",
+        "Freedom Park",
+        "Kyasand",
+        "Megawat Park",
+        "Midrand",
+        "SA Mint",
+        "Samrand",
+        "Strijdom Park",
+        "Voda World",
+        "Waterfall",
+        "Witkoppen 4 Ways",
+        "Woodmead Mall",
+        "Wynberg"
+      ]
+    }
+  ],
+  "fareGroups": {
+    "L1": ["L1"],
+    "L2": ["L2"],
+    "L3/4": ["L3", "L4"],
+    "1": ["B1", "C1"],
+    "2": ["A2", "B2"],
+    "3": ["A3", "H8"],
+    "4": ["B4", "C4"],
+    "5": ["D5"]
+  },
+  "notes": [
+    "Place-to-zone associations are transcribed from PUTCO's official Soshanguve Zones map.",
+    "The coloured map is schematic and is not stored as a GPS polygon layer.",
+    "Pulse must not determine a user's PUTCO zone solely by testing coordinates against hand-drawn polygons derived from this image.",
+    "Fare groups combine physical zones for fare purposes and do not mean those physical zones are identical.",
+    "Some source place references occur in more than one zone; these are retained rather than silently deduplicated."
+  ]
+}

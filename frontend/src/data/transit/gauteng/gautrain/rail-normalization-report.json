@@ -1,0 +1,44 @@
+{
+  "generatedAt": "2026-09-17T16:33:55.839Z",
+  "operatorId": "gautrain",
+  "inputStationCount": 10,
+  "serviceCount": 3,
+  "stationsReferencedByServices": 10,
+  "unreferencedStationCount": 0,
+  "unreferencedStations": [],
+  "missingStationReferenceCount": 0,
+  "missingStationReferences": [],
+  "missingSourceNameCount": 0,
+  "missingSourceNames": [],
+  "sharedServiceStationCount": 2,
+  "sharedServiceStations": [
+    {
+      "stationId": "gautrain-station-marlboro",
+      "stationName": "Marlboro",
+      "serviceIds": [
+        "gautrain-east-west",
+        "gautrain-airport"
+      ],
+      "transferRuleVerified": false
+    },
+    {
+      "stationId": "gautrain-station-sandton",
+      "stationName": "Sandton",
+      "serviceIds": [
+        "gautrain-north-south",
+        "gautrain-east-west",
+        "gautrain-airport"
+      ],
+      "transferRuleVerified": false
+    }
+  ],
+  "adjacencyEdgesCreated": 0,
+  "routeGeometryCreated": false,
+  "timetableCreated": false,
+  "warnings": [
+    "Service membership must not yet be interpreted as a verified stop-to-stop graph.",
+    "Exact train stopping patterns and transfer behaviour require schedule or equivalent official verification.",
+    "Airport-service membership does not by itself establish whether every listed station is a passenger stop on every train.",
+    "No rail duration or ETA is generated in this phase."
+  ]
+}

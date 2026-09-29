@@ -1,0 +1,47 @@
+{
+  "generatedAt": "2026-09-17T19:50:25.517Z",
+  "operatorId": "reavaya",
+  "sourceRouteCount": 21,
+  "runtimeRouteCount": 15,
+  "runtimeRouteCodes": [
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "F7",
+    "F8",
+    "F9",
+    "F10",
+    "F11",
+    "F12",
+    "T1",
+    "T2",
+    "T3"
+  ],
+  "metadataOnlyRouteCount": 6,
+  "metadataOnlyRouteCodes": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C6"
+  ],
+  "publishedTransferEdges": 7,
+  "spatialSupportEdges": 29,
+  "publishedEvidenceExcludedBecauseRouteNotSpatiallyTraversable": 14,
+  "fareBandCount": 7,
+  "exactPassengerFareEnabled": false,
+  "errorCount": 0,
+  "errors": [],
+  "warningCount": 4,
+  "warnings": [
+    "Runtime traversal excludes C1-C6 because they do not yet have canonical coded geometry suitable for conservative spatial journey routing.",
+    "Published shared-stop edges support graph connectivity but still do not prove service direction, timetable compatibility or a guaranteed passenger transfer.",
+    "Spatial-only station-point evidence is retained separately and cannot create a runtime transfer edge.",
+    "The runtime fare dataset exposes current fare bands and ranges, but exact passenger fare remains disabled until Rea Vaya journey distance can be established."
+  ],
+  "qaPassed": true
+}

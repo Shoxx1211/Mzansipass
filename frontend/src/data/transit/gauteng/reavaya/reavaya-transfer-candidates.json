@@ -1,0 +1,1862 @@
+{
+  "schemaVersion": 1,
+  "operatorId": "reavaya",
+  "generatedAt": "2026-09-17T19:46:38.120Z",
+  "definition": "Route-to-route connectivity evidence. These are candidates/supporting links, not guaranteed passenger transfers.",
+  "candidateCount": 43,
+  "candidates": [
+    {
+      "id": "route-link:C4:C5",
+      "routeA": "C4",
+      "routeB": "C5",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:ab5f1e36bce7",
+          "label": "Library station east",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:040852a07be2",
+          "label": "Rissik station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:d8c8fe069388",
+          "label": "Park station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:848472be7275",
+          "label": "Parktown station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:01c01272b77c",
+          "label": "Wits station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:02be930406fa",
+          "label": "Milpark station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:71206e43ce05",
+          "label": "Sabc media park",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        }
+      ],
+      "sharedPublishedStopCount": 7,
+      "sharedOfficialStationPointCount": 0,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:C4:C6",
+      "routeA": "C4",
+      "routeB": "C6",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:02be930406fa",
+          "label": "Milpark station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        }
+      ],
+      "sharedPublishedStopCount": 1,
+      "sharedOfficialStationPointCount": 0,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:C4:F11",
+      "routeA": "C4",
+      "routeB": "F11",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:ab5f1e36bce7",
+          "label": "Library station east",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:040852a07be2",
+          "label": "Rissik station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:d8c8fe069388",
+          "label": "Park station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        }
+      ],
+      "sharedPublishedStopCount": 3,
+      "sharedOfficialStationPointCount": 0,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:C4:F12",
+      "routeA": "C4",
+      "routeB": "F12",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:ab5f1e36bce7",
+          "label": "Library station east",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:040852a07be2",
+          "label": "Rissik station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:d8c8fe069388",
+          "label": "Park station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        }
+      ],
+      "sharedPublishedStopCount": 3,
+      "sharedOfficialStationPointCount": 0,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:C4:T2",
+      "routeA": "C4",
+      "routeB": "T2",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:040852a07be2",
+          "label": "Rissik station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:d8c8fe069388",
+          "label": "Park station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        }
+      ],
+      "sharedPublishedStopCount": 2,
+      "sharedOfficialStationPointCount": 0,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:C4:T3",
+      "routeA": "C4",
+      "routeB": "T3",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:040852a07be2",
+          "label": "Rissik station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:d8c8fe069388",
+          "label": "Park station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        }
+      ],
+      "sharedPublishedStopCount": 2,
+      "sharedOfficialStationPointCount": 0,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:C5:C6",
+      "routeA": "C5",
+      "routeB": "C6",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:02be930406fa",
+          "label": "Milpark station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:79dffa17eff3",
+          "label": "UJ Kingsway campus",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:895bd52e76f3",
+          "label": "Helen Joseph Hospital",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        }
+      ],
+      "sharedPublishedStopCount": 3,
+      "sharedOfficialStationPointCount": 0,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:C5:F11",
+      "routeA": "C5",
+      "routeB": "F11",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:ab5f1e36bce7",
+          "label": "Library station east",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:040852a07be2",
+          "label": "Rissik station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:d8c8fe069388",
+          "label": "Park station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:af9a6670b30d",
+          "label": "Jhb Theatre",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        }
+      ],
+      "sharedPublishedStopCount": 4,
+      "sharedOfficialStationPointCount": 0,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:C5:F12",
+      "routeA": "C5",
+      "routeB": "F12",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:ab5f1e36bce7",
+          "label": "Library station east",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:040852a07be2",
+          "label": "Rissik station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:d8c8fe069388",
+          "label": "Park station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:af9a6670b30d",
+          "label": "Jhb Theatre",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        }
+      ],
+      "sharedPublishedStopCount": 4,
+      "sharedOfficialStationPointCount": 0,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:C5:T2",
+      "routeA": "C5",
+      "routeB": "T2",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:040852a07be2",
+          "label": "Rissik station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:d8c8fe069388",
+          "label": "Park station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:af9a6670b30d",
+          "label": "Jhb Theatre",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        }
+      ],
+      "sharedPublishedStopCount": 3,
+      "sharedOfficialStationPointCount": 0,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:C5:T3",
+      "routeA": "C5",
+      "routeB": "T3",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:040852a07be2",
+          "label": "Rissik station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:d8c8fe069388",
+          "label": "Park station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        }
+      ],
+      "sharedPublishedStopCount": 2,
+      "sharedOfficialStationPointCount": 0,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:C6:F6",
+      "routeA": "C6",
+      "routeB": "F6",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:c78b0dee6c7a",
+          "label": "Bosmont",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        }
+      ],
+      "sharedPublishedStopCount": 1,
+      "sharedOfficialStationPointCount": 0,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:C6:F7",
+      "routeA": "C6",
+      "routeB": "F7",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:c78b0dee6c7a",
+          "label": "Bosmont",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        }
+      ],
+      "sharedPublishedStopCount": 1,
+      "sharedOfficialStationPointCount": 0,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:C6:F8",
+      "routeA": "C6",
+      "routeB": "F8",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:51a775c2e14f",
+          "label": "Westbury station west",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        }
+      ],
+      "sharedPublishedStopCount": 1,
+      "sharedOfficialStationPointCount": 0,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F1:F2",
+      "routeA": "F1",
+      "routeB": "F2",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-1",
+          "coordinates": [
+            27.879336676295335,
+            -26.26473415261787
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F1:F9",
+      "routeA": "F1",
+      "routeB": "F9",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-1",
+          "coordinates": [
+            27.879336676295335,
+            -26.26473415261787
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F2:F9",
+      "routeA": "F2",
+      "routeB": "F9",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-1",
+          "coordinates": [
+            27.879336676295335,
+            -26.26473415261787
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F3:T1",
+      "routeA": "F3",
+      "routeB": "T1",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-29",
+          "coordinates": [
+            27.885172000470167,
+            -26.263079999592883
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F3:T2",
+      "routeA": "F3",
+      "routeB": "T2",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-29",
+          "coordinates": [
+            27.885172000470167,
+            -26.263079999592883
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F3:T3",
+      "routeA": "F3",
+      "routeB": "T3",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-29",
+          "coordinates": [
+            27.885172000470167,
+            -26.263079999592883
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F4:T1",
+      "routeA": "F4",
+      "routeB": "T1",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-12",
+          "coordinates": [
+            27.914454999953676,
+            -26.242812000252655
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F4:T2",
+      "routeA": "F4",
+      "routeB": "T2",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-12",
+          "coordinates": [
+            27.914454999953676,
+            -26.242812000252655
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F4:T3",
+      "routeA": "F4",
+      "routeB": "T3",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-12",
+          "coordinates": [
+            27.914454999953676,
+            -26.242812000252655
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F5:F10",
+      "routeA": "F5",
+      "routeB": "F10",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-2",
+          "coordinates": [
+            27.889995868466062,
+            -26.262513881869477
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F5:T1",
+      "routeA": "F5",
+      "routeB": "T1",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-2",
+          "coordinates": [
+            27.889995868466062,
+            -26.262513881869477
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F5:T2",
+      "routeA": "F5",
+      "routeB": "T2",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-2",
+          "coordinates": [
+            27.889995868466062,
+            -26.262513881869477
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F5:T3",
+      "routeA": "F5",
+      "routeB": "T3",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-2",
+          "coordinates": [
+            27.889995868466062,
+            -26.262513881869477
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F6:F7",
+      "routeA": "F6",
+      "routeB": "F7",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:c78b0dee6c7a",
+          "label": "Bosmont",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-33",
+          "coordinates": [
+            27.957789999515075,
+            -26.20392000040829
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 1,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F6:T3",
+      "routeA": "F6",
+      "routeB": "T3",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-33",
+          "coordinates": [
+            27.957789999515075,
+            -26.20392000040829
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F7:T3",
+      "routeA": "F7",
+      "routeB": "T3",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-33",
+          "coordinates": [
+            27.957789999515075,
+            -26.20392000040829
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F10:T1",
+      "routeA": "F10",
+      "routeB": "T1",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-2",
+          "coordinates": [
+            27.889995868466062,
+            -26.262513881869477
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F10:T2",
+      "routeA": "F10",
+      "routeB": "T2",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-2",
+          "coordinates": [
+            27.889995868466062,
+            -26.262513881869477
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F10:T3",
+      "routeA": "F10",
+      "routeB": "T3",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-2",
+          "coordinates": [
+            27.889995868466062,
+            -26.262513881869477
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F11:F12",
+      "routeA": "F11",
+      "routeB": "F12",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:ab5f1e36bce7",
+          "label": "Library station east",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:040852a07be2",
+          "label": "Rissik station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:d8c8fe069388",
+          "label": "Park station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:af9a6670b30d",
+          "label": "Jhb Theatre",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-16",
+          "coordinates": [
+            28.041468999476894,
+            -26.204716999893023
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-51",
+          "coordinates": [
+            28.039054999582696,
+            -26.19131599991872
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-53",
+          "coordinates": [
+            28.041141233508966,
+            -26.195669091488835
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-54",
+          "coordinates": [
+            28.04173399999484,
+            -26.202113000144436
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-phase1c-station-spatial-proximity",
+          "stationId": "reavaya-phase1c-station-1",
+          "stationName": "Park Station T4",
+          "confidenceClass": "spatial-only",
+          "codedRouteServiceAssignmentVerified": false
+        },
+        {
+          "evidenceType": "shared-phase1c-station-spatial-proximity",
+          "stationId": "reavaya-phase1c-station-2",
+          "stationName": "Metro Center",
+          "confidenceClass": "spatial-only",
+          "codedRouteServiceAssignmentVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 4,
+      "sharedOfficialStationPointCount": 4,
+      "sharedPhase1cSpatialPointCount": 2,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F11:T1",
+      "routeA": "F11",
+      "routeB": "T1",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-16",
+          "coordinates": [
+            28.041468999476894,
+            -26.204716999893023
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F11:T2",
+      "routeA": "F11",
+      "routeB": "T2",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:040852a07be2",
+          "label": "Rissik station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:d8c8fe069388",
+          "label": "Park station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:af9a6670b30d",
+          "label": "Jhb Theatre",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-16",
+          "coordinates": [
+            28.041468999476894,
+            -26.204716999893023
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-51",
+          "coordinates": [
+            28.039054999582696,
+            -26.19131599991872
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-53",
+          "coordinates": [
+            28.041141233508966,
+            -26.195669091488835
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-54",
+          "coordinates": [
+            28.04173399999484,
+            -26.202113000144436
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-phase1c-station-spatial-proximity",
+          "stationId": "reavaya-phase1c-station-1",
+          "stationName": "Park Station T4",
+          "confidenceClass": "spatial-only",
+          "codedRouteServiceAssignmentVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 3,
+      "sharedOfficialStationPointCount": 4,
+      "sharedPhase1cSpatialPointCount": 1,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F11:T3",
+      "routeA": "F11",
+      "routeB": "T3",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:040852a07be2",
+          "label": "Rissik station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:d8c8fe069388",
+          "label": "Park station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-53",
+          "coordinates": [
+            28.041141233508966,
+            -26.195669091488835
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-phase1c-station-spatial-proximity",
+          "stationId": "reavaya-phase1c-station-1",
+          "stationName": "Park Station T4",
+          "confidenceClass": "spatial-only",
+          "codedRouteServiceAssignmentVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 2,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 1,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F12:T1",
+      "routeA": "F12",
+      "routeB": "T1",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-16",
+          "coordinates": [
+            28.041468999476894,
+            -26.204716999893023
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-phase1c-station-spatial-proximity",
+          "stationId": "reavaya-phase1c-station-14",
+          "stationName": "Library Gardens East Station Ext",
+          "confidenceClass": "spatial-only",
+          "codedRouteServiceAssignmentVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 1,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F12:T2",
+      "routeA": "F12",
+      "routeB": "T2",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:040852a07be2",
+          "label": "Rissik station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:d8c8fe069388",
+          "label": "Park station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:af9a6670b30d",
+          "label": "Jhb Theatre",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:fc0cc3ee4376",
+          "label": "Harrison station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-16",
+          "coordinates": [
+            28.041468999476894,
+            -26.204716999893023
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-51",
+          "coordinates": [
+            28.039054999582696,
+            -26.19131599991872
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-53",
+          "coordinates": [
+            28.041141233508966,
+            -26.195669091488835
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-54",
+          "coordinates": [
+            28.04173399999484,
+            -26.202113000144436
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-phase1c-station-spatial-proximity",
+          "stationId": "reavaya-phase1c-station-1",
+          "stationName": "Park Station T4",
+          "confidenceClass": "spatial-only",
+          "codedRouteServiceAssignmentVerified": false
+        },
+        {
+          "evidenceType": "shared-phase1c-station-spatial-proximity",
+          "stationId": "reavaya-phase1c-station-14",
+          "stationName": "Library Gardens East Station Ext",
+          "confidenceClass": "spatial-only",
+          "codedRouteServiceAssignmentVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 4,
+      "sharedOfficialStationPointCount": 4,
+      "sharedPhase1cSpatialPointCount": 2,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:F12:T3",
+      "routeA": "F12",
+      "routeB": "T3",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:040852a07be2",
+          "label": "Rissik station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:d8c8fe069388",
+          "label": "Park station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-53",
+          "coordinates": [
+            28.041141233508966,
+            -26.195669091488835
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-phase1c-station-spatial-proximity",
+          "stationId": "reavaya-phase1c-station-1",
+          "stationName": "Park Station T4",
+          "confidenceClass": "spatial-only",
+          "codedRouteServiceAssignmentVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 2,
+      "sharedOfficialStationPointCount": 1,
+      "sharedPhase1cSpatialPointCount": 1,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:T1:T2",
+      "routeA": "T1",
+      "routeB": "T2",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-2",
+          "coordinates": [
+            27.889995868466062,
+            -26.262513881869477
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-3",
+          "coordinates": [
+            27.924879149188698,
+            -26.231721603770495
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-4",
+          "coordinates": [
+            27.932285317898806,
+            -26.227545723423724
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-5",
+          "coordinates": [
+            27.938414000466537,
+            -26.23298399969971
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-6",
+          "coordinates": [
+            27.94656699976613,
+            -26.23387499982845
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-7",
+          "coordinates": [
+            27.9546119994836,
+            -26.23366199994666
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-8",
+          "coordinates": [
+            27.98107387900957,
+            -26.231603040698573
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-9",
+          "coordinates": [
+            28.01032899977604,
+            -26.229718999560394
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-10",
+          "coordinates": [
+            28.02181900035181,
+            -26.22824199974659
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-11",
+          "coordinates": [
+            28.034271301996583,
+            -26.210527384310595
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-12",
+          "coordinates": [
+            27.914454999953676,
+            -26.242812000252655
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-14",
+          "coordinates": [
+            28.036656999832875,
+            -26.20533700026539
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-16",
+          "coordinates": [
+            28.041468999476894,
+            -26.204716999893023
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-29",
+          "coordinates": [
+            27.885172000470167,
+            -26.263079999592883
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-32",
+          "coordinates": [
+            27.922413999519552,
+            -26.235348999687044
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-42",
+          "coordinates": [
+            27.898444999870623,
+            -26.252778999786585
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-phase1c-station-spatial-proximity",
+          "stationId": "reavaya-phase1c-station-14",
+          "stationName": "Library Gardens East Station Ext",
+          "confidenceClass": "spatial-only",
+          "codedRouteServiceAssignmentVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 16,
+      "sharedPhase1cSpatialPointCount": 1,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:T1:T3",
+      "routeA": "T1",
+      "routeB": "T3",
+      "evidence": [
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-2",
+          "coordinates": [
+            27.889995868466062,
+            -26.262513881869477
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-3",
+          "coordinates": [
+            27.924879149188698,
+            -26.231721603770495
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-4",
+          "coordinates": [
+            27.932285317898806,
+            -26.227545723423724
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-12",
+          "coordinates": [
+            27.914454999953676,
+            -26.242812000252655
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-29",
+          "coordinates": [
+            27.885172000470167,
+            -26.263079999592883
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-32",
+          "coordinates": [
+            27.922413999519552,
+            -26.235348999687044
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-42",
+          "coordinates": [
+            27.898444999870623,
+            -26.252778999786585
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 0,
+      "sharedOfficialStationPointCount": 7,
+      "sharedPhase1cSpatialPointCount": 0,
+      "connectivityStatus": "supported-by-shared-official-station-point-proximity",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    },
+    {
+      "id": "route-link:T2:T3",
+      "routeA": "T2",
+      "routeB": "T3",
+      "evidence": [
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:040852a07be2",
+          "label": "Rissik station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:d8c8fe069388",
+          "label": "Park station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-published-stop-label",
+          "stopId": "published-stop:c0627f90af44",
+          "label": "Thokoza Park BRT Station",
+          "source": "Phase 1B Schedule 7",
+          "confidenceClass": "published-route-stop-overlap"
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-2",
+          "coordinates": [
+            27.889995868466062,
+            -26.262513881869477
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-3",
+          "coordinates": [
+            27.924879149188698,
+            -26.231721603770495
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-4",
+          "coordinates": [
+            27.932285317898806,
+            -26.227545723423724
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-12",
+          "coordinates": [
+            27.914454999953676,
+            -26.242812000252655
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-29",
+          "coordinates": [
+            27.885172000470167,
+            -26.263079999592883
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-32",
+          "coordinates": [
+            27.922413999519552,
+            -26.235348999687044
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-42",
+          "coordinates": [
+            27.898444999870623,
+            -26.252778999786585
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-official-station-point-proximity",
+          "stationId": "reavaya-brt-point-53",
+          "coordinates": [
+            28.041141233508966,
+            -26.195669091488835
+          ],
+          "confidenceClass": "derived-from-two-official-gis-sources",
+          "operationalTransferVerified": false
+        },
+        {
+          "evidenceType": "shared-phase1c-station-spatial-proximity",
+          "stationId": "reavaya-phase1c-station-1",
+          "stationName": "Park Station T4",
+          "confidenceClass": "spatial-only",
+          "codedRouteServiceAssignmentVerified": false
+        }
+      ],
+      "sharedPublishedStopCount": 3,
+      "sharedOfficialStationPointCount": 8,
+      "sharedPhase1cSpatialPointCount": 1,
+      "connectivityStatus": "supported-by-published-shared-stop",
+      "conservativeNetworkConnectivitySupported": true,
+      "userFacingTransferVerified": false,
+      "exactTransferWalkingPathKnown": false,
+      "exactTransferTimeKnown": false,
+      "timetableConnectionKnown": false,
+      "note": "Connectivity evidence is useful for network graph construction but is not equivalent to a guaranteed timed passenger transfer."
+    }
+  ]
+}

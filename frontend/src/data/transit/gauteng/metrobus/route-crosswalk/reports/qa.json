@@ -1,0 +1,388 @@
+{
+  "generatedAt": "2026-09-22T17:40:09.393Z",
+  "summary": {
+    "gisFeatureCount": 110,
+    "uniqueGisNameRouteCodes": 110,
+    "partialIndexedInventoryRoutes": 33,
+    "exactCodeOverlaps": 18,
+    "gisOnlyCodesRelativeToPartialExcerpt": 92,
+    "indexedOnlyCodesRelativeToGIS": 15,
+    "gisNameVersusRawRouteIdDisagreements": 50,
+    "gisFeaturesMissingParsedCode": 0,
+    "gisFeaturesMissingGeometry": 0
+  },
+  "routeIdDisagreements": [
+    {
+      "gisObjectId": 1,
+      "routeCodeFromName": "55",
+      "rawRouteIdField": 60
+    },
+    {
+      "gisObjectId": 3,
+      "routeCodeFromName": "66",
+      "rawRouteIdField": 64
+    },
+    {
+      "gisObjectId": 4,
+      "routeCodeFromName": "67",
+      "rawRouteIdField": 65
+    },
+    {
+      "gisObjectId": 5,
+      "routeCodeFromName": "71",
+      "rawRouteIdField": 67
+    },
+    {
+      "gisObjectId": 6,
+      "routeCodeFromName": "82",
+      "rawRouteIdField": 74
+    },
+    {
+      "gisObjectId": 7,
+      "routeCodeFromName": "83",
+      "rawRouteIdField": 75
+    },
+    {
+      "gisObjectId": 8,
+      "routeCodeFromName": "88",
+      "rawRouteIdField": 77
+    },
+    {
+      "gisObjectId": 9,
+      "routeCodeFromName": "260",
+      "rawRouteIdField": 78
+    },
+    {
+      "gisObjectId": 10,
+      "routeCodeFromName": "412",
+      "rawRouteIdField": 80
+    },
+    {
+      "gisObjectId": 11,
+      "routeCodeFromName": "413",
+      "rawRouteIdField": 81
+    },
+    {
+      "gisObjectId": 12,
+      "routeCodeFromName": "420",
+      "rawRouteIdField": 82
+    },
+    {
+      "gisObjectId": 13,
+      "routeCodeFromName": "12",
+      "rawRouteIdField": 84
+    },
+    {
+      "gisObjectId": 14,
+      "routeCodeFromName": "16",
+      "rawRouteIdField": 87
+    },
+    {
+      "gisObjectId": 15,
+      "routeCodeFromName": "23",
+      "rawRouteIdField": 88
+    },
+    {
+      "gisObjectId": 16,
+      "routeCodeFromName": "24",
+      "rawRouteIdField": 89
+    },
+    {
+      "gisObjectId": 17,
+      "routeCodeFromName": "25",
+      "rawRouteIdField": 90
+    },
+    {
+      "gisObjectId": 18,
+      "routeCodeFromName": "38",
+      "rawRouteIdField": 91
+    },
+    {
+      "gisObjectId": 19,
+      "routeCodeFromName": "42",
+      "rawRouteIdField": 92
+    },
+    {
+      "gisObjectId": 20,
+      "routeCodeFromName": "43",
+      "rawRouteIdField": 93
+    },
+    {
+      "gisObjectId": 21,
+      "routeCodeFromName": "44",
+      "rawRouteIdField": 94
+    },
+    {
+      "gisObjectId": 22,
+      "routeCodeFromName": "48",
+      "rawRouteIdField": 95
+    },
+    {
+      "gisObjectId": 25,
+      "routeCodeFromName": "1",
+      "rawRouteIdField": 2
+    },
+    {
+      "gisObjectId": 26,
+      "routeCodeFromName": "2",
+      "rawRouteIdField": 3
+    },
+    {
+      "gisObjectId": 27,
+      "routeCodeFromName": "3",
+      "rawRouteIdField": 4
+    },
+    {
+      "gisObjectId": 28,
+      "routeCodeFromName": "4",
+      "rawRouteIdField": 5
+    },
+    {
+      "gisObjectId": 30,
+      "routeCodeFromName": "5",
+      "rawRouteIdField": 8
+    },
+    {
+      "gisObjectId": 35,
+      "routeCodeFromName": "8",
+      "rawRouteIdField": 13
+    },
+    {
+      "gisObjectId": 36,
+      "routeCodeFromName": "9",
+      "rawRouteIdField": 14
+    },
+    {
+      "gisObjectId": 37,
+      "routeCodeFromName": "10",
+      "rawRouteIdField": 15
+    },
+    {
+      "gisObjectId": 38,
+      "routeCodeFromName": "18",
+      "rawRouteIdField": 23
+    },
+    {
+      "gisObjectId": 39,
+      "routeCodeFromName": "32",
+      "rawRouteIdField": 35
+    },
+    {
+      "gisObjectId": 40,
+      "routeCodeFromName": "33",
+      "rawRouteIdField": 36
+    },
+    {
+      "gisObjectId": 41,
+      "routeCodeFromName": "34",
+      "rawRouteIdField": 37
+    },
+    {
+      "gisObjectId": 42,
+      "routeCodeFromName": "35",
+      "rawRouteIdField": 38
+    },
+    {
+      "gisObjectId": 43,
+      "routeCodeFromName": "45",
+      "rawRouteIdField": 40
+    },
+    {
+      "gisObjectId": 45,
+      "routeCodeFromName": "522",
+      "rawRouteIdField": 102
+    },
+    {
+      "gisObjectId": 46,
+      "routeCodeFromName": "59",
+      "rawRouteIdField": 103
+    },
+    {
+      "gisObjectId": 47,
+      "routeCodeFromName": "62",
+      "rawRouteIdField": 104
+    },
+    {
+      "gisObjectId": 48,
+      "routeCodeFromName": "74",
+      "rawRouteIdField": 106
+    },
+    {
+      "gisObjectId": 49,
+      "routeCodeFromName": "77",
+      "rawRouteIdField": 107
+    },
+    {
+      "gisObjectId": 50,
+      "routeCodeFromName": "79",
+      "rawRouteIdField": 112
+    },
+    {
+      "gisObjectId": 51,
+      "routeCodeFromName": "84",
+      "rawRouteIdField": 116
+    },
+    {
+      "gisObjectId": 52,
+      "routeCodeFromName": "85",
+      "rawRouteIdField": 117
+    },
+    {
+      "gisObjectId": 53,
+      "routeCodeFromName": "87",
+      "rawRouteIdField": 121
+    },
+    {
+      "gisObjectId": 54,
+      "routeCodeFromName": "436",
+      "rawRouteIdField": 122
+    },
+    {
+      "gisObjectId": 55,
+      "routeCodeFromName": "552",
+      "rawRouteIdField": 127
+    },
+    {
+      "gisObjectId": 56,
+      "routeCodeFromName": "553",
+      "rawRouteIdField": 128
+    },
+    {
+      "gisObjectId": 66,
+      "routeCodeFromName": "80",
+      "rawRouteIdField": 0
+    },
+    {
+      "gisObjectId": 78,
+      "routeCodeFromName": "13",
+      "rawRouteIdField": 0
+    },
+    {
+      "gisObjectId": 81,
+      "routeCodeFromName": "19",
+      "rawRouteIdField": 0
+    }
+  ],
+  "gisOnlyCodesRelativeToPartialExcerpt": [
+    "1",
+    "10",
+    "12",
+    "13",
+    "13A",
+    "13B",
+    "13C",
+    "13D",
+    "18",
+    "19",
+    "19B",
+    "1A",
+    "22A",
+    "22B",
+    "23",
+    "24",
+    "25",
+    "260",
+    "32",
+    "32D",
+    "32E",
+    "35",
+    "4",
+    "412",
+    "412A",
+    "413",
+    "420",
+    "43",
+    "430A",
+    "44",
+    "46A",
+    "46B",
+    "47",
+    "47A",
+    "47B",
+    "47C",
+    "48",
+    "49A",
+    "49B",
+    "49F",
+    "49J",
+    "5",
+    "522",
+    "52A",
+    "52B",
+    "52C",
+    "54A",
+    "55",
+    "551A",
+    "551B",
+    "551C",
+    "552",
+    "553",
+    "55A",
+    "55B",
+    "56A",
+    "56B",
+    "57A",
+    "59",
+    "5C",
+    "62",
+    "63",
+    "66",
+    "67",
+    "69A",
+    "6A",
+    "6B",
+    "6C",
+    "6D",
+    "71",
+    "71A",
+    "74",
+    "77",
+    "78B",
+    "78C",
+    "78D",
+    "79",
+    "79A",
+    "8",
+    "80A",
+    "80B",
+    "80D",
+    "80F",
+    "82A",
+    "84A",
+    "84B",
+    "86A",
+    "86B",
+    "86C",
+    "87",
+    "88",
+    "9"
+  ],
+  "indexedOnlyCodesRelativeToGIS": [
+    "32A",
+    "32C",
+    "56",
+    "71B",
+    "84C",
+    "85B",
+    "90",
+    "91",
+    "91B",
+    "421D",
+    "421F",
+    "421G",
+    "421H",
+    "421R",
+    "547D"
+  ],
+  "sourceAndSafetyChecks": {
+    "indexedInventoryIsPartial": true,
+    "geomIsReferencedNotDuplicated": true,
+    "codeMatchDoesNotValidateGeometryEquivalence": true,
+    "directionValidated": false,
+    "routeStopMembershipValidated": false,
+    "currentOperationValidated": false,
+    "publicationRightsValidated": false,
+    "passengerRoutingEnabled": false
+  },
+  "errors": []
+}

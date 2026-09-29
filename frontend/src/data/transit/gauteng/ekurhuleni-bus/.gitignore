@@ -1,0 +1,3 @@
+# Municipal GIS snapshots require reuse review. Do not commit, bundle, or ship.
+/gis-raw/
+/gis-normalized/

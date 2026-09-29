@@ -1,6 +1,11 @@
 // src/data/transportZones.ts
-// Pulse Transit - Premium Transport Network Data
-// Features: Real-time status, fare zones, transfer points, operating hours
+// Pulse Transit - Configured Transport Network Seed Data
+//
+// IMPORTANT: this file is development/planning data, not a live operator feed.
+// Route recommendations must treat these stops and fare tables as configured
+// seed data until each network dataset is independently verified.
+
+import type { TransitNetwork } from "../types";
 
 // ======================================================
 // TYPES
@@ -41,9 +46,13 @@ export interface TransportStop {
 export interface TransportNetworkZone {
   id: string;
   name: string;
+  canonicalNetwork: TransitNetwork;
   city: string;
   enabled: boolean;
+  dataStatus: "seed" | "verified";
   coverageRadiusKm: number;
+  maxDirectAccessKm: number;
+  maxDirectEgressKm: number;
   center: Coordinate;
   stops: TransportStop[];
   fareZones?: FareZone[];
@@ -111,9 +120,13 @@ export const TAXI_FARE_ZONES: FareZone[] = [
 export const REA_VAYA_ZONE: TransportNetworkZone = {
   id: "rea-vaya",
   name: "Rea Vaya",
+  canonicalNetwork: "Rea Vaya",
   city: "Johannesburg",
   enabled: true,
+  dataStatus: "seed",
   coverageRadiusKm: 35,
+  maxDirectAccessKm: 1.5,
+  maxDirectEgressKm: 1.5,
   center: { lat: -26.2041, lng: 28.0473 },
   
   operatingHours: DEFAULT_OPERATING_HOURS,
@@ -199,15 +212,18 @@ export const REA_VAYA_ZONE: TransportNetworkZone = {
 export const GAUTRAIN_ZONE: TransportNetworkZone = {
   id: "gautrain",
   name: "Gautrain",
+  canonicalNetwork: "Gautrain",
   city: "Gauteng",
   enabled: true,
+  dataStatus: "seed",
   coverageRadiusKm: 80,
+  maxDirectAccessKm: 3,
+  maxDirectEgressKm: 3,
   center: { lat: -26.1367, lng: 28.2411 },
   
   operatingHours: GAUTRAIN_HOURS,
   averageFrequency: { peak: 10, offPeak: 20 },
   fareZones: GAUTRAIN_FARE_ZONES,
-  realTimeApi: "https://api.gautrain.co.za/v1/realtime",
 
   stops: [
     {
@@ -288,9 +304,13 @@ export const GAUTRAIN_ZONE: TransportNetworkZone = {
 export const A_RE_YENG_ZONE: TransportNetworkZone = {
   id: "a-re-yeng",
   name: "A Re Yeng",
+  canonicalNetwork: "A Re Yeng",
   city: "Pretoria",
   enabled: true,
+  dataStatus: "seed",
   coverageRadiusKm: 30,
+  maxDirectAccessKm: 1.5,
+  maxDirectEgressKm: 1.5,
   center: { lat: -25.7479, lng: 28.2293 },
   
   operatingHours: DEFAULT_OPERATING_HOURS,
@@ -340,9 +360,13 @@ export const A_RE_YENG_ZONE: TransportNetworkZone = {
 export const METRORAIL_ZONE: TransportNetworkZone = {
   id: "metrorail",
   name: "Metrorail",
+  canonicalNetwork: "Metrorail",
   city: "Gauteng",
   enabled: true,
+  dataStatus: "seed",
   coverageRadiusKm: 100,
+  maxDirectAccessKm: 2.5,
+  maxDirectEgressKm: 2.5,
   center: { lat: -26.2041, lng: 28.0473 },
   
   operatingHours: {
@@ -398,12 +422,7 @@ export const METRORAIL_ZONE: TransportNetworkZone = {
     safest: false,
     reliable: false,
     leastWalking: false
-  },
-  alerts: [{
-    type: "delay",
-    message: "Signal upgrades between Park and Soweto",
-    timestamp: Date.now()
-  }]
+  }
 };
 
 // ======================================================
@@ -413,9 +432,13 @@ export const METRORAIL_ZONE: TransportNetworkZone = {
 export const TAXI_ZONE: TransportNetworkZone = {
   id: "taxi",
   name: "Minibus Taxi",
+  canonicalNetwork: "Taxi",
   city: "South Africa",
   enabled: true,
+  dataStatus: "seed",
   coverageRadiusKm: 999,
+  maxDirectAccessKm: 3,
+  maxDirectEgressKm: 3,
   center: { lat: -26.2041, lng: 28.0473 },
   
   operatingHours: {

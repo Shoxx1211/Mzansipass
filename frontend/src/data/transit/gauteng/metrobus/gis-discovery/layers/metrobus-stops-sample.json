@@ -1,0 +1,136 @@
+﻿{
+    "displayFieldName":  "PHOTONAME",
+    "fieldAliases":  {
+                         "OBJECTID":  "OBJECTID",
+                         "EXIF_GPSAL":  "EXIF_GPSAL",
+                         "EXIF_GPS_1":  "EXIF_GPS_1",
+                         "EXIF_GPSIM":  "EXIF_GPSIM",
+                         "EXIF_GPS_2":  "EXIF_GPS_2",
+                         "EXIF_GPSDE":  "EXIF_GPSDE",
+                         "EXIF_GPS_3":  "EXIF_GPS_3",
+                         "EXIF_GPS_4":  "EXIF_GPS_4",
+                         "EXIF_GPS_5":  "EXIF_GPS_5",
+                         "EXIF_GPS_6":  "EXIF_GPS_6",
+                         "EXIF_GPS_7":  "EXIF_GPS_7",
+                         "EXIF_DATET":  "EXIF_DATET",
+                         "PHOTONAME":  "PHOTONAME",
+                         "LOCATION":  "LOCATION"
+                     },
+    "fields":  [
+                   {
+                       "name":  "OBJECTID",
+                       "type":  "esriFieldTypeOID",
+                       "alias":  "OBJECTID"
+                   },
+                   {
+                       "name":  "EXIF_GPSAL",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "EXIF_GPSAL"
+                   },
+                   {
+                       "name":  "EXIF_GPS_1",
+                       "type":  "esriFieldTypeSmallInteger",
+                       "alias":  "EXIF_GPS_1"
+                   },
+                   {
+                       "name":  "EXIF_GPSIM",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "EXIF_GPSIM"
+                   },
+                   {
+                       "name":  "EXIF_GPS_2",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "EXIF_GPS_2",
+                       "length":  1
+                   },
+                   {
+                       "name":  "EXIF_GPSDE",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "EXIF_GPSDE"
+                   },
+                   {
+                       "name":  "EXIF_GPS_3",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "EXIF_GPS_3"
+                   },
+                   {
+                       "name":  "EXIF_GPS_4",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "EXIF_GPS_4"
+                   },
+                   {
+                       "name":  "EXIF_GPS_5",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "EXIF_GPS_5",
+                       "length":  1
+                   },
+                   {
+                       "name":  "EXIF_GPS_6",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "EXIF_GPS_6"
+                   },
+                   {
+                       "name":  "EXIF_GPS_7",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "EXIF_GPS_7",
+                       "length":  1
+                   },
+                   {
+                       "name":  "EXIF_DATET",
+                       "type":  "esriFieldTypeDate",
+                       "alias":  "EXIF_DATET",
+                       "length":  8
+                   },
+                   {
+                       "name":  "PHOTONAME",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "PHOTONAME",
+                       "length":  254
+                   },
+                   {
+                       "name":  "LOCATION",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "LOCATION",
+                       "length":  50
+                   }
+               ],
+    "features":  [
+                     {
+                         "attributes":  {
+                                            "OBJECTID":  1923,
+                                            "EXIF_GPSAL":  1646.5,
+                                            "EXIF_GPS_1":  0,
+                                            "EXIF_GPSIM":  162.0,
+                                            "EXIF_GPS_2":  "M",
+                                            "EXIF_GPSDE":  0.0,
+                                            "EXIF_GPS_3":  0.0,
+                                            "EXIF_GPS_4":  0.0,
+                                            "EXIF_GPS_5":  " ",
+                                            "EXIF_GPS_6":  0.0,
+                                            "EXIF_GPS_7":  " ",
+                                            "EXIF_DATET":  1326672000000,
+                                            "PHOTONAME":  "C:\\Users\\adele.samuels\\Desktop\\11 General\\Metrobus Photos\\0120.JPG",
+                                            "LOCATION":  "At Louis Botha Ave and Silwood Road"
+                                        }
+                     },
+                     {
+                         "attributes":  {
+                                            "OBJECTID":  1924,
+                                            "EXIF_GPSAL":  0.0,
+                                            "EXIF_GPS_1":  0,
+                                            "EXIF_GPSIM":  289.0,
+                                            "EXIF_GPS_2":  "M",
+                                            "EXIF_GPSDE":  0.0,
+                                            "EXIF_GPS_3":  0.0,
+                                            "EXIF_GPS_4":  0.0,
+                                            "EXIF_GPS_5":  " ",
+                                            "EXIF_GPS_6":  0.0,
+                                            "EXIF_GPS_7":  " ",
+                                            "EXIF_DATET":  1326672000000,
+                                            "PHOTONAME":  "C:\\Users\\adele.samuels\\Desktop\\11 General\\Metrobus Photos\\0122.JPG",
+                                            "LOCATION":  "At M11 and Louis Botha Avenue"
+                                        }
+                     }
+                 ],
+    "exceededTransferLimit":  true
+}

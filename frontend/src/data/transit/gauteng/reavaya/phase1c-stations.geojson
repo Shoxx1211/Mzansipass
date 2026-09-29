@@ -1,0 +1,357 @@
+{
+  "type": "FeatureCollection",
+  "name": "Pulse Transit Rea Vaya Phase 1C Named Stations",
+  "crsStatus": "requested-from-source-as-EPSG:4326",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "reavaya-phase1c-station-1",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.040766460820674,
+          -26.194891651457343
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "phase": "Phase 1C",
+        "sourceName": "Phase1C Park Station T4",
+        "displayName": "Park Station T4",
+        "stationNameStatus": "official",
+        "displayNameStatus": "derived-from-official-name",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "TransportationMaster",
+        "sourceLayerId": 0,
+        "sourceLayerName": "BRT Stations Phase 1C 11Stations",
+        "sourceObjectId": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-phase1c-station-2",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.03961938760931,
+          -26.190007493967723
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "phase": "Phase 1C",
+        "sourceName": "Phase1C Metro Center Station",
+        "displayName": "Metro Center",
+        "stationNameStatus": "official",
+        "displayNameStatus": "derived-from-official-name",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "TransportationMaster",
+        "sourceLayerId": 0,
+        "sourceLayerName": "BRT Stations Phase 1C 11Stations",
+        "sourceObjectId": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-phase1c-station-3",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.047288978361024,
+          -26.184064547767683
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "phase": "Phase 1C",
+        "sourceName": "Phase1C Brenthurst Clinic Station",
+        "displayName": "Brenthurst Clinic",
+        "stationNameStatus": "official",
+        "displayNameStatus": "derived-from-official-name",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "TransportationMaster",
+        "sourceLayerId": 0,
+        "sourceLayerName": "BRT Stations Phase 1C 11Stations",
+        "sourceObjectId": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-phase1c-station-4",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.05900377716388,
+          -26.17838732034069
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "phase": "Phase 1C",
+        "sourceName": "Phase1C Yeoville Station",
+        "displayName": "Yeoville",
+        "stationNameStatus": "official",
+        "displayNameStatus": "derived-from-official-name",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "TransportationMaster",
+        "sourceLayerId": 0,
+        "sourceLayerName": "BRT Stations Phase 1C 11Stations",
+        "sourceObjectId": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-phase1c-station-5",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.0662846722107,
+          -26.17536141799964
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "phase": "Phase 1C",
+        "sourceName": "Phase1C Bellevue Station",
+        "displayName": "Bellevue",
+        "stationNameStatus": "official",
+        "displayNameStatus": "derived-from-official-name",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "TransportationMaster",
+        "sourceLayerId": 0,
+        "sourceLayerName": "BRT Stations Phase 1C 11Stations",
+        "sourceObjectId": 5
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-phase1c-station-6",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.08518007895957,
+          -26.15781360223829
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "phase": "Phase 1C",
+        "sourceName": "Phase1C Orchards Clinic Station",
+        "displayName": "Orchards Clinic",
+        "stationNameStatus": "official",
+        "displayNameStatus": "derived-from-official-name",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "TransportationMaster",
+        "sourceLayerId": 0,
+        "sourceLayerName": "BRT Stations Phase 1C 11Stations",
+        "sourceObjectId": 6
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-phase1c-station-7",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.086547755871912,
+          -26.13812097195812
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "phase": "Phase 1C",
+        "sourceName": "Phase1C Balfour Park Station",
+        "displayName": "Balfour Park",
+        "stationNameStatus": "official",
+        "displayNameStatus": "derived-from-official-name",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "TransportationMaster",
+        "sourceLayerId": 0,
+        "sourceLayerName": "BRT Stations Phase 1C 11Stations",
+        "sourceObjectId": 7
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-phase1c-station-8",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.085066278095795,
+          -26.126254556401268
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "phase": "Phase 1C",
+        "sourceName": "Phase1C Corlett Drive Station",
+        "displayName": "Corlett Drive",
+        "stationNameStatus": "official",
+        "displayNameStatus": "derived-from-official-name",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "TransportationMaster",
+        "sourceLayerId": 0,
+        "sourceLayerName": "BRT Stations Phase 1C 11Stations",
+        "sourceObjectId": 8
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-phase1c-station-9",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.08430319297021,
+          -26.119356789179793
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "phase": "Phase 1C",
+        "sourceName": "Phase1C Wynberg Station",
+        "displayName": "Wynberg",
+        "stationNameStatus": "official",
+        "displayNameStatus": "derived-from-official-name",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "TransportationMaster",
+        "sourceLayerId": 0,
+        "sourceLayerName": "BRT Stations Phase 1C 11Stations",
+        "sourceObjectId": 9
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-phase1c-station-10",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.08567792974413,
+          -26.097177083868846
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "phase": "Phase 1C",
+        "sourceName": "Phase1C Marlboro Station",
+        "displayName": "Marlboro",
+        "stationNameStatus": "official",
+        "displayNameStatus": "derived-from-official-name",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "TransportationMaster",
+        "sourceLayerId": 0,
+        "sourceLayerName": "BRT Stations Phase 1C 11Stations",
+        "sourceObjectId": 10
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-phase1c-station-11",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.065583270577154,
+          -26.10638403093576
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "phase": "Phase 1C",
+        "sourceName": "Phase1C Atholl Square Station",
+        "displayName": "Atholl Square",
+        "stationNameStatus": "official",
+        "displayNameStatus": "derived-from-official-name",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "TransportationMaster",
+        "sourceLayerId": 0,
+        "sourceLayerName": "BRT Stations Phase 1C 11Stations",
+        "sourceObjectId": 11
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-phase1c-station-12",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.05560595316674,
+          -26.109514624935148
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "phase": "Phase 1C",
+        "sourceName": "Phase1C Sandton City Station",
+        "displayName": "Sandton City",
+        "stationNameStatus": "official",
+        "displayNameStatus": "derived-from-official-name",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "TransportationMaster",
+        "sourceLayerId": 0,
+        "sourceLayerName": "BRT Stations Phase 1C 11Stations",
+        "sourceObjectId": 12
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-phase1c-station-13",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.042814926503286,
+          -26.205397222270992
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "phase": "Phase 1C",
+        "sourceName": "Phase1C Library Gardens West Station Ext",
+        "displayName": "Library Gardens West Station Ext",
+        "stationNameStatus": "official",
+        "displayNameStatus": "derived-from-official-name",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "TransportationMaster",
+        "sourceLayerId": 0,
+        "sourceLayerName": "BRT Stations Phase 1C 11Stations",
+        "sourceObjectId": 13
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-phase1c-station-14",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.042717285543322,
+          -26.204648451103537
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "phase": "Phase 1C",
+        "sourceName": "Phase1C Library Gardens East Station Ext",
+        "displayName": "Library Gardens East Station Ext",
+        "stationNameStatus": "official",
+        "displayNameStatus": "derived-from-official-name",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "TransportationMaster",
+        "sourceLayerId": 0,
+        "sourceLayerName": "BRT Stations Phase 1C 11Stations",
+        "sourceObjectId": 14
+      }
+    }
+  ]
+}

@@ -1,0 +1,191 @@
+{
+  "generatedAt": "2026-09-17T17:21:50.566Z",
+  "operatorId": "gautrain",
+  "sourceManifestRouteCount": 45,
+  "normalizedRouteCount": 45,
+  "stationGroupCount": 9,
+  "busRouteCount": 27,
+  "midibusRouteCount": 18,
+  "explicitRouteCodeCount": 29,
+  "uncodedRouteCount": 16,
+  "uncodedRoutes": [
+    {
+      "stationKey": "centurion",
+      "officialTitle": "Midibus Route Map Celtis Ridge",
+      "mode": "midibus"
+    },
+    {
+      "stationKey": "centurion",
+      "officialTitle": "Midibus Route Map Highveld",
+      "mode": "midibus"
+    },
+    {
+      "stationKey": "centurion",
+      "officialTitle": "Midibus Route Map Midstream",
+      "mode": "midibus"
+    },
+    {
+      "stationKey": "centurion",
+      "officialTitle": "Midibus Route Map Samrand",
+      "mode": "midibus"
+    },
+    {
+      "stationKey": "centurion",
+      "officialTitle": "Midibus Route Map Stone Ridge",
+      "mode": "midibus"
+    },
+    {
+      "stationKey": "centurion",
+      "officialTitle": "Midibus Route Map Thatchfield",
+      "mode": "midibus"
+    },
+    {
+      "stationKey": "hatfield",
+      "officialTitle": "Midibus Route Queenswood",
+      "mode": "midibus"
+    },
+    {
+      "stationKey": "marlboro",
+      "officialTitle": "Midibus Route Kelvin",
+      "mode": "midibus"
+    },
+    {
+      "stationKey": "marlboro",
+      "officialTitle": "Midibus Route Map Buccleuch",
+      "mode": "midibus"
+    },
+    {
+      "stationKey": "marlboro",
+      "officialTitle": "Midibus Route Map Lakeside",
+      "mode": "midibus"
+    },
+    {
+      "stationKey": "marlboro",
+      "officialTitle": "Midibus Route Map to Linbro",
+      "mode": "midibus"
+    },
+    {
+      "stationKey": "marlboro",
+      "officialTitle": "Midibus Route to Greenstone",
+      "mode": "midibus"
+    },
+    {
+      "stationKey": "marlboro",
+      "officialTitle": "Midibus Route to Longlake",
+      "mode": "midibus"
+    },
+    {
+      "stationKey": "marlboro",
+      "officialTitle": "Midibus Route Woodlands Office Park",
+      "mode": "midibus"
+    },
+    {
+      "stationKey": "pretoria",
+      "officialTitle": "Pretoria- CBD",
+      "mode": "bus"
+    },
+    {
+      "stationKey": "sandton",
+      "officialTitle": "Midibus Route Map Montecasino",
+      "mode": "midibus"
+    }
+  ],
+  "missingStationCount": 0,
+  "missingStations": [],
+  "invalidPdfCount": 0,
+  "invalidPdfs": [],
+  "duplicateIdCount": 0,
+  "duplicateIds": [],
+  "duplicateStationRouteCodeCount": 0,
+  "duplicateStationRouteCodes": [],
+  "stationSummary": [
+    {
+      "stationKey": "centurion",
+      "stationId": "gautrain-station-centurion",
+      "routeCount": 10,
+      "busCount": 4,
+      "midibusCount": 6,
+      "explicitCodeCount": 4,
+      "uncodedCount": 6
+    },
+    {
+      "stationKey": "hatfield",
+      "stationId": "gautrain-station-hatfield",
+      "routeCount": 5,
+      "busCount": 4,
+      "midibusCount": 1,
+      "explicitCodeCount": 4,
+      "uncodedCount": 1
+    },
+    {
+      "stationKey": "marlboro",
+      "stationId": "gautrain-station-marlboro",
+      "routeCount": 7,
+      "busCount": 0,
+      "midibusCount": 7,
+      "explicitCodeCount": 0,
+      "uncodedCount": 7
+    },
+    {
+      "stationKey": "midrand",
+      "stationId": "gautrain-station-midrand",
+      "routeCount": 6,
+      "busCount": 4,
+      "midibusCount": 2,
+      "explicitCodeCount": 6,
+      "uncodedCount": 0
+    },
+    {
+      "stationKey": "park",
+      "stationId": "gautrain-station-park",
+      "routeCount": 2,
+      "busCount": 2,
+      "midibusCount": 0,
+      "explicitCodeCount": 2,
+      "uncodedCount": 0
+    },
+    {
+      "stationKey": "pretoria",
+      "stationId": "gautrain-station-pretoria",
+      "routeCount": 2,
+      "busCount": 2,
+      "midibusCount": 0,
+      "explicitCodeCount": 1,
+      "uncodedCount": 1
+    },
+    {
+      "stationKey": "rhodesfield",
+      "stationId": "gautrain-station-rhodesfield",
+      "routeCount": 3,
+      "busCount": 3,
+      "midibusCount": 0,
+      "explicitCodeCount": 3,
+      "uncodedCount": 0
+    },
+    {
+      "stationKey": "rosebank",
+      "stationId": "gautrain-station-rosebank",
+      "routeCount": 5,
+      "busCount": 4,
+      "midibusCount": 1,
+      "explicitCodeCount": 5,
+      "uncodedCount": 0
+    },
+    {
+      "stationKey": "sandton",
+      "stationId": "gautrain-station-sandton",
+      "routeCount": 5,
+      "busCount": 4,
+      "midibusCount": 1,
+      "explicitCodeCount": 4,
+      "uncodedCount": 1
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    "A route-map PDF proves publication of a route map but does not automatically establish a machine-readable stop sequence.",
+    "Code-less midi-bus routes retain null routeCode values.",
+    "No coordinates are extracted from schematic map artwork in this phase.",
+    "No bus or midi-bus ETA is created."
+  ]
+}

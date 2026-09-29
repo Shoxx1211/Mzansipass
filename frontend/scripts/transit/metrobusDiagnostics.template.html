@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Pulse Transit · Metrobus Evidence Diagnostics — LOCAL ONLY</title>
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color-scheme:dark;background:#080d1c;color:#ebf5ff}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 40% -30%,#203454 0%,#0d1426 46%,#080c17 100%)}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 23px;gap:15px;border-bottom:1px solid #2d3d59;background:#111a2cbd;flex-wrap:wrap}
+.logo{font-size:22px;letter-spacing:-1px;font-weight:850}.logo span{color:#7cdeef}.sub{font-size:12px;color:#9bb0cc;margin-top:3px}
+.local{padding:8px 13px;border:1px solid #a17534;border-radius:100px;background:#382b1a;color:#ffe0a1;font-size:11px;font-weight:800;letter-spacing:.4px}
+.banner{padding:11px 23px;background:#242639;color:#ffdeaf;border-bottom:1px solid #7a6848;font-size:12px;line-height:1.55}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(100px,1fr));gap:10px;padding:13px 18px}
+.stat{padding:13px 16px;border:1px solid #30435f;border-radius:14px;background:linear-gradient(135deg,#152138,#131b2e)}.stat b{font-size:24px;display:block;letter-spacing:-.6px}.stat small{font-size:11px;color:#9cb5d0}
+main{padding:0 17px 20px;display:grid;grid-template-columns:minmax(294px,365px) minmax(330px,1fr) minmax(248px,310px);gap:12px;height:calc(100vh - 204px);min-height:550px}
+.panel{border:1px solid #2a3e59;background:#111b2fcf;border-radius:16px;overflow:hidden;min-width:0;min-height:0;display:flex;flex-direction:column}
+.panelhead{padding:14px 16px;border-bottom:1px solid #253853}.panelhead h2{font-size:14px;margin:0 0 5px}.panelhead p{font-size:11px;line-height:1.5;color:#a0b3d0;margin:0}
+.controls{padding:13px 16px;border-bottom:1px solid #253853;overflow:auto;flex-shrink:0}
+.inputrow{margin:0 0 12px}.inputrow label{display:block;color:#b3c8e2;font-size:12px;font-weight:700;margin-bottom:5px}.inputrow small{display:block;color:#90a5c4;font-size:10px;margin-top:5px}
+input[type=text],input[type=search],select{background:#0b1425;color:#ebf6ff;border:1px solid #425a78;border-radius:9px;width:100%;padding:10px 11px;font:inherit;font-size:12px;outline:none}
+input:focus,select:focus{border-color:#7adef1;box-shadow:0 0 0 2px #5ad9ff20}.inputgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+button{cursor:pointer;font:inherit}.btn{padding:9px 11px;border:1px solid #3e5674;background:#1a2b47;color:#d6ebfa;border-radius:9px;font-size:11px;font-weight:700}.btn:hover{border-color:#7bd2ec}.btn:focus-visible{outline:2px solid #7bd2ec;outline-offset:2px}
+.btn.active{background:#20516b;border-color:#70dcf3;color:#e4fdff}.btn.primary{background:linear-gradient(105deg,#3fb8d3,#6c8cf9);color:#0b1731;border:none;font-size:12px;padding:11px}.btn.reset{background:transparent}
+.buttonrow{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.buttonrow>.primary{flex:1}
+.helper{padding:9px 10px;border:1px solid #354864;background:#17233a;border-radius:10px;font-size:11px;color:#abbfd9;line-height:1.5;margin-top:12px}
+.results{overflow:auto;flex:1;padding:13px}.results h3{font-size:13px;margin:0 0 10px}.result{display:block;text-align:left;border:1px solid #344a66;border-radius:12px;background:#172840;width:100%;color:#e9f5ff;padding:11px;margin:8px 0}.result:hover,.result.active{border-color:#7bdce9;background:#1a3d54}.result strong{font-size:12px}.result small{display:block;font-size:10px;line-height:1.6;color:#adc7e3;margin-top:4px}.pill{display:inline-block;padding:3px 7px;background:#2e4558;border-radius:100px;font-size:10px;color:#bfe5f6;float:right}.empty{padding:12px;border-radius:11px;border:1px dashed #425b79;color:#a5bad5;font-size:11px;line-height:1.55}
+.diaggrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.diaggrid>div{min-width:0}.diagnostic-note{background:#1b2941;border:1px solid #526687;color:#deecff;border-radius:10px;padding:10px;font-size:11px;line-height:1.6;margin:10px 0}.witness{border:1px solid #786343;background:#2d2931;padding:10px;border-radius:11px;font-size:11px;line-height:1.5;margin:8px 0;color:#ffe5bb}@media(max-width:650px){.diaggrid{grid-template-columns:1fr}}.sectionlabel{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.65px;margin:16px 0 4px;color:#a0cef6}
+.maphead{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #253853;flex-wrap:wrap}.maphead strong{font-size:13px}.maphead small{font-size:10px;color:#9eb2cf;display:block;margin-top:4px}.mapbuttons{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:11px;color:#b3c8df}.mapbuttons input{accent-color:#7ddde9}
+.mapbox{position:relative;flex:1;min-height:250px}canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair;background:radial-gradient(circle at 55% 44%,#172b42,#0c1729 80%)}canvas.dragging{cursor:grabbing}
+.legend{position:absolute;bottom:12px;left:12px;border:1px solid #3b5370;background:#101a30ec;padding:9px 11px;border-radius:10px;font-size:10px;line-height:1.75;color:#d0e1f6;pointer-events:none}.dot{height:8px;width:8px;border-radius:100%;display:inline-block;margin-right:6px;background:#86e2f4}.dot.gray{background:#57718e}.dot.a{background:#55dfb6}.dot.b{background:#ae98ff}.dot.stop{background:#ffc679}
+.inspect{overflow:auto;padding:15px;font-size:12px;line-height:1.55}.inspect h3{font-size:16px;margin:3px 0 10px}.inspect dt{font-size:10px;color:#9ab3d0;margin-top:13px}.inspect dd{font-size:12px;color:#e0eaf7;margin:3px 0 0;word-break:break-word}.warning{background:#342b21;border:1px solid #9d7945;border-radius:11px;padding:12px;color:#ffe0ad;font-size:11px;line-height:1.6;margin:13px 0}.ok{background:#1e3940;border-color:#4e8f91;color:#c7f7f2}
+.code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px;color:#9bdaf0}.mini{border:1px solid #314863;padding:10px;border-radius:11px;background:#17263c;margin:9px 0}.foot{font-size:10px;color:#8da3c1;border-top:1px solid #253853;padding:10px 15px}
+@media(max-width:1150px){main{grid-template-columns:minmax(275px,365px) minmax(340px,1fr);height:auto}.mapbox{min-height:570px}.inspect{grid-column:1/-1}.stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:710px){header{padding:14px}.banner{padding:12px}.stats{grid-template-columns:repeat(2,1fr);padding:10px}.stat{padding:10px}.stat b{font-size:21px}main{grid-template-columns:1fr;padding:0 10px 16px}.mapbox{min-height:470px}.inspect{grid-column:auto}.results{max-height:440px}}
+</style>
+</head><body>
+<header><div><div class="logo">PULSE <span>TRANSIT</span></div><div class="sub">Johannesburg Metrobus · Phase 1H nearest-geometry and co-proximity diagnostics</div></div><div class="local">LOCAL / DEVELOPER ONLY</div></header>
+<div class="banner">⚠ This tests whether your coordinates are near the <b>same City GIS polyline</b>. It does <b>not</b> establish that a bus operates, stops nearby, travels in the desired direction or permits a transfer. Distances shown are approximate straight-line proximity to GIS geometry, NOT walking or journey distances. GIS reuse rights remain under review.</div>
+<section class="stats"><div class="stat"><b id="nRoutes">—</b><small>GIS route nodes</small></div><div class="stat"><b id="nStops">—</b><small>GIS stop evidence nodes</small></div><div class="stat"><b id="nEdges">—</b><small>Non-traversable spatial edges</small></div><div class="stat"><b id="nOverlap">—</b><small>Partial-index code overlaps</small></div><div class="stat"><b>0</b><small>Verified passenger edges</small></div></section>
+<main>
+<section class="panel"><div class="panelhead"><h2>Developer geometry screening</h2><p>Enter two WGS84 coordinates in <strong>latitude, longitude</strong> order or place them on the map. No geocoding or live transit claims.</p></div>
+<div class="controls"><form id="screenForm">
+<div class="inputrow"><label for="origin">A · Origin coordinates</label><input id="origin" type="text" placeholder="e.g. -26.20, 28.04" autocomplete="off" required/><small>Latitude, longitude — or choose “Place A”, then click on the map.</small></div>
+<div class="inputrow"><label for="destination">B · Destination coordinates</label><input id="destination" type="text" placeholder="e.g. -26.25, 28.01" autocomplete="off" required/><small>Latitude, longitude — or choose “Place B”, then click on the map.</small></div>
+<div class="inputrow"><label for="screeningRadius">Same-polyline screening radius</label><select id="screeningRadius"><option value="250">250 m</option><option value="500">500 m</option><option value="800" selected>800 m · developer default</option><option value="1200">1,200 m</option><option value="1500">1,500 m</option></select><small>Engineering screening threshold, not a recommended walking distance.</small></div>
+<div class="buttonrow"><button class="btn" id="placeA" type="button">Place A on map</button><button class="btn" id="placeB" type="button">Place B on map</button></div>
+<div class="buttonrow" style="margin-top:12px"><button class="btn primary" type="submit">Screen GIS geometries</button><button class="btn reset" type="button" id="clear">Clear</button></div>
+</form><div class="helper" id="message" role="status">Choose two points. Only same-polyline spatial overlap can be displayed. Stop membership, route direction and transfers are not inferred.</div></div>
+<div class="results" id="results"><div class="empty">No geometry screening has been run yet. Click “Place A” and “Place B” to choose points directly on the offline map.</div></div><div class="foot">Only the local developer graph is queried. Your origin and destination are not uploaded.</div></section>
+<section class="panel"><div class="maphead"><div><strong>Offline Johannesburg geometry explorer</strong><small>Custom WGS84 canvas · no street basemap · drag to pan · scroll to zoom</small></div><div class="mapbuttons"><label><input id="showStopPoints" type="checkbox"/>Show stop evidence</label><button id="fitAll" class="btn" type="button">Fit network</button></div></div>
+<div class="mapbox"><canvas id="map" aria-label="Developer-only Metrobus GIS geometry map. Place A or B with the buttons."></canvas><div class="legend"><div><i class="dot gray"></i>Other City GIS shapes</div><div><i class="dot"></i>Selected GIS shape</div><div><i class="dot a"></i>A · origin coordinate</div><div><i class="dot b"></i>B · destination coordinate</div><div><i class="dot stop"></i>Stop point (spatial evidence only)</div><div id="mapStatus">Choose “Place A” or “Place B” to pick a point.</div></div></div></section>
+<section class="panel"><div class="panelhead"><h2>Evidence inspection</h2><p>No passenger route selections, trip starts, stop-order claims, fares or ETAs.</p></div><div class="inspect"><div class="warning">Current operations, travel direction, boarding, stop membership, timetables and fares are unverified. All 8,492 candidate links (if present) are non-traversable <i>spatial support</i>, not transfers.</div><div id="diagnosticSummary" class="diagnostic-note">Nearest-shape diagnostics will appear after screening. No passenger journeys are inferred.</div><div id="routeInspect" class="empty">Select a GIS shape after screening to inspect its raw GIS code, internal ID and coordinate proximity.</div><div class="mini"><strong>What the graph contains</strong><dl><dt>Route nodes</dt><dd id="inspectRoutes">—</dd><dt>GIS stop nodes</dt><dd id="inspectStops">—</dd><dt>Spatial support edges</dt><dd id="inspectEdges">—</dd><dt>Traversable passenger / transfer edges</dt><dd>0 / 0</dd><dt>Reuse and operation</dt><dd>Not cleared / unverified</dd></dl></div></div></section>
+</main>
+<script>
+'use strict';
+// Embeds Phase 1G graph locally for Phase 1H diagnostics. Never upload or distribute this generated HTML publicly.
+const GRAPH = __PULSE_METROBUS_EVIDENCE_GRAPH__;
+__PULSE_METROBUS_SCREEN_CORE__
+const $ = id => document.getElementById(id);
+const n = (tag, cls, value) => { const e = document.createElement(tag); if (cls) e.className=cls; if (value!==undefined) e.textContent=String(value); return e; };
+const fmt = number => Number(number).toLocaleString('en-ZA');
+$('nRoutes').textContent=fmt(GRAPH.summary.routeNodes);$('nStops').textContent=fmt(GRAPH.summary.stopEvidenceNodes);
+$('nEdges').textContent=fmt(GRAPH.summary.spatialSupportEdges);$('nOverlap').textContent=fmt(GRAPH.summary.indexedCodeOverlaps);
+$('inspectRoutes').textContent=fmt(GRAPH.summary.routeNodes);$('inspectStops').textContent=fmt(GRAPH.summary.stopEvidenceNodes);
+$('inspectEdges').textContent=fmt(GRAPH.summary.spatialSupportEdges);
+const canvas=$('map'),ctx=canvas.getContext('2d',{alpha:false});
+let w=0,h=0, midX=28*Math.cos(-26*Math.PI/180),midY=-26.2,unit=.001,drag=null,pick=null;
+let a=null,b=null,screened=null,selected=null,selectedMatch=null,showStops=false;
+const projectionCos=Math.cos(-26*Math.PI/180),toX=lng=>lng*projectionCos;
+const routeByObjectId=new Map(GRAPH.nodes.routes.map(r=>[r.gisObjectId,r]));
+const stopByNodeId=new Map(GRAPH.nodes.stops.map(s=>[s.id,s]));
+const candidatesByRoute=new Map();
+for (const p of GRAPH.edges.spatialSupport) { if(!candidatesByRoute.has(p.routeNodeId))candidatesByRoute.set(p.routeNodeId,[]); candidatesByRoute.get(p.routeNodeId).push(p); }
+function xy(lng,lat){return[w/2+(toX(lng)-midX)/unit,h/2-(lat-midY)/unit]}
+function invert(x,y){return{lng:(midX+(x-w/2)*unit)/projectionCos,lat:midY-(y-h/2)*unit}}
+function fit(bounds){
+ const v=bounds||GRAPH.nodes.routes.reduce((z,r)=>{const e=r.extentWgs84;if(e){z.west=Math.min(z.west,e.west);z.east=Math.max(z.east,e.east);z.south=Math.min(z.south,e.south);z.north=Math.max(z.north,e.north)}return z},{west:Infinity,east:-Infinity,south:Infinity,north:-Infinity});
+ if(!Number.isFinite(v.west))return;
+ midX=toX((v.west+v.east)/2);midY=(v.south+v.north)/2;
+ unit=Math.max(.001*projectionCos,(v.east-v.west)*projectionCos/Math.max(1,w*.87),(v.north-v.south)/Math.max(1,h*.87));draw();
+}
+function draw(){
+ if(!w||!h)return;ctx.fillStyle='#0c172a';ctx.fillRect(0,0,w,h);
+ ctx.strokeStyle='#182a42';ctx.lineWidth=1;
+ for(let x=(w/2-midX/unit)%80;x<w;x+=80){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+ for(let y=(h/2+midY/unit)%80;y<h;y+=80){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+ const line=(r,strong)=>{ctx.strokeStyle=strong?'#7ee8fa':'#4a6486';ctx.lineWidth=strong?2.8:1;
+ ctx.globalAlpha=strong?1:.36;for(const part of r.geometry.coordinates){if(part.length<2)continue;ctx.beginPath();part.forEach((p,i)=>{const [x,y]=xy(p[0],p[1]);if(i)ctx.lineTo(x,y);else ctx.moveTo(x,y)});ctx.stroke()}ctx.globalAlpha=1};
+ for(const r of GRAPH.nodes.routes)if(r!==selected)line(r,false);
+ if(selected)line(selected,true);
+ if(showStops){ctx.fillStyle='#6b789a';for(const s of GRAPH.nodes.stops){const [x,y]=xy(s.coordinate.lng,s.coordinate.lat);if(x>=0&&x<w&&y>=0&&y<h){ctx.beginPath();ctx.arc(x,y,1.5,0,Math.PI*2);ctx.fill()}}}
+ if(selected){ctx.fillStyle='#ffd18b';for(const p of candidatesByRoute.get(selected.id)||[]){const s=stopByNodeId.get(p.stopNodeId);const [x,y]=xy(s.coordinate.lng,s.coordinate.lat);if(x>=-3&&x<=w+3&&y>=-3&&y<=h+3){ctx.beginPath();ctx.arc(x,y,2.5,0,Math.PI*2);ctx.fill()}}}
+ const hit=selectedMatch;
+ if(hit&&a&&b){ctx.save();ctx.setLineDash([5,5]);ctx.lineWidth=1.5;
+ for(const [point,near,color] of [[a,hit.originNearestPolylinePoint,'#58e4b7'],[b,hit.destinationNearestPolylinePoint,'#b59bff']]){
+ const [x,y]=xy(point.lng,point.lat),[nx,ny]=xy(near.lng,near.lat);ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(nx,ny);ctx.strokeStyle=color;ctx.stroke()}
+ ctx.restore()}
+ for(const [point,label,color] of [[a,'A','#50efbf'],[b,'B','#b39aff']])if(point){const [x,y]=xy(point.lng,point.lat);ctx.beginPath();ctx.arc(x,y,7,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();ctx.strokeStyle='#10192e';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='#081325';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(label,x,y+3.5)}
+}
+function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;w=r.width;h=r.height;const dpr=Math.min(2,window.devicePixelRatio||1);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw()}
+function setPick(which){pick=which;$('placeA').classList.toggle('active',pick==='a');$('placeB').classList.toggle('active',pick==='b');$('mapStatus').textContent=which?`Click on the map to place ${which.toUpperCase()}.`:'Drag to pan; scroll to zoom.'}
+function parseCoord(raw){const p=raw.trim().split(/[\s,;]+/).filter(Boolean);if(p.length!==2)throw Error('Enter latitude, longitude, separated by a comma.');const lat=Number(p[0]),lng=Number(p[1]);if(!validCoordinate(lng,lat))throw Error('Coordinates must be valid WGS84 points inside the Gauteng screening bounds.');return{lat,lng}}
+function resetResults(){screened=null;selected=null;selectedMatch=null;$('diagnosticSummary').textContent='Coordinates changed. Run screening to refresh proximity diagnostics.';$('results').replaceChildren(n('div','empty','Coordinates changed. Run the geometry screening again.'));$('routeInspect').replaceChildren(n('div','empty','Run screening and select a GIS shape to inspect its evidence.'));draw()}
+function selectRoute(match){selected=routeByObjectId.get(match.gisObjectId);selectedMatch=match;document.querySelectorAll('.result').forEach(row=>row.classList.toggle('active',Number(row.dataset.gisId)===selected.gisObjectId));
+ const root=$('routeInspect');root.replaceChildren();root.append(n('h3','',`GIS Route ${selected.routeCodeFromName}`));root.append(n('p','',selected.gisDescription||'No description in GIS record.'));
+ const dl=n('dl');for(const [k,v] of [['GIS OBJECTID',selected.gisObjectId],['Passenger-facing code parsed from NAME',selected.routeCodeFromName],['Raw ROUTE_ID (uninterpreted)',selected.rawRouteIdField],['Raw ID disagreement?',selected.rawIdDisagreesWithName?'Yes — no automatic correction':'No'],['Indexed excerpt overlap?',selected.indexedCodeOverlapOnly?'Exact code overlap only':'Not in incomplete excerpt'],['GIS origin / destination labels',`${selected.originLabel||'Unknown'} / ${selected.destinationLabel||'Unknown'}`],['A to geometry · approximate straight line',`${match.originProximityMetresApprox} m`],['B to geometry · approximate straight line',`${match.destinationProximityMetresApprox} m`],['GIS shape length · NOT journey distance',selected.gisPolylineLengthKm==null?'Unknown':`${selected.gisPolylineLengthKm} km`],['Nearby GIS stop points',`${selected.candidateStopCount} · spatial support, not boarding`],['Operating status / direction / boarding / fare / ETA','All unverified']]){dl.append(n('dt','',k),n('dd','',v))}root.append(dl);draw();
+}
+function addResult(container,match){const button=n('button','result');button.type='button';button.dataset.gisId=String(match.gisObjectId);button.append(n('span','pill',match.indexedCodeOverlapOnly?'INDEX CODE OVERLAP':'NOT IN PARTIAL INDEX'),n('strong','',`GIS Route ${match.routeCode} · #${match.gisObjectId}`),n('small','',match.gisDescription||'GIS description not provided'),n('small','',`A ↔ shape: ${match.originProximityMetresApprox} m approx. · B ↔ shape: ${match.destinationProximityMetresApprox} m approx.`));button.addEventListener('click',()=>selectRoute(match));container.append(button)}
+function renderScreen(result){screened=result;selected=null;selectedMatch=null;const results=$('results');results.replaceChildren();
+ const both=result.commonGeometryCandidates;results.append(n('h3','',`${fmt(both.length)} possible same-geometry match${both.length===1?'':'es'}`));
+ results.append(n('div','empty','A GIS line passing near A and B does not establish a bus journey. Direction, stops, timetables and current operation are unknown.'));
+ if(both.length){const wrapper=n('div');for(const match of both.slice(0,35))addResult(wrapper,match);results.append(wrapper);if(both.length>35)results.append(n('div','empty',`Showing 35 of ${both.length} GIS matches; this is a development screening result only.`));selectRoute(both[0]);}
+ else{results.append(n('div','empty','No single GIS shape lies within the selected radius of BOTH endpoints. This does NOT prove that no Metrobus journey exists. We do not infer transfers from different nearby shapes.'));
+  for(const [label,rows] of [['Shapes near A only',result.originOnlyGeometryCandidates],['Shapes near B only',result.destinationOnlyGeometryCandidates]]){results.append(n('div','sectionlabel',`${label} · ${rows.length}`));for(const row of rows.slice(0,8)){const card=n('div','mini');card.append(n('strong','',`Route ${row.routeCode} · GIS #${row.gisObjectId}`),n('div','code',`A: ${row.originProximityMetresApprox} m / B: ${row.destinationProximityMetresApprox} m`));results.append(card)}}}
+ renderDiagnostics(result);
+ draw();
+}
+function reasonMessage(code){
+ const messages={
+  'same-shape-proximity-detected':'At least one GIS shape is near BOTH points. This is geometry only, not a verified bus service.',
+  'no-shapes-near-either-endpoint':'No GIS shape lies inside the chosen radius at either endpoint. The nearest shapes are still listed below.',
+  'no-shapes-near-origin':'No GIS shape lies inside the chosen radius at A. Inspect the nearest A shapes and their distance gaps.',
+  'no-shapes-near-destination':'No GIS shape lies inside the chosen radius at B. Inspect the nearest B shapes and their distance gaps.',
+  'different-shapes-near-endpoints':'Different GIS shapes are near A and B, but none is near BOTH within this radius. Co-proximity is NOT a verified transfer.'
+ };return messages[code]||'GIS proximity diagnostic only.';
+}
+function renderDiagnostics(result){
+ const diag=diagnoseMetrobusGeometry(GRAPH,result,a,b,distanceToPolylineMetres,5);
+ $('diagnosticSummary').textContent=`${reasonMessage(diag.reasonCode)} Near A: ${diag.endpointShapeCounts.origin}; near B: ${diag.endpointShapeCounts.destination}; same shape: ${diag.endpointShapeCounts.both}. All distances are approximate straight-line to GIS geometry.`;
+ const root=$('results');
+ root.append(n('div','sectionlabel','Phase 1H · nearest shape diagnostics'));
+ root.append(n('div','diagnostic-note','These lists include shapes OUTSIDE your screening radius, so a zero-match result remains explainable. Nearest geometry does NOT imply availability, accessibility or a recommended bus journey.'));
+ const grid=n('div','diaggrid');
+ for(const [title,rows,key] of [
+  ['Nearest GIS shapes to A',diag.nearestToOrigin,'originProximityMetresApprox'],
+  ['Nearest GIS shapes to B',diag.nearestToDestination,'destinationProximityMetresApprox']
+ ]){
+  const section=n('div');section.append(n('div','sectionlabel',title));
+  for(const item of rows){
+   const card=n('button','result');card.type='button';card.dataset.gisId=String(item.gisObjectId);
+   card.append(n('strong','',`GIS Route ${item.routeCode} · #${item.gisObjectId}`),n('small','',`${item[key]} m approx · ${item[key]<=diag.screeningThresholdMetres?'inside radius':`${Math.max(0,Math.round(item[key]-diag.screeningThresholdMetres))} m beyond radius`}`),n('small','',item.gisDescription||'No GIS description'));
+   card.addEventListener('click',()=>selectRoute(item));section.append(card);
+  }grid.append(section);
+ }
+ root.append(grid);
+ root.append(n('div','sectionlabel','Lowest joint proximity gap · NOT passenger routes'));
+ for(const item of diag.lowestJointProximityShapes){
+  const card=n('button','result');card.type='button';card.dataset.gisId=String(item.gisObjectId);
+  card.append(n('strong','',`GIS Route ${item.routeCode} · #${item.gisObjectId}`),n('small','',`A: ${item.originProximityMetresApprox} m · B: ${item.destinationProximityMetresApprox} m to shape`),n('small','',`Beyond selected radius: A ${item.gapToOriginThresholdMetresApprox} m; B ${item.gapToDestinationThresholdMetresApprox} m. Neither gap is walking distance.`));
+  card.addEventListener('click',()=>selectRoute(item));root.append(card);
+ }
+ if(diag.reasonCode==='different-shapes-near-endpoints'){
+  root.append(n('div','sectionlabel','Shared GIS-point co-proximity · NOT transfers'));
+  root.append(n('div','diagnostic-note','Each witness below is one GIS stop-location point geographically near TWO different GIS polylines. It is not published route membership, a boarding instruction, a service direction or a transfer. Analysis is limited to the eight nearest within-radius GIS shapes at each end.'));
+  if(!diag.coProximityWitnesses.length) root.append(n('div','empty','No shared GIS stop-point proximity witness was found among the screened route pairs. This does not prove that no transfer exists.'));
+  for(const item of diag.coProximityWitnesses){
+   const card=n('div','witness');card.append(n('strong','',`GIS ${item.originRouteCode} ↔ GIS ${item.destinationRouteCode} · point #${item.stopGisObjectId}`),n('div','',item.stopLocationDescription||'Unlabelled GIS point'),n('div','',`Shape-to-GIS-point: ${item.routeAToGisPointMetresApprox} m / ${item.routeBToGisPointMetresApprox} m. NOT boarding or transfer evidence.`));root.append(card);
+  }
+ }
+}
+$('placeA').addEventListener('click',()=>setPick(pick==='a'?null:'a'));$('placeB').addEventListener('click',()=>setPick(pick==='b'?null:'b'));
+for(const id of ['origin','destination'])$(id).addEventListener('input',()=>{if(screened)resetResults()});
+$('screenForm').addEventListener('submit',e=>{e.preventDefault();try{a=parseCoord($('origin').value);b=parseCoord($('destination').value);const radius=Number($('screeningRadius').value);const result=screenMetrobusGeometry(GRAPH,a,b,radius);renderScreen(result);$('message').textContent=`Found ${result.commonGeometryCandidates.length} same-polyline spatial candidate(s) within ${radius} m of BOTH coordinates. No passenger journey or transfer is verified.`;setPick(null)}catch(error){$('message').textContent=error.message;}});
+$('clear').addEventListener('click',()=>{$('origin').value='';$('destination').value='';a=null;b=null;resetResults();$('results').replaceChildren(n('div','empty','No screening yet. Enter two coordinates or click “Place A” and “Place B”.'));$('message').textContent='Coordinates cleared. Passenger routing remains disabled.';setPick(null)});
+$('showStopPoints').addEventListener('change',e=>{showStops=e.target.checked;draw()});$('fitAll').addEventListener('click',()=>fit());
+canvas.addEventListener('wheel',e=>{e.preventDefault();const rect=canvas.getBoundingClientRect(),mx=e.clientX-rect.left,my=e.clientY-rect.top;const old=unit;unit=Math.max(.0000001,Math.min(.2,unit*Math.exp(e.deltaY*.001)));midX+=(mx-w/2)*(old-unit);midY-=(my-h/2)*(old-unit);draw()},{passive:false});
+canvas.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,moved:0};canvas.setPointerCapture(e.pointerId);canvas.classList.add('dragging')});
+canvas.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.moved+=Math.abs(dx)+Math.abs(dy);midX-=dx*unit;midY+=dy*unit;drag.x=e.clientX;drag.y=e.clientY;draw()});
+canvas.addEventListener('pointerup',e=>{const ended=drag;drag=null;canvas.classList.remove('dragging');if(!ended||ended.moved>6||!pick)return;const rect=canvas.getBoundingClientRect();const point=invert(e.clientX-rect.left,e.clientY-rect.top);if(!validCoordinate(point.lng,point.lat)){$('message').textContent='Chosen point is outside the Gauteng screening bounds. Zoom back into Johannesburg.';return}const id=pick==='a'?'origin':'destination';$(id).value=`${point.lat.toFixed(6)}, ${point.lng.toFixed(6)}`;if(pick==='a')a=point;else b=point;resetResults();setPick(null);$('message').textContent=`${id==='origin'?'A':'B'} coordinate selected from GIS canvas. Choose the other point and screen.`;draw()});
+window.addEventListener('resize',resize);resize();fit();
+</script>
+</body></html>

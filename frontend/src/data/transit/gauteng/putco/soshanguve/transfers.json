@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "operatorId": "putco",
+  "serviceArea": "soshanguve",
+  "effectiveFrom": "2025-02-01",
+  "sourceConfidence": "official",
+  "cashTransferPolicy": {
+    "officialTransferPointsOnly": true,
+    "maxTransferOpportunitiesPerOneWayJourney": 3
+  },
+  "transferPoints": [
+    {
+      "id": "mabopane-station",
+      "name": "Mabopane Station",
+      "zoneId": null,
+      "candidateZoneId": "L3",
+      "zoneMatchMethod": "related-place-name",
+      "zoneMatchConfidence": "medium",
+      "notes": [
+        "The zone map names Mabopane Interchange in L3; the transfer notice uses Mabopane Station. Pulse does not treat these names as exactly identical without further location verification."
+      ]
+    },
+    {
+      "id": "belle-ombre",
+      "name": "Belle Ombre",
+      "zoneId": "B2",
+      "zoneMatchMethod": "normalized-place-name",
+      "zoneMatchConfidence": "high",
+      "zoneMapReference": "Belle Ombre Stn"
+    },
+    {
+      "id": "eastlynne",
+      "name": "Eastlynne",
+      "zoneId": "A2",
+      "zoneMatchMethod": "exact-place-name",
+      "zoneMatchConfidence": "high"
+    },
+    {
+      "id": "block-xx",
+      "name": "Block XX",
+      "zoneId": "L1",
+      "zoneMatchMethod": "exact-place-name",
+      "zoneMatchConfidence": "high"
+    },
+    {
+      "id": "constantia-park",
+      "name": "Constantia Park",
+      "zoneId": "B4",
+      "zoneMatchMethod": "exact-place-name",
+      "zoneMatchConfidence": "high"
+    },
+    {
+      "id": "menlyn",
+      "name": "Menlyn",
+      "zoneId": "B4",
+      "zoneMatchMethod": "exact-place-name",
+      "zoneMatchConfidence": "high"
+    }
+  ],
+  "notes": [
+    "Transfer-point status comes from PUTCO's official Soshanguve passenger notice.",
+    "Zone links are derived by matching transfer-point names against PUTCO's official Soshanguve zone map.",
+    "The Mabopane Station to L3 relationship remains provisional because the zone map labels Mabopane Interchange rather than Mabopane Station."
+  ]
+}

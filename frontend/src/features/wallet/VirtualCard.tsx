@@ -4,7 +4,7 @@
 
 import React, { useEffect, useMemo, useRef, useState, memo } from "react";
 import { TripState } from "../../types";
-import type { TransitNetwork } from "../types";
+import type { TransitNetwork } from "../../types";
 
 // ======================================================
 // TYPES

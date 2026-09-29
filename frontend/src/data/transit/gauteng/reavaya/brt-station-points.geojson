@@ -1,0 +1,1283 @@
+{
+  "type": "FeatureCollection",
+  "name": "Pulse Transit Rea Vaya Official BRT Station Points",
+  "crsStatus": "requested-from-source-as-EPSG:4326",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-1",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.879336676295335,
+          -26.26473415261787
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-2",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.889995868466062,
+          -26.262513881869477
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-3",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.924879149188698,
+          -26.231721603770495
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-4",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.932285317898806,
+          -26.227545723423724
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-5",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.938414000466537,
+          -26.23298399969971
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 5
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-6",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.94656699976613,
+          -26.23387499982845
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 6
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-7",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.9546119994836,
+          -26.23366199994666
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 7
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-8",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.98107387900957,
+          -26.231603040698573
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 8
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-9",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.01032899977604,
+          -26.229718999560394
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 9
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-10",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.02181900035181,
+          -26.22824199974659
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 10
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-11",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.034271301996583,
+          -26.210527384310595
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 11
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-12",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.914454999953676,
+          -26.242812000252655
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 12
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-13",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.03681999988268,
+          -26.206083000200476
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 13
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-14",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.036656999832875,
+          -26.20533700026539
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 14
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-15",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.041611000467178,
+          -26.205554999818233
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 15
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-16",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.041468999476894,
+          -26.204716999893023
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 16
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-17",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.04853299975007,
+          -26.204731000181567
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 17
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-18",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.048458000080263,
+          -26.203960000291357
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 18
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-19",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.064800000463762,
+          -26.19408200020178
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 19
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-20",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.060900999609643,
+          -26.191458999984317
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 20
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-21",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.05611000027714,
+          -26.191659999669653
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 21
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-22",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.051083999614516,
+          -26.193492999943786
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 22
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-23",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.050592000085377,
+          -26.2015670000843
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 23
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-24",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.047966999667814,
+          -26.196120999632615
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 24
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-25",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.048790000170612,
+          -26.201749999575092
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 25
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-26",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.051084000332875,
+          -26.194101000069598
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 26
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-27",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.04650369469302,
+          -26.189958421616545
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 27
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-28",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.033044416141728,
+          -26.201120046255834
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 28
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-29",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.885172000470167,
+          -26.263079999592883
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 29
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-30",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.93860399954941,
+          -26.223457000358742
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 30
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-31",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.945215999654536,
+          -26.215751000040278
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 31
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-32",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.922413999519552,
+          -26.235348999687044
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 32
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-33",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.957789999515075,
+          -26.20392000040829
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 33
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-34",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.9626980004262,
+          -26.195429999961313
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 34
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-35",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.965279999698737,
+          -26.190974999703773
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 35
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-36",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.97092700005178,
+          -26.188648999864398
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 36
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-37",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.983172000057866,
+          -26.18639999979067
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 37
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-38",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.9887999996545,
+          -26.183862999842635
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 38
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-39",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.997228000236284,
+          -26.181634000279466
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 39
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-40",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.002742999920404,
+          -26.182876000224933
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 40
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-41",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.01007000021736,
+          -26.18444399966521
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 41
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-42",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.898444999870623,
+          -26.252778999786585
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 42
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-43",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.038886000248574,
+          -26.18113999966197
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 43
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-44",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.03858299969611,
+          -26.18518899996969
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 44
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-45",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.029519999507038,
+          -26.185612000308453
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 45
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-46",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.025337999884083,
+          -26.184571999855525
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 46
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-47",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.020491000195467,
+          -26.183238999845035
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 47
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-48",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.052756539240864,
+          -26.204264123266825
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 48
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-49",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.052647800943884,
+          -26.203503031878544
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 49
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-50",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.063506999600833,
+          -26.201128999974514
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 50
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-51",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.039054999582696,
+          -26.19131599991872
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 51
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-52",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.04164621106728,
+          -26.191448098500217
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 52
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-53",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.041141233508966,
+          -26.195669091488835
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 53
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-54",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.04173399999484,
+          -26.202113000144436
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 54
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-55",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.033448999806613,
+          -26.203381999526098
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 55
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-56",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.055891625007177,
+          -26.20392412932154
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 56
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-57",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.055839211282713,
+          -26.203359305178534
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 57
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "reavaya-brt-point-58",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.040095024076138,
+          -26.202254408716232
+        ]
+      },
+      "properties": {
+        "operatorId": "reavaya",
+        "sourceName": null,
+        "stationNameStatus": "not-available-in-source-layer",
+        "coordinateStatus": "official-gis",
+        "sourceAuthority": "City of Johannesburg",
+        "sourceService": "Transportation",
+        "sourceLayerId": 6,
+        "sourceLayerName": "BRT Stations",
+        "sourceObjectId": 58
+      }
+    }
+  ]
+}

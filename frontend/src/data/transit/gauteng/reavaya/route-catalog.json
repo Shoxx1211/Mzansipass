@@ -1,0 +1,1620 @@
+{
+  "schemaVersion": 1,
+  "operatorId": "reavaya",
+  "generatedAt": "2026-09-17T19:46:38.120Z",
+  "routeCount": 21,
+  "routes": [
+    {
+      "id": "reavaya-c1",
+      "operatorId": "reavaya",
+      "routeCode": "C1",
+      "routeFamily": "complementary",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 5,
+        "publishedOffPeakHeadwayMinutes": 15,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": false
+      },
+      "geometry": {
+        "spatialCoverage": "supplemental-segment-geometry",
+        "canonicalGeometryAvailable": false,
+        "supplementalSegmentCount": 6,
+        "derivedGeometryLengthKm": null,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": null,
+        "distanceComparison": null
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": false,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-c2",
+      "operatorId": "reavaya",
+      "routeCode": "C2",
+      "routeFamily": "complementary",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 15,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": false
+      },
+      "geometry": {
+        "spatialCoverage": "none",
+        "canonicalGeometryAvailable": false,
+        "supplementalSegmentCount": 0,
+        "derivedGeometryLengthKm": null,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": null,
+        "distanceComparison": null
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": false,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-c3",
+      "operatorId": "reavaya",
+      "routeCode": "C3",
+      "routeFamily": "complementary",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 20,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": false
+      },
+      "geometry": {
+        "spatialCoverage": "none",
+        "canonicalGeometryAvailable": false,
+        "supplementalSegmentCount": 0,
+        "derivedGeometryLengthKm": null,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": null,
+        "distanceComparison": null
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": false,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-c4",
+      "operatorId": "reavaya",
+      "routeCode": "C4",
+      "routeFamily": "complementary",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 8,
+        "publishedOffPeakHeadwayMinutes": 20,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": true,
+        "title": "Windsor West and Cresta to Parktown and City",
+        "distanceKmOneDirection": 16,
+        "pathDescription": "From Beyers Naude Drive / Princes Avenue, Windsor West, south via Beyers Naude, Kingsway, Stanley and Empire into the Johannesburg inner-city trunk corridor.",
+        "publishedStops": [
+          "Chancellor house",
+          "Library station east",
+          "Rissik station",
+          "Park station",
+          "Jhb Theater",
+          "Parktown station",
+          "Wits station",
+          "Milpark station",
+          "Sabc media park",
+          "UJ Sophiatown Res station",
+          "Main&1st avenue",
+          "Main&4th avenue",
+          "Beyers Naude&Westpark cemetery",
+          "Beyers Naude&John Adamson",
+          "Beyers Naude&Fire department",
+          "Beyers Naude&Olive Schreine",
+          "Beyers Naude&Northcliff",
+          "Beyers Naude&Salnero",
+          "Beyers Naude&Heatway square",
+          "Beyers Naude&Lewisham Road",
+          "Beyers Naude&Cresta Mall",
+          "Beyers Naude&Judges Avenue",
+          "Beyers Naude&Heatway square",
+          "Beyers Naude&Alexander str",
+          "Beyers Naude&Princess str"
+        ],
+        "publishedStopCount": 25,
+        "stopListStatus": "published-feeder-complementary-list-order-preserved",
+        "stopDirectionality": "not-separated-by-source",
+        "narrativeMentionedStations": [],
+        "sourcePages": {
+          "routeDescription": 217,
+          "distanceTable": 219,
+          "stopList": [
+            221,
+            222
+          ]
+        }
+      },
+      "geometry": {
+        "spatialCoverage": "none",
+        "canonicalGeometryAvailable": false,
+        "supplementalSegmentCount": 0,
+        "derivedGeometryLengthKm": null,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": null,
+        "distanceComparison": null
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": false,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-c5",
+      "operatorId": "reavaya",
+      "routeCode": "C5",
+      "routeFamily": "complementary",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 15,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": true,
+        "title": "Florida North to Parktown and Library Gardens",
+        "distanceKmOneDirection": 14.7,
+        "pathDescription": "From Flora Centre / Ontdekkers Road through Main Road, Perth Road, Kingsway, Stanley and Empire into Parktown and the Johannesburg inner city.",
+        "publishedStops": [
+          "Library station east",
+          "Rissik station",
+          "Park station",
+          "Jhb Theatre",
+          "Parktown station",
+          "Wits station",
+          "Milpark station",
+          "Sabc Media park",
+          "UJ Sophiatown station",
+          "UJ Kingsway campus",
+          "Helen Joseph Hospital",
+          "Perth&Portland",
+          "End&Perth Road",
+          "Main road&Concord Road",
+          "Main road&Dowling",
+          "Main road&Sophiatown Police station",
+          "Main road&Brown str",
+          "Main road&Ackerman",
+          "Main road&17th avenue",
+          "Main road Pro west car",
+          "Ontdekkers&Pluto",
+          "Ontdekkers&10th avenue",
+          "Ontdekkers&7th str",
+          "Ontdekkers&Hendrik Potgieter",
+          "Ontdekkers &Oupad",
+          "Ontdekkers&Koppie",
+          "Beacons road&Gouduis",
+          "Ontdekkers&Conrad"
+        ],
+        "publishedStopCount": 28,
+        "stopListStatus": "published-feeder-complementary-list-order-preserved",
+        "stopDirectionality": "not-separated-by-source",
+        "narrativeMentionedStations": [],
+        "sourcePages": {
+          "routeDescription": 218,
+          "distanceTable": 219,
+          "stopList": [
+            222,
+            223
+          ]
+        }
+      },
+      "geometry": {
+        "spatialCoverage": "none",
+        "canonicalGeometryAvailable": false,
+        "supplementalSegmentCount": 0,
+        "derivedGeometryLengthKm": null,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": null,
+        "distanceComparison": null
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": false,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-c6",
+      "operatorId": "reavaya",
+      "routeCode": "C6",
+      "routeFamily": "complementary",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": true,
+        "title": "Meadowlands to Orlando Stadium and Bosmont Rea Vaya Station",
+        "distanceKmOneDirection": 21,
+        "pathDescription": "From Elias Motsoaledi Road / Mashinini Street in Meadowlands through Vincent, Forbes, Sanders, Marsh, Hlongwane, Mophiring, Mooki, Main Road, Canada Road and Commando Road to Bosmont Rea Vaya Station.",
+        "publishedStops": [
+          "Mashinini & Cele east",
+          "Mashinini & Caluza",
+          "Mashinini & Ekupoleni",
+          "Vincent&Shinkhova",
+          "Vincent&Shink Forbes",
+          "Forbes &Isigwe",
+          "Sandres&Mojadji",
+          "Heckroodt&Odendaal Police Station",
+          "Marsh&Yende",
+          "Hlongoane&Boikhutso",
+          "Hlongoane&Undertaker",
+          "Mophiring&Oliver",
+          "Mophiring&Nkwanca",
+          "Armitage&Klipvalley",
+          "Orlando stadium",
+          "Noordgesig ext",
+          "New Canada",
+          "Bosmont",
+          "Industria West",
+          "Coronationville",
+          "Westbury station west",
+          "Helen Joseph hospital",
+          "UJ Kingsway campus",
+          "UJ Sophiatown",
+          "Milpark station"
+        ],
+        "publishedStopCount": 25,
+        "stopListStatus": "published-feeder-complementary-list-order-preserved",
+        "stopDirectionality": "not-separated-by-source",
+        "narrativeMentionedStations": [],
+        "sourcePages": {
+          "routeDescription": 218,
+          "distanceTable": 219,
+          "stopList": [
+            223,
+            224
+          ]
+        }
+      },
+      "geometry": {
+        "spatialCoverage": "none",
+        "canonicalGeometryAvailable": false,
+        "supplementalSegmentCount": 0,
+        "derivedGeometryLengthKm": null,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": null,
+        "distanceComparison": null
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": false,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-f1",
+      "operatorId": "reavaya",
+      "routeCode": "F1",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 5,
+        "publishedOffPeakHeadwayMinutes": 20,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": false
+      },
+      "geometry": {
+        "spatialCoverage": "canonical-coded-geometry",
+        "canonicalGeometryAvailable": true,
+        "supplementalSegmentCount": 0,
+        "derivedGeometryLengthKm": 8.169,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": "canonical-route-geometries.geojson",
+        "distanceComparison": null
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": true,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-f2",
+      "operatorId": "reavaya",
+      "routeCode": "F2",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 5,
+        "publishedOffPeakHeadwayMinutes": 20,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": false
+      },
+      "geometry": {
+        "spatialCoverage": "canonical-coded-geometry",
+        "canonicalGeometryAvailable": true,
+        "supplementalSegmentCount": 0,
+        "derivedGeometryLengthKm": 10.051,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": "canonical-route-geometries.geojson",
+        "distanceComparison": null
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": true,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-f3",
+      "operatorId": "reavaya",
+      "routeCode": "F3",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 15,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": false
+      },
+      "geometry": {
+        "spatialCoverage": "canonical-coded-geometry",
+        "canonicalGeometryAvailable": true,
+        "supplementalSegmentCount": 0,
+        "derivedGeometryLengthKm": 2.598,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": "canonical-route-geometries.geojson",
+        "distanceComparison": null
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": true,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-f4",
+      "operatorId": "reavaya",
+      "routeCode": "F4",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": false
+      },
+      "geometry": {
+        "spatialCoverage": "canonical-coded-geometry",
+        "canonicalGeometryAvailable": true,
+        "supplementalSegmentCount": 0,
+        "derivedGeometryLengthKm": 4.079,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": "canonical-route-geometries.geojson",
+        "distanceComparison": null
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": true,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-f5",
+      "operatorId": "reavaya",
+      "routeCode": "F5",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 15,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": false
+      },
+      "geometry": {
+        "spatialCoverage": "canonical-coded-geometry",
+        "canonicalGeometryAvailable": true,
+        "supplementalSegmentCount": 0,
+        "derivedGeometryLengthKm": 5.502,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": "canonical-route-geometries.geojson",
+        "distanceComparison": null
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": true,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-f6",
+      "operatorId": "reavaya",
+      "routeCode": "F6",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": true,
+        "title": "Bosmont Station to Lea Glen",
+        "distanceKmOneDirection": 10,
+        "pathDescription": "Bosmont Rea Vaya Station at Main Reef / Commando Road, west along Main Reef Road to Hebbard Road, Robertville, and return.",
+        "publishedStops": [
+          "Bosmont",
+          "Main Reef&Steps",
+          "Main Reef&Shaft",
+          "Main Reef&Roberts",
+          "Main Reef&Winze",
+          "Main Reef&Granville Avenue",
+          "Helpmekaar&Baobab",
+          "Helpmekaar&Minerva",
+          "Wildplum&Waxflower",
+          "Wildplum&Wild Olive",
+          "Buffalo 1",
+          "Buffalo"
+        ],
+        "publishedStopCount": 12,
+        "stopListStatus": "published-feeder-complementary-list-order-preserved",
+        "stopDirectionality": "not-separated-by-source",
+        "narrativeMentionedStations": [],
+        "sourcePages": {
+          "routeDescription": 216,
+          "distanceTable": 219,
+          "stopList": 224
+        }
+      },
+      "geometry": {
+        "spatialCoverage": "canonical-coded-geometry",
+        "canonicalGeometryAvailable": true,
+        "supplementalSegmentCount": 0,
+        "derivedGeometryLengthKm": 5.357,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": "canonical-route-geometries.geojson",
+        "distanceComparison": {
+          "officialScheduleDistanceKm": 10,
+          "derivedGisGeometryLengthKm": 5.357,
+          "differenceKm": -4.643,
+          "differencePercentOfSchedule": -46.4,
+          "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+        }
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": true,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-f7",
+      "operatorId": "reavaya",
+      "routeCode": "F7",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": true,
+        "title": "Amalgam to Bosmont Station",
+        "distanceKmOneDirection": 10,
+        "pathDescription": "Bosmont Rea Vaya Station at Main Reef / Commando Road, east along Main Reef Road to Crownwood / Church and Main Reef Road, Amalgam, and return.",
+        "publishedStops": [
+          "Bosmont",
+          "Main Reef & Aalwyn road",
+          "Main Reef&Croesus station",
+          "Main Reef &Bed lounge",
+          "Langlaagte Police station",
+          "Main Reef&George Harrison Park",
+          "Main Reef& Engen garage",
+          "Langlaagte testing station",
+          "Coach str& Carriage close"
+        ],
+        "publishedStopCount": 9,
+        "stopListStatus": "published-feeder-complementary-list-order-preserved",
+        "stopDirectionality": "not-separated-by-source",
+        "narrativeMentionedStations": [],
+        "sourcePages": {
+          "routeDescription": 216,
+          "distanceTable": 219,
+          "stopList": 224
+        }
+      },
+      "geometry": {
+        "spatialCoverage": "canonical-coded-geometry",
+        "canonicalGeometryAvailable": true,
+        "supplementalSegmentCount": 0,
+        "derivedGeometryLengthKm": 6.653,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": "canonical-route-geometries.geojson",
+        "distanceComparison": {
+          "officialScheduleDistanceKm": 10,
+          "derivedGisGeometryLengthKm": 6.653,
+          "differenceKm": -3.347,
+          "differencePercentOfSchedule": -33.5,
+          "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+        }
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": true,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-f8",
+      "operatorId": "reavaya",
+      "routeCode": "F8",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 15,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": true,
+        "title": "Westbury Station to Greymont",
+        "distanceKmOneDirection": 7,
+        "pathDescription": "Westbury Rea Vaya Station at Bernard Isaacs School in Fuel Road, via Steytler Road, Eric Place, 8th Road and Long Road to 10th Street.",
+        "publishedStops": [
+          "10th&5th str",
+          "Meyers&5th str",
+          "Long&Second",
+          "Waterval&8th str",
+          "Van Zyl&8th str",
+          "Spring road&8th str",
+          "Eric&Police station",
+          "Eric&Bessie",
+          "Steytler&Eric",
+          "Steytler&Dowing",
+          "Steytler&Saythy",
+          "Westbury station east",
+          "Coronation Park",
+          "Plumstead str",
+          "Landsdown str",
+          "Westbury station west"
+        ],
+        "publishedStopCount": 16,
+        "stopListStatus": "published-feeder-complementary-list-order-preserved",
+        "stopDirectionality": "not-separated-by-source",
+        "narrativeMentionedStations": [],
+        "sourcePages": {
+          "routeDescription": 216,
+          "distanceTable": 219,
+          "stopList": [
+            224,
+            225
+          ]
+        }
+      },
+      "geometry": {
+        "spatialCoverage": "canonical-coded-geometry",
+        "canonicalGeometryAvailable": true,
+        "supplementalSegmentCount": 0,
+        "derivedGeometryLengthKm": 4.875,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": "canonical-route-geometries.geojson",
+        "distanceComparison": {
+          "officialScheduleDistanceKm": 7,
+          "derivedGisGeometryLengthKm": 4.875,
+          "differenceKm": -2.125,
+          "differencePercentOfSchedule": -30.4,
+          "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+        }
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": true,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-f9",
+      "operatorId": "reavaya",
+      "routeCode": "F9",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": true,
+        "title": "Mapetla to Thokoza Park",
+        "distanceKmOneDirection": 4.6,
+        "pathDescription": "From Tshithuthune Avenue / Sekhukhune Street via Manotshe Extension, Mabalane Street and Chris Hani Road to Thokoza Park Station.",
+        "publishedStops": [
+          "Thokoza park",
+          "Chris Hani&Dinizulu",
+          "Mabalane&Umkhomazi",
+          "pick&Pay",
+          "Umhlali&Mabalane",
+          "Phumuzile Primary school",
+          "Mabalane&Manotshe",
+          "Teleka Semane&Manotshe",
+          "Mapetla High school",
+          "Fanie&Sekhukhune",
+          "Chiawela flats"
+        ],
+        "publishedStopCount": 11,
+        "stopListStatus": "published-feeder-complementary-list-order-preserved",
+        "stopDirectionality": "not-separated-by-source",
+        "narrativeMentionedStations": [],
+        "sourcePages": {
+          "routeDescription": 217,
+          "distanceTable": 219,
+          "stopList": 225
+        }
+      },
+      "geometry": {
+        "spatialCoverage": "canonical-coded-geometry",
+        "canonicalGeometryAvailable": true,
+        "supplementalSegmentCount": 0,
+        "derivedGeometryLengthKm": 4.928,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": "canonical-route-geometries.geojson",
+        "distanceComparison": {
+          "officialScheduleDistanceKm": 4.6,
+          "derivedGisGeometryLengthKm": 4.928,
+          "differenceKm": 0.328,
+          "differencePercentOfSchedule": 7.1,
+          "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+        }
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": true,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-f10",
+      "operatorId": "reavaya",
+      "routeCode": "F10",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 30,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": true,
+        "title": "Pimville to Klipspruit Rea Vaya Station (Lakeview Station)",
+        "distanceKmOneDirection": 4,
+        "pathDescription": "From Morobadilepe Street / Mndoni Street in Pimville via Modjadji, Mokoerekoere, Mokgalo, Mohloka, Chris Hani Road and Klipspruit Valley Road to Klipspruit Valley Station.",
+        "publishedStops": [
+          "Lakeview",
+          "Chris Hani road&Klipspruit Valley Road",
+          "Kennys Brick&Tiles",
+          "Mohloka str&Modjadji",
+          "Pimville mall",
+          "Mpondonde&Modjadji",
+          "Mpondonde&Morobadilepe"
+        ],
+        "publishedStopCount": 7,
+        "stopListStatus": "published-feeder-complementary-list-order-preserved",
+        "stopDirectionality": "not-separated-by-source",
+        "narrativeMentionedStations": [],
+        "sourcePages": {
+          "routeDescription": 217,
+          "distanceTable": 219,
+          "stopList": 225
+        }
+      },
+      "geometry": {
+        "spatialCoverage": "canonical-coded-geometry",
+        "canonicalGeometryAvailable": true,
+        "supplementalSegmentCount": 0,
+        "derivedGeometryLengthKm": 3.492,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": "canonical-route-geometries.geojson",
+        "distanceComparison": {
+          "officialScheduleDistanceKm": 4,
+          "derivedGisGeometryLengthKm": 3.492,
+          "differenceKm": -0.508,
+          "differencePercentOfSchedule": -12.7,
+          "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+        }
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": true,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-f11",
+      "operatorId": "reavaya",
+      "routeCode": "F11",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 20,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": true,
+        "title": "Bellevue East / Yeoville to City",
+        "distanceKmOneDirection": 6.6,
+        "pathDescription": "From St Georges Street / Delarey through Bellevue East and Yeoville via Bedford, Raleigh, Joe Slovo, Doris, Tudhope, Abel, Kotze and the inner city; return uses Pretoria Street and Hillbrow Street because of one-way roads.",
+        "publishedStops": [
+          "Library station east",
+          "Rissik station",
+          "Park station",
+          "Jhb Theatre",
+          "Kotze",
+          "Pretoria&Klein",
+          "Pretoria&Twist",
+          "Pretoria&Claim",
+          "Abel&Catherine",
+          "Abel&Tudhope",
+          "Tudhope&Barnato",
+          "Hillbrow&Tudhope",
+          "Hillbrow&Joe Slovo",
+          "Raleigh&Joe Slovo",
+          "Raleigh&Fortesque",
+          "Raleigh&Kenmere",
+          "Bedford&Muller",
+          "St George&Cavedish",
+          "St George&Arthur",
+          "St George&Delarey"
+        ],
+        "publishedStopCount": 20,
+        "stopListStatus": "published-feeder-complementary-list-order-preserved",
+        "stopDirectionality": "not-separated-by-source",
+        "narrativeMentionedStations": [],
+        "sourcePages": {
+          "routeDescription": 217,
+          "distanceTable": 219,
+          "stopList": 225
+        }
+      },
+      "geometry": {
+        "spatialCoverage": "canonical-coded-geometry",
+        "canonicalGeometryAvailable": true,
+        "supplementalSegmentCount": 3,
+        "derivedGeometryLengthKm": 6.287,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": "canonical-route-geometries.geojson",
+        "distanceComparison": {
+          "officialScheduleDistanceKm": 6.6,
+          "derivedGisGeometryLengthKm": 6.287,
+          "differenceKm": -0.313,
+          "differencePercentOfSchedule": -4.7,
+          "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+        }
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": true,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-f12",
+      "operatorId": "reavaya",
+      "routeCode": "F12",
+      "routeFamily": "feeder",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": 20,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": true,
+        "title": "Parktown Distribution Route",
+        "distanceKmOneDirection": 5.1,
+        "pathDescription": "From Constitution Hill Station around the Metropolitan Centre via Joubert / Loveday / Hoofd, then toward Victoria, Jubilee, York, Carse O'Gowrie and the Parktown / hospital precinct.",
+        "publishedStops": [
+          "Library station east",
+          "Rissik station",
+          "Park station",
+          "Jhb Theatre",
+          "Empire&Queens",
+          "Clarendon&Nel",
+          "Boundary&Willie",
+          "Carse O Gowrie&Jubilee",
+          "Wits Medical school",
+          "Jhb hospital",
+          "St Davids and Business school",
+          "St Andrews and Blackwood",
+          "Victoria&Empire",
+          "Conhill",
+          "Park station",
+          "Harrison station",
+          "Library station east"
+        ],
+        "publishedStopCount": 17,
+        "stopListStatus": "published-feeder-complementary-list-order-preserved",
+        "stopDirectionality": "not-separated-by-source",
+        "narrativeMentionedStations": [],
+        "sourcePages": {
+          "routeDescription": 217,
+          "distanceTable": 219,
+          "stopList": 226
+        }
+      },
+      "geometry": {
+        "spatialCoverage": "canonical-coded-geometry",
+        "canonicalGeometryAvailable": true,
+        "supplementalSegmentCount": 0,
+        "derivedGeometryLengthKm": 7.469,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": "canonical-route-geometries.geojson",
+        "distanceComparison": {
+          "officialScheduleDistanceKm": 5.1,
+          "derivedGisGeometryLengthKm": 7.469,
+          "differenceKm": 2.369,
+          "differencePercentOfSchedule": 46.5,
+          "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+        }
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": true,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-t1",
+      "operatorId": "reavaya",
+      "routeCode": "T1",
+      "routeFamily": "trunk",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 3,
+        "publishedOffPeakHeadwayMinutes": 15,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": false
+      },
+      "geometry": {
+        "spatialCoverage": "canonical-coded-geometry",
+        "canonicalGeometryAvailable": true,
+        "supplementalSegmentCount": 22,
+        "derivedGeometryLengthKm": 25.356,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": "canonical-route-geometries.geojson",
+        "distanceComparison": null
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": true,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-t2",
+      "operatorId": "reavaya",
+      "routeCode": "T2",
+      "routeFamily": "trunk",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 10,
+        "publishedOffPeakHeadwayMinutes": null,
+        "offPeakServicePublished": false,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": true,
+        "title": "Thokoza Park to Braamfontein via Soweto Highway",
+        "distanceKmOneDirection": 22.5,
+        "pathDescription": "From Thokoza Park BRT Station via Chris Hani Road, Klipspruit Valley Road, Pela, Mooki, Soweto Highway, Pat Mbatha Bus and Taxiway, Miriam Makeba, Market and Rissik into Braamfontein / inner city, returning via Park and Harrison.",
+        "publishedStops": null,
+        "publishedStopCount": null,
+        "stopListStatus": "route-specific-ordered-stop-table-not-published-in-schedule-7",
+        "stopDirectionality": null,
+        "narrativeMentionedStations": [
+          "Thokoza Park BRT Station",
+          "Rissik Station",
+          "Park Station",
+          "JHB Theatre",
+          "Harrison Station"
+        ],
+        "sourcePages": {
+          "routeDescription": 218,
+          "distanceTable": 219,
+          "stopList": null
+        }
+      },
+      "geometry": {
+        "spatialCoverage": "canonical-coded-geometry",
+        "canonicalGeometryAvailable": true,
+        "supplementalSegmentCount": 17,
+        "derivedGeometryLengthKm": 22.315,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": "canonical-route-geometries.geojson",
+        "distanceComparison": {
+          "officialScheduleDistanceKm": 22.5,
+          "derivedGisGeometryLengthKm": 22.315,
+          "differenceKm": -0.185,
+          "differencePercentOfSchedule": -0.8,
+          "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+        }
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": true,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    },
+    {
+      "id": "reavaya-t3",
+      "operatorId": "reavaya",
+      "routeCode": "T3",
+      "routeFamily": "trunk",
+      "mode": "bus",
+      "currentOperatingRouteInventory": true,
+      "servicePattern": {
+        "publishedPeakHeadwayMinutes": 3,
+        "publishedOffPeakHeadwayMinutes": 15,
+        "offPeakServicePublished": true,
+        "exactPeakWindow": null,
+        "exactOffPeakWindow": null,
+        "windowVerificationStatus": "not-normalized-due-to-source-wording-conflict",
+        "exactDeparturesStored": false,
+        "realtimeStored": false
+      },
+      "currentInventoryVerification": {
+        "routeCode": "official-current-operating-routes-page",
+        "routeFamily": "official-current-operating-routes-page",
+        "publishedHeadway": "official-current-operating-routes-page",
+        "endpointPair": false,
+        "stopSequence": false,
+        "stopCoordinates": false,
+        "routeGeometry": false,
+        "exactTimetable": false,
+        "realtime": false
+      },
+      "phase1bSchedule7": {
+        "available": true,
+        "title": "Thokoza Park to Parktown and Library Gardens",
+        "distanceKmOneDirection": 23,
+        "pathDescription": "From Thokoza Park BRT Station via Chris Hani Road, Klipspruit Valley Road, Pela, Mooki, Main Road, Canada Road, Commando, Fuel, Harmony, Perth, Kingsway, Stanley and Empire into Parktown and Library Gardens.",
+        "publishedStops": null,
+        "publishedStopCount": null,
+        "stopListStatus": "route-specific-ordered-stop-table-not-published-in-schedule-7",
+        "stopDirectionality": null,
+        "narrativeMentionedStations": [
+          "Thokoza Park BRT Station",
+          "Rissik Station",
+          "Park Station",
+          "JHB Theatre Station",
+          "Conhill Station",
+          "Library Gardens Station"
+        ],
+        "sourcePages": {
+          "routeDescription": 218,
+          "distanceTable": 219,
+          "stopList": null
+        }
+      },
+      "geometry": {
+        "spatialCoverage": "canonical-coded-geometry",
+        "canonicalGeometryAvailable": true,
+        "supplementalSegmentCount": 4,
+        "derivedGeometryLengthKm": 23.601,
+        "directionVerified": false,
+        "stopSequenceEncoded": false,
+        "geometryFile": "canonical-route-geometries.geojson",
+        "distanceComparison": {
+          "officialScheduleDistanceKm": 23,
+          "derivedGisGeometryLengthKm": 23.601,
+          "differenceKm": 0.601,
+          "differencePercentOfSchedule": 2.6,
+          "interpretation": "QA-only comparison; GIS polyline length is not automatically treated as Rea Vaya fare distance."
+        }
+      },
+      "fareReadiness": {
+        "currentFareDatasetAvailable": true,
+        "fareDatasetEffectiveFrom": "2026-07-01",
+        "fareDatasetEffectiveTo": "2027-06-30",
+        "fareDistanceKnownForArbitraryJourney": false,
+        "reason": "The fare schedule is available, but a passenger-specific Rea Vaya journey distance must still be established by the journey engine."
+      },
+      "userFacingCapabilities": {
+        "canShowRouteCode": true,
+        "canShowPublishedHeadway": true,
+        "canShowCanonicalRouteOnMap": true,
+        "canShowExactDeparture": false,
+        "canShowLiveArrival": false,
+        "canClaimVerifiedDirection": false
+      }
+    }
+  ]
+}

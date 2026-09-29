@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-09-17T18:59:56.585Z",
+  "operatorId": "reavaya",
+  "sourceFile": "raw/operating-routes.html",
+  "sourceBytes": 144365,
+  "codedRouteCount": 21,
+  "trunkRouteCount": 3,
+  "complementaryRouteCount": 6,
+  "feederRouteCount": 12,
+  "routesWithPeakHeadway": 21,
+  "routesWithOffPeakHeadway": 20,
+  "routesWithoutPublishedOffPeakHeadway": [
+    "T2"
+  ],
+  "missingSourceRouteCodes": [],
+  "duplicateRouteCodes": [],
+  "genericTimeWindowsNormalized": false,
+  "phase1CCodeCoverageClaimed": false,
+  "errorCount": 0,
+  "errors": [],
+  "warningCount": 3,
+  "warnings": [
+    "The current Operating Routes page contains overlapping generic peak/off-peak wording. Exact generic peak/off-peak time windows are therefore not normalized in this dataset.",
+    "Published route-family headway figures are descriptive service frequencies, not live countdowns or exact departure times.",
+    "Phase 1C(a) is operational, but this 21-route coded inventory must not be treated as proof that it contains every Phase 1C service."
+  ],
+  "qaPassed": true,
+  "notes": [
+    "The current official route page publishes three trunk, six complementary and twelve feeder codes.",
+    "T2 has no off-peak headway value in the current summary table and is stored as null rather than inferred.",
+    "Generic peak/off-peak periods are not normalized because the current page contains overlapping wording.",
+    "Phase 1C(a) operational status is recorded separately from the 21-route coded inventory.",
+    "No stops, geometry, journey duration, exact departure time or live ETA is inferred."
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "generatedAt": "2026-09-17T19:18:46.165Z",
+  "operatorId": "reavaya",
+  "phase": "1B(b)",
+  "officialPdfValidated": true,
+  "sourcePdfBytes": 2179175,
+  "routeCount": 12,
+  "familyCounts": {
+    "feeder": 7,
+    "complementary": 3,
+    "trunk": 2
+  },
+  "oneDirectionDistanceTotalKm": 144.5,
+  "stationInventoryCount": 25,
+  "routesWithPublishedStopLists": 10,
+  "routesWithoutPublishedStopLists": [
+    "T2",
+    "T3"
+  ],
+  "totalPublishedStopEntries": 170,
+  "routeStopCounts": {
+    "F6": 12,
+    "F7": 9,
+    "F8": 16,
+    "F9": 11,
+    "F10": 7,
+    "F11": 20,
+    "F12": 17,
+    "C4": 25,
+    "C5": 28,
+    "C6": 25,
+    "T2": null,
+    "T3": null
+  },
+  "codedInventoryCrossCheck": {
+    "filePresent": true,
+    "missingCodes": [],
+    "passed": true
+  },
+  "currentFareDatasetProtectedFromHistoricalTenderFare": true,
+  "exactTimetableNormalized": false,
+  "errorCount": 0,
+  "errors": [],
+  "warningCount": 4,
+  "warnings": [
+    "Published feeder/complementary stop-list order is preserved exactly as a source list, but directionality is not separated by the document; repeated stop names are therefore retained.",
+    "T2 and T3 have route narratives and distances but no route-specific ordered stop table in Schedule 7; no full trunk stop sequence is inferred.",
+    "The PDF contains only an Annexure B cover page labelled 'Weekday Timetables Sample'; no actual departure-time table is normalized from this file.",
+    "Schedule 7 contains 2025/26 fare values. Pulse already has a newer 2026/27 fare dataset, so the embedded tender fare table must not overwrite fares.json."
+  ],
+  "qaPassed": true
+}

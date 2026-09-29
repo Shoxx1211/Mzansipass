@@ -1,0 +1,14 @@
+{
+  "auditedAt": "2026-09-22T16:22:11.870Z",
+  "routeRowsParsed": 33,
+  "uniqueRouteNumbers": 33,
+  "partialExcerpt": true,
+  "completeOperatorSnapshot": false,
+  "geographyAvailable": false,
+  "stopGeometryAvailable": false,
+  "operatorTimetableValidated": false,
+  "currentFareValidated": false,
+  "passengerRoutingEnabled": false,
+  "sourceSha256": "c0abfdb8a298e0546d1ff6b0750d88d36d03adf8dd3363e0c6bf3ab5cdb41a99",
+  "conclusion": "Partial indexed inventory only; excluded from the live journey engine."
+}

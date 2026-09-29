@@ -1,6 +1,16 @@
 // src/services/location.ts
-// Pulse Transit - Premium Location Service
-// Features: Smart filtering, battery optimization, offline queue, geofencing
+// Pulse Transit - Location Service
+//
+// Features:
+// - Browser location permission handling
+// - Detects permission denied / GPS unavailable / timeout
+// - High-accuracy trip tracking
+// - Smart GPS filtering
+// - Speed and movement detection
+// - Battery optimisation
+// - Offline location queue
+// - Location caching
+// - Distance calculations
 
 import type { Location } from "../types";
 
@@ -15,7 +25,7 @@ export interface MovementMeta {
   confidence: number;
   isStale: boolean;
   isAccurate: boolean;
-  source: 'gps' | 'cache' | 'network';
+  source: "gps" | "cache" | "network";
 }
 
 export interface LocationQueueItem {
@@ -31,466 +41,1271 @@ export interface LocationOptions {
   batteryOptimized?: boolean;
 }
 
+export type LocationErrorCode =
+  | "PERMISSION_DENIED"
+  | "POSITION_UNAVAILABLE"
+  | "TIMEOUT"
+  | "NOT_SUPPORTED"
+  | "UNKNOWN";
+
+export class LocationServiceError extends Error {
+  code: LocationErrorCode;
+
+  constructor(code: LocationErrorCode, message: string) {
+    super(message);
+
+    this.name = "LocationServiceError";
+    this.code = code;
+
+    // Required for some older JS targets when extending Error.
+    Object.setPrototypeOf(this, LocationServiceError.prototype);
+  }
+}
+
 // ======================================================
 // CONFIGURATION
 // ======================================================
 
 const CONFIG = {
-  // Distance filtering
-  MIN_DISTANCE_KM: 0.005, // 5 meters (reduced from 2m for better filtering)
-  MAX_DISTANCE_JUMP_KM: 0.5, // 500m max jump between readings
-  
-  // Accuracy thresholds
-  MAX_ACCURACY_METERS: 100, // Stricter for better quality
+  // Ignore GPS drift smaller than 5 metres.
+  MIN_DISTANCE_KM: 0.005,
+
+  // Accuracy thresholds.
+  MAX_ACCURACY_METERS: 100,
   EXCELLENT_ACCURACY: 15,
   GOOD_ACCURACY: 30,
   FAIR_ACCURACY: 60,
-  
-  // Speed thresholds (km/h)
+
+  // Speed thresholds in km/h.
   WALKING_MIN_SPEED: 1,
   WALKING_MAX_SPEED: 8,
+
   RUNNING_MIN_SPEED: 8,
   RUNNING_MAX_SPEED: 15,
+
   CYCLING_MIN_SPEED: 15,
   CYCLING_MAX_SPEED: 30,
+
   VEHICLE_SPEED_THRESHOLD: 10,
+
+  // Anything above this is considered an implausible GPS result.
   MAX_PLAUSIBLE_SPEED: 180,
-  
-  // Smoothing
+
+  // Smoothing.
   SMOOTHING_WINDOW: 5,
   SPEED_SMOOTHING_WINDOW: 3,
-  
-  // Stale detection
-  STALE_LOCATION_MS: 10000, // 10 seconds
-  MAX_CACHE_AGE_MS: 30000, // 30 seconds
-  
-  // Battery optimization
+
+  // Stale location detection.
+  STALE_LOCATION_MS: 10000,
+
+  // Last-known-location cache.
+  MAX_CACHE_AGE_MS: 30000,
+
+  // Battery settings.
   BATTERY_SAVER_INTERVAL_MS: 10000,
   NORMAL_INTERVAL_MS: 3000,
-  
-  // Queue
+
+  // Offline queue.
   MAX_QUEUE_SIZE: 100,
-  OFFLINE_STORAGE_KEY: 'pulse_location_queue'
-};
+  OFFLINE_STORAGE_KEY: "pulse_location_queue",
+} as const;
 
 // ======================================================
 // INTERNAL STATE
 // ======================================================
 
 let history: Location[] = [];
+
 let speedHistory: number[] = [];
+
 let lastKnownLocation: Location | null = null;
+
 let lastUpdateTime = 0;
+
 let isBatteryOptimized = false;
+
 let locationQueue: LocationQueueItem[] = [];
-let isOnline = navigator.onLine;
+
+let isOnline =
+  typeof navigator !== "undefined"
+    ? navigator.onLine
+    : true;
 
 // ======================================================
 // NETWORK STATUS HANDLING
 // ======================================================
 
-window.addEventListener('online', () => {
-  isOnline = true;
-  flushLocationQueue();
-});
+if (typeof window !== "undefined") {
+  window.addEventListener("online", () => {
+    isOnline = true;
 
-window.addEventListener('offline', () => {
-  isOnline = false;
-  console.log('📡 App offline, queueing locations');
-});
+    void flushLocationQueue();
+  });
+
+  window.addEventListener("offline", () => {
+    isOnline = false;
+
+    console.log(
+      "📡 Pulse is offline. Location readings will be queued."
+    );
+  });
+}
 
 // ======================================================
-// QUEUE MANAGEMENT
+// LOCATION SUPPORT
 // ======================================================
 
-const loadQueue = () => {
-  try {
-    const saved = localStorage.getItem(CONFIG.OFFLINE_STORAGE_KEY);
-    if (saved) {
-      locationQueue = JSON.parse(saved);
-      console.log(`📦 Loaded ${locationQueue.length} queued locations`);
+export const isLocationSupported = (): boolean => {
+  return (
+    typeof navigator !== "undefined" &&
+    "geolocation" in navigator
+  );
+};
+
+// ======================================================
+// LOCATION PERMISSION STATUS
+// ======================================================
+
+/**
+ * Returns:
+ *
+ * "granted"    - permission already allowed
+ * "prompt"     - browser will ask the user
+ * "denied"     - permission blocked
+ * "unsupported" - Permissions API unavailable
+ *
+ * IMPORTANT:
+ * A granted browser permission does NOT necessarily mean
+ * the phone's system Location/GPS switch is turned on.
+ *
+ * getCurrentLocation() is still required to obtain an
+ * actual position.
+ */
+export const getLocationPermissionState =
+  async (): Promise<
+    PermissionState | "unsupported"
+  > => {
+    if (typeof navigator === "undefined") {
+      return "unsupported";
     }
-  } catch (error) {
-    console.error('Failed to load location queue:', error);
-  }
-};
 
-const saveQueue = () => {
-  try {
-    localStorage.setItem(CONFIG.OFFLINE_STORAGE_KEY, JSON.stringify(locationQueue));
-  } catch (error) {
-    console.error('Failed to save location queue:', error);
-  }
-};
+    if (!navigator.permissions?.query) {
+      return "unsupported";
+    }
 
-const addToQueue = (location: Location, meta: MovementMeta) => {
-  locationQueue.push({ location, meta, timestamp: Date.now() });
-  if (locationQueue.length > CONFIG.MAX_QUEUE_SIZE) {
-    locationQueue.shift();
-  }
-  saveQueue();
-};
+    try {
+      const permission =
+        await navigator.permissions.query({
+          name: "geolocation" as PermissionName,
+        });
 
-const flushLocationQueue = async () => {
-  if (locationQueue.length === 0) return;
-  
-  console.log(`📤 Flushing ${locationQueue.length} queued locations`);
-  
-  // Here you would send to your backend
-  // await api.batchSendLocations(locationQueue);
-  
-  locationQueue = [];
-  saveQueue();
-};
+      return permission.state;
+    } catch (error) {
+      console.warn(
+        "Could not read geolocation permission state:",
+        error
+      );
+
+      return "unsupported";
+    }
+  };
 
 // ======================================================
-// PUBLIC API - GET CURRENT LOCATION
+// GET CURRENT LOCATION
 // ======================================================
 
-export const getCurrentLocation = (options?: LocationOptions): Promise<Location> => {
+/**
+ * Requests one real location reading.
+ *
+ * Calling this function can trigger the browser's:
+ *
+ * "Allow Pulse to use your location?"
+ *
+ * permission popup.
+ *
+ * We deliberately DO NOT automatically return an old cached
+ * location when GPS/location fails. This allows the UI to tell
+ * the commuter that Location/GPS needs to be turned on.
+ */
+export const getCurrentLocation = (
+  options?: LocationOptions
+): Promise<Location> => {
   return new Promise((resolve, reject) => {
-    if (!navigator.geolocation) {
-      reject(new Error("Geolocation not supported"));
+    if (!isLocationSupported()) {
+      reject(
+        new LocationServiceError(
+          "NOT_SUPPORTED",
+          "Location is not supported on this device or browser."
+        )
+      );
+
       return;
     }
 
-    const opts = {
-      enableHighAccuracy: options?.enableHighAccuracy ?? !isBatteryOptimized,
-      timeout: options?.timeout ?? 15000,
-      maximumAge: options?.maximumAge ?? 0
+    const positionOptions: PositionOptions = {
+      enableHighAccuracy:
+        options?.enableHighAccuracy ??
+        !isBatteryOptimized,
+
+      timeout: options?.timeout ?? 12000,
+
+      maximumAge: options?.maximumAge ?? 0,
     };
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const loc = formatLocation(position);
-        updateState(loc);
-        
-        // Also update lastKnownLocation for caching
-        lastKnownLocation = loc;
+        const location =
+          formatLocation(position);
+
+        updateState(location);
+
+        lastKnownLocation = location;
         lastUpdateTime = Date.now();
-        
-        resolve(loc);
-      },
-      (error) => {
-        // Fallback to cached location
-        if (lastKnownLocation && Date.now() - lastUpdateTime < CONFIG.MAX_CACHE_AGE_MS) {
-          console.warn("⚠️ Using cached location");
-          resolve(lastKnownLocation);
-          return;
+
+        if (import.meta.env.DEV) {
+          console.log(
+            "📍 Current location acquired",
+            {
+              lat: location.lat.toFixed(6),
+              lng: location.lng.toFixed(6),
+              accuracy:
+                Math.round(
+                  location.accuracy ?? 0
+                ) + "m",
+            }
+          );
         }
-        reject(new Error(parseError(error)));
+
+        resolve(location);
       },
-      opts
+
+      (error) => {
+        const locationError =
+          createLocationError(error);
+
+        console.error(
+          "❌ Could not obtain location:",
+          locationError.code,
+          locationError.message
+        );
+
+        reject(locationError);
+      },
+
+      positionOptions
     );
   });
 };
 
 // ======================================================
-// PUBLIC API - WATCH LOCATION (ENHANCED)
+// WATCH LOCATION
 // ======================================================
 
+/**
+ * Starts continuous GPS tracking.
+ *
+ * This should normally be called AFTER the user starts a trip,
+ * not automatically when the entire Pulse app opens.
+ */
 export const watchLocation = (
-  onUpdate: (loc: Location, meta: MovementMeta) => void,
-  onError?: (err: any) => void,
+  onUpdate: (
+    location: Location,
+    meta: MovementMeta
+  ) => void,
+
+  /**
+   * First argument remains a STRING for backwards compatibility
+   * with the existing Pulse hook/UI.
+   *
+   * A second optional argument supplies the error code.
+   */
+  onError?: (
+    message: string,
+    code?: LocationErrorCode
+  ) => void,
+
   options?: LocationOptions
 ): number => {
-  if (!navigator.geolocation) {
-    throw new Error("Geolocation not supported");
+  if (!isLocationSupported()) {
+    throw new LocationServiceError(
+      "NOT_SUPPORTED",
+      "Location is not supported on this device or browser."
+    );
   }
 
-  const opts = {
-    enableHighAccuracy: options?.enableHighAccuracy ?? !isBatteryOptimized,
+  const positionOptions: PositionOptions = {
+    enableHighAccuracy:
+      options?.enableHighAccuracy ??
+      !isBatteryOptimized,
+
     timeout: options?.timeout ?? 15000,
-    maximumAge: options?.maximumAge ?? 0
+
+    maximumAge: options?.maximumAge ?? 0,
   };
 
   return navigator.geolocation.watchPosition(
     (position) => {
-      const loc = formatLocation(position);
-      const isAccurateFlag = isAccurate(loc);
-      
-      // Check for large GPS jumps
-      const previous = history[history.length - 1];
+      const location =
+        formatLocation(position);
+
+      const previous =
+        history[history.length - 1];
+
       let distance = 0;
       let shouldSkip = false;
-      
+
+      // ==================================================
+      // DISTANCE / GPS JUMP VALIDATION
+      // ==================================================
+
       if (previous) {
-        distance = calculateDistance(previous, loc);
-        
-        // Filter out impossible jumps
-        if (distance > CONFIG.MAX_DISTANCE_JUMP_KM && !isBatteryOptimized) {
-          console.log(`⚠️ Skipping GPS jump: ${distance.toFixed(2)}km`);
-          shouldSkip = true;
+        distance = calculateDistance(
+          previous,
+          location
+        );
+
+        /*
+         * Instead of blindly rejecting every reading that
+         * moved more than 500m, calculate the implied speed.
+         *
+         * This prevents real vehicle journeys from being
+         * discarded simply because the browser delivered
+         * the next GPS reading late.
+         */
+        if (
+          previous.timestamp &&
+          location.timestamp
+        ) {
+          const elapsedHours =
+            (location.timestamp -
+              previous.timestamp) /
+            3600000;
+
+          if (elapsedHours > 0) {
+            const impliedSpeed =
+              distance / elapsedHours;
+
+            if (
+              distance > 0.05 &&
+              impliedSpeed >
+                CONFIG.MAX_PLAUSIBLE_SPEED
+            ) {
+              console.warn(
+                "⚠️ Ignoring implausible GPS jump",
+                {
+                  distanceKm:
+                    distance.toFixed(3),
+
+                  impliedSpeedKmh:
+                    impliedSpeed.toFixed(1),
+                }
+              );
+
+              shouldSkip = true;
+            }
+          }
         }
-        
-        // Filter tiny movements (GPS drift)
-        if (distance < CONFIG.MIN_DISTANCE_KM) {
+
+        /*
+         * Filter normal stationary GPS drift.
+         *
+         * We keep lastKnownLocation updated below, but we
+         * don't add movements smaller than 5m to trip history.
+         */
+        if (
+          distance < CONFIG.MIN_DISTANCE_KM
+        ) {
           shouldSkip = true;
         }
       }
-      
-      if (shouldSkip) return;
-      
-      // Update state
-      updateState(loc);
-      lastKnownLocation = loc;
+
+      // ==================================================
+      // STALE READING DETECTION
+      // ==================================================
+
+      /*
+       * Use the timestamp of the GPS reading itself.
+       *
+       * The old implementation updated lastUpdateTime before
+       * checking staleness, making isStale almost always false.
+       */
+      const locationAge =
+        Math.max(
+          0,
+          Date.now() - position.timestamp
+        );
+
+      const isStale =
+        locationAge >
+        CONFIG.STALE_LOCATION_MS;
+
+      // ==================================================
+      // ALWAYS REMEMBER THE LATEST REAL POSITION
+      // ==================================================
+
+      lastKnownLocation = location;
       lastUpdateTime = Date.now();
-      
-      // Calculate speed (prefer GPS speed, fallback to calculated)
+
+      /*
+       * Skip GPS drift / impossible jumps from the trip
+       * calculation.
+       */
+      if (shouldSkip) {
+        return;
+      }
+
+      // ==================================================
+      // ACCEPT LOCATION
+      // ==================================================
+
+      updateState(location);
+
+      // ==================================================
+      // SPEED
+      // ==================================================
+
       let speed = 0;
-      if (position.coords.speed !== null && position.coords.speed !== undefined && position.coords.speed > 0) {
-        speed = position.coords.speed * 3.6;
+
+      /*
+       * navigator.geolocation reports speed in m/s.
+       * Pulse uses km/h.
+       */
+      if (
+        position.coords.speed !== null &&
+        position.coords.speed !== undefined &&
+        position.coords.speed >= 0
+      ) {
+        speed =
+          position.coords.speed * 3.6;
       } else {
         speed = getSmoothedSpeed();
       }
-      
-      // Validate speed
-      if (speed < 0 || speed > CONFIG.MAX_PLAUSIBLE_SPEED) {
+
+      // Reject impossible speed values.
+      if (
+        !Number.isFinite(speed) ||
+        speed < 0 ||
+        speed >
+          CONFIG.MAX_PLAUSIBLE_SPEED
+      ) {
         speed = getSmoothedSpeed();
       }
-      
-      // Update speed history
+
+      // ==================================================
+      // SPEED HISTORY
+      // ==================================================
+
       speedHistory.push(speed);
-      if (speedHistory.length > CONFIG.SPEED_SMOOTHING_WINDOW) {
+
+      if (
+        speedHistory.length >
+        CONFIG.SPEED_SMOOTHING_WINDOW
+      ) {
         speedHistory.shift();
       }
-      
-      // Check for stale location
-      const isStale = (Date.now() - lastUpdateTime) > CONFIG.STALE_LOCATION_MS;
-      
-      // Determine movement mode
-      const isMoving = speed > CONFIG.WALKING_MIN_SPEED;
-      const isWalking = speed >= CONFIG.WALKING_MIN_SPEED && speed <= CONFIG.WALKING_MAX_SPEED;
-      const isRunning = speed >= CONFIG.RUNNING_MIN_SPEED && speed <= CONFIG.RUNNING_MAX_SPEED;
-      const isCycling = speed >= CONFIG.CYCLING_MIN_SPEED && speed <= CONFIG.CYCLING_MAX_SPEED;
-      const isDriving = speed > CONFIG.VEHICLE_SPEED_THRESHOLD;
-      
+
+      // ==================================================
+      // MOVEMENT CLASSIFICATION
+      // ==================================================
+
+      const isMoving =
+        speed >
+        CONFIG.WALKING_MIN_SPEED;
+
+      const isWalking =
+        speed >=
+          CONFIG.WALKING_MIN_SPEED &&
+        speed <=
+          CONFIG.WALKING_MAX_SPEED;
+
+      const isRunning =
+        speed >=
+          CONFIG.RUNNING_MIN_SPEED &&
+        speed <=
+          CONFIG.RUNNING_MAX_SPEED;
+
+      const isCycling =
+        speed >=
+          CONFIG.CYCLING_MIN_SPEED &&
+        speed <=
+          CONFIG.CYCLING_MAX_SPEED;
+
+      const isDriving =
+        speed >
+        CONFIG.VEHICLE_SPEED_THRESHOLD;
+
+      // ==================================================
+      // META DATA
+      // ==================================================
+
       const meta: MovementMeta = {
-        speed: Math.round(speed * 10) / 10,
+        speed:
+          Math.round(speed * 10) / 10,
+
         isMoving,
+
         isWalking,
-        confidence: calculateConfidence(loc),
+
+        confidence:
+          calculateConfidence(location),
+
         isStale,
-        isAccurate: isAccurateFlag,
-        source: position.coords.speed ? 'gps' : 'network'
+
+        isAccurate:
+          isAccurate(location),
+
+        /*
+         * Browsers don't provide a completely reliable way
+         * to identify GPS vs network location.
+         *
+         * A direct speed measurement usually indicates a
+         * proper device positioning source.
+         */
+        source:
+          position.coords.speed !== null
+            ? "gps"
+            : "network",
       };
-      
-      // Queue if offline
+
+      // ==================================================
+      // OFFLINE QUEUE
+      // ==================================================
+
       if (!isOnline) {
-        addToQueue(loc, meta);
+        addToQueue(location, meta);
       }
-      
-      // Broadcast update
-      onUpdate(loc, meta);
-      
-      // Detailed logging (only in debug mode)
-      if (import.meta.env.DEV){
+
+      // ==================================================
+      // SEND LOCATION TO TRIP ENGINE / HOOK
+      // ==================================================
+
+      onUpdate(location, meta);
+
+      // ==================================================
+      // DEVELOPMENT LOGGING
+      // ==================================================
+
+      if (import.meta.env.DEV) {
         console.log("📍 GPS UPDATE", {
-          lat: loc.lat.toFixed(6),
-          lng: loc.lng.toFixed(6),
-          distance: distance.toFixed(3) + " km",
-          speed: speed.toFixed(1) + " km/h",
-          accuracy: loc.accuracy,
-          mode: isWalking ? "🚶" : isRunning ? "🏃" : isCycling ? "🚴" : isDriving ? "🚗" : "📍",
-          confidence: meta.confidence
+          lat: location.lat.toFixed(6),
+
+          lng: location.lng.toFixed(6),
+
+          distance:
+            distance.toFixed(3) +
+            " km",
+
+          speed:
+            speed.toFixed(1) +
+            " km/h",
+
+          accuracy:
+            Math.round(
+              location.accuracy ?? 0
+            ) + "m",
+
+          locationAge:
+            Math.round(locationAge / 1000) +
+            "s",
+
+          mode: isWalking
+            ? "🚶 walking"
+            : isRunning
+              ? "🏃 running"
+              : isCycling
+                ? "🚴 cycling"
+                : isDriving
+                  ? "🚗 vehicle"
+                  : "📍 stationary",
+
+          confidence:
+            meta.confidence,
+
+          stale:
+            meta.isStale,
         });
       }
     },
+
+    // ==================================================
+    // WATCH ERROR
+    // ==================================================
+
     (error) => {
-      console.error("❌ GPS ERROR:", error);
-      if (onError) {
-        onError(parseError(error));
-      }
+      const locationError =
+        createLocationError(error);
+
+      console.error(
+        "❌ GPS WATCH ERROR:",
+        locationError.code,
+        locationError.message
+      );
+
+      /*
+       * Keep first argument as a string so existing Pulse
+       * components using setError(error) don't break.
+       */
+      onError?.(
+        locationError.message,
+        locationError.code
+      );
     },
-    opts
+
+    positionOptions
   );
 };
 
 // ======================================================
-// PUBLIC API - CLEAR WATCH
+// CLEAR LOCATION WATCH
 // ======================================================
 
-export const clearLocationWatch = (watchId: number) => {
-  navigator.geolocation.clearWatch(watchId);
-};
-
-// ======================================================
-// PUBLIC API - BATTERY OPTIMIZATION
-// ======================================================
-
-export const setBatteryOptimized = (enabled: boolean) => {
-  isBatteryOptimized = enabled;
-  console.log(`🔋 Battery optimization: ${enabled ? 'ON' : 'OFF'}`);
-};
-
-export const isBatteryOptimizedMode = () => isBatteryOptimized;
-
-// ======================================================
-// PUBLIC API - GET LAST KNOWN LOCATION
-// ======================================================
-
-export const getLastKnownLocation = (): Location | null => {
-  if (lastKnownLocation && Date.now() - lastUpdateTime < CONFIG.MAX_CACHE_AGE_MS) {
-    return lastKnownLocation;
+export const clearLocationWatch = (
+  watchId: number
+): void => {
+  if (!isLocationSupported()) {
+    return;
   }
-  return null;
+
+  navigator.geolocation.clearWatch(
+    watchId
+  );
+
+  if (import.meta.env.DEV) {
+    console.log(
+      "🛑 GPS location watcher stopped"
+    );
+  }
 };
 
 // ======================================================
-// PUBLIC API - GET LOCATION HISTORY
+// BATTERY OPTIMIZATION
 // ======================================================
 
-export const getLocationHistory = (limit?: number): Location[] => {
-  if (limit && limit > 0) {
+export const setBatteryOptimized = (
+  enabled: boolean
+): void => {
+  isBatteryOptimized = enabled;
+
+  console.log(
+    `🔋 Battery optimisation: ${
+      enabled ? "ON" : "OFF"
+    }`
+  );
+};
+
+export const isBatteryOptimizedMode =
+  (): boolean => {
+    return isBatteryOptimized;
+  };
+
+// ======================================================
+// GET LAST KNOWN LOCATION
+// ======================================================
+
+/**
+ * This is useful for displaying the most recent position in
+ * the UI, but SHOULD NOT be used to silently bypass a failed
+ * Start Trip location request.
+ */
+export const getLastKnownLocation =
+  (): Location | null => {
+    if (!lastKnownLocation) {
+      return null;
+    }
+
+    const age =
+      Date.now() - lastUpdateTime;
+
+    if (
+      age <= CONFIG.MAX_CACHE_AGE_MS
+    ) {
+      return lastKnownLocation;
+    }
+
+    return null;
+  };
+
+// ======================================================
+// LOCATION HISTORY
+// ======================================================
+
+export const getLocationHistory = (
+  limit?: number
+): Location[] => {
+  if (
+    limit !== undefined &&
+    limit > 0
+  ) {
     return history.slice(-limit);
   }
+
   return [...history];
 };
 
-export const clearLocationHistory = () => {
-  history = [];
-  speedHistory = [];
-  console.log("🗑️ Location history cleared");
+export const clearLocationHistory =
+  (): void => {
+    history = [];
+
+    speedHistory = [];
+
+    console.log(
+      "🗑️ Location history cleared"
+    );
+  };
+
+// ======================================================
+// DISTANCE CALCULATION
+// ======================================================
+
+/**
+ * Calculates distance between two coordinates using the
+ * Haversine formula.
+ *
+ * Returns kilometres.
+ */
+export const calculateDistance = (
+  loc1: Location,
+  loc2: Location
+): number => {
+  const EARTH_RADIUS_KM = 6371;
+
+  const dLat = deg2rad(
+    loc2.lat - loc1.lat
+  );
+
+  const dLon = deg2rad(
+    loc2.lng - loc1.lng
+  );
+
+  const lat1 =
+    deg2rad(loc1.lat);
+
+  const lat2 =
+    deg2rad(loc2.lat);
+
+  const a =
+    Math.sin(dLat / 2) *
+      Math.sin(dLat / 2) +
+    Math.cos(lat1) *
+      Math.cos(lat2) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+
+  const c =
+    2 *
+    Math.atan2(
+      Math.sqrt(a),
+      Math.sqrt(1 - a)
+    );
+
+  return EARTH_RADIUS_KM * c;
 };
 
 // ======================================================
-// PUBLIC API - DISTANCE CALCULATION
+// SPEED CALCULATION
 // ======================================================
 
-export const calculateDistance = (loc1: Location, loc2: Location): number => {
-  const R = 6371; // Earth's radius in km
-  const dLat = deg2rad(loc2.lat - loc1.lat);
-  const dLon = deg2rad(loc2.lng - loc1.lng);
-  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(deg2rad(loc1.lat)) * Math.cos(deg2rad(loc2.lat)) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-};
-
-// ======================================================
-// PUBLIC API - SPEED CALCULATION
-// ======================================================
-
-export const calculateSpeed = (loc1: Location, loc2: Location): number => {
-  if (!loc1.timestamp || !loc2.timestamp) return 0;
-  
-  const distance = calculateDistance(loc1, loc2);
-  const hours = (loc2.timestamp - loc1.timestamp) / 3600000;
-  
-  if (hours <= 0) return 0;
-  
-  const speed = distance / hours;
-  
-  if (!Number.isFinite(speed) || speed < 0 || speed > CONFIG.MAX_PLAUSIBLE_SPEED) {
+/**
+ * Calculates speed between two locations in km/h.
+ */
+export const calculateSpeed = (
+  loc1: Location,
+  loc2: Location
+): number => {
+  if (
+    !loc1.timestamp ||
+    !loc2.timestamp
+  ) {
     return 0;
   }
-  
+
+  const distance =
+    calculateDistance(loc1, loc2);
+
+  const elapsedMilliseconds =
+    loc2.timestamp -
+    loc1.timestamp;
+
+  if (
+    elapsedMilliseconds <= 0
+  ) {
+    return 0;
+  }
+
+  const hours =
+    elapsedMilliseconds /
+    3600000;
+
+  const speed =
+    distance / hours;
+
+  if (
+    !Number.isFinite(speed) ||
+    speed < 0 ||
+    speed >
+      CONFIG.MAX_PLAUSIBLE_SPEED
+  ) {
+    return 0;
+  }
+
   return speed;
 };
 
 // ======================================================
-// PUBLIC API - UTILITIES
+// LOCATION AGE / STALE STATUS
 // ======================================================
 
-export const isLocationStale = (): boolean => {
-  return (Date.now() - lastUpdateTime) > CONFIG.STALE_LOCATION_MS;
-};
+export const isLocationStale =
+  (): boolean => {
+    if (!lastUpdateTime) {
+      return true;
+    }
 
-export const getLocationAge = (): number | null => {
-  if (!lastUpdateTime) return null;
-  return Date.now() - lastUpdateTime;
-};
+    return (
+      Date.now() -
+        lastUpdateTime >
+      CONFIG.STALE_LOCATION_MS
+    );
+  };
 
-export const getMovementMode = (speed: number): string => {
-  if (speed < CONFIG.WALKING_MIN_SPEED) return "stationary";
-  if (speed <= CONFIG.WALKING_MAX_SPEED) return "walking";
-  if (speed <= CONFIG.RUNNING_MAX_SPEED) return "running";
-  if (speed <= CONFIG.CYCLING_MAX_SPEED) return "cycling";
+export const getLocationAge =
+  (): number | null => {
+    if (!lastUpdateTime) {
+      return null;
+    }
+
+    return (
+      Date.now() -
+      lastUpdateTime
+    );
+  };
+
+// ======================================================
+// MOVEMENT MODE
+// ======================================================
+
+export const getMovementMode = (
+  speed: number
+): string => {
+  if (
+    speed <
+    CONFIG.WALKING_MIN_SPEED
+  ) {
+    return "stationary";
+  }
+
+  if (
+    speed <=
+    CONFIG.WALKING_MAX_SPEED
+  ) {
+    return "walking";
+  }
+
+  if (
+    speed <=
+    CONFIG.RUNNING_MAX_SPEED
+  ) {
+    return "running";
+  }
+
+  if (
+    speed <=
+    CONFIG.CYCLING_MAX_SPEED
+  ) {
+    return "cycling";
+  }
+
   return "driving";
 };
 
 // ======================================================
-// PRIVATE HELPERS
+// OFFLINE QUEUE
 // ======================================================
 
-const getSmoothedSpeed = (): number => {
-  if (history.length < 2) return 0;
-  
-  const recentSpeeds: number[] = [];
-  const startIdx = Math.max(0, history.length - CONFIG.SMOOTHING_WINDOW);
-  
-  for (let i = startIdx + 1; i < history.length; i++) {
-    const speed = calculateSpeed(history[i - 1], history[i]);
-    if (speed > 0 && speed < CONFIG.MAX_PLAUSIBLE_SPEED) {
-      recentSpeeds.push(speed);
-    }
+const loadQueue = (): void => {
+  if (
+    typeof localStorage ===
+    "undefined"
+  ) {
+    return;
   }
-  
-  if (recentSpeeds.length === 0) return 0;
-  
-  // Median smoothing (more robust than average)
-  recentSpeeds.sort((a, b) => a - b);
-  const mid = Math.floor(recentSpeeds.length / 2);
-  return recentSpeeds.length % 2 === 0 
-    ? (recentSpeeds[mid - 1] + recentSpeeds[mid]) / 2
-    : recentSpeeds[mid];
+
+  try {
+    const saved =
+      localStorage.getItem(
+        CONFIG.OFFLINE_STORAGE_KEY
+      );
+
+    if (!saved) {
+      return;
+    }
+
+    const parsed =
+      JSON.parse(saved);
+
+    if (Array.isArray(parsed)) {
+      locationQueue = parsed;
+
+      console.log(
+        `📦 Loaded ${locationQueue.length} queued location readings`
+      );
+    }
+  } catch (error) {
+    console.error(
+      "Failed to load location queue:",
+      error
+    );
+
+    locationQueue = [];
+  }
 };
 
-const updateState = (loc: Location) => {
-  history.push(loc);
-  if (history.length > CONFIG.SMOOTHING_WINDOW) {
+const saveQueue = (): void => {
+  if (
+    typeof localStorage ===
+    "undefined"
+  ) {
+    return;
+  }
+
+  try {
+    localStorage.setItem(
+      CONFIG.OFFLINE_STORAGE_KEY,
+
+      JSON.stringify(
+        locationQueue
+      )
+    );
+  } catch (error) {
+    console.error(
+      "Failed to save location queue:",
+      error
+    );
+  }
+};
+
+const addToQueue = (
+  location: Location,
+  meta: MovementMeta
+): void => {
+  locationQueue.push({
+    location,
+    meta,
+    timestamp: Date.now(),
+  });
+
+  if (
+    locationQueue.length >
+    CONFIG.MAX_QUEUE_SIZE
+  ) {
+    locationQueue.shift();
+  }
+
+  saveQueue();
+};
+
+/**
+ * This currently clears the local queue.
+ *
+ * Replace the marked section later with the backend API call
+ * when Pulse location synchronisation is connected.
+ */
+const flushLocationQueue =
+  async (): Promise<void> => {
+    if (
+      locationQueue.length === 0
+    ) {
+      return;
+    }
+
+    if (!isOnline) {
+      return;
+    }
+
+    console.log(
+      `📤 ${locationQueue.length} queued location readings ready to sync`
+    );
+
+    try {
+      /*
+       * FUTURE BACKEND:
+       *
+       * await api.batchSendLocations(locationQueue);
+       */
+
+      locationQueue = [];
+
+      saveQueue();
+    } catch (error) {
+      console.error(
+        "Could not flush location queue:",
+        error
+      );
+    }
+  };
+
+// ======================================================
+// PRIVATE - SMOOTH SPEED
+// ======================================================
+
+const getSmoothedSpeed =
+  (): number => {
+    if (history.length < 2) {
+      return 0;
+    }
+
+    const recentSpeeds: number[] =
+      [];
+
+    const startIndex =
+      Math.max(
+        0,
+
+        history.length -
+          CONFIG.SMOOTHING_WINDOW
+      );
+
+    for (
+      let index =
+        startIndex + 1;
+
+      index < history.length;
+
+      index++
+    ) {
+      const calculated =
+        calculateSpeed(
+          history[index - 1],
+          history[index]
+        );
+
+      if (
+        calculated > 0 &&
+        calculated <
+          CONFIG.MAX_PLAUSIBLE_SPEED
+      ) {
+        recentSpeeds.push(
+          calculated
+        );
+      }
+    }
+
+    if (
+      recentSpeeds.length === 0
+    ) {
+      return 0;
+    }
+
+    /*
+     * Median is less affected by one bad GPS reading than
+     * a simple average.
+     */
+    recentSpeeds.sort(
+      (a, b) => a - b
+    );
+
+    const middle =
+      Math.floor(
+        recentSpeeds.length / 2
+      );
+
+    if (
+      recentSpeeds.length % 2 ===
+      0
+    ) {
+      return (
+        (recentSpeeds[
+          middle - 1
+        ] +
+          recentSpeeds[
+            middle
+          ]) /
+        2
+      );
+    }
+
+    return recentSpeeds[middle];
+  };
+
+// ======================================================
+// PRIVATE - UPDATE LOCATION HISTORY
+// ======================================================
+
+const updateState = (
+  location: Location
+): void => {
+  history.push(location);
+
+  if (
+    history.length >
+    CONFIG.SMOOTHING_WINDOW
+  ) {
     history.shift();
   }
 };
 
-const isAccurate = (loc: Location): boolean => {
-  const accuracy = loc.accuracy ?? 999;
-  return accuracy <= CONFIG.MAX_ACCURACY_METERS;
+// ======================================================
+// PRIVATE - ACCURACY
+// ======================================================
+
+const isAccurate = (
+  location: Location
+): boolean => {
+  const accuracy =
+    location.accuracy ?? 999;
+
+  return (
+    accuracy <=
+    CONFIG.MAX_ACCURACY_METERS
+  );
 };
 
-const calculateConfidence = (loc: Location): number => {
-  const accuracy = loc.accuracy ?? 100;
-  
-  if (accuracy <= CONFIG.EXCELLENT_ACCURACY) return 0.98;
-  if (accuracy <= CONFIG.GOOD_ACCURACY) return 0.9;
-  if (accuracy <= CONFIG.FAIR_ACCURACY) return 0.75;
-  if (accuracy <= CONFIG.MAX_ACCURACY_METERS) return 0.6;
+// ======================================================
+// PRIVATE - CONFIDENCE
+// ======================================================
+
+const calculateConfidence = (
+  location: Location
+): number => {
+  const accuracy =
+    location.accuracy ?? 100;
+
+  if (
+    accuracy <=
+    CONFIG.EXCELLENT_ACCURACY
+  ) {
+    return 0.98;
+  }
+
+  if (
+    accuracy <=
+    CONFIG.GOOD_ACCURACY
+  ) {
+    return 0.9;
+  }
+
+  if (
+    accuracy <=
+    CONFIG.FAIR_ACCURACY
+  ) {
+    return 0.75;
+  }
+
+  if (
+    accuracy <=
+    CONFIG.MAX_ACCURACY_METERS
+  ) {
+    return 0.6;
+  }
+
   return 0.4;
 };
 
-const formatLocation = (position: GeolocationPosition): Location => ({
-  lat: position.coords.latitude,
-  lng: position.coords.longitude,
-  accuracy: position.coords.accuracy ?? 100,
-  speed: position.coords.speed !== null && position.coords.speed !== undefined 
-    ? position.coords.speed * 3.6 
-    : 0,
-  heading: position.coords.heading ?? undefined,
-  altitude: position.coords.altitude ?? undefined,
-  timestamp: position.timestamp
-});
+// ======================================================
+// PRIVATE - FORMAT GEOLOCATION POSITION
+// ======================================================
 
-const parseError = (error: GeolocationPositionError): string => {
+const formatLocation = (
+  position: GeolocationPosition
+): Location => {
+  return {
+    lat:
+      position.coords.latitude,
+
+    lng:
+      position.coords.longitude,
+
+    accuracy:
+      position.coords.accuracy ??
+      100,
+
+    /*
+     * Browser speed is metres/second.
+     * Pulse stores/displays km/h.
+     */
+    speed:
+      position.coords.speed !==
+        null &&
+      position.coords.speed !==
+        undefined
+        ? position.coords.speed *
+          3.6
+        : 0,
+
+    heading:
+      position.coords.heading ??
+      undefined,
+
+    altitude:
+      position.coords.altitude ??
+      undefined,
+
+    timestamp:
+      position.timestamp,
+  };
+};
+
+// ======================================================
+// PRIVATE - LOCATION ERRORS
+// ======================================================
+
+const createLocationError = (
+  error: GeolocationPositionError
+): LocationServiceError => {
   switch (error.code) {
-    case error.PERMISSION_DENIED:
-      return "Location permission denied. Please enable in settings.";
-    case error.POSITION_UNAVAILABLE:
-      return "Location unavailable. Check GPS signal.";
-    case error.TIMEOUT:
-      return "Location request timed out. Please try again.";
+    case 1:
+      return new LocationServiceError(
+        "PERMISSION_DENIED",
+
+        "Pulse needs location permission to track your trip. Please allow location access and try again."
+      );
+
+    case 2:
+      return new LocationServiceError(
+        "POSITION_UNAVAILABLE",
+
+        "Your location is unavailable. Please make sure Location/GPS is turned on and try again."
+      );
+
+    case 3:
+      return new LocationServiceError(
+        "TIMEOUT",
+
+        "Pulse could not get your location in time. Make sure Location/GPS is turned on, move to an area with a clear signal, and try again."
+      );
+
     default:
-      return "Unknown location error";
+      return new LocationServiceError(
+        "UNKNOWN",
+
+        "Pulse could not determine your location. Please try again."
+      );
   }
 };
 
-const deg2rad = (deg: number): number => deg * (Math.PI / 180);
+// ======================================================
+// PRIVATE - DEGREES TO RADIANS
+// ======================================================
+
+const deg2rad = (
+  degrees: number
+): number => {
+  return (
+    degrees *
+    (Math.PI / 180)
+  );
+};
 
 // ======================================================
 // INITIALIZATION
 // ======================================================
 
 loadQueue();
-flushLocationQueue(); // Initial flush if online
 
-console.log("📍 Location service initialized");
+if (isOnline) {
+  void flushLocationQueue();
+}
+
+console.log(
+  "📍 Pulse location service initialized"
+);

@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "operatorId": "gautrain",
+  "retrievedAt": "2026-09-17",
+  "sources": [
+    {
+      "authority": "Gautrain",
+      "title": "General Information",
+      "url": "https://www.gautrain.co.za/commuter/generalinformation",
+      "sourceType": "official-web-page",
+      "confidence": "official"
+    },
+    {
+      "authority": "Gautrain",
+      "title": "Fares / Trip Planning Information",
+      "url": "https://www.gautrain.co.za/commuter/farecalc",
+      "sourceType": "official-web-page",
+      "confidence": "official"
+    }
+  ],
+  "publishedNetworkWindow": {
+    "start": "05:30",
+    "end": "20:30",
+    "appliesTo": [
+      "train",
+      "bus"
+    ],
+    "interpretation": "published overall Gautrain operating window",
+    "routeSpecificGuarantee": false,
+    "note": "This does not mean every train service or feeder bus route has departures continuously throughout the full window."
+  },
+  "rail": {
+    "weekday": {
+      "peak": {
+        "headwayMinutes": 10,
+        "periods": [
+          "06:00-08:30",
+          "15:00-18:30"
+        ],
+        "sourceMeaning": "Gautrain states trains depart at 10-minute intervals during peak periods."
+      },
+      "offPeak": {
+        "headwayMinutes": 20,
+        "periods": [
+          "05:30-06:00",
+          "08:30-15:00",
+          "18:30-20:30"
+        ],
+        "sourceMeaning": "Gautrain states trains depart at 20-minute intervals during off-peak periods."
+      }
+    },
+    "weekendAndPublicHoliday": {
+      "appliesExplicitlyToServiceIds": [
+        "gautrain-north-south",
+        "gautrain-east-west"
+      ],
+      "periods": [
+        {
+          "start": "05:30",
+          "end": "09:00",
+          "headwayMinutes": 30
+        },
+        {
+          "start": "09:00",
+          "end": "16:00",
+          "headwayMinutes": 20
+        },
+        {
+          "start": "16:00",
+          "end": "20:30",
+          "headwayMinutes": 30
+        }
+      ],
+      "airportServiceFrequency": "not-normalized-from-this-source",
+      "note": "The published weekend/public-holiday frequency wording specifically names the North-South and East-West lines. No Airport Service weekend frequency is inferred."
+    },
+    "exactDepartureTimesAvailable": false,
+    "realtimeAvailableInDataset": false,
+    "timetableStatus": "frequency-rules-only"
+  },
+  "feederBus": {
+    "routeInventoryCount": 45,
+    "busRouteCount": 27,
+    "midibusRouteCount": 18,
+    "publishedNetworkWindow": {
+      "start": "05:30",
+      "end": "20:30"
+    },
+    "weekendAvailability": {
+      "status": "limited",
+      "routeSpecificScheduleKnown": false,
+      "note": "Gautrain warns that bus services are limited over weekends. Pulse must check a route-specific schedule before presenting weekend availability as confirmed."
+    },
+    "routeSpecificSchedulesNormalized": false,
+    "stopSequencesNormalized": false,
+    "stopCoordinatesNormalized": false,
+    "liveVehicleLocationsAvailableInDataset": false
+  },
+  "appRules": [
+    "Do not convert published headways into an exact departure time unless a verified timetable or live departure source is available.",
+    "Do not claim that every Gautrain feeder bus operates for the entire 05:30-20:30 network window.",
+    "Do not claim weekend availability for an individual feeder route unless route-specific service has been verified.",
+    "Use 10-minute weekday peak and 20-minute weekday off-peak train headways as published frequency information, not as live countdowns.",
+    "Use the published weekend/public-holiday frequency pattern only for the North-South and East-West services unless additional official evidence supports the Airport Service.",
+    "Do not generate a rail ETA merely from frequency information."
+  ]
+}

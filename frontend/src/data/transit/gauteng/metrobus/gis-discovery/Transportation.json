@@ -1,0 +1,758 @@
+{
+ "currentVersion": 10.91,
+ "serviceDescription": "",
+ "mapName": "Transportation",
+ "description": "",
+ "copyrightText": "",
+ "supportsDynamicLayers": true,
+ "layers": [
+  {
+   "id": 33,
+   "name": "Transport Plans",
+   "parentLayerId": -1,
+   "defaultVisibility": false,
+   "subLayerIds": [
+    32,
+    30
+   ],
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Group Layer"
+  },
+  {
+   "id": 32,
+   "name": "Transport Master Plans (TMP) Study Areas",
+   "parentLayerId": 33,
+   "defaultVisibility": false,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolygon"
+  },
+  {
+   "id": 30,
+   "name": "Parking Management Plan Study Areas",
+   "parentLayerId": 33,
+   "defaultVisibility": false,
+   "subLayerIds": null,
+   "minScale": 100000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolygon"
+  },
+  {
+   "id": 4,
+   "name": "Rea Vaya Bus Rapid Transit (BRT)",
+   "parentLayerId": -1,
+   "defaultVisibility": false,
+   "subLayerIds": [
+    5,
+    6,
+    7,
+    140,
+    54
+   ],
+   "minScale": 250000,
+   "maxScale": 0,
+   "type": "Group Layer"
+  },
+  {
+   "id": 5,
+   "name": "BRT Routes",
+   "parentLayerId": 4,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 150000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 6,
+   "name": "BRT Stations",
+   "parentLayerId": 4,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 150000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPoint"
+  },
+  {
+   "id": 7,
+   "name": "BRT Stops",
+   "parentLayerId": 4,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 150000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPoint"
+  },
+  {
+   "id": 140,
+   "name": "BRT Feeder Routes",
+   "parentLayerId": 4,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 150000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 54,
+   "name": "BRT Trunk Routes",
+   "parentLayerId": 4,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 150000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 25,
+   "name": "PRASA Rail",
+   "parentLayerId": -1,
+   "defaultVisibility": false,
+   "subLayerIds": [
+    26,
+    27
+   ],
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Group Layer"
+  },
+  {
+   "id": 26,
+   "name": "PRASA Stations",
+   "parentLayerId": 25,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 10000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPoint"
+  },
+  {
+   "id": 27,
+   "name": "PRASA Railway Lines",
+   "parentLayerId": 25,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 11,
+   "name": "Gautrain Management Agency (GMA)",
+   "parentLayerId": -1,
+   "defaultVisibility": false,
+   "subLayerIds": [
+    79,
+    28,
+    13,
+    29,
+    147,
+    77,
+    78
+   ],
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Group Layer"
+  },
+  {
+   "id": 79,
+   "name": "Gautrain Rail Reserve",
+   "parentLayerId": 11,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolygon"
+  },
+  {
+   "id": 28,
+   "name": "Gautrain Stations",
+   "parentLayerId": 11,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPoint"
+  },
+  {
+   "id": 13,
+   "name": "Gautrain Railway Lines",
+   "parentLayerId": 11,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 29,
+   "name": "Gautrain Future Railway Lines",
+   "parentLayerId": 11,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 147,
+   "name": "Gautrain Rail Reserve Buffers",
+   "parentLayerId": 11,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolygon"
+  },
+  {
+   "id": 77,
+   "name": "Phase 2_4_5_Determined_Route",
+   "parentLayerId": 11,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 78,
+   "name": "Phase_2_4_5_Determined_Route_400m_Buffer",
+   "parentLayerId": 11,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolygon"
+  },
+  {
+   "id": 0,
+   "name": "Security Access Restrictions (SAR)",
+   "parentLayerId": -1,
+   "defaultVisibility": false,
+   "subLayerIds": [
+    1,
+    2
+   ],
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Group Layer"
+  },
+  {
+   "id": 1,
+   "name": "SAR Enclosed Areas",
+   "parentLayerId": 0,
+   "defaultVisibility": false,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolygon"
+  },
+  {
+   "id": 2,
+   "name": "SAR Restricted Road/Access Points",
+   "parentLayerId": 0,
+   "defaultVisibility": false,
+   "subLayerIds": null,
+   "minScale": 150000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPoint"
+  },
+  {
+   "id": 34,
+   "name": "Road Network",
+   "parentLayerId": -1,
+   "defaultVisibility": true,
+   "subLayerIds": [
+    14,
+    3,
+    15
+   ],
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Group Layer"
+  },
+  {
+   "id": 14,
+   "name": "GIS Road Centreline",
+   "parentLayerId": 34,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 32000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 3,
+   "name": "JRA Traffic Signals",
+   "parentLayerId": 34,
+   "defaultVisibility": false,
+   "subLayerIds": null,
+   "minScale": 10000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPoint"
+  },
+  {
+   "id": 15,
+   "name": "JRA Road Centerlines",
+   "parentLayerId": 34,
+   "defaultVisibility": false,
+   "subLayerIds": [
+    16,
+    17,
+    18,
+    19,
+    20,
+    21
+   ],
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Group Layer"
+  },
+  {
+   "id": 16,
+   "name": "JRA Road - Class 1",
+   "parentLayerId": 15,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 250000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 17,
+   "name": "JRA Road - Class 2",
+   "parentLayerId": 15,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 100000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 18,
+   "name": "JRA Road - Class 3",
+   "parentLayerId": 15,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 80000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 19,
+   "name": "JRA Road - Class 4",
+   "parentLayerId": 15,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 50000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 20,
+   "name": "JRA Road - Class 5",
+   "parentLayerId": 15,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 50000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 21,
+   "name": "JRA Road - Class 6",
+   "parentLayerId": 15,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 50000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 35,
+   "name": "Minibus Taxi Public Tranport (PT) Facilities ",
+   "parentLayerId": -1,
+   "defaultVisibility": false,
+   "subLayerIds": [
+    23,
+    24,
+    55,
+    56,
+    57,
+    58,
+    59
+   ],
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Group Layer"
+  },
+  {
+   "id": 23,
+   "name": "Taxi Ranks",
+   "parentLayerId": 35,
+   "defaultVisibility": false,
+   "subLayerIds": null,
+   "minScale": 10000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPoint"
+  },
+  {
+   "id": 24,
+   "name": "Taxi Routes",
+   "parentLayerId": 35,
+   "defaultVisibility": false,
+   "subLayerIds": null,
+   "minScale": 100000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 55,
+   "name": "Formal Minibus Taxi Holding",
+   "parentLayerId": 35,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 10000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPoint"
+  },
+  {
+   "id": 56,
+   "name": "Formal Ranking Facilities",
+   "parentLayerId": 35,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 10000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPoint"
+  },
+  {
+   "id": 57,
+   "name": "Informal Minibus Taxi Holding",
+   "parentLayerId": 35,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 10000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPoint"
+  },
+  {
+   "id": 58,
+   "name": "Informal Ranking Facilities",
+   "parentLayerId": 35,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 10000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPoint"
+  },
+  {
+   "id": 59,
+   "name": "Metered Taxi Ranking & Holding",
+   "parentLayerId": 35,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 10000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPoint"
+  },
+  {
+   "id": 36,
+   "name": "Bus Services",
+   "parentLayerId": -1,
+   "defaultVisibility": false,
+   "subLayerIds": [
+    22,
+    52
+   ],
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Group Layer"
+  },
+  {
+   "id": 22,
+   "name": "Metrobus Routes",
+   "parentLayerId": 36,
+   "defaultVisibility": false,
+   "subLayerIds": null,
+   "minScale": 150000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 52,
+   "name": "Metrobus_Stops",
+   "parentLayerId": 36,
+   "defaultVisibility": false,
+   "subLayerIds": null,
+   "minScale": 150000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPoint"
+  },
+  {
+   "id": 8,
+   "name": "Putco",
+   "parentLayerId": -1,
+   "defaultVisibility": false,
+   "subLayerIds": [
+    9,
+    10
+   ],
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Group Layer"
+  },
+  {
+   "id": 9,
+   "name": "Bus Routes",
+   "parentLayerId": 8,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 150000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 10,
+   "name": "Bus Stops",
+   "parentLayerId": 8,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 150000,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPoint"
+  },
+  {
+   "id": 69,
+   "name": "Integrated Public Transport Network",
+   "parentLayerId": -1,
+   "defaultVisibility": false,
+   "subLayerIds": [
+    66,
+    67,
+    68
+   ],
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Group Layer"
+  },
+  {
+   "id": 66,
+   "name": "Articulated Bus Corridor",
+   "parentLayerId": 69,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolygon"
+  },
+  {
+   "id": 67,
+   "name": "BRT Corridor",
+   "parentLayerId": 69,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolygon"
+  },
+  {
+   "id": 68,
+   "name": "Rail Corridor",
+   "parentLayerId": 69,
+   "defaultVisibility": true,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolygon"
+  },
+  {
+   "id": 63,
+   "name": "Walkable_Network_Planned",
+   "parentLayerId": -1,
+   "defaultVisibility": false,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 62,
+   "name": "Walkable_Network_Existing",
+   "parentLayerId": -1,
+   "defaultVisibility": false,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 61,
+   "name": "On-Street_Parking",
+   "parentLayerId": -1,
+   "defaultVisibility": false,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 60,
+   "name": "Off-Street Parking",
+   "parentLayerId": -1,
+   "defaultVisibility": false,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPoint"
+  },
+  {
+   "id": 65,
+   "name": "Cycle_Lanes",
+   "parentLayerId": -1,
+   "defaultVisibility": false,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 64,
+   "name": "Managed_Lanes_Policy",
+   "parentLayerId": -1,
+   "defaultVisibility": false,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPolyline"
+  },
+  {
+   "id": 74,
+   "name": "Park n Ride",
+   "parentLayerId": -1,
+   "defaultVisibility": false,
+   "subLayerIds": null,
+   "minScale": 0,
+   "maxScale": 0,
+   "type": "Feature Layer",
+   "geometryType": "esriGeometryPoint"
+  }
+ ],
+ "tables": [
+  {
+   "id": 12,
+   "name": "rgdb.RGDB.LU_STREET_TYPE",
+   "type": "Table"
+  }
+ ],
+ "spatialReference": {"wkt": "PROJCS[\"TM_29_Hartebeesthoek\",GEOGCS[\"GCS_Hartebeesthoek_1994\",DATUM[\"D_Hartebeesthoek_1994\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",29.0],PARAMETER[\"Scale_Factor\",1.0],PARAMETER[\"Latitude_Of_Origin\",0.0],UNIT[\"Meter\",1.0]],VERTCS[\"EGM96_Geoid\",VDATUM[\"EGM96_Geoid\"],PARAMETER[\"Vertical_Shift\",0.0],PARAMETER[\"Direction\",1.0],UNIT[\"Meter\",1.0]]"},
+ "singleFusedMapCache": false,
+ "initialExtent": {
+  "xmin": -98233.70881726971,
+  "ymin": -2883999.725018262,
+  "xmax": -79113.97970650252,
+  "ymax": -2873569.1664792094,
+  "spatialReference": {"wkt": "PROJCS[\"TM_29_Hartebeesthoek\",GEOGCS[\"GCS_Hartebeesthoek_1994\",DATUM[\"D_Hartebeesthoek_1994\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",29.0],PARAMETER[\"Scale_Factor\",1.0],PARAMETER[\"Latitude_Of_Origin\",0.0],UNIT[\"Meter\",1.0]],VERTCS[\"EGM96_Geoid\",VDATUM[\"EGM96_Geoid\"],PARAMETER[\"Vertical_Shift\",0.0],PARAMETER[\"Direction\",1.0],UNIT[\"Meter\",1.0]]"}
+ },
+ "fullExtent": {
+  "xmin": -5623012.972888589,
+  "ymin": -1.0001965729312696E7,
+  "xmax": 5623012.972888589,
+  "ymax": 1.0001965729312697E7,
+  "spatialReference": {"wkt": "PROJCS[\"TM_29_Hartebeesthoek\",GEOGCS[\"GCS_Hartebeesthoek_1994\",DATUM[\"D_Hartebeesthoek_1994\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",29.0],PARAMETER[\"Scale_Factor\",1.0],PARAMETER[\"Latitude_Of_Origin\",0.0],UNIT[\"Meter\",1.0]],VERTCS[\"EGM96_Geoid\",VDATUM[\"EGM96_Geoid\"],PARAMETER[\"Vertical_Shift\",0.0],PARAMETER[\"Direction\",1.0],UNIT[\"Meter\",1.0]]"}
+ },
+ "minScale": 0,
+ "maxScale": 0,
+ "units": "esriMeters",
+ "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+ "documentInfo": {
+  "Title": "",
+  "Author": "",
+  "Comments": "",
+  "Subject": "",
+  "Category": "",
+  "AntialiasingMode": "None",
+  "TextAntialiasingMode": "Force",
+  "Keywords": ""
+ },
+ "capabilities": "Map,Query,Data",
+ "supportedQueryFormats": "JSON, geoJSON",
+ "exportTilesAllowed": false,
+ "referenceScale": 0,
+ "datumTransformations": [
+  {
+   "geoTransforms": [
+    {
+     "wkid": 108001,
+     "latestWkid": 1241,
+     "transformForward": true,
+     "name": "NAD_1927_To_NAD_1983_NADCON"
+    }
+   ]
+  },
+  {
+   "geoTransforms": [
+    {
+     "wkid": 108001,
+     "latestWkid": 1241,
+     "transformForward": false,
+     "name": "NAD_1927_To_NAD_1983_NADCON"
+    }
+   ]
+  }
+ ],
+ "supportsDatumTransformation": true,
+ "maxRecordCount": 1000,
+ "maxImageHeight": 4096,
+ "maxImageWidth": 4096,
+ "supportedExtensions": "KmlServer, LayerDatasets",
+ "resampling": false
+}

@@ -1,0 +1,34 @@
+{
+  "generatedAt": "2026-09-17T17:26:00.310Z",
+  "operatorId": "gautrain",
+  "serviceWindow": {
+    "start": "05:30",
+    "end": "20:30"
+  },
+  "weekdayRail": {
+    "peakHeadwayMinutes": 10,
+    "offPeakHeadwayMinutes": 20
+  },
+  "weekendRail": {
+    "explicitlyCoveredServices": [
+      "gautrain-north-south",
+      "gautrain-east-west"
+    ],
+    "morningHeadwayMinutes": 30,
+    "daytimeHeadwayMinutes": 20,
+    "eveningHeadwayMinutes": 30,
+    "airportFrequencyInferred": false
+  },
+  "feederNetwork": {
+    "routeCount": 45,
+    "busCount": 27,
+    "midibusCount": 18,
+    "routeSpecificSchedules": false,
+    "weekendAvailability": "limited-and-route-specific"
+  },
+  "exactDepartureTimesStored": false,
+  "liveArrivalDataStored": false,
+  "errors": [],
+  "warnings": [],
+  "qaPassed": true
+}

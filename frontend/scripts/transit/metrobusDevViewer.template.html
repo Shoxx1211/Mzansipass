@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Pulse · Metrobus GIS Inspector — LOCAL ONLY</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;background:#080c19;color:#eef1ff}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top left,#182447 0,#090e1e 48%,#080b15 100%)}
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 24px;border-bottom:1px solid #344260;background:#101829b5;flex-wrap:wrap}
+.logo{font-size:22px;font-weight:850;letter-spacing:-1px}.logo span{color:#88d8ef}.sub{color:#a4b3d2;font-size:12px;margin-top:4px}.status{background:#302416;border:1px solid #8d6730;color:#ffdba8;padding:8px 13px;border-radius:999px;font-weight:700;font-size:11px;letter-spacing:.35px}
+.note{padding:11px 24px;background:#1c2438;color:#ffdfad;border-bottom:1px solid #8c703f;font-size:12px;line-height:1.5}
+.metrics{display:flex;gap:10px;padding:14px 20px;flex-wrap:wrap}.metric{flex:1;min-width:135px;background:#111a31;border:1px solid #293956;border-radius:13px;padding:12px 15px}.metric b{display:block;font-size:24px;color:#ecf8ff}.metric small{color:#9baecf;font-size:11px}
+.main{display:grid;grid-template-columns:minmax(290px,340px) minmax(0,1fr) minmax(270px,330px);gap:12px;padding:0 18px 18px;height:calc(100vh - 213px);min-height:500px}
+.panel{background:#10192d;border:1px solid #293b5a;border-radius:17px;overflow:hidden;min-height:0}.side{display:flex;flex-direction:column}.phead{padding:15px 16px;border-bottom:1px solid #253852}.phead strong{font-size:14px}.phead small{font-size:11px;color:#93a8cb;display:block;margin-top:5px}
+input{width:100%;background:#0b1222;color:#f1f6ff;border:1px solid #3b5273;border-radius:10px;padding:11px;outline:none;margin-top:12px}input:focus{border-color:#6cbfe8}
+.filters{display:flex;gap:5px;flex-wrap:wrap;padding:10px}.filters button,.btn{border:1px solid #3b4c68;background:#1b2942;color:#b8c7e4;border-radius:9px;padding:7px 9px;font-size:11px;cursor:pointer}.filters button.active{background:#2a5a73;color:#d6fbff;border-color:#65aecd}
+#routeList{overflow:auto;padding:2px 8px 12px}.rbutton{display:block;text-align:left;width:100%;border:1px solid transparent;border-radius:11px;padding:10px;margin:3px 0;background:transparent;color:#dce8fc;cursor:pointer}.rbutton:hover{background:#1c2c46}.rbutton.active{border-color:#65b0db;background:#193a54}.rbutton b{font-size:13px}.rbutton small{display:block;color:#90a7c5;margin-top:4px;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pill{font-size:10px;border-radius:99px;padding:3px 7px;float:right;background:#233854;color:#99d0f0}.pill.match{background:#214639;color:#a4f2c6}
+.mapwrap{display:flex;flex-direction:column;position:relative;min-width:0}.maphead{display:flex;align-items:center;justify-content:space-between;padding:12px 15px;border-bottom:1px solid #293b5a;gap:10px}.maphead b{font-size:13px}.maphead small{font-size:11px;color:#a9bdd9}#map{width:100%;height:100%;display:block;touch-action:none;cursor:grab;background:radial-gradient(circle at 60% 45%,#14243c,#0b1326 70%)}#map.dragging{cursor:grabbing}.canvaswrap{position:relative;flex:1;min-height:220px}.mapoverlay{position:absolute;left:14px;bottom:14px;background:#101b33e9;border:1px solid #425675;border-radius:11px;padding:11px;color:#ccd9ee;font-size:11px;line-height:1.7;pointer-events:none}.mapoverlay b{color:#e8f7ff}.dots{display:inline-block;border-radius:99px;height:8px;width:8px;background:#8edcff;margin-right:7px}.dots.gold{background:#ffd18a}.dots.gray{background:#67799c}
+.mapactions{display:flex;align-items:center;gap:7px}.mapactions label{color:#a5b9da;font-size:11px;display:flex;align-items:center;gap:5px;white-space:nowrap}.mapactions input{width:auto;margin:0}.btn{white-space:nowrap}.detail{overflow:auto;padding:17px;line-height:1.55}.detail h2{font-size:24px;margin:2px 0 5px}.detail .eyebrow{font-size:11px;font-weight:700;color:#91d2f2;text-transform:uppercase;letter-spacing:1px}.detail .desc{color:#c3d1e8;font-size:13px}.detail dl{display:grid;grid-template-columns:1fr;gap:0}.detail dt{font-size:11px;color:#93a8c7;margin-top:13px}.detail dd{margin:3px 0 0;color:#e6eeff;font-size:13px;word-break:break-word}.warning{border:1px solid #a08047;background:#322b24;color:#fbd7a3;padding:12px;border-radius:11px;font-size:12px;margin:16px 0}.stopcard{background:#19243a;border:1px solid #344868;border-radius:11px;padding:11px;margin-top:12px;font-size:12px;color:#d2dff6}.stopcard small{display:block;color:#97adc8;margin-top:5px}.hint{color:#8fa5c8;font-size:12px;padding:3px 0}
+@media(max-width:1050px){.main{grid-template-columns:minmax(235px,280px) minmax(0,1fr);height:auto}.mapwrap{min-height:520px}.detail{grid-column:1/-1}.side{max-height:560px}}
+@media(max-width:650px){.header{padding:13px 15px}.metrics{padding:10px}.note{padding:11px 15px}.main{grid-template-columns:1fr;padding:0 10px 16px}.side{max-height:330px}.mapwrap{min-height:490px}.detail{grid-column:auto}.maphead{flex-wrap:wrap}}
+</style></head><body>
+<header class="header"><div><div class="logo">PULSE <span>TRANSIT</span></div><div class="sub">Johannesburg Metrobus · developer GIS inspector</div></div><div class="status">LOCAL / NOT FOR PASSENGERS</div></header>
+<div class="note">⚠ The lines are City GIS geometry, NOT verified operating routes. Amber dots show stop proximity within a developer-defined threshold, NOT confirmed boarding, route membership or transfers. Public reuse permission has not been established.</div>
+<div class="metrics"><div class="metric"><b id="routeCount">—</b><small>GIS route geometries</small></div><div class="metric"><b id="stopCount">—</b><small>GIS stop points</small></div><div class="metric"><b id="overlapCount">—</b><small>Partial-index code matches</small></div><div class="metric"><b id="candidateCount">—</b><small>Spatial-only pairs</small></div><div class="metric"><b>0</b><small>Verified passenger route edges</small></div></div>
+<main class="main">
+<section class="panel side"><div class="phead"><strong>Explore GIS routes</strong><small>Search passenger-facing code, description or GIS object ID</small><input id="search" placeholder="Search e.g. 55 or Gandhi Square" type="search"/></div><div class="filters"><button class="active" data-filter="all">All</button><button data-filter="matched">Indexed matches</button><button data-filter="mismatch">ID mismatches</button><button data-filter="gis-only">GIS only</button></div><div id="routeList"></div></section>
+<section class="panel mapwrap"><div class="maphead"><div><b>Local coordinate explorer</b><br/><small>Geometry only · not a street basemap · drag / scroll to explore</small></div><div class="mapactions"><label><input id="showStops" type="checkbox"/>All GIS stops</label><button id="fit" class="btn">Fit view</button></div></div><div class="canvaswrap"><canvas id="map" aria-label="Developer-only Metrobus route geometry viewer"></canvas><div class="mapoverlay"><div><i class="dots"></i><b>Selected GIS route</b></div><div><i class="dots gold"></i>Nearby GIS stop (spatial only)</div><div><i class="dots gray"></i>Other GIS geometry</div><div id="hoverText">Click a nearby stop for its GIS description</div></div></div></section>
+<section class="panel detail"><div class="eyebrow">Evidence inspection</div><div id="routeDetail" class="hint">Choose a GIS route on the left. No route is currently confirmed for passenger operation.</div><div class="warning">No journey planning, stop ordering, boarding instructions, fares, ETAs or transfer edges can be inferred from this dataset.</div><div id="stopDetail" class="stopcard">Select a nearby stop point on the map to inspect its GIS description. Proximity is NOT membership.</div></section>
+</main><script>
+'use strict';
+// This data is embedded LOCALLY only by the builder; this HTML must not be published.
+const DATA = __PULSE_METROBUS_DEV_DATA__;
+const $=id=>document.getElementById(id);
+for(const [target,key] of [['routeCount','gisRouteGeometries'],['stopCount','gisStopPoints'],['overlapCount','inventoryCodeMatches'],['candidateCount','candidateSpatialPairs']]) $(target).textContent=DATA.summary[key].toLocaleString();
+const canvas=$('map'),cx=canvas.getContext('2d',{alpha:false});
+const midCos=Math.cos(-26*Math.PI/180), toX=lng=>lng*midCos;
+const routeById=new Map(DATA.routes.map(r=>[r.gisObjectId,r]));
+const stopById=new Map(DATA.stops.map(s=>[s.gisObjectId,s]));
+const routeCandidates=new Map();
+for(const p of DATA.candidates){if(!routeCandidates.has(p.routeGisObjectId))routeCandidates.set(p.routeGisObjectId,[]);routeCandidates.get(p.routeGisObjectId).push(p)}
+let selected=null, filter='all', search='', allStops=false, width=0,height=0,midX=toX(28.0),midY=-26.2,unit=.001,drag=null;
+const sortCodes=(a,b)=>String(a.routeCodeFromName??'').localeCompare(String(b.routeCodeFromName??''),undefined,{numeric:true});
+DATA.routes.sort(sortCodes);
+function fit(b){
+  const bounds=b||DATA.routes.reduce((v,r)=>{const e=r.extentWgs84;if(e){v.west=Math.min(v.west,e.west);v.east=Math.max(v.east,e.east);v.south=Math.min(v.south,e.south);v.north=Math.max(v.north,e.north)}return v},{west:Infinity,east:-Infinity,south:Infinity,north:-Infinity});
+  if(!Number.isFinite(bounds.west))return;
+  midX=toX((bounds.west+bounds.east)/2);midY=(bounds.south+bounds.north)/2;
+  const dx=Math.max(.005,toX(bounds.east-bounds.west)),dy=Math.max(.005,bounds.north-bounds.south);
+  unit=Math.max(dx/Math.max(10,width*.82),dy/Math.max(10,height*.82));paint();
+}
+function xy(lng,lat){return [width/2+(toX(lng)-midX)/unit,height/2-(lat-midY)/unit]}
+function paint(){
+  if(!width||!height)return;
+  cx.fillStyle='#0a1427';cx.fillRect(0,0,width,height);
+  cx.strokeStyle='#14253d';cx.lineWidth=1;for(let x=(width/2-midX/unit)%80;x<width;x+=80){cx.beginPath();cx.moveTo(x,0);cx.lineTo(x,height);cx.stroke()}
+  for(let y=(height/2+midY/unit)%80;y<height;y+=80){cx.beginPath();cx.moveTo(0,y);cx.lineTo(width,y);cx.stroke()}
+  function routeLine(r,strong){cx.strokeStyle=strong?'#8de5ff':'#3f5579';cx.lineWidth=strong?3:1;cx.globalAlpha=strong?1:selected?.gisObjectId===r.gisObjectId?1:.30;
+    for(const part of r.geometry){if(part.length<2)continue;cx.beginPath();for(let i=0;i<part.length;i++){const [x,y]=xy(part[i][0],part[i][1]);if(i===0)cx.moveTo(x,y);else cx.lineTo(x,y)}cx.stroke()}cx.globalAlpha=1}
+  for(const r of DATA.routes)if(r!==selected)routeLine(r,false);
+  if(selected)routeLine(selected,true);
+  if(allStops){cx.fillStyle='#647da2';for(const s of DATA.stops){const [x,y]=xy(s.lng,s.lat);if(x>=0&&x<=width&&y>=0&&y<=height){cx.beginPath();cx.arc(x,y,1.4,0,Math.PI*2);cx.fill()}}}
+  if(selected){const seen=new Set();cx.fillStyle='#ffd18a';for(const p of routeCandidates.get(selected.gisObjectId)||[]){if(seen.has(p.stopGisObjectId))continue;seen.add(p.stopGisObjectId);const s=stopById.get(p.stopGisObjectId),[x,y]=xy(s.lng,s.lat);if(x>=-5&&x<=width+5&&y>=-5&&y<=height+5){cx.beginPath();cx.arc(x,y,3.2,0,Math.PI*2);cx.fill()}}}
+}
+function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;width=r.width;height=r.height;const dpr=Math.min(2,window.devicePixelRatio||1);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);cx.setTransform(dpr,0,0,dpr,0,0);paint()}
+function n(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=String(txt);return e}
+function renderList(){const ul=$('routeList');ul.replaceChildren();const v=DATA.routes.filter(r=>{const q=search.toLowerCase();const txt=[r.routeCodeFromName,r.gisObjectId,r.gisDescription,r.originLabel,r.destinationLabel].filter(Boolean).join(' ').toLowerCase();return txt.includes(q)&&(filter==='all'||(filter==='matched'&&r.inventoryCodeOverlapOnly)||(filter==='mismatch'&&r.rawIdDisagreesWithName)||(filter==='gis-only'&&!r.inventoryCodeOverlapOnly))});
+  for(const r of v){const b=n('button','rbutton'+(selected?.gisObjectId===r.gisObjectId?' active':''));const badge=n('span','pill'+(r.inventoryCodeOverlapOnly?' match':''),r.inventoryCodeOverlapOnly?'INDEX MATCH':'GIS ONLY');b.append(badge,n('b','',`Route ${r.routeCodeFromName||'?'} · GIS #${r.gisObjectId}`),n('small','',r.gisDescription||`${r.originLabel||'Origin unknown'} → ${r.destinationLabel||'Destination unknown'}`));b.addEventListener('click',()=>select(r));ul.append(b)}
+  if(!v.length)ul.append(n('p','hint','No matching GIS routes.'));
+}
+function appendField(dl,key,value){const dt=n('dt','',key),dd=n('dd','',value==null||value===''?'Not provided':value);dl.append(dt,dd)}
+function select(r){selected=r;renderList();const d=$('routeDetail');d.replaceChildren();d.append(n('h2','',`Metrobus GIS Route ${r.routeCodeFromName||'?'}`));d.append(n('p','desc',r.gisDescription||'No route description published in the GIS record.'));
+ const dl=n('dl');appendField(dl,'GIS origin → destination',`${r.originLabel||'Unlisted'} → ${r.destinationLabel||'Unlisted'}`);
+ appendField(dl,'GIS OBJECTID',r.gisObjectId);appendField(dl,'GIS ROUTE_ID (uninterpreted)',r.rawRouteIdField);
+ appendField(dl,'Passenger code / raw GIS ID disagree?',r.rawIdDisagreesWithName?'Yes — interpretation pending':'No recorded disagreement');
+ appendField(dl,'Partial indexed inventory',r.inventoryCodeOverlapOnly?'Exact code overlap only':'Absent from incomplete excerpt');
+ appendField(dl,'GIS polyline length (NOT journey distance)',r.gisPolylineLengthKm==null?'Unknown':`${r.gisPolylineLengthKm} km`);
+ appendField(dl,'Nearby GIS stops within proximity threshold',`${r.candidateStopCount} — spatial support only, none verified as boarding stops`);
+ appendField(dl,'Operational status, direction, timetables, fares','Unverified');
+ d.append(dl);$('stopDetail').textContent='Select an amber point on the map to inspect a nearby GIS stop. Proximity is NOT membership.';
+ fit(r.extentWgs84);}
+$('search').addEventListener('input',e=>{search=e.target.value;renderList()});
+document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));renderList()}));
+$('showStops').addEventListener('change',e=>{allStops=e.target.checked;paint()});$('fit').addEventListener('click',()=>fit(selected?.extentWgs84));
+canvas.addEventListener('wheel',e=>{e.preventDefault();const rect=canvas.getBoundingClientRect(),mx=e.clientX-rect.left,my=e.clientY-rect.top;const old=unit;unit=Math.max(.0000002,Math.min(.15,unit*Math.exp(e.deltaY*.001)));midX+=(mx-width/2)*(old-unit);midY-=(my-height/2)*(old-unit);paint()},{passive:false});
+canvas.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,moved:0};canvas.setPointerCapture(e.pointerId);canvas.classList.add('dragging')});
+canvas.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.moved+=Math.abs(dx)+Math.abs(dy);midX-=dx*unit;midY+=dy*unit;drag.x=e.clientX;drag.y=e.clientY;paint()});
+canvas.addEventListener('pointerup',e=>{const was=drag;drag=null;canvas.classList.remove('dragging');if(!was||was.moved>6)return;const rect=canvas.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;const matches=selected?(routeCandidates.get(selected.gisObjectId)||[]).map(p=>({p,s:stopById.get(p.stopGisObjectId)})):[];let best=null,dist2=16*16;for(const item of matches){const pt=xy(item.s.lng,item.s.lat),d=(pt[0]-x)**2+(pt[1]-y)**2;if(d<dist2){dist2=d;best=item}}if(best){$('stopDetail').replaceChildren(n('b','',`GIS stop #${best.s.gisObjectId}`),n('div','',best.s.locationDescription||'No GIS location description'),n('small','',`Approx. proximity: ${best.p.proximityMetresApprox} m; local screening only, NOT verified boarding or transfer.`))}});
+window.addEventListener('resize',resize);resize();fit();renderList();
+</script></body></html>

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "operatorId": "harambee",
+  "asOfResearchDate": "2026-09-23",
+  "status": "source-catalog-only",
+  "currentServiceNamesVisibleOnOfficialTimetablePage": [
+    "O.R. Tambo International Airport Route",
+    "Bartlett Super South Route",
+    "Isando Route"
+  ],
+  "officialTimetablePage": "https://www.harambeebrt.co.za/timetable/",
+  "officialRoutePage": "https://www.harambeebrt.co.za/routes/",
+  "officialStationPage": "https://www.harambeebrt.co.za/stations-2/",
+  "gisRouteAssociationVerified": false,
+  "stopMembershipVerified": false,
+  "operatingTodayVerified": false,
+  "fareVerified": false,
+  "licenseStatus": "review-required",
+  "passengerRoutingEnabled": false,
+  "note": "Website section headings are a limited service-label inventory; do not equate them with municipal GIS IRPTN shapes."
+}

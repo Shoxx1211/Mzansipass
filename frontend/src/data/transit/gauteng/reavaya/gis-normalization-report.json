@@ -1,0 +1,156 @@
+{
+  "generatedAt": "2026-09-17T19:36:40.336Z",
+  "operatorId": "reavaya",
+  "sourceCounts": {
+    "brtRoutes": 99,
+    "brtStations": 58,
+    "brtStops": 0,
+    "feederRoutes": 12,
+    "trunkRoutes": 3,
+    "phase1cStations": 14
+  },
+  "canonicalRoutes": {
+    "count": 15,
+    "feederCodes": [
+      "F1",
+      "F2",
+      "F3",
+      "F4",
+      "F5",
+      "F6",
+      "F7",
+      "F8",
+      "F9",
+      "F10",
+      "F11",
+      "F12"
+    ],
+    "trunkCodes": [
+      "T1",
+      "T2",
+      "T3"
+    ],
+    "routeCodes": [
+      "F1",
+      "F2",
+      "F3",
+      "F4",
+      "F5",
+      "F6",
+      "F7",
+      "F8",
+      "F9",
+      "F10",
+      "F11",
+      "F12",
+      "T1",
+      "T2",
+      "T3"
+    ],
+    "geometryTypes": [
+      "LineString"
+    ],
+    "extent": {
+      "minLon": 27.804249472272467,
+      "minLat": -26.294528668793287,
+      "maxLon": 28.066809310577895,
+      "maxLat": -26.16155056944028
+    },
+    "invalidGeometryCount": 0
+  },
+  "phase1cStations": {
+    "count": 14,
+    "sourceNames": [
+      "Phase1C Park Station T4",
+      "Phase1C Metro Center Station",
+      "Phase1C Brenthurst Clinic Station",
+      "Phase1C Yeoville Station",
+      "Phase1C Bellevue Station",
+      "Phase1C Orchards Clinic Station",
+      "Phase1C Balfour Park Station",
+      "Phase1C Corlett Drive Station",
+      "Phase1C Wynberg Station",
+      "Phase1C Marlboro Station",
+      "Phase1C Atholl Square Station",
+      "Phase1C Sandton City Station",
+      "Phase1C Library Gardens West Station Ext",
+      "Phase1C Library Gardens East Station Ext"
+    ],
+    "extent": {
+      "minLon": 28.03961938760931,
+      "minLat": -26.205397222270992,
+      "maxLon": 28.086547755871912,
+      "maxLat": -26.097177083868846
+    },
+    "invalidGeometryCount": 0
+  },
+  "generalBrtStations": {
+    "count": 58,
+    "namedCount": 0,
+    "extent": {
+      "minLon": 27.879336676295335,
+      "minLat": -26.26473415261787,
+      "maxLon": 28.064800000463762,
+      "maxLat": -26.18113999966197
+    },
+    "invalidGeometryCount": 0
+  },
+  "supplementalSegments": {
+    "totalCount": 52,
+    "perRoute": {
+      "C1": 6,
+      "F11": 3,
+      "T1": 22,
+      "T2": 17,
+      "T3": 4
+    },
+    "geometryTypes": [
+      "LineString",
+      "MultiLineString"
+    ],
+    "extent": {
+      "minLon": 27.87233899999232,
+      "minLat": -26.268843000028912,
+      "maxLon": 28.0725330000093,
+      "maxLat": -26.176947000046578
+    },
+    "invalidGeometryCount": 0
+  },
+  "genericBrtRoutes": {
+    "featureCount": 99,
+    "phaseCounts": {
+      "Phase 1B": 70,
+      "unknown": 10,
+      "Phase 1A": 19
+    },
+    "typeCounts": {
+      "Complementary": 12,
+      "Clockwise": 5,
+      "Anticlockwise": 5,
+      "Feeder": 35,
+      "Trunk": 42
+    },
+    "geometryTypes": [
+      "LineString",
+      "MultiLineString"
+    ],
+    "extent": {
+      "minLon": 27.804346000011662,
+      "minLat": -26.294008999968362,
+      "maxLon": 28.0725330000093,
+      "maxLat": -26.114778999960848
+    }
+  },
+  "emptyBrtStopLayer": true,
+  "errorCount": 0,
+  "errors": [],
+  "warningCount": 5,
+  "warnings": [
+    "The general BRT Stations layer contains official point geometry but does not expose a reliable station-name attribute in the inspected data. Pulse therefore does not assign station names to those 58 points.",
+    "TransportationMaster C1/F11/T1/T2/T3 layers contain multiple GIS features. Their feature order is not treated as route sequence or service direction.",
+    "C1 has official supplemental geometry, but it is not promoted to one ordered canonical route because its segment topology has not yet been verified.",
+    "The official Transportation/BRT Stops layer currently contains zero features. Pulse will not create stop points from this empty source.",
+    "The source layer is named 'BRT Stations Phase 1C 11Stations' but currently contains 14 features. Pulse uses the actual queried feature count rather than inferring 11 stations from the layer title."
+  ],
+  "qaPassed": true
+}

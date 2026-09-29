@@ -1,0 +1,100 @@
+{
+  "generatedAt": "2026-09-17T10:15:29.007Z",
+  "operatorId": "areyeng",
+  "sourceAuthority": "City of Tshwane",
+  "matchThresholdMeters": 35,
+  "totalStops": 138,
+  "totalRoutes": 10,
+  "stopsWithCandidateRoute": 138,
+  "unmatchedStopCount": 0,
+  "multiMatchedStopCount": 96,
+  "closestRouteDistanceBuckets": {
+    "0-30m": 138,
+    "31-60m": 0,
+    "61-120m": 0
+  },
+  "routeSummary": [
+    {
+      "id": "areyeng-route-1",
+      "code": "Line 2A - F04",
+      "type": "feeder",
+      "name": "Muckleneuk Groenkloof Anti-Clockwise",
+      "geometryType": "LineString",
+      "candidateStopCount": 24
+    },
+    {
+      "id": "areyeng-route-2",
+      "code": "Line 2A - F07",
+      "type": "feeder",
+      "name": "Muckleneuk Groenkloof Clockwise",
+      "geometryType": "LineString",
+      "candidateStopCount": 20
+    },
+    {
+      "id": "areyeng-route-3",
+      "code": "Line 2A - F05",
+      "type": "feeder",
+      "name": "Pretoria CBD Clockwise",
+      "geometryType": "LineString",
+      "candidateStopCount": 41
+    },
+    {
+      "id": "areyeng-route-4",
+      "code": "Line 2A - F06",
+      "type": "feeder",
+      "name": "Pretoria CBD Anti-Clockwise",
+      "geometryType": "LineString",
+      "candidateStopCount": 45
+    },
+    {
+      "id": "areyeng-route-5",
+      "code": "Line 1A",
+      "type": "trunk",
+      "name": "CBD - Wonderboom",
+      "geometryType": "LineString",
+      "candidateStopCount": 18
+    },
+    {
+      "id": "areyeng-route-6",
+      "code": "Line 1A - C01",
+      "type": "complementary",
+      "name": "E's'kia Mphahlele Complementary",
+      "geometryType": "MultiLineString",
+      "candidateStopCount": 35
+    },
+    {
+      "id": "areyeng-route-7",
+      "code": "Line 1A - C02",
+      "type": "complementary",
+      "name": "Gezina Complementary",
+      "geometryType": "MultiLineString",
+      "candidateStopCount": 35
+    },
+    {
+      "id": "areyeng-route-8",
+      "code": "Line 1A - C02*",
+      "type": "complementary",
+      "name": "Gezina Circular",
+      "geometryType": "LineString",
+      "candidateStopCount": 17
+    },
+    {
+      "id": "areyeng-route-9",
+      "code": "Line 1A - C03",
+      "type": "complementary",
+      "name": "Bloed Mall Complementary",
+      "geometryType": "MultiLineString",
+      "candidateStopCount": 27
+    },
+    {
+      "id": "areyeng-route-10",
+      "code": "Line 2A",
+      "type": "trunk",
+      "name": "CBD - Hatfield",
+      "geometryType": "MultiLineString",
+      "candidateStopCount": 15
+    }
+  ],
+  "unmatchedStops": [],
+  "note": "Candidate route-stop links are inferred from GIS proximity and are not yet official route-stop assignments."
+}

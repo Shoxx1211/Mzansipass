@@ -1,25 +1,29 @@
-// src/components/TransportRecommendation.tsx
-// Pulse Transit - Premium Transport Recommendation Component
-// Features: Smart sorting, filtering, animations, accessibility, detailed metrics
+// src/features/planner/TransportRecommendations.tsx
+// Pulse Transit - Evidence-aware transport recommendation cards
+// Premium planner UI | Truthful public-transport intelligence
 
-import React, { useState, useMemo, memo } from "react";
+import React, {
+  memo,
+  useMemo,
+  useState,
+} from "react";
+
 import {
-  Clock3,
-  Footprints,
-  ShieldCheck,
-  Wallet,
-  Sparkles,
+  ArrowRight,
   CheckCircle2,
   ChevronDown,
   ChevronUp,
+  Clock3,
   Filter,
+  Footprints,
+  MapPin,
+  Navigation,
   TrendingUp,
-  Award,
-  Navigation
+  Wallet,
 } from "lucide-react";
 
-import {
-  type TransportRecommendation as RecommendationType
+import type {
+  TransportRecommendation as RecommendationType,
 } from "../../types";
 
 // ======================================================
@@ -29,77 +33,550 @@ import {
 interface TransportRecommendationProps {
   recommendations: RecommendationType[];
   selected: RecommendationType | null;
-  onSelect: (recommendation: RecommendationType) => void;
-  onCompare?: (recommendations: RecommendationType[]) => void;
+  onSelect: (
+    recommendation: RecommendationType,
+  ) => void;
+  onCompare?: (
+    recommendations: RecommendationType[],
+  ) => void;
   showFilters?: boolean;
   showComparison?: boolean;
   isLoading?: boolean;
   className?: string;
 }
 
-type SortOption = "best" | "fastest" | "cheapest" | "safest" | "leastWalking";
-type FilterOption = "all" | "taxi" | "train" | "bus";
+type SortOption =
+  | "recommended"
+  | "fastest"
+  | "cheapest"
+  | "leastWalking";
+
+type FilterOption =
+  | "all"
+  | "taxi"
+  | "train"
+  | "bus";
 
 // ======================================================
-// CONSTANTS
+// OPTIONS
 // ======================================================
 
-const SORT_OPTIONS: { value: SortOption; label: string; icon: React.ReactNode }[] = [
-  { value: "best", label: "Best Overall", icon: <Award size={14} /> },
-  { value: "fastest", label: "Fastest", icon: <Clock3 size={14} /> },
-  { value: "cheapest", label: "Cheapest", icon: <Wallet size={14} /> },
-  { value: "safest", label: "Safest", icon: <ShieldCheck size={14} /> },
-  { value: "leastWalking", label: "Least Walk", icon: <Footprints size={14} /> }
+const SORT_OPTIONS: Array<{
+  value: SortOption;
+  label: string;
+}> = [
+  {
+    value: "recommended",
+    label: "Recommended",
+  },
+  {
+    value: "fastest",
+    label: "Shortest verified time",
+  },
+  {
+    value: "cheapest",
+    label: "Lowest verified fare",
+  },
+  {
+    value: "leastWalking",
+    label: "Least walking",
+  },
 ];
 
-const FILTER_OPTIONS: { value: FilterOption; label: string }[] = [
-  { value: "all", label: "All" },
-  { value: "taxi", label: "Taxi" },
-  { value: "train", label: "Train" },
-  { value: "bus", label: "Bus" }
+const FILTER_OPTIONS: Array<{
+  value: FilterOption;
+  label: string;
+}> = [
+  {
+    value: "all",
+    label: "All",
+  },
+  {
+    value: "taxi",
+    label: "Taxi",
+  },
+  {
+    value: "train",
+    label: "Train",
+  },
+  {
+    value: "bus",
+    label: "Bus",
+  },
 ];
 
+const MODE_MARKS: Record<
+  string,
+  string
+> = {
+  Taxi: "TX",
+  Gautrain: "GT",
+  Metrorail: "MR",
+  "Rea Vaya": "RV",
+  "A Re Yeng": "AR",
+  "Tshwane Bus Service": "TB",
+};
+
 // ======================================================
-// HELPER FUNCTIONS
+// FORMATTERS
 // ======================================================
 
+const getModeLabel = (
+  mode: string,
+): string =>
+  mode === "Taxi"
+    ? "Minibus Taxi"
+    : mode;
 
-const getBadgeColor = (badge: string): string => {
+const formatMoney = (
+  value: number,
+): string => {
+  if (!Number.isFinite(value)) {
+    return "Not verified";
+  }
+
+  return Number.isInteger(value)
+    ? `R${value.toFixed(0)}`
+    : `R${value.toFixed(2)}`;
+};
+
+const formatWalking = (
+  distanceKm: number,
+): string => {
+  if (
+    !Number.isFinite(distanceKm) ||
+    distanceKm < 0
+  ) {
+    return "Not verified";
+  }
+
+  if (distanceKm < 1) {
+    return `${Math.round(
+      distanceKm * 1000,
+    )} m`;
+  }
+
+  return `${distanceKm.toFixed(
+    1,
+  )} km`;
+};
+
+const formatDistance = (
+  distanceKm?: number,
+): string => {
+  if (
+    distanceKm === undefined ||
+    !Number.isFinite(distanceKm) ||
+    distanceKm <= 0
+  ) {
+    return "Not verified";
+  }
+
+  return `${distanceKm.toFixed(
+    1,
+  )} km`;
+};
+
+const formatTime = (
+  minutes: number | null,
+): string => {
+  if (
+    minutes === null ||
+    !Number.isFinite(minutes) ||
+    minutes <= 0
+  ) {
+    return "Not verified";
+  }
+
+  if (minutes < 60) {
+    return `${Math.round(
+      minutes,
+    )} min`;
+  }
+
+  const hours =
+    Math.floor(minutes / 60);
+
+  const remainder =
+    Math.round(minutes % 60);
+
+  return remainder > 0
+    ? `${hours}h ${remainder}m`
+    : `${hours}h`;
+};
+
+const formatFare = (
+  recommendation: RecommendationType,
+): string => {
+  if (
+    recommendation.estimatedFare !== null &&
+    Number.isFinite(
+      recommendation.estimatedFare,
+    )
+  ) {
+    return formatMoney(
+      recommendation.estimatedFare,
+    );
+  }
+
+  const range =
+    recommendation.publishedFareRange;
+
+  if (range) {
+    return `${formatMoney(
+      range.minimum,
+    )} - ${formatMoney(
+      range.maximum,
+    )}`;
+  }
+
+  return "Not verified";
+};
+
+const getFareHeading = (
+  recommendation: RecommendationType,
+): string => {
+  if (
+    recommendation.estimatedFare !== null
+  ) {
+    return "Est. fare";
+  }
+
+  if (
+    recommendation.publishedFareRange
+  ) {
+    return "Published range";
+  }
+
+  return "Fare";
+};
+
+const getTimeHeading = (
+  recommendation: RecommendationType,
+): string =>
+  recommendation.estimatedTime !== null
+    ? "Est. time"
+    : "Travel time";
+
+const getFareSupportingText = (
+  recommendation: RecommendationType,
+): string | null => {
+  if (
+    recommendation.fareStatus ===
+      "unverified" &&
+    recommendation.publishedFareRange
+  ) {
+    const period =
+      recommendation
+        .publishedFareRange.period;
+
+    if (period === "peak") {
+      return "Published peak range across fare bands. Your exact journey fare is not verified.";
+    }
+
+    if (period === "offPeak") {
+      return "Published off-peak range across fare bands. Your exact journey fare is not verified.";
+    }
+
+    return "Published fare range. Your exact journey fare is not verified.";
+  }
+
+  if (
+    recommendation.fareStatus ===
+    "unverified"
+  ) {
+    return "Exact journey fare is not verified.";
+  }
+
+  return null;
+};
+
+const getTimeSupportingText = (
+  recommendation: RecommendationType,
+): string | null => {
+  if (
+    recommendation.timeStatus ===
+    "unverified"
+  ) {
+    return "No verified operator journey time is available yet.";
+  }
+
+  return null;
+};
+
+// ======================================================
+// BADGES
+// ======================================================
+
+const getBadgeColor = (
+  badge: string,
+): string => {
   switch (badge) {
-    case "FASTEST":
-      return "text-cyan-400 bg-cyan-500/10";
-    case "CHEAPEST":
-      return "text-yellow-400 bg-yellow-500/10";
-    case "BEST_OVERALL":
-      return "text-emerald-400 bg-emerald-500/10";
-    case "SAFEST":
-      return "text-violet-400 bg-violet-500/10";
-    case "LEAST_WALKING":
-      return "text-pink-400 bg-pink-500/10";
-    case "RELIABLE":
-      return "text-orange-400 bg-orange-500/10";
+    case "DIRECT":
+      return "border-emerald-400/20 bg-emerald-500/10 text-emerald-300";
+
+    case "TRANSFER":
+      return "border-violet-400/20 bg-violet-500/10 text-violet-300";
+
+    case "PUBLISHED_CONNECTION":
+      return "border-cyan-400/20 bg-cyan-500/10 text-cyan-300";
+
+    case "LOW_WALK":
+      return "border-cyan-400/20 bg-cyan-500/10 text-cyan-300";
+
+    case "LOW_FARE":
+      return "border-amber-400/20 bg-amber-500/10 text-amber-300";
+
+    case "QUICK_ESTIMATE":
+      return "border-violet-400/20 bg-violet-500/10 text-violet-300";
+
+    case "CONFIGURED_DATA":
+      return "border-white/10 bg-white/5 text-white/45";
+
     default:
-      return "text-white/50 bg-white/5";
+      return "border-white/10 bg-white/5 text-white/50";
   }
 };
 
-const formatBadge = (badge: string): string => {
-  return badge.replaceAll("_", " ").toUpperCase();
-};
+const formatBadge = (
+  badge: string,
+): string => {
+  const labels: Record<
+    string,
+    string
+  > = {
+    DIRECT:
+      "Direct route",
+    TRANSFER:
+      "Transfer",
+    PUBLISHED_CONNECTION:
+      "Published connection",
+    LOW_WALK:
+      "Low walk",
+    LOW_FARE:
+      "Lower fare",
+    QUICK_ESTIMATE:
+      "Quicker estimate",
+    CONFIGURED_DATA:
+      "Configured data",
+  };
 
-const getModeIcon = (mode: string): string => {
-  switch (mode) {
-    case "Taxi": return "🚖";
-    case "Gautrain": return "🚅";
-    case "Metrorail": return "🚂";
-    case "Rea Vaya": return "🚌";
-    case "A Re Yeng": return "🚍";
-    default: return "🚌";
-  }
+  return (
+    labels[badge] ??
+    badge
+      .replaceAll("_", " ")
+      .toLowerCase()
+  );
 };
 
 // ======================================================
-// SUB-COMPONENTS
+// EVIDENCE HELPERS
+// ======================================================
+
+const getEvidenceHeading = (
+  recommendation: RecommendationType,
+): string => {
+  switch (
+    recommendation.evidenceStatus
+  ) {
+    case "same-canonical-route":
+      return "Canonical route match";
+
+    case "published-shared-stop-connectivity":
+      return "Published transfer evidence";
+
+    case "configured":
+    default:
+      return "Configured route evidence";
+  }
+};
+
+const getEvidenceDescription = (
+  recommendation: RecommendationType,
+): string => {
+  switch (
+    recommendation.evidenceStatus
+  ) {
+    case "same-canonical-route":
+      return "Pulse matched your origin and destination to the same canonical operator route geometry. This does not confirm a timetable, exact fare or live vehicle.";
+
+    case "published-shared-stop-connectivity":
+      return "Pulse found a path using canonical route geometry and published shared-stop connectivity. Exact transfer timing, walking path and timetable compatibility remain unverified.";
+
+    case "configured":
+    default:
+      return "This recommendation is based on Pulse's configured transport evidence. It is not a live operator confirmation.";
+  }
+};
+
+const isTransferRecommendation = (
+  recommendation: RecommendationType,
+): boolean =>
+  recommendation.direct === false ||
+  (
+    recommendation.routeCodes?.length ??
+    0
+  ) > 1;
+
+// ======================================================
+// ROUTE EVIDENCE VISUAL
+// ======================================================
+
+const RouteEvidence: React.FC<{
+  recommendation: RecommendationType;
+}> = ({
+  recommendation,
+}) => {
+  const routeCodes =
+    recommendation.routeCodes ?? [];
+
+  const transferStops =
+    recommendation.transferStops ?? [];
+
+  if (!routeCodes.length) {
+    return null;
+  }
+
+  const isTransfer =
+    isTransferRecommendation(
+      recommendation,
+    );
+
+  return (
+    <div className="mt-4 overflow-hidden rounded-2xl border border-cyan-400/10 bg-gradient-to-br from-cyan-500/[0.07] via-white/[0.025] to-violet-500/[0.05]">
+      <div className="flex items-center justify-between gap-3 border-b border-white/[0.06] px-4 py-3">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-300/70">
+            Route evidence
+          </p>
+
+          <p className="mt-0.5 text-xs text-white/45">
+            {isTransfer
+              ? "Published connection path"
+              : "Direct canonical route fit"}
+          </p>
+        </div>
+
+        <span className="rounded-full border border-cyan-400/15 bg-cyan-500/10 px-2.5 py-1 text-[10px] font-bold text-cyan-200">
+          {isTransfer
+            ? "Transfer"
+            : "Direct"}
+        </span>
+      </div>
+
+      <div className="p-4">
+        <div className="flex flex-wrap items-center gap-2">
+          {routeCodes.map(
+            (
+              routeCode,
+              index,
+            ) => {
+              const isLast =
+                index ===
+                routeCodes.length - 1;
+
+              const transferStop =
+                transferStops[index];
+
+              return (
+                <React.Fragment
+                  key={`${routeCode}-${index}`}
+                >
+                  <div className="flex h-10 min-w-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.07] px-3 text-sm font-black text-white">
+                    {routeCode}
+                  </div>
+
+                  {!isLast && (
+                    <>
+                      <ArrowRight
+                        size={15}
+                        className="shrink-0 text-white/25"
+                      />
+
+                      <div className="flex min-h-10 items-center gap-2 rounded-xl border border-violet-400/15 bg-violet-500/[0.08] px-3">
+                        <MapPin
+                          size={13}
+                          className="shrink-0 text-violet-300"
+                        />
+
+                        <div>
+                          <p className="text-[9px] font-bold uppercase tracking-wide text-white/30">
+                            Change at
+                          </p>
+
+                          <p className="text-xs font-bold text-white/80">
+                            {transferStop ??
+                              "Published connection"}
+                          </p>
+                        </div>
+                      </div>
+
+                      <ArrowRight
+                        size={15}
+                        className="shrink-0 text-white/25"
+                      />
+                    </>
+                  )}
+                </React.Fragment>
+              );
+            },
+          )}
+        </div>
+
+        {isTransfer && (
+          <p className="mt-3 text-[11px] leading-relaxed text-white/35">
+            The shared stop is supported
+            by published route evidence.
+            Pulse does not yet claim an
+            exact interchange walking
+            path or timed connection.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ======================================================
+// METRIC TILE
+// ======================================================
+
+const MetricTile: React.FC<{
+  icon: React.ReactNode;
+  heading: string;
+  value: string;
+  valueClassName?: string;
+  supportingText?: string | null;
+}> = ({
+  icon,
+  heading,
+  value,
+  valueClassName =
+    "text-white",
+  supportingText,
+}) => (
+  <div className="min-w-0 rounded-2xl border border-white/[0.04] bg-white/[0.045] p-3">
+    <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide text-white/35">
+      {icon}
+      {heading}
+    </div>
+
+    <p
+      className={`mt-2 break-words text-lg font-black ${valueClassName}`}
+    >
+      {value}
+    </p>
+
+    {supportingText && (
+      <p className="mt-1.5 text-[10px] leading-relaxed text-white/30">
+        {supportingText}
+      </p>
+    )}
+  </div>
+);
+
+// ======================================================
+// RECOMMENDATION CARD
 // ======================================================
 
 const RecommendationCard: React.FC<{
@@ -107,407 +584,849 @@ const RecommendationCard: React.FC<{
   isSelected: boolean;
   onSelect: () => void;
   index: number;
-}> = memo(({ recommendation, isSelected, onSelect, index }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+}> = memo(
+  ({
+    recommendation,
+    isSelected,
+    onSelect,
+    index,
+  }) => {
+    const [
+      isExpanded,
+      setIsExpanded,
+    ] = useState(false);
 
-  return (
-    <button
-      onClick={onSelect}
-      className={`
-        w-full text-left
-        glass rounded-2xl p-5
-        transition-all duration-300
-        border-2
-        animate-fadeIn
-        ${isSelected 
-          ? "border-cyan-400/50 bg-cyan-500/5 scale-[1.01]" 
-          : "border-white/10 hover:border-white/20 hover:scale-[1.01]"
-        }
-      `}
-      style={{ animationDelay: `${index * 100}ms` }}
-    >
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-4">
-          {/* Icon with glow */}
-          <div className={`
-            relative w-14 h-14 rounded-2xl 
-            flex items-center justify-center
-            transition-all duration-300
-            ${isSelected ? 'bg-cyan-500/20' : 'bg-white/10'}
-          `}>
-            <div className={`
-              absolute inset-0 rounded-2xl blur-xl
-              ${isSelected ? 'bg-cyan-500/30' : 'bg-transparent'}
-            `} />
-            <span className="text-2xl">{getModeIcon(recommendation.mode)}</span>
+    const modeLabel =
+      getModeLabel(
+        recommendation.mode,
+      );
+
+    const modeMark =
+      MODE_MARKS[
+        recommendation.mode
+      ] ?? "PT";
+
+    const isEvidenceOnly =
+      recommendation.selectable ===
+      false;
+
+    const fareSupportingText =
+      getFareSupportingText(
+        recommendation,
+      );
+
+    const timeSupportingText =
+      getTimeSupportingText(
+        recommendation,
+      );
+
+    return (
+      <article
+        className={`
+          glass overflow-hidden rounded-3xl border
+          transition-all duration-300
+          ${
+            isSelected
+              ? "border-cyan-400/45 bg-cyan-500/[0.06] shadow-lg shadow-cyan-500/5"
+              : "border-white/10 hover:border-white/20"
+          }
+        `}
+        style={{
+          animationDelay:
+            `${index * 70}ms`,
+        }}
+      >
+        <div className="p-4 sm:p-5">
+          {/* HEADER */}
+          <div className="flex min-w-0 items-start gap-3">
+            <div
+              className={`
+                flex h-12 w-12 shrink-0
+                items-center justify-center
+                rounded-2xl border
+                text-sm font-black tracking-wide
+                ${
+                  isSelected
+                    ? "border-cyan-400/30 bg-cyan-500/15 text-cyan-200"
+                    : "border-white/10 bg-white/[0.07] text-white/75"
+                }
+              `}
+              aria-hidden="true"
+            >
+              {modeMark}
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="break-words text-lg font-black text-white">
+                  {modeLabel}
+                </h3>
+
+                {isSelected && (
+                  <span className="inline-flex items-center gap-1 rounded-full border border-cyan-400/20 bg-cyan-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-cyan-300">
+                    <CheckCircle2
+                      size={11}
+                    />
+                    Selected
+                  </span>
+                )}
+
+                {isEvidenceOnly && (
+                  <span className="inline-flex items-center gap-1 rounded-full border border-violet-400/20 bg-violet-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-violet-300">
+                    Evidence only
+                  </span>
+                )}
+              </div>
+
+              {recommendation.routeName && (
+                <p className="mt-1 break-words text-sm font-semibold leading-relaxed text-white/65">
+                  {
+                    recommendation.routeName
+                  }
+                </p>
+              )}
+
+              {recommendation.subtitle && (
+                <p className="mt-1 text-xs text-white/35">
+                  {
+                    recommendation.subtitle
+                  }
+                </p>
+              )}
+            </div>
           </div>
 
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <p className="font-bold text-lg text-white">
-                {recommendation.mode}
-              </p>
- {recommendation.badges.map((badge) => (
-  <span
-    key={badge}
-    className={`
-      text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-full
-      ${getBadgeColor(badge)}
-    `}
-  >
-    {formatBadge(badge)}
-  </span>
-))}
+          {/* BADGES */}
+          {!!recommendation
+            .badges?.length && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {recommendation.badges.map(
+                (badge) => (
+                  <span
+                    key={badge}
+                    className={`
+                      rounded-full border
+                      px-2.5 py-1
+                      text-[10px] font-bold tracking-wide
+                      ${getBadgeColor(
+                        badge,
+                      )}
+                    `}
+                  >
+                    {formatBadge(
+                      badge,
+                    )}
+                  </span>
+                ),
+              )}
             </div>
-            
-            <p className="text-sm text-white/50 mt-0.5">
-              {recommendation.routeName}
+          )}
+
+          {/* ROUTE CHAIN */}
+          <RouteEvidence
+            recommendation={
+              recommendation
+            }
+          />
+
+          {/* WHY THIS OPTION */}
+          <div className="mt-4 rounded-2xl border border-white/[0.07] bg-white/[0.035] p-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/35">
+              Why Pulse found this
             </p>
-            
-            {recommendation.subtitle && (
-              <p className="text-xs text-white/40 mt-0.5 flex items-center gap-1">
-                <Navigation size={10} />
-                {recommendation.subtitle}
+
+            <p className="mt-2 text-sm leading-relaxed text-white/75">
+              {recommendation.reason}
+            </p>
+          </div>
+
+          {/* METRICS */}
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <MetricTile
+              icon={
+                <Clock3
+                  size={12}
+                />
+              }
+              heading={getTimeHeading(
+                recommendation,
+              )}
+              value={formatTime(
+                recommendation.estimatedTime,
+              )}
+              supportingText={
+                timeSupportingText
+              }
+            />
+
+            <MetricTile
+              icon={
+                <Wallet
+                  size={12}
+                />
+              }
+              heading={getFareHeading(
+                recommendation,
+              )}
+              value={formatFare(
+                recommendation,
+              )}
+              valueClassName={
+                recommendation
+                  .estimatedFare !==
+                  null
+                  ? "text-emerald-300"
+                  : recommendation
+                        .publishedFareRange
+                    ? "text-cyan-200"
+                    : "text-white"
+              }
+              supportingText={
+                fareSupportingText
+              }
+            />
+
+            <MetricTile
+              icon={
+                <Footprints
+                  size={12}
+                />
+              }
+              heading="Access walk"
+              value={formatWalking(
+                recommendation.walkingDistance,
+              )}
+            />
+
+            <MetricTile
+              icon={
+                <Navigation
+                  size={12}
+                />
+              }
+              heading="Network leg"
+              value={formatDistance(
+                recommendation.serviceDistanceKm,
+              )}
+              supportingText={
+                recommendation
+                  .serviceDistanceKm ===
+                undefined
+                  ? "Not inferred from the road-driving baseline."
+                  : null
+              }
+            />
+          </div>
+
+          {/* EXPANDED DETAILS */}
+          {isExpanded && (
+            <div className="mt-4 space-y-3 border-t border-white/10 pt-4">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-2xl border border-white/[0.05] bg-white/[0.04] p-3">
+                  <p className="text-[10px] uppercase tracking-wide text-white/30">
+                    Board near
+                  </p>
+
+                  <p className="mt-1 text-sm font-semibold text-white/80">
+                    {recommendation.nearestStop ??
+                      "Exact boarding stop not verified"}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-white/[0.05] bg-white/[0.04] p-3">
+                  <p className="text-[10px] uppercase tracking-wide text-white/30">
+                    Exit near
+                  </p>
+
+                  <p className="mt-1 text-sm font-semibold text-white/80">
+                    {recommendation.destinationStop ??
+                      "Exact exit stop not verified"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-cyan-400/10 bg-cyan-500/[0.045] p-4">
+                <div className="flex items-start gap-2.5">
+                  <CheckCircle2
+                    size={16}
+                    className="mt-0.5 shrink-0 text-cyan-300"
+                  />
+
+                  <div>
+                    <p className="text-xs font-bold text-white/80">
+                      {getEvidenceHeading(
+                        recommendation,
+                      )}
+                    </p>
+
+                    <p className="mt-1.5 text-xs leading-relaxed text-white/40">
+                      {getEvidenceDescription(
+                        recommendation,
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {isEvidenceOnly && (
+                <div className="rounded-2xl border border-amber-400/10 bg-amber-500/[0.04] p-4">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-amber-300/75">
+                    Before trip start
+                  </p>
+
+                  <p className="mt-2 text-xs leading-relaxed text-white/45">
+                    Pulse will not start
+                    this option as a
+                    tracked journey until
+                    the required passenger
+                    fare and journey-time
+                    evidence is available.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ACTIONS */}
+          <div className="mt-4 flex gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                if (!isEvidenceOnly) {
+                  onSelect();
+                }
+              }}
+              disabled={
+                isEvidenceOnly
+              }
+              className={`
+                min-h-11 flex-1
+                rounded-2xl px-4
+                text-sm font-black
+                transition
+                ${
+                  isEvidenceOnly
+                    ? "cursor-not-allowed border border-white/[0.07] bg-white/[0.04] text-white/35"
+                    : isSelected
+                      ? "bg-cyan-500/20 text-cyan-200"
+                      : "bg-gradient-to-r from-cyan-500 to-emerald-500 text-white hover:brightness-110"
+                }
+              `}
+            >
+              {isEvidenceOnly
+                ? "Route evidence only"
+                : isSelected
+                  ? "Selected"
+                  : "Choose this option"}
+            </button>
+
+            <button
+              type="button"
+              onClick={() =>
+                setIsExpanded(
+                  (value) =>
+                    !value,
+                )
+              }
+              className="flex min-h-11 min-w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white/65 transition hover:bg-white/10"
+              aria-expanded={
+                isExpanded
+              }
+              aria-label={
+                isExpanded
+                  ? "Hide route evidence"
+                  : "Show route evidence"
+              }
+            >
+              {isExpanded ? (
+                <ChevronUp
+                  size={18}
+                />
+              ) : (
+                <ChevronDown
+                  size={18}
+                />
+              )}
+            </button>
+          </div>
+        </div>
+      </article>
+    );
+  },
+);
+
+RecommendationCard.displayName =
+  "RecommendationCard";
+
+// ======================================================
+// MAIN RECOMMENDATION LIST
+// ======================================================
+
+export const TransportRecommendation =
+  memo<TransportRecommendationProps>(
+    ({
+      recommendations,
+      selected,
+      onSelect,
+      onCompare,
+      showFilters = true,
+      showComparison = true,
+      isLoading = false,
+      className = "",
+    }) => {
+      const [
+        sortBy,
+        setSortBy,
+      ] =
+        useState<SortOption>(
+          "recommended",
+        );
+
+      const [
+        filterBy,
+        setFilterBy,
+      ] =
+        useState<FilterOption>(
+          "all",
+        );
+
+      const [
+        showSortMenu,
+        setShowSortMenu,
+      ] = useState(false);
+
+      const [
+        showFilterMenu,
+        setShowFilterMenu,
+      ] = useState(false);
+
+      const processedRecommendations =
+        useMemo(() => {
+          let filtered = [
+            ...recommendations,
+          ];
+
+          if (
+            filterBy !== "all"
+          ) {
+            filtered =
+              filtered.filter(
+                (
+                  recommendation,
+                ) => {
+                  if (
+                    filterBy ===
+                    "taxi"
+                  ) {
+                    return (
+                      recommendation.mode ===
+                      "Taxi"
+                    );
+                  }
+
+                  if (
+                    filterBy ===
+                    "train"
+                  ) {
+                    return (
+                      recommendation.mode ===
+                        "Gautrain" ||
+                      recommendation.mode ===
+                        "Metrorail"
+                    );
+                  }
+
+                  if (
+                    filterBy ===
+                    "bus"
+                  ) {
+                    return (
+                      recommendation.mode ===
+                        "Rea Vaya" ||
+                      recommendation.mode ===
+                        "A Re Yeng" ||
+                      recommendation.mode ===
+                        "Tshwane Bus Service"
+                    );
+                  }
+
+                  return true;
+                },
+              );
+          }
+
+          filtered.sort(
+            (a, b) => {
+              switch (
+                sortBy
+              ) {
+                case "fastest": {
+                  const aTime =
+                    a.estimatedTime ??
+                    Number.POSITIVE_INFINITY;
+
+                  const bTime =
+                    b.estimatedTime ??
+                    Number.POSITIVE_INFINITY;
+
+                  return (
+                    aTime -
+                    bTime
+                  );
+                }
+
+                case "cheapest": {
+                  const aFare =
+                    a.estimatedFare ??
+                    Number.POSITIVE_INFINITY;
+
+                  const bFare =
+                    b.estimatedFare ??
+                    Number.POSITIVE_INFINITY;
+
+                  return (
+                    aFare -
+                    bFare
+                  );
+                }
+
+                case "leastWalking":
+                  return (
+                    a.walkingDistance -
+                    b.walkingDistance
+                  );
+
+                case "recommended":
+                default:
+                  return (
+                    b.score -
+                    a.score
+                  );
+              }
+            },
+          );
+
+          return filtered;
+        }, [
+          filterBy,
+          recommendations,
+          sortBy,
+        ]);
+
+      // ==================================================
+      // LOADING
+      // ==================================================
+
+      if (isLoading) {
+        return (
+          <div
+            className={`space-y-4 ${className}`}
+          >
+            <div className="glass rounded-3xl p-8 text-center">
+              <div className="mx-auto h-12 w-12 animate-spin rounded-full border-2 border-white/10 border-t-cyan-400" />
+
+              <p className="mt-4 text-sm font-semibold text-white/70">
+                Checking transport
+                evidence for this
+                journey...
               </p>
+
+              <p className="mt-1 text-xs text-white/35">
+                Matching your origin
+                and destination against
+                supported network
+                geometry and connection
+                evidence.
+              </p>
+            </div>
+          </div>
+        );
+      }
+
+      // ==================================================
+      // EMPTY STATE
+      // ==================================================
+
+      if (
+        !recommendations.length
+      ) {
+        return (
+          <div
+            className={`glass rounded-3xl p-6 text-center sm:p-8 ${className}`}
+          >
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.06]">
+              <Navigation
+                size={26}
+                className="text-white/35"
+              />
+            </div>
+
+            <h3 className="mt-4 text-lg font-black text-white">
+              No supported
+              public-transport path yet
+            </h3>
+
+            <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-white/45">
+              Pulse found the
+              destination, but the
+              current verified and
+              configured network
+              evidence does not yet
+              support a route between
+              both ends of this journey.
+            </p>
+          </div>
+        );
+      }
+
+      // ==================================================
+      // RESULTS
+      // ==================================================
+
+      return (
+        <div
+          className={`space-y-4 ${className}`}
+        >
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-cyan-500/20 to-emerald-500/20">
+                <Navigation
+                  size={18}
+                  className="text-cyan-300"
+                />
+              </div>
+
+              <div className="min-w-0">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/35">
+                  Pulse journey
+                  intelligence
+                </p>
+
+                <h2 className="truncate text-lg font-black text-white">
+                  Evidence-backed
+                  journey options
+                </h2>
+              </div>
+            </div>
+
+            {showFilters && (
+              <div className="flex flex-wrap gap-2">
+                {/* SORT */}
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowSortMenu(
+                        (value) =>
+                          !value,
+                      );
+
+                      setShowFilterMenu(
+                        false,
+                      );
+                    }}
+                    className="flex min-h-10 items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.06] px-3 text-xs font-semibold text-white/65"
+                  >
+                    <TrendingUp
+                      size={13}
+                    />
+                    Sort
+                    <ChevronDown
+                      size={12}
+                    />
+                  </button>
+
+                  {showSortMenu && (
+                    <div className="absolute right-0 top-full z-20 mt-2 w-52 rounded-2xl border border-white/10 bg-slate-950/95 p-2 shadow-2xl backdrop-blur-xl">
+                      {SORT_OPTIONS.map(
+                        (
+                          option,
+                        ) => (
+                          <button
+                            key={
+                              option.value
+                            }
+                            type="button"
+                            onClick={() => {
+                              setSortBy(
+                                option.value,
+                              );
+
+                              setShowSortMenu(
+                                false,
+                              );
+                            }}
+                            className={`
+                              w-full rounded-xl
+                              px-3 py-2
+                              text-left text-xs
+                              transition
+                              ${
+                                sortBy ===
+                                option.value
+                                  ? "bg-cyan-500/15 text-cyan-300"
+                                  : "text-white/65 hover:bg-white/[0.06]"
+                              }
+                            `}
+                          >
+                            {
+                              option.label
+                            }
+                          </button>
+                        ),
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* FILTER */}
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowFilterMenu(
+                        (value) =>
+                          !value,
+                      );
+
+                      setShowSortMenu(
+                        false,
+                      );
+                    }}
+                    className="flex min-h-10 items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.06] px-3 text-xs font-semibold text-white/65"
+                  >
+                    <Filter
+                      size={13}
+                    />
+                    Filter
+                    <ChevronDown
+                      size={12}
+                    />
+                  </button>
+
+                  {showFilterMenu && (
+                    <div className="absolute right-0 top-full z-20 mt-2 w-36 rounded-2xl border border-white/10 bg-slate-950/95 p-2 shadow-2xl backdrop-blur-xl">
+                      {FILTER_OPTIONS.map(
+                        (
+                          option,
+                        ) => (
+                          <button
+                            key={
+                              option.value
+                            }
+                            type="button"
+                            onClick={() => {
+                              setFilterBy(
+                                option.value,
+                              );
+
+                              setShowFilterMenu(
+                                false,
+                              );
+                            }}
+                            className={`
+                              w-full rounded-xl
+                              px-3 py-2
+                              text-left text-xs
+                              transition
+                              ${
+                                filterBy ===
+                                option.value
+                                  ? "bg-cyan-500/15 text-cyan-300"
+                                  : "text-white/65 hover:bg-white/[0.06]"
+                              }
+                            `}
+                          >
+                            {
+                              option.label
+                            }
+                          </button>
+                        ),
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
             )}
           </div>
-        </div>
 
-        <div className="flex items-center gap-2">
-          {isSelected && (
-            <CheckCircle2 size={22} className="text-cyan-400 animate-scaleIn" />
-          )}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsExpanded(!isExpanded);
-            }}
-            className="p-1 rounded-lg hover:bg-white/10 transition-all"
-          >
-            {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-          </button>
-        </div>
-      </div>
+          <div className="flex items-center justify-between px-1 text-[10px] text-white/35">
+            <span>
+              {
+                processedRecommendations.length
+              }{" "}
+              journey option
+              {processedRecommendations.length ===
+              1
+                ? ""
+                : "s"}
+            </span>
 
-      {/* AI Reason */}
-      <div className="mt-4 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 rounded-xl p-4 border border-white/5">
-        <div className="flex items-center gap-2 mb-2">
-          <Sparkles size={14} className="text-cyan-400" />
-          <p className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
-            AI INSIGHT
-          </p>
-        </div>
-        <p className="text-sm leading-relaxed text-white/80">
-          {recommendation.reason}
-        </p>
-      </div>
-
-      {/* Metrics Grid */}
-      <div className="grid grid-cols-4 gap-3 mt-5">
-        <div className="bg-white/5 rounded-xl p-3 text-center hover:bg-white/10 transition-all">
-          <div className="flex items-center justify-center gap-1 text-[10px] text-white/40 mb-1">
-            <Clock3 size={11} />
-            <span>TIME</span>
-          </div>
-          <p className="font-bold text-base text-white">
-            {recommendation.estimatedTime}
-            <span className="text-xs text-white/40">m</span>
-          </p>
-        </div>
-
-        <div className="bg-white/5 rounded-xl p-3 text-center hover:bg-white/10 transition-all">
-          <div className="flex items-center justify-center gap-1 text-[10px] text-white/40 mb-1">
-            <Wallet size={11} />
-            <span>COST</span>
-          </div>
-          <p className="font-bold text-base text-white">
-            R{recommendation.estimatedFare.toFixed(0)}
-          </p>
-        </div>
-
-        <div className="bg-white/5 rounded-xl p-3 text-center hover:bg-white/10 transition-all">
-          <div className="flex items-center justify-center gap-1 text-[10px] text-white/40 mb-1">
-            <Footprints size={11} />
-            <span>WALK</span>
-          </div>
-          <p className="font-bold text-base text-white">
-            {recommendation.walkingDistance}
-            <span className="text-xs text-white/40">m</span>
-          </p>
-        </div>
-
-        <div className="bg-white/5 rounded-xl p-3 text-center hover:bg-white/10 transition-all">
-          <div className="flex items-center justify-center gap-1 text-[10px] text-white/40 mb-1">
-            <ShieldCheck size={11} />
-            <span>SAFETY</span>
-          </div>
-          <p className="font-bold text-base text-white">
-            {Math.round(recommendation.reliabilityScore || 85)}
-            <span className="text-xs text-white/40">%</span>
-          </p>
-        </div>
-      </div>
-
-      {/* Expanded Details */}
-      {isExpanded && (
-        <div className="mt-4 pt-4 border-t border-white/10 space-y-3 animate-fadeIn">
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            <div>
-              <p className="text-[10px] text-white/40">Affordability Score</p>
-              <div className="flex items-center gap-2 mt-1">
-                <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full"
-                    style={{ width: `${(recommendation.affordabilityScore || 80)}%` }}
-                  />
-                </div>
-                <span className="text-xs font-semibold">{recommendation.affordabilityScore || 80}%</span>
-              </div>
-            </div>
-            <div>
-              <p className="text-[10px] text-white/40">Speed Score</p>
-              <div className="flex items-center gap-2 mt-1">
-                <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full"
-                    style={{ width: `${(recommendation.speedScore || 75)}%` }}
-                  />
-                </div>
-                <span className="text-xs font-semibold">{recommendation.speedScore || 75}%</span>
-              </div>
-            </div>
-          </div>
-
-          {recommendation.confidence && (
-            <div className="flex items-center gap-2 text-[10px] text-white/40">
-              <Sparkles size={10} />
-              <span>AI Confidence: {(recommendation.confidence * 100).toFixed(0)}%</span>
-            </div>
-          )}
-        </div>
-      )}
-    </button>
-  );
-});
-
-RecommendationCard.displayName = "RecommendationCard";
-
-// ======================================================
-// MAIN COMPONENT
-// ======================================================
-
-export const TransportRecommendation = memo<TransportRecommendationProps>(({
-  recommendations,
-  selected,
-  onSelect,
-  onCompare,
-  showFilters = true,
-  showComparison = true,
-  isLoading = false,
-  className = ""
-}) => {
-  const [sortBy, setSortBy] = useState<SortOption>("best");
-  const [filterBy, setFilterBy] = useState<FilterOption>("all");
-  const [showSortMenu, setShowSortMenu] = useState(false);
-  const [showFilterMenu, setShowFilterMenu] = useState(false);
-
-  // Filter and sort recommendations
-  const processedRecommendations = useMemo(() => {
-    let filtered = [...recommendations];
-
-    // Apply filters
-    if (filterBy !== "all") {
-      filtered = filtered.filter(rec => {
-        if (filterBy === "taxi") return rec.mode === "Taxi";
-        if (filterBy === "train") return rec.mode === "Gautrain" || rec.mode === "Metrorail";
-        if (filterBy === "bus") return rec.mode === "Rea Vaya" || rec.mode === "A Re Yeng";
-        return true;
-      });
-    }
-
-    // Apply sorting
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case "fastest":
-          return a.estimatedTime - b.estimatedTime;
-        case "cheapest":
-          return a.estimatedFare - b.estimatedFare;
-        case "safest":
-          return (b.reliabilityScore || 0) - (a.reliabilityScore || 0);
-        case "leastWalking":
-          return a.walkingDistance - b.walkingDistance;
-        case "best":
-        default:
-          return (b.score || 0) - (a.score || 0);
-      }
-    });
-
-    return filtered;
-  }, [recommendations, sortBy, filterBy]);
-
-  if (isLoading) {
-    return (
-      <div className="space-y-4">
-        <div className="glass rounded-2xl p-8 text-center">
-          <div className="animate-pulse space-y-4">
-            <div className="w-16 h-16 mx-auto rounded-full bg-cyan-500/20" />
-            <div className="h-4 bg-white/10 rounded w-3/4 mx-auto" />
-            <div className="h-3 bg-white/5 rounded w-1/2 mx-auto" />
-          </div>
-          <p className="text-white/50 text-sm mt-4">Analyzing best routes...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!recommendations.length) {
-    return (
-      <div className="glass rounded-2xl p-8 text-center">
-        <div className="w-16 h-16 mx-auto rounded-full bg-white/10 flex items-center justify-center mb-4">
-          <Navigation size={32} className="text-white/30" />
-        </div>
-        <p className="text-white/50">No recommendations found</p>
-        <p className="text-xs text-white/30 mt-2">Try a different destination</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className={`space-y-4 ${className}`}>
-      {/* Header with Filters */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-cyan-500/20 to-emerald-500/20 flex items-center justify-center">
-            <Sparkles size={18} className="text-cyan-400" />
-          </div>
-          <div>
-            <p className="text-[10px] text-white/40 uppercase tracking-wider">
-              AI JOURNEY ENGINE
-            </p>
-            <h2 className="text-lg font-bold text-white">
-              Recommended Routes
-            </h2>
-          </div>
-        </div>
-
-        {showFilters && (
-          <div className="flex items-center gap-2">
-            {/* Sort Button */}
-            <div className="relative">
-              <button
-                onClick={() => {
-                  setShowSortMenu(!showSortMenu);
-                  setShowFilterMenu(false);
-                }}
-                className="px-3 py-1.5 rounded-xl bg-white/10 text-xs text-white/70 flex items-center gap-1"
-              >
-                <TrendingUp size={12} />
-                Sort
-                <ChevronDown size={10} />
-              </button>
-              
-              {showSortMenu && (
-                <div className="absolute right-0 top-full mt-2 w-40 glass rounded-xl p-2 z-10 animate-fadeIn">
-                  {SORT_OPTIONS.map(option => (
-                    <button
-                      key={option.value}
-                      onClick={() => {
-                        setSortBy(option.value);
-                        setShowSortMenu(false);
-                      }}
-                      className={`
-                        w-full text-left px-3 py-2 rounded-lg text-xs
-                        transition-all flex items-center gap-2
-                        ${sortBy === option.value ? 'bg-cyan-500/20 text-cyan-400' : 'text-white/70 hover:bg-white/10'}
-                      `}
-                    >
-                      {option.icon}
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
+            {showComparison &&
+              processedRecommendations.length >
+                1 &&
+              onCompare && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    onCompare(
+                      processedRecommendations,
+                    )
+                  }
+                  className="font-semibold text-cyan-300 transition hover:text-cyan-200"
+                >
+                  Compare
+                </button>
               )}
-            </div>
-
-            {/* Filter Button */}
-            <div className="relative">
-              <button
-                onClick={() => {
-                  setShowFilterMenu(!showFilterMenu);
-                  setShowSortMenu(false);
-                }}
-                className="px-3 py-1.5 rounded-xl bg-white/10 text-xs text-white/70 flex items-center gap-1"
-              >
-                <Filter size={12} />
-                Filter
-                <ChevronDown size={10} />
-              </button>
-              
-              {showFilterMenu && (
-                <div className="absolute right-0 top-full mt-2 w-32 glass rounded-xl p-2 z-10 animate-fadeIn">
-                  {FILTER_OPTIONS.map(option => (
-                    <button
-                      key={option.value}
-                      onClick={() => {
-                        setFilterBy(option.value);
-                        setShowFilterMenu(false);
-                      }}
-                      className={`
-                        w-full text-left px-3 py-2 rounded-lg text-xs
-                        transition-all
-                        ${filterBy === option.value ? 'bg-cyan-500/20 text-cyan-400' : 'text-white/70 hover:bg-white/10'}
-                      `}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
           </div>
-        )}
-      </div>
 
-      {/* Results Count */}
-      <div className="flex items-center justify-between px-1">
-        <p className="text-[10px] text-white/40">
-          {processedRecommendations.length} route{processedRecommendations.length !== 1 ? 's' : ''} found
-        </p>
-        {showComparison && processedRecommendations.length > 1 && onCompare && (
-          <button
-            onClick={() => onCompare(processedRecommendations)}
-            className="text-[10px] text-cyan-400 hover:text-cyan-300 transition-colors"
-          >
-            Compare All
-          </button>
-        )}
-      </div>
+          <div className="space-y-3">
+            {processedRecommendations.map(
+              (
+                recommendation,
+                index,
+              ) => (
+                <RecommendationCard
+                  key={
+                    recommendation.id
+                  }
+                  recommendation={
+                    recommendation
+                  }
+                  isSelected={
+                    selected?.id ===
+                    recommendation.id
+                  }
+                  onSelect={() =>
+                    onSelect(
+                      recommendation,
+                    )
+                  }
+                  index={index}
+                />
+              ),
+            )}
+          </div>
 
-      {/* Recommendations List */}
-      <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
-        {processedRecommendations.map((recommendation, idx) => (
-          <RecommendationCard
-            key={recommendation.id}
-            recommendation={recommendation}
-            isSelected={selected?.id === recommendation.id}
-            onSelect={() => onSelect(recommendation)}
-            index={idx}
-          />
-        ))}
-      </div>
-
-      {/* AI Disclaimer */}
-      <p className="text-[10px] text-white/20 text-center px-4">
-        Recommendations based on real-time data and AI analysis
-      </p>
-    </div>
+          <p className="px-4 text-center text-[10px] leading-relaxed text-white/25">
+            Pulse separates
+            road-driving context from
+            public-transport evidence.
+            Exact fares, journey times
+            and transfer instructions
+            are only presented when the
+            available evidence supports
+            them.
+          </p>
+        </div>
+      );
+    },
   );
-});
 
-TransportRecommendation.displayName = "TransportRecommendation";
+TransportRecommendation.displayName =
+  "TransportRecommendation";
 
-// ======================================================
-// EXPORT TYPES
-// ======================================================
-export type { SortOption, FilterOption };
+export type {
+  FilterOption,
+  SortOption,
+};

@@ -1,0 +1,34 @@
+{
+  "generatedAt": "2026-09-22T18:34:15.357Z",
+  "source": "Existing local Metrobus Phase 1D crosswalk and QA only; no new operator verification",
+  "counts": {
+    "gisFeatures": 110,
+    "inventoryRoutes": 33,
+    "exactCodeOverlapsForManualValidation": 18,
+    "gisOnlyRelativeToIncompleteExcerpt": 92,
+    "indexedOnlyRelativeToGIS": 15,
+    "rawGisIdDisagreementsForInterpretation": 50
+  },
+  "restrictions": {
+    "sourceRights": "CoJ GIS metadata: CoJ to decide. Obtain reuse rights before public distribution.",
+    "publishedStopMembership": false,
+    "verifiedRouteDirection": false,
+    "verifiedCurrentOperation": false,
+    "verifiedRouteGeometryEquivalence": false,
+    "verifiedFaresAndSchedules": false,
+    "passengerRoutingEnabled": false,
+    "geographicProximityDoesNotProveStopMembership": true
+  },
+  "checksPassed": [
+    "Source Phase 1D QA matches crosswalk counts",
+    "GIS object IDs are unique",
+    "GIS and partial inventory category totals reconcile",
+    "No source record claims verified services, direction, stops or passenger routing",
+    "Only minimal review metadata is exported; no geometry, stop photos or private filenames"
+  ],
+  "errors": [],
+  "inputSha256": {
+    "crosswalk": "2365a42ddc5b443363fc39c3f86f8df8e77b9437c8631f6fa35400dd4a09b77a",
+    "crosswalkQa": "599c5b7319cb0dc1d5f794774669203c372c7c1c84a914e530c5fa0b0f32128b"
+  }
+}

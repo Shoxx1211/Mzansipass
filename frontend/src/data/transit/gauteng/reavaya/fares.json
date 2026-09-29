@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "operatorId": "reavaya",
+  "currency": "ZAR",
+  "effectiveFrom": "2026-07-01",
+  "effectiveTo": "2027-06-30",
+  "source": {
+    "authority": "Rea Vaya / City of Johannesburg",
+    "documentTitle": "Rea Vaya Fares",
+    "sourceType": "official-web-page",
+    "sourceFile": "raw/fares.html",
+    "sourceUrl": "https://reavaya.org.za/fares/",
+    "confidence": "official",
+    "transcriptionMethod": "official-published-values-transcribed-and-QA-checked"
+  },
+  "fareModel": {
+    "type": "distance-banded",
+    "distanceUnit": "km",
+    "distanceBasis": "Rea Vaya journey distance",
+    "distanceRoundingRule": "not-specified-by-source",
+    "computationalBandPolicy": {
+      "status": "normalized-derived-boundaries",
+      "explanation": "Published labels are preserved on each band. Continuous thresholds are normalized as <=5, >5<=10, >10<=15, >15<=25, >25<=35, >35<=45 and >45 for deterministic application logic.",
+      "officialFareEngineEquivalent": "not-claimed"
+    },
+    "bands": [
+      {
+        "id": "rv-fare-0-5",
+        "sourceLabel": "0 - 5km",
+        "offPeakSourceLabel": "Less than 5km (Minimum Fare)",
+        "lowerBoundKm": 0,
+        "lowerInclusive": true,
+        "upperBoundKm": 5,
+        "upperInclusive": true,
+        "peakFare": 11.5,
+        "offPeakFare": 10,
+        "currency": "ZAR"
+      },
+      {
+        "id": "rv-fare-5-10",
+        "sourceLabel": "5.1 - 10km",
+        "offPeakSourceLabel": "More than 5km but less than and equals to 10km",
+        "lowerBoundKm": 5,
+        "lowerInclusive": false,
+        "upperBoundKm": 10,
+        "upperInclusive": true,
+        "peakFare": 14.5,
+        "offPeakFare": 13,
+        "currency": "ZAR"
+      },
+      {
+        "id": "rv-fare-10-15",
+        "sourceLabel": "10.1 - 15km",
+        "offPeakSourceLabel": "More than 10km but less than and equals to 15km",
+        "lowerBoundKm": 10,
+        "lowerInclusive": false,
+        "upperBoundKm": 15,
+        "upperInclusive": true,
+        "peakFare": 17,
+        "offPeakFare": 15,
+        "currency": "ZAR"
+      },
+      {
+        "id": "rv-fare-15-25",
+        "sourceLabel": "15.1 - 25km",
+        "offPeakSourceLabel": "More than 15km but less than and equals to 25km",
+        "lowerBoundKm": 15,
+        "lowerInclusive": false,
+        "upperBoundKm": 25,
+        "upperInclusive": true,
+        "peakFare": 19.5,
+        "offPeakFare": 17.5,
+        "currency": "ZAR"
+      },
+      {
+        "id": "rv-fare-25-35",
+        "sourceLabel": "25.1 - 35km",
+        "offPeakSourceLabel": "More than 25km but less than 35km",
+        "lowerBoundKm": 25,
+        "lowerInclusive": false,
+        "upperBoundKm": 35,
+        "upperInclusive": true,
+        "peakFare": 21.5,
+        "offPeakFare": 19.5,
+        "currency": "ZAR"
+      },
+      {
+        "id": "rv-fare-35-45",
+        "sourceLabel": "35.1 - 45km",
+        "offPeakSourceLabel": "More than 35km but less than 45km",
+        "lowerBoundKm": 35,
+        "lowerInclusive": false,
+        "upperBoundKm": 45,
+        "upperInclusive": true,
+        "peakFare": 22.5,
+        "offPeakFare": 20.5,
+        "currency": "ZAR"
+      },
+      {
+        "id": "rv-fare-over-45",
+        "sourceLabel": "More than 45km",
+        "offPeakSourceLabel": "More than 45km (Maximum Fare)",
+        "lowerBoundKm": 45,
+        "lowerInclusive": false,
+        "upperBoundKm": null,
+        "upperInclusive": false,
+        "peakFare": 28.5,
+        "offPeakFare": 26.5,
+        "currency": "ZAR"
+      }
+    ]
+  },
+  "offPeak": {
+    "published": true,
+    "marketingDescription": "10% discount for off-peak travel",
+    "calculationMethod": "use-published-off-peak-values",
+    "calculateAsPercentage": false,
+    "timeWindow": null,
+    "timeWindowStatus": "not-normalized-from-fare-source",
+    "note": "Pulse must use the published off-peak fare column, not calculate a 10% reduction itself."
+  },
+  "transferRule": {
+    "fareContinuationSupported": true,
+    "publishedRule": "A connecting bus ride may count as continuation of the first journey rather than a new trip.",
+    "passengerAction": "At a Rea Vaya station, passengers continuing onto a connecting bus do not tap out and tap in again; they tap out at the final destination.",
+    "transferTimeLimit": null,
+    "transferTimeLimitStatus": "not-specified-in-normalized-source"
+  },
+  "paymentProducts": {
+    "abtCard": {
+      "price": 30,
+      "minimumBalanceToTravel": 30,
+      "currency": "ZAR"
+    },
+    "qrSingleUse": {
+      "price": 30,
+      "currency": "ZAR"
+    },
+    "qrEventPass": {
+      "price": 60,
+      "currency": "ZAR"
+    }
+  },
+  "penalties": {
+    "generalPenaltyFee": 30,
+    "inspectionFareEvasionPenalty": 60,
+    "currency": "ZAR"
+  },
+  "appRules": [
+    "Do not calculate Rea Vaya fare from Mapbox driving distance.",
+    "Do not calculate Rea Vaya fare from straight-line distance.",
+    "Fare calculation requires an appropriate Rea Vaya journey distance or official fare-system equivalent.",
+    "Use published off-peak values rather than mathematically subtracting 10 percent.",
+    "Do not infer an off-peak time window from the fare table until the applicable service/fare rule has been verified.",
+    "Do not charge each leg independently when an official Rea Vaya transfer is treated as continuation of one journey.",
+    "Preserve the published effective period when presenting current fares."
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "generatedAt": "2026-09-17T16:28:45.828Z",
+  "operatorId": "gautrain",
+  "expectedStationCount": 10,
+  "normalizedStationCount": 10,
+  "failedStationCount": 0,
+  "failures": [],
+  "headingMismatchCount": 0,
+  "headingMismatches": [],
+  "duplicateCoordinateCount": 0,
+  "duplicateCoordinates": [],
+  "coordinateMethod": "Official Gautrain GPS DDM values converted to decimal degrees",
+  "gpsPolygonsInferred": false,
+  "routeGeometryInferred": false,
+  "notes": [
+    "Station coordinates come from official Gautrain station pages.",
+    "South latitudes are stored as negative decimal degrees.",
+    "East longitudes are stored as positive decimal degrees.",
+    "Decimal commas in source GPS values are normalized before conversion.",
+    "No train route geometry, timetable or live data is inferred by this normalizer."
+  ]
+}

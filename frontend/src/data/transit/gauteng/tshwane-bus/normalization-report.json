@@ -1,0 +1,43 @@
+{
+  "generatedAt": "2026-09-17T11:18:29.796Z",
+  "operatorId": "tshwane-bus",
+  "sourceAuthority": "City of Tshwane",
+  "sourceTerminalFeatureCount": 131,
+  "normalizedTerminalCount": 131,
+  "skippedTerminalCount": 0,
+  "sourceRouteFeatureCount": 79,
+  "normalizedGeometryVariantCount": 79,
+  "logicalRouteCount": 78,
+  "referencedRouteIdCount": 78,
+  "sharedTerminalCount": 33,
+  "routesWithBothFromAndTo": 77,
+  "routesWithOnlyFrom": 0,
+  "routesWithOnlyTo": 1,
+  "routesWithoutTerminalData": 0,
+  "unmatchedTerminalRouteIdCount": 0,
+  "unmatchedTerminalRouteIds": [],
+  "geometryTypes": {
+    "MultiLineString": 74,
+    "LineString": 5
+  },
+  "alternateRoutes": [
+    {
+      "routeId": "SCA",
+      "name": "INOVATION HUB (MURRYFIELD 2)",
+      "variantCount": 2,
+      "alternates": [
+        "1",
+        "2"
+      ]
+    }
+  ],
+  "routesWithoutTerminals": [],
+  "skippedTerminals": [],
+  "notes": [
+    "The City GIS point layer is treated as route endpoint/terminal data, not as a complete roadside bus-stop dataset.",
+    "Terminal-to-route relationships use the official Route_ID field rather than spatial inference.",
+    "Comma-separated Route_ID values are treated as one terminal shared by multiple routes.",
+    "Multiple geometry features with the same Route_ID are retained as variants of one logical route.",
+    "No timetable, roadside stop sequence, fare or live arrival data is inferred by this normalizer."
+  ]
+}

@@ -1,0 +1,96 @@
+﻿{
+    "displayFieldName":  "NAME",
+    "fieldAliases":  {
+                         "OBJECTID":  "OBJECTID",
+                         "NAME":  "Name",
+                         "ROUTE_ID":  "Route ID",
+                         "NAME_OF_RO":  "Name of Route",
+                         "ROUTE_ORIG":  "Route Origin",
+                         "ORIGIN_ADD":  "Origin Address",
+                         "ROUTE_DEST":  "Route Destination",
+                         "DESTINATIO":  "Destination",
+                         "SHAPE.STLength()":  "SHAPE.STLength()"
+                     },
+    "fields":  [
+                   {
+                       "name":  "OBJECTID",
+                       "type":  "esriFieldTypeOID",
+                       "alias":  "OBJECTID"
+                   },
+                   {
+                       "name":  "NAME",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "Name",
+                       "length":  254
+                   },
+                   {
+                       "name":  "ROUTE_ID",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "Route ID"
+                   },
+                   {
+                       "name":  "NAME_OF_RO",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "Name of Route",
+                       "length":  254
+                   },
+                   {
+                       "name":  "ROUTE_ORIG",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "Route Origin",
+                       "length":  254
+                   },
+                   {
+                       "name":  "ORIGIN_ADD",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "Origin Address",
+                       "length":  254
+                   },
+                   {
+                       "name":  "ROUTE_DEST",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "Route Destination",
+                       "length":  254
+                   },
+                   {
+                       "name":  "DESTINATIO",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "Destination",
+                       "length":  254
+                   },
+                   {
+                       "name":  "SHAPE.STLength()",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "SHAPE.STLength()"
+                   }
+               ],
+    "features":  [
+                     {
+                         "attributes":  {
+                                            "OBJECTID":  1,
+                                            "NAME":  "ROUTE 55",
+                                            "ROUTE_ID":  60.0,
+                                            "NAME_OF_RO":  "GANDHI SQUARE TO MEREDALE via SOUTHGATE",
+                                            "ROUTE_ORIG":  "Gandhi Square",
+                                            "ORIGIN_ADD":  "Corner Eloff Street \u0026 Main Street",
+                                            "ROUTE_DEST":  "Meredale",
+                                            "DESTINATIO":  "Joan Street \u0026 Margaret Street",
+                                            "SHAPE.STLength()":  16429.376987817108
+                                        }
+                     },
+                     {
+                         "attributes":  {
+                                            "OBJECTID":  2,
+                                            "NAME":  "ROUTE 63",
+                                            "ROUTE_ID":  63.0,
+                                            "NAME_OF_RO":  "PRITCHARD \u0026 NUGGET STR TO NEWLANDS",
+                                            "ROUTE_ORIG":  "Sanlam Centre",
+                                            "ORIGIN_ADD":  "Plein Street \u0026 Klein Street",
+                                            "ROUTE_DEST":  "Newlands",
+                                            "DESTINATIO":  "Lebombo Street \u0026 Blinkwater Street",
+                                            "SHAPE.STLength()":  13791.158421907254
+                                        }
+                     }
+                 ],
+    "exceededTransferLimit":  true
+}

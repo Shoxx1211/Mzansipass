@@ -46,7 +46,11 @@ export interface TripPrompt {
 export interface TripSummary {
   fare: number;
   fareConfidence: number;
-  fareSource: "distance" | "learned" | "cached";
+  fareSource:
+  | "distance"
+  | "learned"
+  | "cached"
+  | "configured";
   distance: number;
   network: string;
   route: string;
