@@ -485,10 +485,11 @@ selectable: false,
               ? "same-canonical-route"
               : "published-shared-stop-connectivity",
 
-          // Evidence can be shown, but the user cannot start a tracked
-          // trip until a passenger-specific fare/time is defensible.
+          // The commuter may choose and track this evidence-backed route.
+          // Missing fare/time stays explicitly unverified and can be
+          // confirmed after the journey.
           selectable:
-            false,
+            true,
         });
       }
     }
