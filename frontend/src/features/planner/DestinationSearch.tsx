@@ -140,16 +140,6 @@ const PULSE_DESTINATIONS: DestinationPlace[] = [
   { id: "bara", name: "Chris Hani Baragwanath Hospital", label: "Chris Hani Baragwanath Academic Hospital, Soweto, Gauteng", category: "Hospital", source: "pulse" },
   { id: "uj-apk", name: "University of Johannesburg APK", label: "University of Johannesburg Auckland Park Kingsway Campus", category: "University", source: "pulse" },
   { id: "wits", name: "University of the Witwatersrand", label: "Wits University, Braamfontein, Johannesburg", category: "University", source: "pulse" },
-  { id: "cape-town-cbd", name: "Cape Town CBD", label: "Cape Town, Western Cape", category: "City centre", source: "pulse" },
-  { id: "cape-town-station", name: "Cape Town Station", label: "Cape Town Station, Cape Town, Western Cape", category: "Rail & bus station", source: "pulse" },
-  { id: "durban-cbd", name: "Durban CBD", label: "Durban, KwaZulu-Natal", category: "City centre", source: "pulse" },
-  { id: "durban-station", name: "Durban Station", label: "Durban Station, Durban, KwaZulu-Natal", category: "Rail station", source: "pulse" },
-  { id: "bloemfontein-cbd", name: "Bloemfontein CBD", label: "Bloemfontein, Free State", category: "City centre", source: "pulse" },
-  { id: "gqeberha-cbd", name: "Gqeberha CBD", label: "Gqeberha, Eastern Cape", category: "City centre", source: "pulse" },
-  { id: "mbombela-cbd", name: "Mbombela CBD", label: "Mbombela, Mpumalanga", category: "City centre", source: "pulse" },
-  { id: "polokwane-cbd", name: "Polokwane CBD", label: "Polokwane, Limpopo", category: "City centre", source: "pulse" },
-  { id: "kimberley-cbd", name: "Kimberley CBD", label: "Kimberley, Northern Cape", category: "City centre", source: "pulse" },
-  { id: "mahikeng-cbd", name: "Mahikeng CBD", label: "Mahikeng, North West", category: "City centre", source: "pulse" },
 ];
 
 const normalize = (value: string) =>
@@ -772,8 +762,8 @@ export const DestinationSearch = ({
 
         {!mapboxToken && (
           <p className="text-xs leading-5 text-white/35">
-            Live address search is not configured yet. Pulse is using its
-            built-in South African commuter destination index.
+            Live nationwide address search is not configured yet. Pulse is using
+            its built-in commuter destination index.
           </p>
         )}
 
