@@ -1779,6 +1779,256 @@ const multimodalCandidates = (
   return results;
 };
 
+
+const PRETORIA_CBD_REFERENCE: Location = {
+  lat: -25.7479,
+  lng: 28.1881,
+};
+
+const JOHANNESBURG_CBD_REFERENCE: Location = {
+  lat: -26.2041,
+  lng: 28.0473,
+};
+
+const SOWETO_REFERENCE: Location = {
+  lat: -26.2678,
+  lng: 27.8585,
+};
+
+const SOSHANGUVE_REFERENCE: Location = {
+  lat: -25.54,
+  lng: 28.10,
+};
+
+const BRONKHORSTSPRUIT_REFERENCE: Location = {
+  lat: -25.81,
+  lng: 28.74,
+};
+
+const nearReference = (
+  point: Location,
+  reference: Location,
+  radiusKm: number,
+): boolean =>
+  haversineKm(
+    point,
+    reference,
+  ) <= radiusKm;
+
+const putcoServiceAreaCandidates = (
+  origin: Location,
+  destination: Location,
+): TransportRecommendation[] => {
+  const originInNorthernTshwane =
+    nearReference(
+      origin,
+      SOSHANGUVE_REFERENCE,
+      35,
+    ) ||
+    nearReference(
+      origin,
+      BRONKHORSTSPRUIT_REFERENCE,
+      28,
+    );
+
+  const destinationInNorthernTshwane =
+    nearReference(
+      destination,
+      SOSHANGUVE_REFERENCE,
+      35,
+    ) ||
+    nearReference(
+      destination,
+      BRONKHORSTSPRUIT_REFERENCE,
+      28,
+    );
+
+  const originInPretoria =
+    nearReference(
+      origin,
+      PRETORIA_CBD_REFERENCE,
+      20,
+    );
+
+  const destinationInPretoria =
+    nearReference(
+      destination,
+      PRETORIA_CBD_REFERENCE,
+      20,
+    );
+
+  const originInSoweto =
+    nearReference(
+      origin,
+      SOWETO_REFERENCE,
+      25,
+    );
+
+  const destinationInSoweto =
+    nearReference(
+      destination,
+      SOWETO_REFERENCE,
+      25,
+    );
+
+  const originInJohannesburg =
+    nearReference(
+      origin,
+      JOHANNESBURG_CBD_REFERENCE,
+      20,
+    );
+
+  const destinationInJohannesburg =
+    nearReference(
+      destination,
+      JOHANNESBURG_CBD_REFERENCE,
+      20,
+    );
+
+  const tshwaneMatch =
+    (
+      originInNorthernTshwane &&
+      destinationInPretoria
+    ) ||
+    (
+      destinationInNorthernTshwane &&
+      originInPretoria
+    );
+
+  const sowetoMatch =
+    (
+      originInSoweto &&
+      destinationInJohannesburg
+    ) ||
+    (
+      destinationInSoweto &&
+      originInJohannesburg
+    );
+
+  if (
+    !tshwaneMatch &&
+    !sowetoMatch
+  ) {
+    return [];
+  }
+
+  const corridorLabel =
+    tshwaneMatch
+      ? "Soshanguve / Tshwane ↔ Pretoria"
+      : "Soweto ↔ Johannesburg";
+
+  return [
+    {
+      id:
+        `discovery:putco-service-area:${tshwaneMatch ? "tshwane" : "soweto"}`,
+      mode: "Putco",
+      score: 38,
+      estimatedFare: null,
+      estimatedTime: null,
+      estimatedTravelTime: null,
+      walkingDistance: 0,
+      routeName:
+        `PUTCO · ${corridorLabel}`,
+      subtitle:
+        "Published operator service area",
+      reason:
+        `PUTCO publishes commuter services in the ${corridorLabel} travel area. Pulse has not yet integrated the exact stop sequence, current timetable or fare for this specific trip, so this is shown as an operator match rather than a confirmed route.`,
+      badges: [
+        "PUBLISHED_CONNECTION",
+        "FARE_VERIFY",
+      ],
+      color: "#38BDF8",
+      confidence: 0.58,
+      dataQuality: "limited",
+      direct: false,
+      routeCodes: [
+        "PUTCO",
+      ],
+      transferStops: [],
+      fareStatus: "unverified",
+      timeStatus: "unverified",
+      evidenceStatus:
+        "published-service-area",
+      selectable: false,
+    },
+  ];
+};
+
+const prasaServiceAreaCandidates = (
+  origin: Location,
+  destination: Location,
+): TransportRecommendation[] => {
+  const originNearPretoria =
+    nearReference(
+      origin,
+      PRETORIA_CBD_REFERENCE,
+      40,
+    );
+
+  const destinationNearPretoria =
+    nearReference(
+      destination,
+      PRETORIA_CBD_REFERENCE,
+      40,
+    );
+
+  const oneEndCentralPretoria =
+    nearReference(
+      origin,
+      PRETORIA_CBD_REFERENCE,
+      10,
+    ) ||
+    nearReference(
+      destination,
+      PRETORIA_CBD_REFERENCE,
+      10,
+    );
+
+  if (
+    !originNearPretoria ||
+    !destinationNearPretoria ||
+    !oneEndCentralPretoria
+  ) {
+    return [];
+  }
+
+  return [
+    {
+      id:
+        "discovery:prasa-service-area:tshwane",
+      mode: "Metrorail",
+      score: 40,
+      estimatedFare: null,
+      estimatedTime: null,
+      estimatedTravelTime: null,
+      walkingDistance: 0,
+      routeName:
+        "PRASA Metrorail · Tshwane corridors",
+      subtitle:
+        "Published commuter-rail service area",
+      reason:
+        "Current City of Tshwane transport planning identifies PRASA commuter-rail corridors linking Pretoria with Mabopane, Saulsville, Pienaarspoort, De Wildt and Centurion. Pulse has not yet integrated the exact current station sequence, timetable and fare for this trip, so this is shown as a rail-network match rather than a confirmed route.",
+      badges: [
+        "OFFICIAL_SERVICE",
+        "FARE_VERIFY",
+      ],
+      color: "#22C55E",
+      confidence: 0.62,
+      dataQuality: "limited",
+      direct: false,
+      routeCodes: [
+        "PRASA Metrorail",
+      ],
+      transferStops: [],
+      fareStatus: "unverified",
+      timeStatus: "unverified",
+      evidenceStatus:
+        "published-service-area",
+      selectable: false,
+    },
+  ];
+};
+
 const dedupeRecommendations = (
   recommendations: TransportRecommendation[],
 ): TransportRecommendation[] => {
@@ -1900,6 +2150,14 @@ export class JourneyDiscoveryEngine {
         routes,
         stops,
         now,
+      ),
+      ...prasaServiceAreaCandidates(
+        origin,
+        destination,
+      ),
+      ...putcoServiceAreaCandidates(
+        origin,
+        destination,
       ),
     ])
       .sort(
