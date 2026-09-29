@@ -1149,7 +1149,7 @@ const App = () => {
 
         if (enrichedRecommendations.length === 0) {
           setError(
-            "Pulse found the destination, but no supported public-transport route or connection is available in the currently supported operator data for both ends of this journey.",
+            "Pulse found the destination, but supported operator data is not yet available for enough of this trip to build a reliable public-transport journey.",
           );
         }
       } catch (planningError) {
@@ -1663,7 +1663,7 @@ const App = () => {
                         </h1>
 
                         <p className="mt-3 max-w-xl text-sm leading-6 text-white/45 sm:text-[15px]">
-                          Plan taxi, rail and bus journeys across South Africa.
+                          Built for South Africa. Pulse brings supported taxi, rail and bus connections into one journey.
                         </p>
                       </div>
 
