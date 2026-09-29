@@ -171,6 +171,101 @@ const formatDistance = (distanceKm: number | null): string => {
   return `${distanceKm.toFixed(1)} km`;
 };
 
+const straightLineDistanceKm = (
+  origin: Location,
+  destination: Location,
+): number => {
+  const earthRadiusKm = 6371;
+  const toRadians = (value: number) =>
+    (value * Math.PI) / 180;
+
+  const dLat = toRadians(
+    destination.lat - origin.lat,
+  );
+  const dLng = toRadians(
+    destination.lng - origin.lng,
+  );
+  const lat1 = toRadians(origin.lat);
+  const lat2 = toRadians(destination.lat);
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1) *
+      Math.cos(lat2) *
+      Math.sin(dLng / 2) ** 2;
+
+  return (
+    earthRadiusKm *
+    2 *
+    Math.atan2(
+      Math.sqrt(a),
+      Math.sqrt(1 - a),
+    )
+  );
+};
+
+const buildRoadFallbackRecommendation = (
+  routePlan: RoutePlanSummary,
+): RecommendationType | null => {
+  if (
+    routePlan.distanceKm === null ||
+    !Number.isFinite(routePlan.distanceKm) ||
+    routePlan.distanceKm <= 0
+  ) {
+    return null;
+  }
+
+  const estimatedTime =
+    routePlan.roadDurationSeconds !== null &&
+    Number.isFinite(
+      routePlan.roadDurationSeconds,
+    ) &&
+    routePlan.roadDurationSeconds > 0
+      ? Math.max(
+          1,
+          Math.round(
+            routePlan.roadDurationSeconds /
+              60,
+          ),
+        )
+      : null;
+
+  return {
+    id: "road-fallback:taxi",
+    mode: "Taxi",
+    score: 45,
+    estimatedFare: null,
+    estimatedTime,
+    estimatedTravelTime:
+      estimatedTime,
+    walkingDistance: 0,
+    serviceDistanceKm:
+      routePlan.distanceKm,
+    routeName:
+      "Road-based public transport option",
+    subtitle:
+      "Taxi / road connection available",
+    reason:
+      "Pulse can confirm a road connection to this destination. The exact minibus-taxi rank, vehicle change, route code and fare are not verified yet, so confirm those details locally before boarding.",
+    badges: [
+      "ROAD_ROUTE",
+      "FARE_VERIFY",
+    ],
+    color: "#F59E0B",
+    confidence: 0.55,
+    dataQuality: "limited",
+    direct: true,
+    fareStatus: "unverified",
+    timeStatus:
+      estimatedTime === null
+        ? "unverified"
+        : "estimated",
+    evidenceStatus:
+      "road-baseline",
+    selectable: true,
+  };
+};
+
 const getMapboxRoadBaseline = async (
   origin: Location,
   destination: DestinationPlace,
@@ -214,8 +309,43 @@ const getMapboxRoadBaseline = async (
     return null;
   }
 
+  const routeDistanceKm =
+    route.distance / 1000;
+
+  const directDistanceKm =
+    straightLineDistanceKm(
+      origin,
+      {
+        lat: destination.lat,
+        lng: destination.lng,
+      },
+    );
+
+  const maximumPlausibleRoadKm =
+    Math.max(
+      directDistanceKm * 4,
+      directDistanceKm + 20,
+    );
+
+  if (
+    Number.isFinite(directDistanceKm) &&
+    directDistanceKm > 0 &&
+    routeDistanceKm >
+      maximumPlausibleRoadKm
+  ) {
+    console.warn(
+      "Rejected implausible Mapbox road baseline:",
+      {
+        routeDistanceKm,
+        directDistanceKm,
+      },
+    );
+
+    return null;
+  }
+
   return {
-    distanceKm: route.distance / 1000,
+    distanceKm: routeDistanceKm,
     roadDurationSeconds:
       route.duration !== undefined && Number.isFinite(route.duration)
         ? route.duration
@@ -851,11 +981,33 @@ const App = () => {
           baseRecommendations.map((recommendation) => recommendation.id),
         );
 
+        const hasTaxiRecommendation =
+          baseRecommendations.some(
+            (recommendation) =>
+              recommendation.mode ===
+              "Taxi",
+          ) ||
+          discoveryRecommendations.some(
+            (recommendation) =>
+              recommendation.mode ===
+              "Taxi",
+          );
+
+        const roadFallback =
+          hasTaxiRecommendation
+            ? null
+            : buildRoadFallbackRecommendation(
+                nextRoutePlan,
+              );
+
         const combinedRecommendations = [
           ...baseRecommendations,
           ...discoveryRecommendations.filter(
             (recommendation) => !recommendationIds.has(recommendation.id),
           ),
+          ...(roadFallback
+            ? [roadFallback]
+            : []),
         ]
           .sort((a, b) => b.score - a.score)
           .slice(0, 8);
@@ -1001,20 +1153,14 @@ const App = () => {
       recalculatedFare ??
       rec.estimatedFare;
 
-    if (
-      finalFare === null ||
-      !Number.isFinite(finalFare)
-    ) {
-      setError(
-        "Pulse does not yet have a usable fare for this journey.",
-      );
-
-      return;
-    }
-
     setSelectedRecommendation(rec);
     setNetwork(selectedNetwork);
-    setEstimatedFare(finalFare);
+    setEstimatedFare(
+      finalFare !== null &&
+      Number.isFinite(finalFare)
+        ? finalFare
+        : null,
+    );
     setPlanningStep("fare");
     setError(null);
   },
@@ -1676,7 +1822,7 @@ const App = () => {
 
                     {/* STEP 3: FARE / START */}
 
-                    {planningStep === "fare" && estimatedFare !== null && (
+                    {planningStep === "fare" && selectedRecommendation && (
                       <div className="space-y-5 pb-32">
                         <button
                           type="button"
@@ -1696,7 +1842,7 @@ const App = () => {
                             destination={destination}
                             distance={routePlan.distanceKm ?? 0}
                             duration={plannedDurationSeconds}
-                            estimatedFare={estimatedFare}
+                            estimatedFare={estimatedFare ?? undefined}
                             variant="compact"
                             showTilt={false}
                           />
@@ -1740,8 +1886,16 @@ const App = () => {
                                 <span className="text-sm text-white/45">
                                   Est. fare
                                 </span>
-                                <span className="text-lg font-black text-emerald-300">
-                                  R{estimatedFare.toFixed(2)}
+                                <span
+                                  className={
+                                    estimatedFare !== null
+                                      ? "text-lg font-black text-emerald-300"
+                                      : "text-sm font-bold text-amber-200"
+                                  }
+                                >
+                                  {estimatedFare !== null
+                                    ? `R${estimatedFare.toFixed(2)}`
+                                    : "Not verified"}
                                 </span>
                               </div>
                             </div>
@@ -1791,7 +1945,9 @@ const App = () => {
                             Estimated fare
                           </p>
                           <p className="mt-1 text-4xl font-black text-white">
-                            R{verifyTrip.fare.toFixed(2)}
+                            {verifyTrip.fare > 0
+                              ? `R${verifyTrip.fare.toFixed(2)}`
+                              : "Not entered"}
                           </p>
                         </div>
                       </div>
@@ -1846,7 +2002,7 @@ const App = () => {
                         />
 
                         <p className="text-[10px] text-white/30">
-                          Leave this empty to keep Pulse's estimate.
+                          If Pulse did not have a verified fare, enter what you actually paid.
                         </p>
                       </div>
 
