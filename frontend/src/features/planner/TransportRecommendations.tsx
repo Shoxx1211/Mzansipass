@@ -17,6 +17,7 @@ import {
   Filter,
   Footprints,
   MapPin,
+  Navigation,
   TrendingUp,
   Wallet,
 } from "lucide-react";
@@ -1172,18 +1173,11 @@ export const TransportRecommendation =
             </div>
 
             <h3 className="mt-4 text-lg font-black text-white">
-              No supported
-              public-transport path yet
+              No journey found yet
             </h3>
 
             <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-white/45">
-              Pulse found the
-              destination, but the
-              current verified and
-              configured network
-              evidence does not yet
-              support a route between
-              both ends of this journey.
+              Pulse found the destination, but we do not yet have enough route data to build a useful public-transport journey for both ends.
             </p>
           </div>
         );
@@ -1208,13 +1202,11 @@ export const TransportRecommendation =
 
               <div className="min-w-0">
                 <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/35">
-                  Pulse journey
-                  intelligence
+                  Journey options
                 </p>
 
                 <h2 className="truncate text-lg font-black text-white">
-                  Evidence-backed
-                  journey options
+                  Best ways to get there
                 </h2>
               </div>
             </div>
@@ -1235,7 +1227,7 @@ export const TransportRecommendation =
                         false,
                       );
                     }}
-                    className="flex min-h-10 items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.06] px-3 text-xs font-semibold text-white/65"
+                    className="flex min-h-9 items-center gap-1.5 rounded-xl bg-white/[0.045] px-3 text-xs font-semibold text-white/55 transition hover:bg-white/[0.075] hover:text-white/75"
                   >
                     <TrendingUp
                       size={13}
@@ -1303,7 +1295,7 @@ export const TransportRecommendation =
                         false,
                       );
                     }}
-                    className="flex min-h-10 items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.06] px-3 text-xs font-semibold text-white/65"
+                    className="flex min-h-9 items-center gap-1.5 rounded-xl bg-white/[0.045] px-3 text-xs font-semibold text-white/55 transition hover:bg-white/[0.075] hover:text-white/75"
                   >
                     <Filter
                       size={13}
