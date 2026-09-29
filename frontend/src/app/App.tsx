@@ -1893,6 +1893,80 @@ const App = () => {
                           <- Compare other options
                         </button>
 
+                        {selectedRecommendation.journeyLegs?.length ? (
+                          <div className="glass rounded-3xl p-5 sm:p-6">
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="min-w-0">
+                                <p className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+                                  Journey plan
+                                </p>
+                                <h3 className="mt-1 break-words text-lg font-black text-white">
+                                  {selectedRecommendation.routeName ?? destination}
+                                </h3>
+                              </div>
+
+                              {selectedRecommendation.direct === false && (
+                                <span className="shrink-0 rounded-full border border-violet-400/20 bg-violet-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-violet-200">
+                                  Multi-modal
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="mt-5">
+                              {selectedRecommendation.journeyLegs.map((leg, index) => {
+                                const isLast =
+                                  index ===
+                                  selectedRecommendation.journeyLegs!.length - 1;
+
+                                return (
+                                  <div
+                                    key={leg.id}
+                                    className="relative flex gap-4"
+                                  >
+                                    <div className="flex w-8 shrink-0 flex-col items-center">
+                                      <div className="flex h-8 w-8 items-center justify-center rounded-full border border-cyan-400/20 bg-cyan-500/10 text-xs font-black text-cyan-200">
+                                        {index + 1}
+                                      </div>
+
+                                      {!isLast && (
+                                        <div className="min-h-8 w-px flex-1 bg-gradient-to-b from-cyan-400/35 to-violet-400/20" />
+                                      )}
+                                    </div>
+
+                                    <div className={isLast ? "pb-1" : "pb-5"}>
+                                      <p className="text-sm font-bold text-white">
+                                        {leg.label}
+                                      </p>
+
+                                      <p className="mt-1 text-xs leading-5 text-white/40">
+                                        {leg.from ?? "Origin"}
+                                        {" -> "}
+                                        {leg.to ?? "Destination"}
+                                      </p>
+
+                                      <div className="mt-2 flex flex-wrap gap-2">
+                                        {leg.distanceKm !== undefined &&
+                                          leg.distanceKm !== null && (
+                                            <span className="rounded-full bg-white/[0.05] px-2.5 py-1 text-[10px] font-semibold text-white/45">
+                                              {formatDistance(leg.distanceKm)}
+                                            </span>
+                                          )}
+
+                                        <span className="rounded-full bg-white/[0.05] px-2.5 py-1 text-[10px] font-semibold text-white/45">
+                                          {leg.fare !== undefined &&
+                                          leg.fare !== null
+                                            ? `R${leg.fare.toFixed(2)}`
+                                            : "Fare to confirm"}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        ) : null}
+
                         <div className="grid gap-4 lg:grid-cols-[1fr_0.7fr]">
                           <VirtualCard
                             state={tripState}
@@ -1970,7 +2044,7 @@ const App = () => {
                             {isStartingTrip ? (
                               <>
                                 <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/35 border-t-white" />
-                                Starting GPS trackerâ€¦
+                                Starting GPS tracker...
                               </>
                             ) : (
                               <>Start journey</>
