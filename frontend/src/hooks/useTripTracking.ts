@@ -78,7 +78,8 @@ const CARBON_FACTORS: Record<TransitNetwork, number> = {
   'Rea Vaya': 0.08,
   'A Re Yeng': 0.08,
   'Tshwane Bus Service': 0.08,
-  Metrorail: 0.06
+  Metrorail: 0.06,
+  Putco: 0.08
 };
 
 const CALORIES_PER_KM_WALKING = 50;
@@ -325,7 +326,7 @@ export const useTripTracking = (
 
   const generateAlternatives = useCallback(async (): Promise<TripAlternative[]> => {
     const alternatives: TripAlternative[] = [];
-    const networks: TransitNetwork[] = ['Taxi', 'Gautrain', 'Rea Vaya', 'Metrorail'];
+    const networks: TransitNetwork[] = ['Taxi', 'Gautrain', 'Rea Vaya', 'Metrorail', 'Putco'];
     
     for (const network of networks) {
       try {
