@@ -115,6 +115,33 @@ const FAVORITES_KEY = "pulse_favorite_destinations_v1";
 const SELECTED_DESTINATION_KEY = "pulse_selected_destination_v1";
 const MAX_RECENTS = 6;
 
+// Pulse MVP is currently scoped to Gauteng. Constrain autocomplete so
+// same-named places elsewhere in South Africa cannot silently hijack a trip.
+const GAUTENG_BBOX = {
+  minLng: 27.0,
+  minLat: -27.0,
+  maxLng: 29.5,
+  maxLat: -24.9,
+} as const;
+
+const isWithinGautengMvpBounds = (
+  place: Pick<DestinationPlace, "lat" | "lng">,
+): boolean => {
+  if (
+    place.lat === undefined ||
+    place.lng === undefined
+  ) {
+    return true;
+  }
+
+  return (
+    place.lng >= GAUTENG_BBOX.minLng &&
+    place.lng <= GAUTENG_BBOX.maxLng &&
+    place.lat >= GAUTENG_BBOX.minLat &&
+    place.lat <= GAUTENG_BBOX.maxLat
+  );
+};
+
 /*
  * Fallback labels only. Real coordinates come from the configured geocoder.
  * This prevents Pulse from pretending approximate hard-coded coordinates are
@@ -289,6 +316,12 @@ export const DestinationSearch = ({
           limit: "6",
           language: "en",
           types: "poi,address,place,locality,neighborhood,district",
+          bbox: [
+            GAUTENG_BBOX.minLng,
+            GAUTENG_BBOX.minLat,
+            GAUTENG_BBOX.maxLng,
+            GAUTENG_BBOX.maxLat,
+          ].join(","),
         });
 
         if (currentLocation) {
@@ -351,16 +384,26 @@ export const DestinationSearch = ({
 
     const recentMatches: DestinationPlace[] = showRecentSearches
       ? recentPlaces
-          .filter((place) =>
-            normalize(place.name).includes(query) || normalize(place.label).includes(query),
+          .filter(
+            (place) =>
+              isWithinGautengMvpBounds(place) &&
+              (
+                normalize(place.name).includes(query) ||
+                normalize(place.label).includes(query)
+              ),
           )
           .map((place) => ({ ...place, source: "recent" as const }))
       : [];
 
     const favoriteMatches: DestinationPlace[] = showFavorites
       ? favoritePlaces
-          .filter((place) =>
-            normalize(place.name).includes(query) || normalize(place.label).includes(query),
+          .filter(
+            (place) =>
+              isWithinGautengMvpBounds(place) &&
+              (
+                normalize(place.name).includes(query) ||
+                normalize(place.label).includes(query)
+              ),
           )
           .map((place) => ({ ...place, source: "favorite" as const }))
       : [];
