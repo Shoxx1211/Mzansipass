@@ -1080,6 +1080,20 @@ class BackgroundTrackerService {
       return;
     }
 
+    // A planner seed may be intentionally approximate (for example a browser
+    // location around +/-500 m). When the watcher produces a materially better
+    // point, re-anchor without counting the correction as travelled distance.
+    if (
+      previous.accuracy >
+        GPS_FILTERS.maxAccuracyMeters &&
+      location.accuracy <
+        previous.accuracy
+    ) {
+      this.lastRawLocation = location;
+      this.acceptAnchorPoint(location, true);
+      return;
+    }
+
     const timeSeconds = (location.timestamp - previous.timestamp) / 1000;
 
     if (!Number.isFinite(timeSeconds) || timeSeconds <= 0) {
