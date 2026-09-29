@@ -357,7 +357,7 @@ export interface TransportRecommendation {
     period: "peak" | "offPeak";
   };
   timeStatus?: "verified" | "estimated" | "unverified";
-    evidenceStatus?:
+  evidenceStatus?:
     | "same-canonical-route"
     | "published-shared-stop-connectivity"
     | "published-service-membership"
