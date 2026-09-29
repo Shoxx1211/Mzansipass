@@ -72,7 +72,8 @@ const CACHE_KEY = "pulse_gemini_cache";
 const NETWORK_PROMPTS: Record<string, string> = {
   Taxi: "Minibus taxi - flexible, cash-based, negotiable fares",
   Gautrain: "Premium express rail - fastest, most reliable, higher cost",
-  Metrorail: "Commuter rail - cheapest, but frequent delays",
+  Metrorail: "PRASA commuter rail service",
+  Putco: "Regional commuter bus operator serving selected Gauteng, Mpumalanga and Limpopo corridors",
   "Rea Vaya": "Johannesburg BRT - structured, card-based payment",
   "A Re Yeng": "Pretoria BRT - modern, reliable",
   "Tshwane Bus Service": "Municipal bus - affordable, limited routes"
@@ -276,7 +277,7 @@ Decide:
 
 Return STRICT JSON:
 {
-  "mode": "Taxi" | "Gautrain" | "Metrorail" | "Rea Vaya" | "Walking",
+  "mode": "Taxi" | "Gautrain" | "Metrorail" | "Putco" | "Rea Vaya" | "Walking",
   "estimatedFare": number,
   "reason": "string",
   "confidence": number,
