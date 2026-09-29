@@ -313,14 +313,14 @@ export const VirtualCard = memo<VirtualCardProps>(({
             />
             <Metric 
               label="Duration" 
-              value={formatTime(duration)}
+              value={isActive || duration > 0 ? formatTime(duration) : "--"}
               icon="⏱️"
             />
             <Metric 
               label="Speed" 
-              value={`${speed.toFixed(0)} km/h`}
+              value={isActive ? `${speed.toFixed(0)} km/h` : "--"}
               icon="⚡"
-              trend={speed > 0 ? 'up' : null}
+              trend={isActive && speed > 0 ? 'up' : null}
             />
             <Metric 
               label="Fare" 
