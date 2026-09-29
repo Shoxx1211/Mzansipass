@@ -378,7 +378,7 @@ const formatBadge = (
     MULTIMODAL:
       "Multi-modal",
     ACCESS_REQUIRED:
-      "Station access",
+      "Access leg",
     ROAD_ROUTE:
       "Road route",
     FARE_VERIFY:
