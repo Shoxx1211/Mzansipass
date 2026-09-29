@@ -161,7 +161,7 @@ const formatDuration = (seconds: number): string => {
 
 const formatDistance = (distanceKm: number | null): string => {
   if (distanceKm === null || !Number.isFinite(distanceKm)) {
-    return "â€”";
+    return "—";
   }
 
   if (distanceKm < 1) {
@@ -540,7 +540,7 @@ const App = () => {
 
   const plannerGpsLabel = useMemo(() => {
     if (plannerOriginIsTest && plannerOrigin) {
-      return `Test origin Â· ${plannerOrigin.lat.toFixed(5)}, ${plannerOrigin.lng.toFixed(5)}`;
+      return `Test origin · ${plannerOrigin.lat.toFixed(5)}, ${plannerOrigin.lng.toFixed(5)}`;
     }
 
     if (location.isLocating) {
@@ -549,7 +549,7 @@ const App = () => {
 
     if (location.location) {
       if (location.accuracy > 0) {
-        return `GPS ready Â· Â±${Math.round(location.accuracy)} m`;
+        return `GPS ready · ±${Math.round(location.accuracy)} m`;
       }
 
       return "GPS ready";
@@ -1756,7 +1756,7 @@ const App = () => {
                               }}
                               className="mb-5 text-sm font-semibold text-cyan-300 transition hover:text-cyan-200"
                             >
-                              â† Change destination
+                              ← Change destination
                             </button>
 
                             <p className="text-xs uppercase tracking-[0.18em] text-white/35">
@@ -1785,7 +1785,7 @@ const App = () => {
                                 </p>
                                 <p className="mt-1 text-2xl font-black text-white">
                                   {isPlanning
-                                    ? "â€¦"
+                                    ? "…"
                                     : formatDistance(routePlan.distanceKm)}
                                 </p>
                               </div>
@@ -1795,7 +1795,7 @@ const App = () => {
                                   Options found
                                 </p>
                                 <p className="mt-1 text-2xl font-black text-cyan-300">
-                                  {isPlanning ? "â€¦" : recommendations.length}
+                                  {isPlanning ? "…" : recommendations.length}
                                 </p>
                               </div>
 
