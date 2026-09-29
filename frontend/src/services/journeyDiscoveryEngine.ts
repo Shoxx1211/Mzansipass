@@ -956,13 +956,11 @@ const tshwaneBusCandidates = (
           accessTerminal.distanceKm,
         ),
       nearestStop:
-        accessTerminal.terminal
-          .rawRouteLabel ??
         "Official departure point",
       destinationStop:
-        bestToTerminal?.terminal
-          .rawRouteLabel ??
-        undefined,
+        bestToTerminal
+          ? "Near destination"
+          : undefined,
       routeName:
         requiresRoadAccess
           ? `Taxi / road access → Tshwane Bus · ${routeLabel}`
@@ -1006,8 +1004,6 @@ const tshwaneBusCandidates = (
       transferStops:
         requiresRoadAccess
           ? [
-              accessTerminal.terminal
-                .rawRouteLabel ??
               "Official departure point",
             ]
           : [],
@@ -1021,8 +1017,6 @@ const tshwaneBusCandidates = (
                   "Taxi / road access",
                 from: "Origin",
                 to:
-                  accessTerminal.terminal
-                    .rawRouteLabel ??
                   "Official departure point",
                 distanceKm:
                   roundKm(
@@ -1042,13 +1036,11 @@ const tshwaneBusCandidates = (
                 operator:
                   "Tshwane Bus Service",
                 from:
-                  accessTerminal.terminal
-                    .rawRouteLabel ??
                   "Official departure point",
                 to:
-                  bestToTerminal?.terminal
-                    .rawRouteLabel ??
-                  "Destination area",
+                  bestToTerminal
+                    ? "Near destination"
+                    : "Destination area",
                 fare: null,
                 fareStatus:
                   "unverified",
@@ -1065,13 +1057,11 @@ const tshwaneBusCandidates = (
                 operator:
                   "Tshwane Bus Service",
                 from:
-                  accessTerminal.terminal
-                    .rawRouteLabel ??
                   "Origin area",
                 to:
-                  bestToTerminal?.terminal
-                    .rawRouteLabel ??
-                  "Destination area",
+                  bestToTerminal
+                    ? "Near destination"
+                    : "Destination area",
                 fare: null,
                 fareStatus:
                   "unverified",
