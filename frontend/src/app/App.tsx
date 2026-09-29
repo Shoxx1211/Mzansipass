@@ -1310,13 +1310,46 @@ const App = () => {
     setError(null);
 
     try {
-      // Refresh origin at the exact moment the commuter starts travelling.
-      // This avoids starting a trip with an old planning position.
-      const freshOrigin = await location.requestCurrentLocation();
+      const candidateOrigin = plannerOrigin;
 
-      // BackgroundTracker has its own validated high-accuracy trip watcher.
-      // ACTIVE is set only AFTER this succeeds.
-      await BackgroundTracker.start();
+      const candidateAgeMs =
+        candidateOrigin?.timestamp
+          ? Math.max(
+              0,
+              Date.now() - candidateOrigin.timestamp,
+            )
+          : Number.POSITIVE_INFINITY;
+
+      const candidateAccuracy =
+        candidateOrigin?.accuracy ??
+        Number.POSITIVE_INFINITY;
+
+      const canUsePlannerOrigin =
+        candidateOrigin !== null &&
+        candidateOrigin !== undefined &&
+        Number.isFinite(candidateOrigin.lat) &&
+        Number.isFinite(candidateOrigin.lng) &&
+        candidateAgeMs <= 2 * 60 * 1000 &&
+        candidateAccuracy <= 1500;
+
+      const freshOrigin =
+        canUsePlannerOrigin && candidateOrigin
+          ? candidateOrigin
+          : await location.requestCurrentLocation();
+
+      const trackerSeed: TrackerLocation = {
+        lat: freshOrigin.lat,
+        lng: freshOrigin.lng,
+        accuracy: freshOrigin.accuracy ?? 999,
+        speed: freshOrigin.speed ?? 0,
+        heading: freshOrigin.heading ?? 0,
+        altitude: freshOrigin.altitude ?? 0,
+        timestamp: freshOrigin.timestamp ?? Date.now(),
+      };
+
+      await BackgroundTracker.startWithSeed(
+        trackerSeed,
+      );
 
       const trackerTrip = BackgroundTracker.getTrip();
       const trackerLocation = BackgroundTracker.getLastKnownLocation();
@@ -1355,6 +1388,7 @@ const App = () => {
     isStartingTrip,
     location,
     network,
+    plannerOrigin,
   ]);
 
   // ====================================================
