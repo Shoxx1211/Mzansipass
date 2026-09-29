@@ -87,7 +87,15 @@ const NETWORK_CONFIG: Record<TransitNetwork, NetworkIcon> = {
     color: 'text-orange-400',
     bgColor: 'bg-orange-500/20',
     gradient: 'from-orange-500/20 to-red-500/20',
-    description: 'Commuter rail service'
+    description: 'PRASA commuter rail'
+  },
+  Putco: {
+    icon: '🚌',
+    iconActive: '🚍',
+    color: 'text-sky-400',
+    bgColor: 'bg-sky-500/20',
+    gradient: 'from-sky-500/20 to-blue-500/20',
+    description: 'PUTCO commuter bus'
   }
 };
 
