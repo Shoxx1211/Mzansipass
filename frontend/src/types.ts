@@ -360,6 +360,9 @@ export interface TransportRecommendation {
     evidenceStatus?:
     | "same-canonical-route"
     | "published-shared-stop-connectivity"
+    | "published-service-membership"
+    | "official-gis-route"
+    | "multi-operator-published-connection"
     | "insufficient-evidence"
     | "configured";
 };
