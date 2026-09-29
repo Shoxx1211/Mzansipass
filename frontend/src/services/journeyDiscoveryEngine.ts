@@ -635,6 +635,25 @@ const directGautrainCandidates = (
         serviceLabel(service),
       ],
       transferStops: [],
+      journeyLegs: [
+        {
+          id: "gautrain-rail",
+          mode: "rail",
+          label:
+            `Gautrain · ${originMatch.station.name} → ${destinationMatch.station.name}`,
+          operator: "Gautrain",
+          from:
+            originMatch.station.name,
+          to:
+            destinationMatch.station.name,
+          fare,
+          fareStatus:
+            fare === null
+              ? "unverified"
+              : "verified",
+          evidence: "published",
+        },
+      ],
       fareStatus:
         fare === null
           ? "unverified"
@@ -754,6 +773,44 @@ const aReYengRoadAccessCandidates = (
       ],
       transferStops: [
         accessStop.stop.name,
+      ],
+      journeyLegs: [
+        {
+          id: "access-road",
+          mode: "taxi",
+          label:
+            "Taxi / road access",
+          from: "Origin",
+          to:
+            accessStop.stop.name,
+          distanceKm:
+            roundKm(
+              accessStop.distanceKm,
+            ),
+          fare: null,
+          fareStatus:
+            "unverified",
+          evidence:
+            "road-access",
+        },
+        {
+          id: "areyeng-bus",
+          mode: "bus",
+          label:
+            `A Re Yeng · ${destinationRoute.route.code}`,
+          operator:
+            "A Re Yeng",
+          from:
+            accessStop.stop.name,
+          to:
+            exitStop?.stop.name ??
+            "Destination area",
+          fare: null,
+          fareStatus:
+            "unverified",
+          evidence:
+            "official-gis",
+        },
       ],
       fareStatus: "unverified",
       timeStatus: "unverified",
@@ -954,6 +1011,74 @@ const tshwaneBusCandidates = (
               "Official departure point",
             ]
           : [],
+      journeyLegs:
+        requiresRoadAccess
+          ? [
+              {
+                id: "access-road",
+                mode: "taxi",
+                label:
+                  "Taxi / road access",
+                from: "Origin",
+                to:
+                  accessTerminal.terminal
+                    .rawRouteLabel ??
+                  "Official departure point",
+                distanceKm:
+                  roundKm(
+                    accessTerminal.distanceKm,
+                  ),
+                fare: null,
+                fareStatus:
+                  "unverified",
+                evidence:
+                  "road-access",
+              },
+              {
+                id: "tshwane-bus",
+                mode: "bus",
+                label:
+                  `Tshwane Bus · ${match.route.routeId}`,
+                operator:
+                  "Tshwane Bus Service",
+                from:
+                  accessTerminal.terminal
+                    .rawRouteLabel ??
+                  "Official departure point",
+                to:
+                  bestToTerminal?.terminal
+                    .rawRouteLabel ??
+                  "Destination area",
+                fare: null,
+                fareStatus:
+                  "unverified",
+                evidence:
+                  "official-gis",
+              },
+            ]
+          : [
+              {
+                id: "tshwane-bus",
+                mode: "bus",
+                label:
+                  `Tshwane Bus · ${match.route.routeId}`,
+                operator:
+                  "Tshwane Bus Service",
+                from:
+                  accessTerminal.terminal
+                    .rawRouteLabel ??
+                  "Origin area",
+                to:
+                  bestToTerminal?.terminal
+                    .rawRouteLabel ??
+                  "Destination area",
+                fare: null,
+                fareStatus:
+                  "unverified",
+                evidence:
+                  "official-gis",
+              },
+            ],
       fareStatus: "unverified",
       timeStatus: "unverified",
       evidenceStatus:
@@ -1112,6 +1237,88 @@ const gautrainRoadAccessCandidates = (
       direct: false,
       routeCodes,
       transferStops,
+      journeyLegs:
+        useRoadThenRail
+          ? [
+              {
+                id: "access-road",
+                mode: "taxi",
+                label:
+                  "Taxi / road access",
+                from: "Origin",
+                to:
+                  originMatch.station.name,
+                distanceKm:
+                  roundKm(
+                    originMatch.distanceKm,
+                  ),
+                fare: null,
+                fareStatus:
+                  "unverified",
+                evidence:
+                  "road-access",
+              },
+              {
+                id: "gautrain-rail",
+                mode: "rail",
+                label:
+                  `Gautrain · ${originMatch.station.name} → ${destinationMatch.station.name}`,
+                operator:
+                  "Gautrain",
+                from:
+                  originMatch.station.name,
+                to:
+                  destinationMatch.station.name,
+                fare:
+                  railFare,
+                fareStatus:
+                  railFare === null
+                    ? "unverified"
+                    : "verified",
+                evidence:
+                  "published",
+              },
+            ]
+          : [
+              {
+                id: "gautrain-rail",
+                mode: "rail",
+                label:
+                  `Gautrain · ${originMatch.station.name} → ${destinationMatch.station.name}`,
+                operator:
+                  "Gautrain",
+                from:
+                  originMatch.station.name,
+                to:
+                  destinationMatch.station.name,
+                fare:
+                  railFare,
+                fareStatus:
+                  railFare === null
+                    ? "unverified"
+                    : "verified",
+                evidence:
+                  "published",
+              },
+              {
+                id: "access-road",
+                mode: "taxi",
+                label:
+                  "Taxi / road access",
+                from:
+                  destinationMatch.station.name,
+                to: "Destination",
+                distanceKm:
+                  roundKm(
+                    destinationMatch.distanceKm,
+                  ),
+                fare: null,
+                fareStatus:
+                  "unverified",
+                evidence:
+                  "road-access",
+              },
+            ],
       fareStatus: "unverified",
       timeStatus: "unverified",
       evidenceStatus:
@@ -1231,6 +1438,27 @@ const directAReYengCandidates = (
         originCandidate.route.code,
       ],
       transferStops: [],
+      journeyLegs: [
+        {
+          id: "areyeng-bus",
+          mode: "bus",
+          label:
+            `A Re Yeng · ${originCandidate.route.code}`,
+          operator:
+            "A Re Yeng",
+          from:
+            originStop?.stop.name ??
+            "Origin area",
+          to:
+            destinationStop?.stop.name ??
+            "Destination area",
+          fare: null,
+          fareStatus:
+            "unverified",
+          evidence:
+            "official-gis",
+        },
+      ],
       fareStatus: "unverified",
       timeStatus: "unverified",
       evidenceStatus:
