@@ -262,6 +262,23 @@ const buildRoadFallbackRecommendation = (
         : "estimated",
     evidenceStatus:
       "road-baseline",
+    journeyLegs: [
+      {
+        id: "taxi-road",
+        mode: "taxi",
+        label:
+          "Minibus taxi / road journey",
+        from: "Origin",
+        to: "Destination",
+        distanceKm:
+          routePlan.distanceKm,
+        fare: null,
+        fareStatus:
+          "unverified",
+        evidence:
+          "estimated",
+      },
+    ],
     selectable: true,
   };
 };
@@ -1873,7 +1890,7 @@ const App = () => {
                           }}
                           className="text-sm font-semibold text-cyan-300 transition hover:text-cyan-200"
                         >
-                          â† Compare other options
+                          <- Compare other options
                         </button>
 
                         <div className="grid gap-4 lg:grid-cols-[1fr_0.7fr]">
@@ -1896,7 +1913,7 @@ const App = () => {
                             <div className="mt-4 space-y-3">
                               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                                 <span className="text-sm text-white/45">
-                                  Transport
+                                  Primary network
                                 </span>
                                 <span className="text-sm font-bold text-white">
                                   {network}
@@ -1919,7 +1936,7 @@ const App = () => {
                                 <span className="text-sm font-bold text-white">
                                   {plannedDurationSeconds > 0
                                     ? formatDuration(plannedDurationSeconds)
-                                    : "Estimating"}
+                                    : "Not verified"}
                                 </span>
                               </div>
 
