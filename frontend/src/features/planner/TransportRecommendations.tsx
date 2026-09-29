@@ -420,6 +420,9 @@ const getEvidenceHeading = (
     case "multi-operator-published-connection":
       return "Multi-modal connection evidence";
 
+    case "multi-operator-official-gis-connection":
+      return "Official network connection evidence";
+
     case "road-baseline":
       return "Road connection available";
 
@@ -449,6 +452,9 @@ const getEvidenceDescription = (
 
     case "multi-operator-published-connection":
       return "Pulse found a plausible connection between official operator networks using published service membership and route geometry. Transfer timing, exact interchange walking and the combined fare remain unverified.";
+
+    case "multi-operator-official-gis-connection":
+      return "Pulse connected an access leg to an official municipal bus route using City GIS route and terminal evidence. The exact transfer timing, roadside stop sequence and combined fare remain unverified.";
 
     case "road-baseline":
       return "Pulse confirmed a road connection to the destination. The exact minibus-taxi rank, stopping pattern, vehicle changes and fare still need local confirmation.";
@@ -846,7 +852,7 @@ const RecommendationCard: React.FC<{
                 recommendation.badges.includes(
                   "ACCESS_REQUIRED",
                 )
-                  ? "Station access"
+                  ? "Access leg"
                   : "Access walk"
               }
               value={formatWalking(
