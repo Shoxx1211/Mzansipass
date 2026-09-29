@@ -167,8 +167,6 @@ const PULSE_DESTINATIONS: DestinationPlace[] = [
   { id: "bara", name: "Chris Hani Baragwanath Hospital", label: "Chris Hani Baragwanath Academic Hospital, Soweto, Gauteng", category: "Hospital", source: "pulse" },
   { id: "uj-apk", name: "University of Johannesburg APK", label: "University of Johannesburg Auckland Park Kingsway Campus", category: "University", source: "pulse" },
   { id: "wits", name: "University of the Witwatersrand", label: "Wits University, Braamfontein, Johannesburg", category: "University", source: "pulse" },
-  { id: "cape-town-station", name: "Cape Town Station", label: "Cape Town Station, Cape Town, Western Cape", category: "Rail & bus station", source: "pulse" },
-  { id: "durban-station", name: "Durban Station", label: "Durban Station, Durban, KwaZulu-Natal", category: "Rail station", source: "pulse" },
 ];
 
 const normalize = (value: string) =>
@@ -659,7 +657,7 @@ export const DestinationSearch = ({
     showSuggestions && !isSearchingPlaces && suggestions.length === 0;
 
   return (
-    <div className="relative w-full overflow-visible rounded-[30px] border border-white/[0.07] bg-[#09101d]/82 p-3 shadow-[0_24px_70px_rgba(0,0,0,0.28)] backdrop-blur-2xl sm:p-4">
+    <div className="relative w-full overflow-visible rounded-[30px] border border-white/[0.07] bg-[#09101d]/80 p-3 shadow-[0_24px_70px_rgba(0,0,0,0.28)] backdrop-blur-2xl sm:p-4">
       <div className="space-y-3">
         <div className="relative">
           <div className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-white/40">
@@ -721,7 +719,7 @@ export const DestinationSearch = ({
             <div
               id="pulse-destination-suggestions"
               role="listbox"
-              className="absolute left-0 right-0 top-[calc(100%+10px)] z-40 max-h-[380px] overflow-y-auto rounded-[22px] border border-white/[0.08] bg-[#07101d]/98 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.55)] backdrop-blur-2xl"
+              className="absolute left-0 right-0 top-[calc(100%+10px)] z-40 max-h-[380px] overflow-y-auto rounded-[22px] border border-white/[0.08] bg-[#07101d]/95 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.55)] backdrop-blur-2xl"
             >
               {suggestions.map((place, index) => {
                 const favorite = isFavorite(place);
