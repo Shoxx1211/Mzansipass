@@ -139,7 +139,8 @@ const PULSE_DESTINATIONS: DestinationPlace[] = [
   { id: "soweto", name: "Soweto", label: "Soweto, Johannesburg, Gauteng", category: "Major commuter area", source: "pulse" },
   { id: "bara", name: "Chris Hani Baragwanath Hospital", label: "Chris Hani Baragwanath Academic Hospital, Soweto, Gauteng", category: "Hospital", source: "pulse" },
   { id: "uj-apk", name: "University of Johannesburg APK", label: "University of Johannesburg Auckland Park Kingsway Campus", category: "University", source: "pulse" },
-  { id: "wits", name: "University of the Witwatersrand", label: "Wits University, Braamfontein, Johannesburg", category: "University", source: "pulse" },
+  { id: "wits", name: "University of the Witwatersrand", label: "Wits University, 1 Jan Smuts Avenue, Braamfontein, Johannesburg", lat: -26.1920, lng: 28.0270, category: "University", source: "pulse" },
+  { id: "marabastad", name: "Marabastad", label: "Marabastad transport hub, Pretoria, Gauteng", lat: -25.73937, lng: 28.17351, category: "Taxi & transport hub", source: "pulse" },
 ];
 
 const normalize = (value: string) =>
