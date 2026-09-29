@@ -42,7 +42,8 @@ export const TransitNetwork = {
   ReaVaya: "Rea Vaya",
   AReYeng: "A Re Yeng",
   TshwaneBusService: "Tshwane Bus Service",
-  Metrorail: "Metrorail"
+  Metrorail: "Metrorail",
+  Putco: "Putco"
 } as const;
 
 export type TransitNetwork = typeof TransitNetwork[keyof typeof TransitNetwork];
@@ -59,7 +60,8 @@ export const NetworkDisplayNames: Record<TransitNetwork, string> = {
   "Rea Vaya": "Rea Vaya BRT",
   "A Re Yeng": "A Re Yeng BRT",
   "Tshwane Bus Service": "Tshwane Bus Service",
-  Metrorail: "Metrorail"
+  Metrorail: "PRASA Metrorail",
+  Putco: "PUTCO"
 };
 
 // Network string values (for easy iteration when needed)
@@ -378,6 +380,7 @@ export interface TransportRecommendation {
     | "official-gis-route"
     | "multi-operator-published-connection"
     | "multi-operator-official-gis-connection"
+    | "published-service-area"
     | "road-baseline"
     | "insufficient-evidence"
     | "configured";
