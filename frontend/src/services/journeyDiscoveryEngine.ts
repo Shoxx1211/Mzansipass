@@ -98,7 +98,9 @@ const ARE_YENG_ROUTE_RADIUS_METRES = 800;
 const ARE_YENG_TRANSFER_RADIUS_METRES = 700;
 const GAUTRAIN_WALK_ACCESS_RADIUS_KM = 1.6;
 const GAUTRAIN_DISCOVERY_ACCESS_RADIUS_KM = 15;
-const MAX_RESULTS = 6;
+const GAUTRAIN_MULTIMODAL_ACCESS_RADIUS_KM = 45;
+const GAUTRAIN_STATION_DESTINATION_RADIUS_KM = 3;
+const MAX_RESULTS = 8;
 
 const toRadians = (value: number): number =>
   (value * Math.PI) / 180;
@@ -617,6 +619,159 @@ const directGautrainCandidates = (
   return results;
 };
 
+
+const gautrainRoadAccessCandidates = (
+  origin: Location,
+  destination: Location,
+  railData: GautrainRailData,
+  fares: GautrainFareData,
+  now: Date,
+): TransportRecommendation[] => {
+  const results: TransportRecommendation[] = [];
+
+  for (const service of railData.services) {
+    const originMatch =
+      nearestStation(
+        origin,
+        service,
+      );
+
+    const destinationMatch =
+      nearestStation(
+        destination,
+        service,
+      );
+
+    if (
+      !originMatch ||
+      !destinationMatch ||
+      originMatch.station.stationId ===
+        destinationMatch.station.stationId
+    ) {
+      continue;
+    }
+
+    const originNeedsRoadAccess =
+      originMatch.distanceKm >
+        GAUTRAIN_WALK_ACCESS_RADIUS_KM &&
+      originMatch.distanceKm <=
+        GAUTRAIN_MULTIMODAL_ACCESS_RADIUS_KM;
+
+    const destinationNeedsRoadAccess =
+      destinationMatch.distanceKm >
+        GAUTRAIN_WALK_ACCESS_RADIUS_KM &&
+      destinationMatch.distanceKm <=
+        GAUTRAIN_MULTIMODAL_ACCESS_RADIUS_KM;
+
+    const originAtStation =
+      originMatch.distanceKm <=
+        GAUTRAIN_STATION_DESTINATION_RADIUS_KM;
+
+    const destinationAtStation =
+      destinationMatch.distanceKm <=
+        GAUTRAIN_STATION_DESTINATION_RADIUS_KM;
+
+    const useRoadThenRail =
+      originNeedsRoadAccess &&
+      destinationAtStation;
+
+    const useRailThenRoad =
+      originAtStation &&
+      destinationNeedsRoadAccess;
+
+    if (
+      !useRoadThenRail &&
+      !useRailThenRoad
+    ) {
+      continue;
+    }
+
+    const railFare =
+      gautrainFare(
+        originMatch.station.stationId,
+        destinationMatch.station.stationId,
+        fares,
+        now,
+      );
+
+    const accessDistanceKm =
+      useRoadThenRail
+        ? originMatch.distanceKm
+        : destinationMatch.distanceKm;
+
+    const routeCodes =
+      useRoadThenRail
+        ? [
+            "Taxi / road access",
+            serviceLabel(service),
+          ]
+        : [
+            serviceLabel(service),
+            "Taxi / road access",
+          ];
+
+    const transferStops = [
+      useRoadThenRail
+        ? originMatch.station.name
+        : destinationMatch.station.name,
+    ];
+
+    const routeName =
+      useRoadThenRail
+        ? `Taxi / road access → Gautrain · ${originMatch.station.name} → ${destinationMatch.station.name}`
+        : `Gautrain · ${originMatch.station.name} → ${destinationMatch.station.name} → Taxi / road access`;
+
+    const reason =
+      useRoadThenRail
+        ? `Pulse found ${originMatch.station.name} as the nearest useful station on Gautrain's published ${service.name}, about ${roundKm(originMatch.distanceKm)} km from your origin. From there, the official Gautrain service continues to ${destinationMatch.station.name}. ${railFare === null ? "" : `The published Gautrain rail leg fare is R${railFare}; `}the taxi/road access fare and exact pickup point are not yet verified.`
+        : `Pulse matched your origin to ${originMatch.station.name} on Gautrain's published ${service.name}, then found your destination about ${roundKm(destinationMatch.distanceKm)} km from ${destinationMatch.station.name}. ${railFare === null ? "" : `The published Gautrain rail leg fare is R${railFare}; `}the final taxi/road access fare and exact drop-off route are not yet verified.`;
+
+    results.push({
+      id:
+        `discovery:gautrain-road-access:${service.id}:${originMatch.station.stationId}:${destinationMatch.station.stationId}:${useRoadThenRail ? "origin" : "destination"}`,
+      mode: "Gautrain",
+      score: 88,
+      estimatedFare: null,
+      estimatedTime: null,
+      estimatedTravelTime: null,
+      walkingDistance:
+        roundKm(accessDistanceKm),
+      nearestStop:
+        useRoadThenRail
+          ? originMatch.station.name
+          : undefined,
+      destinationStop:
+        useRailThenRoad
+          ? destinationMatch.station.name
+          : destinationMatch.station.name,
+      routeName,
+      subtitle:
+        useRoadThenRail
+          ? "Taxi/road access + Gautrain"
+          : "Gautrain + taxi/road access",
+      reason,
+      badges: [
+        "MULTIMODAL",
+        "OFFICIAL_SERVICE",
+        "ACCESS_REQUIRED",
+      ],
+      color: "#00AEEF",
+      confidence: 0.9,
+      dataQuality: "verified",
+      direct: false,
+      routeCodes,
+      transferStops,
+      fareStatus: "unverified",
+      timeStatus: "unverified",
+      evidenceStatus:
+        "multi-operator-published-connection",
+      selectable: true,
+    });
+  }
+
+  return results;
+};
+
 const directAReYengCandidates = (
   origin: Location,
   destination: Location,
@@ -1123,6 +1278,13 @@ export class JourneyDiscoveryEngine {
 
     return dedupeRecommendations([
       ...directGautrainCandidates(
+        origin,
+        destination,
+        railData,
+        fares,
+        now,
+      ),
+      ...gautrainRoadAccessCandidates(
         origin,
         destination,
         railData,
