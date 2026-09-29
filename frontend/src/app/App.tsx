@@ -1634,9 +1634,9 @@ const App = () => {
   return (
     <>
       <Layout activeTab={activeTab} onNavClick={setActiveTab}>
-        <div className="mx-auto w-full max-w-7xl">
+        <div className="mx-auto w-full max-w-6xl">
           <div
-            className="relative z-10 min-h-[100dvh] space-y-6 px-4 pb-40 md:px-8 lg:px-12"
+            className="relative z-10 min-h-[100dvh] space-y-8 pb-36 pt-2"
             style={{
               WebkitOverflowScrolling: "touch",
               scrollBehavior: "smooth",
@@ -1651,51 +1651,48 @@ const App = () => {
                 {/* HERO */}
 
                 {tripState !== TripState.ACTIVE && !verifyTrip && (
-                  <div className="space-y-3 pt-4">
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                      <div>
-                        <p className="text-sm text-white/40">
-                          Smart commuter intelligence
-                        </p>
+                  <div className="pt-6 sm:pt-8">
+                    <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+                      <div className="max-w-3xl">
+                        <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.045] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-white/35">
+                          <span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />
+                          Door-to-door Gauteng journeys
+                        </div>
 
-                        <h1 className="mt-1 text-3xl font-black tracking-tight text-white sm:text-4xl">
-                          Where are you going?
+                        <h1 className="mt-4 text-4xl font-black tracking-[-0.045em] text-white sm:text-5xl lg:text-6xl">
+                          Where to?
                         </h1>
 
-                        <p className="mt-2 max-w-2xl text-sm leading-6 text-white/45">
-                          Compare public transport by cost and travel time,
-                          then track your real journey with live GPS.
+                        <p className="mt-3 max-w-xl text-sm leading-6 text-white/45 sm:text-[15px]">
+                          Compare taxi, rail and bus connections in one journey.
                         </p>
                       </div>
 
                       <div
-                        className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-2 text-xs font-medium backdrop-blur-xl ${
-                          plannerGpsHealthy
-                            ? "border-emerald-400/20 bg-emerald-400/[0.08] text-emerald-200"
-                            : location.error
-                              ? "border-amber-400/20 bg-amber-400/[0.08] text-amber-100"
-                              : "border-white/10 bg-white/[0.04] text-white/55"
+                        className={`inline-flex w-fit items-center gap-2 rounded-full px-3 py-2 text-[11px] font-bold ${plannerGpsHealthy
+                          ? "bg-emerald-400/[0.08] text-emerald-200/80"
+                          : location.error
+                            ? "bg-amber-400/[0.08] text-amber-100/80"
+                            : "bg-white/[0.04] text-white/45"
                         }`}
                       >
                         <span
-                          className={`h-2 w-2 rounded-full ${
-                            plannerGpsHealthy
-                              ? "bg-emerald-400"
-                              : location.isLocating
-                                ? "animate-pulse bg-cyan-400"
-                                : "bg-amber-400"
+                          className={`h-2 w-2 rounded-full ${plannerGpsHealthy
+                            ? "bg-emerald-400"
+                            : location.isLocating
+                              ? "animate-pulse bg-cyan-400"
+                              : "bg-amber-400"
                           }`}
                         />
-
                         <span>{plannerGpsLabel}</span>
                       </div>
                     </div>
 
                     {location.error && !plannerOrigin && (
-                      <div className="flex flex-col gap-3 rounded-2xl border border-amber-400/15 bg-amber-400/[0.06] p-4 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="mt-5 flex flex-col gap-3 rounded-2xl bg-amber-400/[0.06] p-4 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                           <p className="text-sm font-semibold text-amber-100/90">
-                            We need your location to plan from where you are
+                            Location needed
                           </p>
                           <p className="mt-1 text-xs leading-5 text-amber-100/55">
                             {location.error}
@@ -1706,9 +1703,9 @@ const App = () => {
                           type="button"
                           onClick={() => void retryPlannerLocation()}
                           disabled={location.isLocating}
-                          className="min-h-10 shrink-0 rounded-xl border border-amber-300/20 bg-amber-300/10 px-4 text-sm font-bold text-amber-100 transition hover:bg-amber-300/15 disabled:opacity-50"
+                          className="min-h-10 shrink-0 rounded-xl bg-amber-300/10 px-4 text-sm font-bold text-amber-100 transition hover:bg-amber-300/15 disabled:opacity-50"
                         >
-                          {location.isLocating ? "Finding GPS..." : "Try GPS again"}
+                          {location.isLocating ? "Finding GPS..." : "Try again"}
                         </button>
                       </div>
                     )}
