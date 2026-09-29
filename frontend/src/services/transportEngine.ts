@@ -138,6 +138,14 @@ const TRANSPORT_PATTERNS: Record<string, TransportPattern> = {
     typicalStopDistance: 0.8,
     confidenceWeight: 0.85
   },
+  Putco: {
+    name: "PUTCO",
+    speedRange: [CONFIG.BUS_MIN, CONFIG.BUS_MAX],
+    stopRateRange: [0.2, 0.5],
+    accelerationPattern: "stop-start",
+    typicalStopDistance: 1,
+    confidenceWeight: 0.78
+  },
   Metrorail: {
     name: "Metrorail",
     speedRange: [CONFIG.TRAIN_MIN, CONFIG.TRAIN_MAX],
