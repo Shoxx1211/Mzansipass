@@ -96,7 +96,8 @@ interface RouteProximity {
 const EARTH_METRES = 6_371_000;
 const ARE_YENG_ROUTE_RADIUS_METRES = 800;
 const ARE_YENG_TRANSFER_RADIUS_METRES = 700;
-const GAUTRAIN_ACCESS_RADIUS_KM = 1.6;
+const GAUTRAIN_WALK_ACCESS_RADIUS_KM = 1.6;
+const GAUTRAIN_DISCOVERY_ACCESS_RADIUS_KM = 15;
 const MAX_RESULTS = 6;
 
 const toRadians = (value: number): number =>
@@ -522,9 +523,9 @@ const directGautrainCandidates = (
       originMatch.station.stationId ===
         destinationMatch.station.stationId ||
       originMatch.distanceKm >
-        GAUTRAIN_ACCESS_RADIUS_KM ||
+        GAUTRAIN_DISCOVERY_ACCESS_RADIUS_KM ||
       destinationMatch.distanceKm >
-        GAUTRAIN_ACCESS_RADIUS_KM
+        GAUTRAIN_DISCOVERY_ACCESS_RADIUS_KM
     ) {
       continue;
     }
@@ -540,17 +541,23 @@ const directGautrainCandidates = (
       originMatch.distanceKm +
       destinationMatch.distanceKm;
 
+    const accessRequired =
+      originMatch.distanceKm >
+        GAUTRAIN_WALK_ACCESS_RADIUS_KM ||
+      destinationMatch.distanceKm >
+        GAUTRAIN_WALK_ACCESS_RADIUS_KM;
+
     const accessScore = Math.max(
-      55,
+      52,
       96 -
         (
           totalAccess /
           (
-            GAUTRAIN_ACCESS_RADIUS_KM *
+            GAUTRAIN_DISCOVERY_ACCESS_RADIUS_KM *
             2
           )
         ) *
-          36,
+          44,
     );
 
     results.push({
@@ -570,13 +577,22 @@ const directGautrainCandidates = (
       routeName:
         `${originMatch.station.name} → ${destinationMatch.station.name}`,
       subtitle:
-        "Official Gautrain service match",
+        accessRequired
+          ? "Gautrain rail option · station access required"
+          : "Official Gautrain service match",
       reason:
-        `Gautrain's published ${service.name} includes both ${originMatch.station.name} and ${destinationMatch.station.name}. Pulse measured approximately ${roundKm(originMatch.distanceKm)} km access at the origin and ${roundKm(destinationMatch.distanceKm)} km at the destination. Timetable compatibility and total door-to-door time are not yet verified.`,
-      badges: [
-        "OFFICIAL_SERVICE",
-        "DIRECT",
-      ],
+        accessRequired
+          ? `Gautrain's published ${service.name} connects ${originMatch.station.name} and ${destinationMatch.station.name}. Your journey needs an access leg of about ${roundKm(originMatch.distanceKm)} km to the origin station and about ${roundKm(destinationMatch.distanceKm)} km after the destination station. Pulse is showing the verified rail leg while leaving the access mode, timetable compatibility and total door-to-door time unverified.`
+          : `Gautrain's published ${service.name} includes both ${originMatch.station.name} and ${destinationMatch.station.name}. Pulse measured approximately ${roundKm(originMatch.distanceKm)} km access at the origin and ${roundKm(destinationMatch.distanceKm)} km at the destination. Timetable compatibility and total door-to-door time are not yet verified.`,
+      badges: accessRequired
+        ? [
+            "OFFICIAL_SERVICE",
+            "ACCESS_REQUIRED",
+          ]
+        : [
+            "OFFICIAL_SERVICE",
+            "DIRECT",
+          ],
       color: "#00AEEF",
       confidence: 0.94,
       dataQuality: "verified",
@@ -768,7 +784,7 @@ const multimodalCandidates = (
     if (
       railOrigin &&
       railOrigin.distanceKm <=
-        GAUTRAIN_ACCESS_RADIUS_KM
+        GAUTRAIN_DISCOVERY_ACCESS_RADIUS_KM
     ) {
       let best:
         | {
@@ -904,7 +920,7 @@ const multimodalCandidates = (
     if (
       railDestination &&
       railDestination.distanceKm <=
-        GAUTRAIN_ACCESS_RADIUS_KM
+        GAUTRAIN_DISCOVERY_ACCESS_RADIUS_KM
     ) {
       let best:
         | {
