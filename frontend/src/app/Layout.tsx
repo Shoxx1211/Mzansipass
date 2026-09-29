@@ -330,7 +330,7 @@ export const Layout = memo<LayoutProps>(
             w-[calc(100%-24px)] max-w-[430px]
             -translate-x-1/2
             rounded-[24px] border border-white/[0.08]
-            bg-[#070c18]/88 p-1.5
+            bg-[#070c18]/90 p-1.5
             shadow-[0_20px_60px_rgba(0,0,0,0.48)]
             backdrop-blur-2xl safe-bottom
             transition-all duration-300
