@@ -701,6 +701,125 @@ class BackgroundTrackerService {
     return this.startPromise;
   }
 
+  /**
+   * Start a trip immediately from a recent planner location.
+   *
+   * Browser/PWA devices can take a long time to produce a second
+   * high-accuracy getCurrentPosition() reading even when Pulse already has a
+   * usable fix. The continuous watcher will refine the seed as better GPS
+   * readings arrive.
+   */
+  async startWithSeed(
+    seed: TrackerLocation
+  ): Promise<void> {
+    if (this.isTracking) {
+      console.log("⚠️ Pulse tracker is already running");
+      return;
+    }
+
+    if (this.startPromise) return this.startPromise;
+
+    this.startPromise = this
+      .startWithSeedInternal(seed)
+      .finally(() => {
+        this.startPromise = null;
+      });
+
+    return this.startPromise;
+  }
+
+  private async startWithSeedInternal(
+    seed: TrackerLocation
+  ): Promise<void> {
+    if (this.currentTrip?.active) {
+      await this.resumeInternal();
+      return;
+    }
+
+    const seedAgeMs =
+      Math.max(
+        0,
+        now() - seed.timestamp
+      );
+
+    const seedIsUsable =
+      isValidCoordinate(
+        seed.lat,
+        seed.lng
+      ) &&
+      Number.isFinite(
+        seed.accuracy
+      ) &&
+      seed.accuracy >= 0 &&
+      seed.accuracy <= 1500 &&
+      seedAgeMs <= 2 * 60 * 1000;
+
+    if (!seedIsUsable) {
+      await this.startInternal();
+      return;
+    }
+
+    console.log(
+      "🚀 Starting Pulse trip tracker from planner location..."
+    );
+
+    await this.ensureLocationPermission();
+
+    const initialLocation: TrackerLocation = {
+      ...seed,
+      speed: 0,
+      reportedSpeed:
+        seed.reportedSpeed,
+      heading:
+        finiteOr(seed.heading, 0),
+      altitude:
+        finiteOr(seed.altitude, 0),
+      timestamp:
+        seed.timestamp || now(),
+      isBackground:
+        this.isInBackground,
+      batteryImpact:
+        this.lastBatteryLevel,
+    };
+
+    this.initializeNewTrip(
+      initialLocation
+    );
+    this.lastRawLocation =
+      initialLocation;
+
+    try {
+      await this.startWatching();
+      this.isTracking = true;
+      safeSetItem(
+        STORAGE.trackingState,
+        "true"
+      );
+      this.startHeartbeat();
+      this.startBatteryMonitoring();
+      this.notifyLocation(
+        initialLocation
+      );
+
+      console.log(
+        "✅ Pulse trip tracker active from planner seed"
+      );
+    } catch (error) {
+      this.isTracking = false;
+      safeRemoveItem(
+        STORAGE.trackingState
+      );
+
+      if (this.currentTrip) {
+        this.currentTrip.active =
+          false;
+        this.persistTrip();
+      }
+
+      throw mapTrackerError(error);
+    }
+  }
+
   private async startInternal(): Promise<void> {
     // If an active trip was restored, resume it instead of silently replacing it.
     if (this.currentTrip?.active) {
