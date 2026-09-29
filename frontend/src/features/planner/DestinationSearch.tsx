@@ -171,7 +171,13 @@ const PULSE_DESTINATIONS: DestinationPlace[] = [
   { id: "durban-station", name: "Durban Station", label: "Durban Station, Durban, KwaZulu-Natal", category: "Rail station", source: "pulse" },
 ];
 
-const normalize = (value: string) => value.trim().toLowerCase();
+const normalize = (value: string) =>
+  value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const readStored = (key: string): StoredDestination[] => {
   try {
@@ -412,8 +418,8 @@ export const DestinationSearch = ({
 
     return [
       ...favoriteMatches,
-      ...remoteSuggestions,
       ...localSuggestions,
+      ...remoteSuggestions,
       ...recentMatches,
     ]
       .filter((place) => {
