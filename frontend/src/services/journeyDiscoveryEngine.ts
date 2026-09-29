@@ -753,9 +753,9 @@ const aReYengRoadAccessCandidates = (
       destinationStop:
         exitStop?.stop.name,
       routeName:
-        `Taxi / road access → A Re Yeng · ${destinationRoute.route.code}`,
+        `Taxi → A Re Yeng · ${destinationRoute.route.code}`,
       subtitle:
-        "Road access + A Re Yeng",
+        "Taxi + A Re Yeng",
       reason:
         `Official City of Tshwane GIS places A Re Yeng ${destinationRoute.route.code} within about ${Math.round(destinationRoute.distanceMetres)} m of your destination. The nearest mapped stop on that route is about ${roundKm(accessStop.distanceKm)} km from your origin, so Pulse is showing a road/taxi access leg before the bus. The exact access fare, today's timetable and direction remain unverified.`,
       badges: [
@@ -768,7 +768,7 @@ const aReYengRoadAccessCandidates = (
       dataQuality: "verified",
       direct: false,
       routeCodes: [
-        "Taxi / road access",
+        "Taxi",
         destinationRoute.route.code,
       ],
       transferStops: [
@@ -779,7 +779,7 @@ const aReYengRoadAccessCandidates = (
           id: "access-road",
           mode: "taxi",
           label:
-            "Taxi / road access",
+            "Taxi",
           from: "Origin",
           to:
             accessStop.stop.name,
@@ -963,11 +963,11 @@ const tshwaneBusCandidates = (
           : undefined,
       routeName:
         requiresRoadAccess
-          ? `Taxi / road access → Tshwane Bus · ${routeLabel}`
+          ? `Taxi → Tshwane Bus · ${routeLabel}`
           : `Tshwane Bus · ${routeLabel}`,
       subtitle:
         requiresRoadAccess
-          ? "Road access + municipal bus"
+          ? "Taxi + municipal bus"
           : "Official municipal bus route",
       reason:
         requiresRoadAccess
@@ -995,7 +995,7 @@ const tshwaneBusCandidates = (
       routeCodes:
         requiresRoadAccess
           ? [
-              "Taxi / road access",
+              "Taxi",
               match.route.routeId,
             ]
           : [
@@ -1014,7 +1014,7 @@ const tshwaneBusCandidates = (
                 id: "access-road",
                 mode: "taxi",
                 label:
-                  "Taxi / road access",
+                  "Taxi",
                 from: "Origin",
                 to:
                   "Official departure point",
@@ -1168,12 +1168,12 @@ const gautrainRoadAccessCandidates = (
     const routeCodes =
       useRoadThenRail
         ? [
-            "Taxi / road access",
+            "Taxi",
             serviceLabel(service),
           ]
         : [
             serviceLabel(service),
-            "Taxi / road access",
+            "Taxi",
           ];
 
     const transferStops = [
@@ -1184,8 +1184,8 @@ const gautrainRoadAccessCandidates = (
 
     const routeName =
       useRoadThenRail
-        ? `Taxi / road access → Gautrain · ${originMatch.station.name} → ${destinationMatch.station.name}`
-        : `Gautrain · ${originMatch.station.name} → ${destinationMatch.station.name} → Taxi / road access`;
+        ? `Taxi → Gautrain · ${originMatch.station.name} → ${destinationMatch.station.name}`
+        : `Gautrain · ${originMatch.station.name} → ${destinationMatch.station.name} → Taxi`;
 
     const reason =
       useRoadThenRail
@@ -1213,8 +1213,8 @@ const gautrainRoadAccessCandidates = (
       routeName,
       subtitle:
         useRoadThenRail
-          ? "Taxi/road access + Gautrain"
-          : "Gautrain + taxi/road access",
+          ? "Taxi + Gautrain"
+          : "Gautrain + taxi",
       reason,
       badges: [
         "MULTIMODAL",
@@ -1234,7 +1234,7 @@ const gautrainRoadAccessCandidates = (
                 id: "access-road",
                 mode: "taxi",
                 label:
-                  "Taxi / road access",
+                  "Taxi",
                 from: "Origin",
                 to:
                   originMatch.station.name,
@@ -1294,7 +1294,7 @@ const gautrainRoadAccessCandidates = (
                 id: "access-road",
                 mode: "taxi",
                 label:
-                  "Taxi / road access",
+                  "Taxi",
                 from:
                   destinationMatch.station.name,
                 to: "Destination",
