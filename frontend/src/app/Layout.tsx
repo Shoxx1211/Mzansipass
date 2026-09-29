@@ -206,7 +206,7 @@ const Header: React.FC<{
 
   return (
     <header className="sticky top-0 z-30 safe-top">
-      <div className="border-b border-white/[0.045] bg-[#040813]/80 backdrop-blur-2xl">
+      <div className="premium-glass border-x-0 border-t-0 rounded-none">
         <div className="mx-auto flex min-h-[62px] w-full max-w-[1400px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="flex min-w-0 items-center gap-3">
             {showBack ? (
@@ -329,10 +329,7 @@ export const Layout = memo<LayoutProps>(
             fixed bottom-4 left-1/2 z-50
             w-[calc(100%-24px)] max-w-[430px]
             -translate-x-1/2
-            rounded-[24px] border border-white/[0.08]
-            bg-[#070c18]/90 p-1.5
-            shadow-[0_20px_60px_rgba(0,0,0,0.48)]
-            backdrop-blur-2xl safe-bottom
+            premium-glass rounded-[24px] p-1.5 safe-bottom
             transition-all duration-300
             ${isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}
           `}
