@@ -873,7 +873,13 @@ const App = () => {
             // using Mapbox's road-driving distance.
             if (
               recommendation.fareStatus ===
-              "unverified"
+                "unverified" ||
+              (
+                recommendation.fareStatus ===
+                  "verified" &&
+                recommendation.estimatedFare !==
+                  null
+              )
             ) {
               return [
                 networkName,
@@ -979,7 +985,7 @@ const App = () => {
   (rec: RecommendationType) => {
     if (rec.selectable === false) {
       setError(
-        "Pulse can verify this Rea Vaya route fit, but an exact journey fare and travel time are not verified yet, so this option cannot be started as a tracked trip.",
+        "Pulse found useful public-transport evidence for this option, but the journey still needs enough fare, timing or transfer evidence before it can be started as a tracked trip.",
       );
 
       return;
