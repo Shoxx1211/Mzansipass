@@ -198,6 +198,7 @@ const formatFare = (
   recommendation: RecommendationType,
 ): string => {
   if (
+    recommendation.fareStatus !== "unverified" &&
     recommendation.estimatedFare !== null &&
     Number.isFinite(
       recommendation.estimatedFare,
@@ -226,6 +227,7 @@ const getFareHeading = (
   recommendation: RecommendationType,
 ): string => {
   if (
+    recommendation.fareStatus !== "unverified" &&
     recommendation.estimatedFare !== null
   ) {
     return "Est. fare";
