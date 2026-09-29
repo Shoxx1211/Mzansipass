@@ -363,6 +363,7 @@ export interface TransportRecommendation {
     | "published-service-membership"
     | "official-gis-route"
     | "multi-operator-published-connection"
+    | "multi-operator-official-gis-connection"
     | "road-baseline"
     | "insufficient-evidence"
     | "configured";
