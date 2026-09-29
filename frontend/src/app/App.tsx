@@ -33,6 +33,7 @@ import { DestinationEngine } from "../services/destinationEngine";
 import { FareEngine } from "../services/fareService";
 import { HabitEngine } from "../services/habitEngine";
 import { RecommendationEngine } from "../services/recommendationEngine";
+import { JourneyDiscoveryEngine } from "../services/journeyDiscoveryEngine";
 import { UnifiedCoverageEngine, type UnifiedCoverageReport } from "../services/unifiedCoverage";
 import { UnifiedCoveragePanel } from "../features/planner/UnifiedCoveragePanel";
 
@@ -830,13 +831,42 @@ const App = () => {
           },
         );
 
+        let discoveryRecommendations: RecommendationType[] = [];
+
+        if (destinationLocation) {
+          try {
+            discoveryRecommendations = await JourneyDiscoveryEngine.discover(
+              origin,
+              destinationLocation,
+            );
+          } catch (discoveryError) {
+            console.warn(
+              "Public transport discovery unavailable:",
+              discoveryError,
+            );
+          }
+        }
+
+        const recommendationIds = new Set(
+          baseRecommendations.map((recommendation) => recommendation.id),
+        );
+
+        const combinedRecommendations = [
+          ...baseRecommendations,
+          ...discoveryRecommendations.filter(
+            (recommendation) => !recommendationIds.has(recommendation.id),
+          ),
+        ]
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 8);
+
         const estimates: Partial<Record<TransitNetwork, number>> = {};
 
         // Fare calculations are now limited to route-fit recommendations, and
         // use the network leg distance rather than blindly applying the whole
         // Mapbox road distance to every transport system.
         const farePairs = await Promise.all(
-          baseRecommendations.map(async (recommendation) => {
+          combinedRecommendations.map(async (recommendation) => {
             const networkName = recommendation.mode as TransitNetwork;
 
             // Evidence-only recommendations must never be priced
@@ -887,7 +917,7 @@ const App = () => {
 
         // Prefer the distance-derived FareEngine amount when it exists,
         // but keep the recommendation engine's own estimate as fallback.
-        const enrichedRecommendations = baseRecommendations.map((rec) => {
+        const enrichedRecommendations = combinedRecommendations.map((rec) => {
           const calculatedFare = estimates[rec.mode as TransitNetwork];
 
           if (calculatedFare === undefined) {
@@ -904,7 +934,7 @@ const App = () => {
 
         if (enrichedRecommendations.length === 0) {
           setError(
-            "Pulse found the destination, but the current transport evidence does not yet support a public-transport path between both ends of this journey.",
+            "Pulse found the destination, but no supported public-transport route or connection is available in the current Gauteng dataset for both ends of this journey.",
           );
         }
       } catch (planningError) {
