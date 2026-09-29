@@ -73,6 +73,29 @@ const DESTINATIONS: Record<string, {
     category: "suburb",
     popularity: 94
   },
+  "university of the witwatersrand": {
+    location: { lat: -26.1920, lng: 28.0270 },
+    aliases: [
+      "wits",
+      "wits university",
+      "university of witwatersrand",
+      "witwatersrand university",
+      "wits braamfontein"
+    ],
+    category: "suburb",
+    popularity: 96
+  },
+  "marabastad": {
+    location: { lat: -25.73937, lng: 28.17351 },
+    aliases: [
+      "marabastad pretoria",
+      "marabastad taxi rank",
+      "marabastad transport hub",
+      "asiatic bazaar"
+    ],
+    category: "station",
+    popularity: 90
+  },
   "sandton": {
     location: { lat: -26.1076, lng: 28.0567 },
     aliases: ["sandton city", "sandton cbd", "sandton central"],
