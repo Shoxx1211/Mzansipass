@@ -93,6 +93,35 @@ interface RouteProximity {
   distanceMetres: number;
 }
 
+interface TshwaneBusTerminal {
+  id: string;
+  role: "from" | "to" | "unknown";
+  routeIds: string[];
+  location: Location;
+  rawRouteLabel: string | null;
+  routeDescription: string | null;
+  status: string | null;
+}
+
+interface TshwaneBusRouteVariant {
+  geometry: RouteGeometry | null;
+}
+
+interface TshwaneBusRoute {
+  id: string;
+  routeId: string;
+  name: string;
+  approved: boolean;
+  descriptions: string[];
+  geometryVariants: TshwaneBusRouteVariant[];
+  terminals: {
+    from: string[];
+    to: string[];
+    unknown: string[];
+    all: string[];
+  };
+}
+
 const EARTH_METRES = 6_371_000;
 const ARE_YENG_ROUTE_RADIUS_METRES = 800;
 const ARE_YENG_TRANSFER_RADIUS_METRES = 700;
@@ -100,7 +129,10 @@ const GAUTRAIN_WALK_ACCESS_RADIUS_KM = 1.6;
 const GAUTRAIN_DISCOVERY_ACCESS_RADIUS_KM = 15;
 const GAUTRAIN_MULTIMODAL_ACCESS_RADIUS_KM = 45;
 const GAUTRAIN_STATION_DESTINATION_RADIUS_KM = 3;
-const MAX_RESULTS = 8;
+const BUS_WALK_ACCESS_RADIUS_KM = 1.6;
+const BUS_ROAD_ACCESS_RADIUS_KM = 45;
+const TSHWANE_BUS_ROUTE_RADIUS_METRES = 1000;
+const MAX_RESULTS = 10;
 
 const toRadians = (value: number): number =>
   (value * Math.PI) / 180;
@@ -619,6 +651,326 @@ const directGautrainCandidates = (
   return results;
 };
 
+
+
+const distanceToTshwaneRouteMetres = (
+  point: Location,
+  route: TshwaneBusRoute,
+): number => {
+  let shortest = Number.POSITIVE_INFINITY;
+
+  for (const variant of route.geometryVariants) {
+    if (!variant.geometry) {
+      continue;
+    }
+
+    shortest = Math.min(
+      shortest,
+      distanceToGeometryMetres(
+        point,
+        variant.geometry,
+      ),
+    );
+  }
+
+  return shortest;
+};
+
+const aReYengRoadAccessCandidates = (
+  origin: Location,
+  destination: Location,
+  routes: AReYengRoute[],
+  stops: AReYengStop[],
+): TransportRecommendation[] => {
+  const destinationRoutes =
+    routeProximities(
+      destination,
+      routes,
+      ARE_YENG_ROUTE_RADIUS_METRES,
+    );
+
+  const results: TransportRecommendation[] = [];
+
+  for (const destinationRoute of destinationRoutes) {
+    const accessStop =
+      nearestStopForRoute(
+        origin,
+        destinationRoute.route.id,
+        stops,
+      );
+
+    const exitStop =
+      nearestStopForRoute(
+        destination,
+        destinationRoute.route.id,
+        stops,
+      );
+
+    if (!accessStop) {
+      continue;
+    }
+
+    if (
+      accessStop.distanceKm <=
+        BUS_WALK_ACCESS_RADIUS_KM ||
+      accessStop.distanceKm >
+        BUS_ROAD_ACCESS_RADIUS_KM
+    ) {
+      continue;
+    }
+
+    results.push({
+      id:
+        `discovery:areyeng-road-access:${destinationRoute.route.id}`,
+      mode: "A Re Yeng",
+      score: 84,
+      estimatedFare: null,
+      estimatedTime: null,
+      estimatedTravelTime: null,
+      walkingDistance:
+        roundKm(accessStop.distanceKm),
+      nearestStop:
+        accessStop.stop.name,
+      destinationStop:
+        exitStop?.stop.name,
+      routeName:
+        `Taxi / road access → A Re Yeng · ${destinationRoute.route.code}`,
+      subtitle:
+        "Road access + A Re Yeng",
+      reason:
+        `Official City of Tshwane GIS places A Re Yeng ${destinationRoute.route.code} within about ${Math.round(destinationRoute.distanceMetres)} m of your destination. The nearest mapped stop on that route is about ${roundKm(accessStop.distanceKm)} km from your origin, so Pulse is showing a road/taxi access leg before the bus. The exact access fare, today's timetable and direction remain unverified.`,
+      badges: [
+        "MULTIMODAL",
+        "OFFICIAL_GIS",
+        "ACCESS_REQUIRED",
+      ],
+      color: "#00A86B",
+      confidence: 0.84,
+      dataQuality: "verified",
+      direct: false,
+      routeCodes: [
+        "Taxi / road access",
+        destinationRoute.route.code,
+      ],
+      transferStops: [
+        accessStop.stop.name,
+      ],
+      fareStatus: "unverified",
+      timeStatus: "unverified",
+      evidenceStatus:
+        "multi-operator-official-gis-connection",
+      selectable: false,
+    });
+
+    if (results.length >= 2) {
+      break;
+    }
+  }
+
+  return results;
+};
+
+const tshwaneBusCandidates = (
+  origin: Location,
+  destination: Location,
+  routes: TshwaneBusRoute[],
+  terminals: TshwaneBusTerminal[],
+): TransportRecommendation[] => {
+  const terminalById = new Map(
+    terminals.map(
+      (terminal) => [
+        terminal.id,
+        terminal,
+      ] as const,
+    ),
+  );
+
+  const destinationMatches = routes
+    .filter((route) => route.approved)
+    .map((route) => ({
+      route,
+      destinationDistanceMetres:
+        distanceToTshwaneRouteMetres(
+          destination,
+          route,
+        ),
+    }))
+    .filter(
+      (candidate) =>
+        candidate.destinationDistanceMetres <=
+        TSHWANE_BUS_ROUTE_RADIUS_METRES,
+    )
+    .sort(
+      (a, b) =>
+        a.destinationDistanceMetres -
+        b.destinationDistanceMetres,
+    );
+
+  const results: TransportRecommendation[] = [];
+
+  for (const match of destinationMatches) {
+    const fromTerminals =
+      match.route.terminals.from
+        .map((id) =>
+          terminalById.get(id),
+        )
+        .filter(
+          (
+            terminal,
+          ): terminal is TshwaneBusTerminal =>
+            terminal !== undefined,
+        );
+
+    if (!fromTerminals.length) {
+      continue;
+    }
+
+    const accessTerminal =
+      fromTerminals
+        .map((terminal) => ({
+          terminal,
+          distanceKm:
+            haversineKm(
+              origin,
+              terminal.location,
+            ),
+        }))
+        .sort(
+          (a, b) =>
+            a.distanceKm -
+            b.distanceKm,
+        )[0];
+
+    if (
+      !accessTerminal ||
+      accessTerminal.distanceKm >
+        BUS_ROAD_ACCESS_RADIUS_KM
+    ) {
+      continue;
+    }
+
+    const requiresRoadAccess =
+      accessTerminal.distanceKm >
+        BUS_WALK_ACCESS_RADIUS_KM;
+
+    const bestToTerminal =
+      match.route.terminals.to
+        .map((id) =>
+          terminalById.get(id),
+        )
+        .filter(
+          (
+            terminal,
+          ): terminal is TshwaneBusTerminal =>
+            terminal !== undefined,
+        )
+        .map((terminal) => ({
+          terminal,
+          distanceKm:
+            haversineKm(
+              destination,
+              terminal.location,
+            ),
+        }))
+        .sort(
+          (a, b) =>
+            a.distanceKm -
+            b.distanceKm,
+        )[0];
+
+    const routeLabel =
+      match.route.name ||
+      match.route.routeId;
+
+    results.push({
+      id:
+        `discovery:tshwane-bus:${match.route.routeId}:${requiresRoadAccess ? "road-access" : "direct"}`,
+      mode:
+        "Tshwane Bus Service",
+      score:
+        requiresRoadAccess
+          ? 82
+          : 90,
+      estimatedFare: null,
+      estimatedTime: null,
+      estimatedTravelTime: null,
+      walkingDistance:
+        roundKm(
+          accessTerminal.distanceKm,
+        ),
+      nearestStop:
+        accessTerminal.terminal
+          .rawRouteLabel ??
+        "Official departure point",
+      destinationStop:
+        bestToTerminal?.terminal
+          .rawRouteLabel ??
+        undefined,
+      routeName:
+        requiresRoadAccess
+          ? `Taxi / road access → Tshwane Bus · ${routeLabel}`
+          : `Tshwane Bus · ${routeLabel}`,
+      subtitle:
+        requiresRoadAccess
+          ? "Road access + municipal bus"
+          : "Official municipal bus route",
+      reason:
+        requiresRoadAccess
+          ? `City of Tshwane GIS shows approved bus route ${match.route.routeId} within about ${Math.round(match.destinationDistanceMetres)} m of your destination. Its official departure point is about ${roundKm(accessTerminal.distanceKm)} km from your origin, so Pulse is showing a road/taxi access leg followed by Tshwane Bus. The roadside stop sequence, current timetable and exact fare are not yet verified.`
+          : `City of Tshwane GIS shows approved bus route ${match.route.routeId} accessible near your origin and within about ${Math.round(match.destinationDistanceMetres)} m of your destination. The roadside stop sequence, current timetable and exact fare are not yet verified.`,
+      badges:
+        requiresRoadAccess
+          ? [
+              "MULTIMODAL",
+              "OFFICIAL_GIS",
+              "ACCESS_REQUIRED",
+            ]
+          : [
+              "OFFICIAL_GIS",
+              "DIRECT",
+            ],
+      color: "#38BDF8",
+      confidence:
+        requiresRoadAccess
+          ? 0.8
+          : 0.9,
+      dataQuality: "verified",
+      direct:
+        !requiresRoadAccess,
+      routeCodes:
+        requiresRoadAccess
+          ? [
+              "Taxi / road access",
+              match.route.routeId,
+            ]
+          : [
+              match.route.routeId,
+            ],
+      transferStops:
+        requiresRoadAccess
+          ? [
+              accessTerminal.terminal
+                .rawRouteLabel ??
+              "Official departure point",
+            ]
+          : [],
+      fareStatus: "unverified",
+      timeStatus: "unverified",
+      evidenceStatus:
+        requiresRoadAccess
+          ? "multi-operator-official-gis-connection"
+          : "official-gis-route",
+      selectable:
+        !requiresRoadAccess,
+    });
+
+    if (results.length >= 2) {
+      break;
+    }
+  }
+
+  return results;
+};
 
 const gautrainRoadAccessCandidates = (
   origin: Location,
@@ -1249,6 +1601,8 @@ export class JourneyDiscoveryEngine {
       fareModule,
       routeModule,
       stopModule,
+      tshwaneRouteModule,
+      tshwaneTerminalModule,
     ] = await Promise.all([
       import(
         "../data/transit/gauteng/gautrain/rail-lines.json"
@@ -1261,6 +1615,12 @@ export class JourneyDiscoveryEngine {
       ),
       import(
         "../data/transit/gauteng/areyeng/normalized-stops.json"
+      ),
+      import(
+        "../data/transit/gauteng/tshwane-bus/normalized-routes.json"
+      ),
+      import(
+        "../data/transit/gauteng/tshwane-bus/normalized-terminals.json"
       ),
     ]);
 
@@ -1275,6 +1635,12 @@ export class JourneyDiscoveryEngine {
 
     const stops =
       stopModule.default as AReYengStop[];
+
+    const tshwaneRoutes =
+      tshwaneRouteModule.default as TshwaneBusRoute[];
+
+    const tshwaneTerminals =
+      tshwaneTerminalModule.default as TshwaneBusTerminal[];
 
     return dedupeRecommendations([
       ...directGautrainCandidates(
@@ -1296,6 +1662,18 @@ export class JourneyDiscoveryEngine {
         destination,
         routes,
         stops,
+      ),
+      ...aReYengRoadAccessCandidates(
+        origin,
+        destination,
+        routes,
+        stops,
+      ),
+      ...tshwaneBusCandidates(
+        origin,
+        destination,
+        tshwaneRoutes,
+        tshwaneTerminals,
       ),
       ...multimodalCandidates(
         origin,
