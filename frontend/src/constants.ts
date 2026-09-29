@@ -18,6 +18,7 @@ export const TRANSIT_NETWORKS: readonly TransitNetwork[] = [
   "A Re Yeng",
   "Tshwane Bus Service",
   "Metrorail",
+  "Putco",
   "Taxi"
 ] as const;
 
@@ -27,7 +28,8 @@ export const NETWORK_DISPLAY_NAMES: Record<TransitNetwork, string> = {
   "Rea Vaya": "Rea Vaya BRT",
   "A Re Yeng": "A Re Yeng BRT",
   "Tshwane Bus Service": "Tshwane Bus Service",
-  Metrorail: "Metrorail",
+  Metrorail: "PRASA Metrorail",
+  Putco: "PUTCO",
   Taxi: "Minibus Taxi"
 } as const;
 
@@ -37,7 +39,8 @@ export const NETWORK_DESCRIPTIONS: Record<TransitNetwork, string> = {
   "Rea Vaya": "Johannesburg's Bus Rapid Transit system. Reliable and affordable.",
   "A Re Yeng": "Pretoria's BRT system. Modern buses with dedicated lanes.",
   "Tshwane Bus Service": "Municipal bus service covering Pretoria region.",
-  Metrorail: "Commuter rail service. Most affordable but less reliable.",
+  Metrorail: "PRASA commuter rail service.",
+  Putco: "Regional commuter bus operator serving selected Gauteng, Mpumalanga and Limpopo corridors.",
   Taxi: "Minibus taxi network. Most flexible, cash-based."
 } as const;
 
@@ -100,6 +103,17 @@ export const NETWORK_UI = {
     iconActive: "🚂",
     short: "MR",
     fullName: "Metrorail"
+  },
+  Putco: {
+    color: "from-sky-500 to-blue-700",
+    bgColor: "bg-sky-500/10",
+    borderColor: "border-sky-500/30",
+    textColor: "text-sky-400",
+    glow: "shadow-sky-500/20",
+    icon: "🚌",
+    iconActive: "🚍",
+    short: "PU",
+    fullName: "PUTCO"
   },
   Taxi: {
     color: "from-zinc-700 to-zinc-900",
