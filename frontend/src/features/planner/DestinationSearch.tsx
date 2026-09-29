@@ -657,7 +657,7 @@ export const DestinationSearch = ({
     showSuggestions && !isSearchingPlaces && suggestions.length === 0;
 
   return (
-    <div className="relative w-full overflow-visible rounded-[30px] border border-white/[0.07] bg-[#09101d]/80 p-3 shadow-[0_24px_70px_rgba(0,0,0,0.28)] backdrop-blur-2xl sm:p-4">
+    <div className="premium-glass compact-card relative w-full overflow-visible p-3 sm:p-4">
       <div className="space-y-3">
         <div className="relative">
           <div className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-white/40">
@@ -680,7 +680,7 @@ export const DestinationSearch = ({
             onBlur={() => window.setTimeout(() => setIsOpen(false), 150)}
             onKeyDown={handleKeyDown}
             placeholder="Where do you want to go?"
-            className="h-[66px] w-full rounded-[22px] border border-white/[0.07] bg-[#050a14]/90 pl-12 pr-20 text-base font-semibold text-white shadow-inner outline-none transition placeholder:text-white/28 focus:border-cyan-300/35 focus:bg-[#07101d] focus:ring-4 focus:ring-cyan-400/[0.06] sm:text-lg"
+            className="premium-glass-soft h-[60px] w-full rounded-[20px] pl-12 pr-20 text-base font-semibold text-white outline-none transition placeholder:text-white/30 focus:border-cyan-300/30 focus:ring-4 focus:ring-cyan-400/[0.05] sm:h-[62px] sm:text-lg"
             autoComplete="off"
             autoCorrect="off"
             spellCheck={false}
