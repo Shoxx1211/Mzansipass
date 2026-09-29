@@ -1793,75 +1793,77 @@ const App = () => {
                     {/* STEP 2: TRANSPORT */}
 
                     {planningStep === "transport" && (
-                      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                        <div className="lg:col-span-1">
-                          <div className="glass rounded-3xl p-5 lg:sticky lg:top-24 lg:p-6">
+                      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[290px_minmax(0,1fr)]">
+                        <aside className="xl:col-span-1">
+                          <div className="rounded-[28px] border border-white/[0.07] bg-[#09101d]/72 p-5 shadow-[0_18px_55px_rgba(0,0,0,0.20)] backdrop-blur-xl xl:sticky xl:top-20">
                             <button
                               type="button"
                               onClick={() => {
                                 setPlanningStep("destination");
                                 setError(null);
                               }}
-                              className="mb-5 text-sm font-semibold text-cyan-300 transition hover:text-cyan-200"
+                              className="text-xs font-bold text-cyan-200/75 transition hover:text-cyan-100"
                             >
                               ← Change destination
                             </button>
 
-                            <p className="text-xs uppercase tracking-[0.18em] text-white/35">
-                              Journey
+                            <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.16em] text-white/28">
+                              Your trip
                             </p>
 
-                            <h2 className="mt-2 text-2xl font-black text-white">
+                            <h2 className="mt-2 text-2xl font-black tracking-[-0.03em] text-white">
                               {destination}
                             </h2>
 
                             {resolvedDestination?.label &&
                               resolvedDestination.label !== destination && (
-                                <p className="mt-2 text-xs leading-5 text-white/40">
+                                <p className="mt-2 line-clamp-2 text-xs leading-5 text-white/35">
                                   {resolvedDestination.label}
                                 </p>
                               )}
 
-                            <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-1">
-                              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                                <p className="text-[10px] uppercase tracking-wider text-white/35">
-                                  {routePlan.source === "mapbox-road"
-  ? "Road baseline"
-  : routePlan.source === "coordinate-estimate"
-    ? "Straight-line estimate"
-    : "Planning distance"}
-                                </p>
-                                <p className="mt-1 text-2xl font-black text-white">
+                            <div className="mt-7 divide-y divide-white/[0.055]">
+                              <div className="flex items-end justify-between gap-4 py-4 first:pt-0">
+                                <div>
+                                  <p className="text-[9px] font-bold uppercase tracking-[0.13em] text-white/28">
+                                    {routePlan.source === "mapbox-road"
+                                      ? "Road distance"
+                                      : routePlan.source === "coordinate-estimate"
+                                        ? "Approx. distance"
+                                        : "Distance"}
+                                  </p>
+                                </div>
+                                <p className="text-xl font-black text-white">
                                   {isPlanning
                                     ? "…"
                                     : formatDistance(routePlan.distanceKm)}
                                 </p>
                               </div>
 
-                              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                                <p className="text-[10px] uppercase tracking-wider text-white/35">
-                                  Options found
+                              <div className="flex items-end justify-between gap-4 py-4">
+                                <p className="text-[9px] font-bold uppercase tracking-[0.13em] text-white/28">
+                                  Journeys
                                 </p>
-                                <p className="mt-1 text-2xl font-black text-cyan-300">
+                                <p className="text-xl font-black text-cyan-200">
                                   {isPlanning ? "…" : recommendations.length}
                                 </p>
                               </div>
 
-                              <div className="col-span-2 rounded-2xl border border-white/10 bg-white/[0.04] p-4 lg:col-span-1">
-                                <div className="flex items-center justify-between gap-3">
-                                  <div>
-                                    <p className="text-[10px] uppercase tracking-wider text-white/35">
-                                      GPS origin
-                                    </p>
-                                    <p
-                                      className={`mt-1 text-sm font-bold ${
-                                        plannerOrigin
-                                          ? plannerOriginIsTest
-                                            ? "text-violet-200"
-                                            : "text-emerald-300"
-                                          : "text-amber-200"
+                              <div className="py-4 last:pb-0">
+                                <p className="text-[9px] font-bold uppercase tracking-[0.13em] text-white/28">
+                                  Starting from
+                                </p>
+                                <div className="mt-2 flex items-center justify-between gap-3">
+                                  <div className="flex min-w-0 items-center gap-2">
+                                    <span
+                                      className={`h-2 w-2 shrink-0 rounded-full ${plannerOrigin
+                                        ? plannerOriginIsTest
+                                          ? "bg-violet-300"
+                                          : "bg-emerald-400"
+                                        : "bg-amber-400"
                                       }`}
-                                    >
+                                    />
+                                    <p className="truncate text-xs font-bold text-white/60">
                                       {plannerGpsLabel}
                                     </p>
                                   </div>
@@ -1870,7 +1872,7 @@ const App = () => {
                                     <button
                                       type="button"
                                       onClick={() => void retryPlannerLocation()}
-                                      className="rounded-xl bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/70"
+                                      className="rounded-lg bg-white/[0.055] px-2.5 py-1.5 text-[10px] font-bold text-white/60"
                                     >
                                       Retry
                                     </button>
@@ -1880,23 +1882,14 @@ const App = () => {
                             </div>
 
                             {routePlan.source === "coordinate-estimate" && (
-                              <p className="mt-4 rounded-xl border border-amber-400/15 bg-amber-400/[0.05] px-3 py-2 text-xs leading-5 text-amber-100/60">
-                                Distance is provisional until live Mapbox routing
-                                is enabled.
-                              </p>
-                            )}
-
-                            {routePlan.source === "mapbox-road" && (
-                              <p className="mt-4 text-xs leading-5 text-white/35">
-                                {plannerOriginIsTest
-                                  ? "Road baseline resolved from deterministic development coordinates. Public-transport evidence remains independent of that driving baseline."
-                                  : "Route geometry resolved from your GPS origin to the selected destination. Public-transport ETAs are shown separately on each option."}
+                              <p className="mt-5 rounded-2xl bg-amber-400/[0.055] px-3 py-2.5 text-[10px] leading-5 text-amber-100/55">
+                                Distance is approximate until a road route is available.
                               </p>
                             )}
                           </div>
-                        </div>
+                        </aside>
 
-                        <div className="max-w-4xl lg:col-span-2">
+                        <div className="min-w-0 xl:col-span-1">
                           {SHOW_NETWORK_LAB && <UnifiedCoveragePanel report={unifiedCoverage} />}
 
                           <TransportRecommendation
