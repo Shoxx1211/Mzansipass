@@ -462,6 +462,7 @@ export const NETWORK_RATES: Record<TransitNetwork, number> = {
   "A Re Yeng": 2.2,
   "Tshwane Bus Service": 1.8,
   Metrorail: 1.2,
+  Putco: 0,
   Taxi: 2.5
 } as const;
 
@@ -472,6 +473,7 @@ export const NETWORK_BASE_FARES: Record<TransitNetwork, number> = {
   "A Re Yeng": 10,
   "Tshwane Bus Service": 10,
   Metrorail: 10,
+  Putco: 0,
   Taxi: 12
 } as const;
 
