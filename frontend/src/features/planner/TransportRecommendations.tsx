@@ -330,6 +330,13 @@ const getBadgeColor = (
     case "QUICK_ESTIMATE":
       return "border-violet-400/20 bg-violet-500/10 text-violet-300";
 
+    case "OFFICIAL_SERVICE":
+    case "OFFICIAL_GIS":
+      return "border-emerald-400/20 bg-emerald-500/10 text-emerald-300";
+
+    case "MULTIMODAL":
+      return "border-fuchsia-400/20 bg-fuchsia-500/10 text-fuchsia-300";
+
     case "CONFIGURED_DATA":
       return "border-white/10 bg-white/5 text-white/45";
 
@@ -357,6 +364,12 @@ const formatBadge = (
       "Lower fare",
     QUICK_ESTIMATE:
       "Quicker estimate",
+    OFFICIAL_SERVICE:
+      "Official service",
+    OFFICIAL_GIS:
+      "Official route",
+    MULTIMODAL:
+      "Multi-modal",
     CONFIGURED_DATA:
       "Configured data",
   };
@@ -385,6 +398,15 @@ const getEvidenceHeading = (
     case "published-shared-stop-connectivity":
       return "Published transfer evidence";
 
+    case "published-service-membership":
+      return "Official service match";
+
+    case "official-gis-route":
+      return "Official route geometry";
+
+    case "multi-operator-published-connection":
+      return "Multi-modal connection evidence";
+
     case "configured":
     default:
       return "Configured route evidence";
@@ -402,6 +424,15 @@ const getEvidenceDescription = (
 
     case "published-shared-stop-connectivity":
       return "Pulse found a path using canonical route geometry and published shared-stop connectivity. Exact transfer timing, walking path and timetable compatibility remain unverified.";
+
+    case "published-service-membership":
+      return "Pulse matched both ends of the journey to stations on the same official Gautrain service. Live timetable compatibility and total door-to-door time are not yet confirmed.";
+
+    case "official-gis-route":
+      return "Pulse matched both ends of the journey to the same official municipal route geometry. Direction, today's timetable and exact fare may still need confirmation.";
+
+    case "multi-operator-published-connection":
+      return "Pulse found a plausible connection between official operator networks using published service membership and route geometry. Transfer timing, exact interchange walking and the combined fare remain unverified.";
 
     case "configured":
     default:
