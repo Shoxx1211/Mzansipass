@@ -1795,7 +1795,7 @@ const App = () => {
                     {planningStep === "transport" && (
                       <div className="grid grid-cols-1 gap-5 xl:grid-cols-[290px_minmax(0,1fr)]">
                         <aside className="xl:col-span-1">
-                          <div className="rounded-[28px] border border-white/[0.07] bg-[#09101d]/72 p-5 shadow-[0_18px_55px_rgba(0,0,0,0.20)] backdrop-blur-xl xl:sticky xl:top-20">
+                          <div className="rounded-[28px] border border-white/[0.07] bg-[#09101d]/80 p-5 shadow-[0_18px_55px_rgba(0,0,0,0.20)] backdrop-blur-xl xl:sticky xl:top-20">
                             <button
                               type="button"
                               onClick={() => {
@@ -1807,7 +1807,7 @@ const App = () => {
                               ← Change destination
                             </button>
 
-                            <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.16em] text-white/28">
+                            <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.16em] text-white/30">
                               Your trip
                             </p>
 
@@ -1825,7 +1825,7 @@ const App = () => {
                             <div className="mt-7 divide-y divide-white/[0.055]">
                               <div className="flex items-end justify-between gap-4 py-4 first:pt-0">
                                 <div>
-                                  <p className="text-[9px] font-bold uppercase tracking-[0.13em] text-white/28">
+                                  <p className="text-[9px] font-bold uppercase tracking-[0.13em] text-white/30">
                                     {routePlan.source === "mapbox-road"
                                       ? "Road distance"
                                       : routePlan.source === "coordinate-estimate"
@@ -1841,7 +1841,7 @@ const App = () => {
                               </div>
 
                               <div className="flex items-end justify-between gap-4 py-4">
-                                <p className="text-[9px] font-bold uppercase tracking-[0.13em] text-white/28">
+                                <p className="text-[9px] font-bold uppercase tracking-[0.13em] text-white/30">
                                   Journeys
                                 </p>
                                 <p className="text-xl font-black text-cyan-200">
@@ -1850,7 +1850,7 @@ const App = () => {
                               </div>
 
                               <div className="py-4 last:pb-0">
-                                <p className="text-[9px] font-bold uppercase tracking-[0.13em] text-white/28">
+                                <p className="text-[9px] font-bold uppercase tracking-[0.13em] text-white/30">
                                   Starting from
                                 </p>
                                 <div className="mt-2 flex items-center justify-between gap-3">
