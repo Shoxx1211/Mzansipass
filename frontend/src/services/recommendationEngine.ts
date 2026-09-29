@@ -61,6 +61,7 @@ const FALLBACK_NETWORK_SPEED_KMH: Record<TransitNetwork, number> = {
   "A Re Yeng": 24,
   "Tshwane Bus Service": 22,
   Metrorail: 35,
+  Putco: 28,
 };
 
 const ROAD_BASELINE_MULTIPLIER: Record<TransitNetwork, number> = {
@@ -70,6 +71,7 @@ const ROAD_BASELINE_MULTIPLIER: Record<TransitNetwork, number> = {
   "A Re Yeng": 1.15,
   "Tshwane Bus Service": 1.2,
   Metrorail: 0.95,
+  Putco: 1.15,
 };
 
 const isPeakHour = (date: Date): boolean => {
@@ -801,6 +803,7 @@ selectable: false,
       "A Re Yeng": "from-purple-500 to-pink-500",
       "Tshwane Bus Service": "from-teal-500 to-emerald-500",
       Metrorail: "from-green-500 to-emerald-500",
+      Putco: "from-sky-500 to-blue-600",
     };
 
     return colors[network];
