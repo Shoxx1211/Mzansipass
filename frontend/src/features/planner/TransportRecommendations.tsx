@@ -17,7 +17,6 @@ import {
   Filter,
   Footprints,
   MapPin,
-  Navigation,
   TrendingUp,
   Wallet,
 } from "lucide-react";
