@@ -480,9 +480,7 @@ const isTransferRecommendation = (
 
 const RouteEvidence: React.FC<{
   recommendation: RecommendationType;
-}> = ({
-  recommendation,
-}) => {
+}> = ({ recommendation }) => {
   const routeCodes =
     recommendation.routeCodes ?? [];
 
@@ -499,94 +497,67 @@ const RouteEvidence: React.FC<{
     );
 
   return (
-    <div className="mt-4 overflow-hidden rounded-2xl border border-cyan-400/10 bg-gradient-to-br from-cyan-500/[0.07] via-white/[0.025] to-violet-500/[0.05]">
-      <div className="flex items-center justify-between gap-3 border-b border-white/[0.06] px-4 py-3">
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-300/70">
-            Route evidence
-          </p>
+    <div className="mt-4 rounded-2xl bg-white/[0.035] p-3.5">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-white/30">
+          Journey
+        </p>
 
-          <p className="mt-0.5 text-xs text-white/45">
-            {isTransfer
-              ? "Published connection path"
-              : "Direct canonical route fit"}
-          </p>
-        </div>
-
-        <span className="rounded-full border border-cyan-400/15 bg-cyan-500/10 px-2.5 py-1 text-[10px] font-bold text-cyan-200">
+        <span className="rounded-full bg-white/[0.055] px-2.5 py-1 text-[9px] font-bold uppercase tracking-wide text-white/45">
           {isTransfer
-            ? "Transfer"
+            ? `${Math.max(1, routeCodes.length - 1)} change${routeCodes.length > 2 ? "s" : ""}`
             : "Direct"}
         </span>
       </div>
 
-      <div className="p-4">
-        <div className="flex flex-wrap items-center gap-2">
-          {routeCodes.map(
-            (
-              routeCode,
-              index,
-            ) => {
-              const isLast =
-                index ===
-                routeCodes.length - 1;
+      <div className="flex flex-wrap items-center gap-2">
+        {routeCodes.map(
+          (routeCode, index) => {
+            const isLast =
+              index ===
+              routeCodes.length - 1;
 
-              const transferStop =
-                transferStops[index];
+            const transferStop =
+              transferStops[index];
 
-              return (
-                <React.Fragment
-                  key={`${routeCode}-${index}`}
-                >
-                  <div className="flex h-10 min-w-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.07] px-3 text-sm font-black text-white">
-                    {routeCode}
-                  </div>
+            return (
+              <React.Fragment
+                key={`${routeCode}-${index}`}
+              >
+                <div className="flex min-h-10 items-center rounded-xl bg-white/[0.065] px-3 text-xs font-black text-white/85">
+                  {routeCode}
+                </div>
 
-                  {!isLast && (
-                    <>
-                      <ArrowRight
-                        size={15}
-                        className="shrink-0 text-white/25"
-                      />
+                {!isLast && (
+                  <>
+                    <ArrowRight
+                      size={14}
+                      className="shrink-0 text-cyan-300/55"
+                    />
 
-                      <div className="flex min-h-10 items-center gap-2 rounded-xl border border-violet-400/15 bg-violet-500/[0.08] px-3">
-                        <MapPin
-                          size={13}
-                          className="shrink-0 text-violet-300"
-                        />
-
-                        <div>
-                          <p className="text-[9px] font-bold uppercase tracking-wide text-white/30">
-                            Change at
-                          </p>
-
-                          <p className="text-xs font-bold text-white/80">
-                            {transferStop ??
-                              "Published connection"}
-                          </p>
+                    {transferStop && (
+                      <>
+                        <div className="flex min-h-10 items-center gap-2 rounded-xl bg-violet-500/[0.07] px-3">
+                          <MapPin
+                            size={12}
+                            className="shrink-0 text-violet-300/80"
+                          />
+                          <span className="max-w-[190px] truncate text-[11px] font-semibold text-white/55">
+                            {transferStop}
+                          </span>
                         </div>
-                      </div>
 
-                      <ArrowRight
-                        size={15}
-                        className="shrink-0 text-white/25"
-                      />
-                    </>
-                  )}
-                </React.Fragment>
-              );
-            },
-          )}
-        </div>
-
-        {isTransfer && (
-          <p className="mt-3 text-[11px] leading-relaxed text-white/35">
-            The shared stop is supported
-            by published route evidence.
-            Pulse does not yet claim an
-            exact interchange walking
-            path or timed connection.
-          </p>
+                        <ArrowRight
+                          size={14}
+                          className="shrink-0 text-cyan-300/55"
+                        />
+                      </>
+                    )}
+                  </>
+                )}
+              </React.Fragment>
+            );
+          },
         )}
       </div>
     </div>
@@ -607,24 +578,21 @@ const MetricTile: React.FC<{
   icon,
   heading,
   value,
-  valueClassName =
-    "text-white",
+  valueClassName = "text-white",
   supportingText,
 }) => (
-  <div className="min-w-0 rounded-2xl border border-white/[0.04] bg-white/[0.045] p-3">
-    <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide text-white/35">
+  <div className="min-w-0">
+    <div className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.12em] text-white/30">
       {icon}
       {heading}
     </div>
 
-    <p
-      className={`mt-2 break-words text-lg font-black ${valueClassName}`}
-    >
+    <p className={`mt-1.5 break-words text-base font-black sm:text-lg ${valueClassName}`}>
       {value}
     </p>
 
     {supportingText && (
-      <p className="mt-1.5 text-[10px] leading-relaxed text-white/30">
+      <p className="mt-1 text-[9px] leading-relaxed text-white/25">
         {supportingText}
       </p>
     )}
@@ -679,12 +647,13 @@ const RecommendationCard: React.FC<{
     return (
       <article
         className={`
-          glass overflow-hidden rounded-3xl border
+          relative overflow-hidden rounded-[28px] border
+          bg-[#0a1020]/80 backdrop-blur-xl
           transition-all duration-300
           ${
             isSelected
-              ? "border-cyan-400/45 bg-cyan-500/[0.06] shadow-lg shadow-cyan-500/5"
-              : "border-white/10 hover:border-white/20"
+              ? "border-cyan-300/35 shadow-[0_18px_55px_rgba(6,182,212,0.10)]"
+              : "border-white/[0.075] shadow-[0_16px_50px_rgba(0,0,0,0.18)] hover:border-white/15"
           }
         `}
         style={{
@@ -692,7 +661,7 @@ const RecommendationCard: React.FC<{
             `${index * 70}ms`,
         }}
       >
-        <div className="p-4 sm:p-5">
+        <div className="p-5 sm:p-6">
           {/* HEADER */}
           <div className="flex min-w-0 items-start gap-3">
             <div
@@ -785,19 +754,8 @@ const RecommendationCard: React.FC<{
             }
           />
 
-          {/* WHY THIS OPTION */}
-          <div className="mt-4 rounded-2xl border border-white/[0.07] bg-white/[0.035] p-4">
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/35">
-              Why Pulse found this
-            </p>
-
-            <p className="mt-2 text-sm leading-relaxed text-white/75">
-              {recommendation.reason}
-            </p>
-          </div>
-
           {/* METRICS */}
-          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="mt-5 grid grid-cols-3 gap-4 border-y border-white/[0.055] py-4">
             <MetricTile
               icon={
                 <Clock3
@@ -860,24 +818,6 @@ const RecommendationCard: React.FC<{
               )}
             />
 
-            <MetricTile
-              icon={
-                <Navigation
-                  size={12}
-                />
-              }
-              heading="Network leg"
-              value={formatDistance(
-                recommendation.serviceDistanceKm,
-              )}
-              supportingText={
-                recommendation
-                  .serviceDistanceKm ===
-                undefined
-                  ? "Not inferred from the road-driving baseline."
-                  : null
-              }
-            />
           </div>
 
           {/* EXPANDED DETAILS */}
@@ -905,6 +845,15 @@ const RecommendationCard: React.FC<{
                       "Exact exit stop not verified"}
                   </p>
                 </div>
+              </div>
+
+              <div className="rounded-2xl bg-white/[0.035] p-4">
+                <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-white/30">
+                  Why this journey
+                </p>
+                <p className="mt-2 text-xs leading-relaxed text-white/50">
+                  {recommendation.reason}
+                </p>
               </div>
 
               <div className="rounded-2xl border border-cyan-400/10 bg-cyan-500/[0.045] p-4">
@@ -971,7 +920,7 @@ const RecommendationCard: React.FC<{
                     ? "cursor-not-allowed border border-white/[0.07] bg-white/[0.04] text-white/35"
                     : isSelected
                       ? "bg-cyan-500/20 text-cyan-200"
-                      : "bg-gradient-to-r from-cyan-500 to-emerald-500 text-white hover:brightness-110"
+                      : "bg-gradient-to-r from-cyan-400 via-cyan-400 to-emerald-400 text-[#031019] shadow-[0_10px_30px_rgba(34,211,238,0.14)] hover:brightness-110"
                 }
               `}
             >
@@ -979,7 +928,7 @@ const RecommendationCard: React.FC<{
                 ? "Route evidence only"
                 : isSelected
                   ? "Selected"
-                  : "Choose this option"}
+                  : "Choose journey"}
             </button>
 
             <button
