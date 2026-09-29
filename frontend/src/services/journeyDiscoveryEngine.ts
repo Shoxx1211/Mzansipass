@@ -759,7 +759,7 @@ const aReYengRoadAccessCandidates = (
       timeStatus: "unverified",
       evidenceStatus:
         "multi-operator-official-gis-connection",
-      selectable: false,
+      selectable: true,
     });
 
     if (results.length >= 2) {
@@ -960,8 +960,7 @@ const tshwaneBusCandidates = (
         requiresRoadAccess
           ? "multi-operator-official-gis-connection"
           : "official-gis-route",
-      selectable:
-        !requiresRoadAccess,
+      selectable: true,
     });
 
     if (results.length >= 2) {
