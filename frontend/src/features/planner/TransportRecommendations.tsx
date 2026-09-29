@@ -161,22 +161,6 @@ const formatWalking = (
   )} km`;
 };
 
-const formatDistance = (
-  distanceKm?: number,
-): string => {
-  if (
-    distanceKm === undefined ||
-    !Number.isFinite(distanceKm) ||
-    distanceKm <= 0
-  ) {
-    return "Not verified";
-  }
-
-  return `${distanceKm.toFixed(
-    1,
-  )} km`;
-};
-
 const formatTime = (
   minutes: number | null,
 ): string => {
