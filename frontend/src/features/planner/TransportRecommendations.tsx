@@ -111,7 +111,8 @@ const MODE_MARKS: Record<
 > = {
   Taxi: "TX",
   Gautrain: "GT",
-  Metrorail: "MR",
+  Metrorail: "PR",
+  Putco: "PU",
   "Rea Vaya": "RV",
   "A Re Yeng": "AR",
   "Tshwane Bus Service": "TB",
@@ -126,7 +127,11 @@ const getModeLabel = (
 ): string =>
   mode === "Taxi"
     ? "Minibus Taxi"
-    : mode;
+    : mode === "Metrorail"
+      ? "PRASA Metrorail"
+      : mode === "Putco"
+        ? "PUTCO"
+        : mode;
 
 const formatMoney = (
   value: number,
@@ -362,7 +367,7 @@ const formatBadge = (
     MULTIMODAL:
       "Multi-modal",
     ACCESS_REQUIRED:
-      "Access leg",
+      "Extra connection",
     ROAD_ROUTE:
       "Road route",
     FARE_VERIFY:
@@ -407,6 +412,9 @@ const getEvidenceHeading = (
     case "multi-operator-official-gis-connection":
       return "Official network connection evidence";
 
+    case "published-service-area":
+      return "Operator service area";
+
     case "road-baseline":
       return "Road connection available";
 
@@ -439,6 +447,9 @@ const getEvidenceDescription = (
 
     case "multi-operator-official-gis-connection":
       return "Pulse connected an access leg to an official municipal bus route using City GIS route and terminal evidence. The exact transfer timing, roadside stop sequence and combined fare remain unverified.";
+
+    case "published-service-area":
+      return "The operator publishes service in this travel area, but Pulse has not yet verified the exact stop sequence, timetable or fare for this specific journey.";
 
     case "road-baseline":
       return "Pulse confirmed a road connection to the destination. The exact minibus-taxi rank, stopping pattern, vehicle changes and fare still need local confirmation.";
@@ -803,8 +814,8 @@ const RecommendationCard: React.FC<{
                 recommendation.badges.includes(
                   "ACCESS_REQUIRED",
                 )
-                  ? "Access leg"
-                  : "Access walk"
+                  ? "To first stop"
+                  : "Walk"
               }
               value={formatWalking(
                 recommendation.walkingDistance,
@@ -1050,7 +1061,9 @@ export const TransportRecommendation =
                       recommendation.mode ===
                         "A Re Yeng" ||
                       recommendation.mode ===
-                        "Tshwane Bus Service"
+                        "Tshwane Bus Service" ||
+                      recommendation.mode ===
+                        "Putco"
                     );
                   }
 
