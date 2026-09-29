@@ -901,7 +901,7 @@ const App = () => {
                   fallbackPlace.formattedAddress,
                 label:
                   resolvedDestination?.label ??
-                  `${fallbackPlace.formattedAddress}, Gauteng, South Africa`,
+                  fallbackPlace.formattedAddress,
                 lat:
                   fallbackPlace.location.lat,
                 lng:
