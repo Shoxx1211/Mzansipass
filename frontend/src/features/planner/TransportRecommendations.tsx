@@ -481,7 +481,7 @@ const RouteEvidence: React.FC<{
     );
 
   return (
-    <div className="mt-4 rounded-2xl bg-white/[0.035] p-3.5">
+    <div className="premium-glass-soft mt-3 rounded-2xl p-3">
       <div className="mb-3 flex items-center justify-between gap-3">
         <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-white/30">
           Journey
@@ -643,9 +643,7 @@ const RecommendationCard: React.FC<{
     return (
       <article
         className={`
-          relative overflow-hidden rounded-[28px] border
-          bg-[#0a1020]/80 backdrop-blur-xl
-          transition-all duration-300
+          premium-glass compact-card relative overflow-hidden transition-all duration-300
           ${
             isSelected
               ? "border-cyan-300/35 shadow-[0_18px_55px_rgba(6,182,212,0.10)]"
@@ -657,7 +655,7 @@ const RecommendationCard: React.FC<{
             `${index * 70}ms`,
         }}
       >
-        <div className="p-5 sm:p-6">
+        <div className="p-4 sm:p-5">
           {/* HEADER */}
           <div className="flex min-w-0 items-start gap-3">
             <div
@@ -750,7 +748,7 @@ const RecommendationCard: React.FC<{
           />
 
           {/* METRICS */}
-          <div className="mt-5 grid grid-cols-3 gap-4 border-y border-white/[0.055] py-4">
+          <div className="mt-4 grid grid-cols-3 gap-3 border-y border-white/[0.055] py-3.5">
             <MetricTile
               icon={
                 <Clock3
