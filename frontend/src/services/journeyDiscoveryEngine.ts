@@ -727,7 +727,7 @@ const directAReYengCandidates = (
       timeStatus: "unverified",
       evidenceStatus:
         "official-gis-route",
-      selectable: false,
+      selectable: true,
     });
 
     if (results.length >= 2) {
