@@ -703,7 +703,7 @@ const RecommendationCard: React.FC<{
 
                 {isEvidenceOnly && (
                   <span className="inline-flex items-center gap-1 rounded-full border border-violet-400/20 bg-violet-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-violet-300">
-                    Evidence only
+                    Needs confirmation
                   </span>
                 )}
               </div>
@@ -929,7 +929,7 @@ const RecommendationCard: React.FC<{
               `}
             >
               {isEvidenceOnly
-                ? "Route evidence only"
+                ? "Route to confirm"
                 : isSelected
                   ? "Selected"
                   : "Choose journey"}
@@ -949,8 +949,8 @@ const RecommendationCard: React.FC<{
               }
               aria-label={
                 isExpanded
-                  ? "Hide route evidence"
-                  : "Show route evidence"
+                  ? "Hide journey details"
+                  : "Show journey details"
               }
             >
               {isExpanded ? (
