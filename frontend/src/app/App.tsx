@@ -1890,7 +1890,7 @@ const App = () => {
                           }}
                           className="text-sm font-semibold text-cyan-300 transition hover:text-cyan-200"
                         >
-                          <- Compare other options
+                          ← Compare other options
                         </button>
 
                         {selectedRecommendation.journeyLegs?.length ? (
