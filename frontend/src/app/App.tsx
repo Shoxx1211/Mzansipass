@@ -18,7 +18,6 @@ import {
   type DevJourneyTestRequest,
 } from "../features/planner/DevJourneyTestLab";
 import { TripTracker } from "../features/trip/TripTracker";
-import { VirtualCard } from "../features/wallet/VirtualCard";
 
 import {
   TripState,
@@ -1991,71 +1990,69 @@ const App = () => {
                           </div>
                         ) : null}
 
-                        <div className="grid gap-4 lg:grid-cols-[1fr_0.7fr]">
-                          <VirtualCard
-                            state={tripState}
-                            network={network}
-                            destination={destination}
-                            distance={routePlan.distanceKm ?? 0}
-                            duration={plannedDurationSeconds}
-                            estimatedFare={estimatedFare ?? undefined}
-                            variant="compact"
-                            showTilt={false}
-                          />
+                        <div className="rounded-[28px] border border-white/[0.07] bg-[#09101d]/80 p-5 shadow-[0_18px_55px_rgba(0,0,0,0.20)] backdrop-blur-xl sm:p-6">
+                          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                            <div>
+                              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-emerald-300/60">
+                                Ready to go
+                              </p>
+                              <h3 className="mt-1 text-xl font-black tracking-[-0.025em] text-white">
+                                {destination}
+                              </h3>
+                            </div>
 
-                          <div className="glass rounded-3xl p-5">
-                            <p className="text-[10px] uppercase tracking-[0.18em] text-white/35">
-                              Before you go
-                            </p>
+                            <span className="w-fit rounded-full bg-white/[0.055] px-3 py-1.5 text-[10px] font-bold text-white/55">
+                              {network}
+                            </span>
+                          </div>
 
-                            <div className="mt-4 space-y-3">
-                              <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                                <span className="text-sm text-white/45">
-                                  Primary network
-                                </span>
-                                <span className="text-sm font-bold text-white">
-                                  {network}
-                                </span>
-                              </div>
+                          <div className="mt-6 grid grid-cols-2 gap-x-5 gap-y-5 sm:grid-cols-4">
+                            <div>
+                              <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/28">
+                                Distance
+                              </p>
+                              <p className="mt-1.5 text-lg font-black text-white">
+                                {formatDistance(routePlan.distanceKm)}
+                              </p>
+                            </div>
 
-                              <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                                <span className="text-sm text-white/45">
-                                  Distance
-                                </span>
-                                <span className="text-sm font-bold text-white">
-                                  {formatDistance(routePlan.distanceKm)}
-                                </span>
-                              </div>
+                            <div>
+                              <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/28">
+                                Time
+                              </p>
+                              <p className="mt-1.5 text-lg font-black text-white">
+                                {plannedDurationSeconds > 0
+                                  ? formatDuration(plannedDurationSeconds)
+                                  : "Not verified"}
+                              </p>
+                            </div>
 
-                              <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                                <span className="text-sm text-white/45">
-                                  Est. time
-                                </span>
-                                <span className="text-sm font-bold text-white">
-                                  {plannedDurationSeconds > 0
-                                    ? formatDuration(plannedDurationSeconds)
-                                    : "Not verified"}
-                                </span>
-                              </div>
+                            <div>
+                              <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/28">
+                                Fare
+                              </p>
+                              <p className={`mt-1.5 text-lg font-black ${estimatedFare !== null ? "text-emerald-300" : "text-amber-200"}`}>
+                                {estimatedFare !== null
+                                  ? `R${estimatedFare.toFixed(2)}`
+                                  : "Confirm"}
+                              </p>
+                            </div>
 
-                              <div className="flex items-center justify-between">
-                                <span className="text-sm text-white/45">
-                                  Est. fare
-                                </span>
-                                <span
-                                  className={
-                                    estimatedFare !== null
-                                      ? "text-lg font-black text-emerald-300"
-                                      : "text-sm font-bold text-amber-200"
-                                  }
-                                >
-                                  {estimatedFare !== null
-                                    ? `R${estimatedFare.toFixed(2)}`
-                                    : "Not verified"}
-                                </span>
-                              </div>
+                            <div>
+                              <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/28">
+                                Legs
+                              </p>
+                              <p className="mt-1.5 text-lg font-black text-white">
+                                {selectedRecommendation.journeyLegs?.length ?? 1}
+                              </p>
                             </div>
                           </div>
+
+                          {(estimatedFare === null || plannedDurationSeconds === 0) && (
+                            <p className="mt-5 border-t border-white/[0.055] pt-4 text-[10px] leading-5 text-white/30">
+                              Pulse will track the journey now. Unverified fare or timing can be confirmed as the network data improves.
+                            </p>
+                          )}
                         </div>
 
                         <div className="sticky bottom-4 z-40 pt-3">
@@ -2063,7 +2060,7 @@ const App = () => {
                             type="button"
                             onClick={() => void startTrip()}
                             disabled={isStartingTrip}
-                            className="flex h-16 w-full items-center justify-center gap-3 rounded-3xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-lg font-black text-white shadow-xl shadow-emerald-500/20 transition hover:scale-[1.01] active:scale-[0.99] disabled:cursor-wait disabled:opacity-60"
+                            className="flex h-16 w-full items-center justify-center gap-3 rounded-[22px] bg-gradient-to-r from-cyan-400 via-cyan-400 to-emerald-400 text-base font-black text-[#031019] shadow-[0_16px_45px_rgba(34,211,238,0.20)] transition hover:brightness-110 active:scale-[0.99] disabled:cursor-wait disabled:opacity-60"
                           >
                             {isStartingTrip ? (
                               <>
