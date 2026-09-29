@@ -359,7 +359,7 @@ export const A_RE_YENG_ZONE: TransportNetworkZone = {
 
 export const METRORAIL_ZONE: TransportNetworkZone = {
   id: "metrorail",
-  name: "Metrorail",
+  name: "PRASA Metrorail",
   canonicalNetwork: "Metrorail",
   city: "Gauteng",
   enabled: true,
