@@ -1148,17 +1148,11 @@ export const TransportRecommendation =
               <div className="mx-auto h-12 w-12 animate-spin rounded-full border-2 border-white/10 border-t-cyan-400" />
 
               <p className="mt-4 text-sm font-semibold text-white/70">
-                Checking transport
-                evidence for this
-                journey...
+                Building your journeys...
               </p>
 
               <p className="mt-1 text-xs text-white/35">
-                Matching your origin
-                and destination against
-                supported network
-                geometry and connection
-                evidence.
+                Checking taxi, rail and bus connections for this trip.
               </p>
             </div>
           </div>
