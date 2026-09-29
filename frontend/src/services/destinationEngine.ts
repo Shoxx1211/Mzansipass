@@ -61,6 +61,18 @@ const DESTINATIONS: Record<string, {
   popularity: number; // 0-100
   boundingBox?: { northeast: Location; southwest: Location };
 }> = {
+  "braamfontein": {
+    // Central Braamfontein, Johannesburg. Used only as a resilient fallback
+    // when the live geocoder is unavailable.
+    location: { lat: -26.1911, lng: 28.0378 },
+    aliases: [
+      "braam",
+      "braamfontein johannesburg",
+      "braamfontein joburg"
+    ],
+    category: "suburb",
+    popularity: 94
+  },
   "sandton": {
     location: { lat: -26.1076, lng: 28.0567 },
     aliases: ["sandton city", "sandton cbd", "sandton central"],
