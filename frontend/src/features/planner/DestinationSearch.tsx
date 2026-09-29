@@ -115,33 +115,6 @@ const FAVORITES_KEY = "pulse_favorite_destinations_v1";
 const SELECTED_DESTINATION_KEY = "pulse_selected_destination_v1";
 const MAX_RECENTS = 6;
 
-// Pulse MVP is currently scoped to Gauteng. Constrain autocomplete so
-// same-named places elsewhere in South Africa cannot silently hijack a trip.
-const GAUTENG_BBOX = {
-  minLng: 27.0,
-  minLat: -27.0,
-  maxLng: 29.5,
-  maxLat: -24.9,
-} as const;
-
-const isWithinGautengMvpBounds = (
-  place: Pick<DestinationPlace, "lat" | "lng">,
-): boolean => {
-  if (
-    place.lat === undefined ||
-    place.lng === undefined
-  ) {
-    return true;
-  }
-
-  return (
-    place.lng >= GAUTENG_BBOX.minLng &&
-    place.lng <= GAUTENG_BBOX.maxLng &&
-    place.lat >= GAUTENG_BBOX.minLat &&
-    place.lat <= GAUTENG_BBOX.maxLat
-  );
-};
-
 /*
  * Fallback labels only. Real coordinates come from the configured geocoder.
  * This prevents Pulse from pretending approximate hard-coded coordinates are
@@ -167,6 +140,16 @@ const PULSE_DESTINATIONS: DestinationPlace[] = [
   { id: "bara", name: "Chris Hani Baragwanath Hospital", label: "Chris Hani Baragwanath Academic Hospital, Soweto, Gauteng", category: "Hospital", source: "pulse" },
   { id: "uj-apk", name: "University of Johannesburg APK", label: "University of Johannesburg Auckland Park Kingsway Campus", category: "University", source: "pulse" },
   { id: "wits", name: "University of the Witwatersrand", label: "Wits University, Braamfontein, Johannesburg", category: "University", source: "pulse" },
+  { id: "cape-town-cbd", name: "Cape Town CBD", label: "Cape Town, Western Cape", category: "City centre", source: "pulse" },
+  { id: "cape-town-station", name: "Cape Town Station", label: "Cape Town Station, Cape Town, Western Cape", category: "Rail & bus station", source: "pulse" },
+  { id: "durban-cbd", name: "Durban CBD", label: "Durban, KwaZulu-Natal", category: "City centre", source: "pulse" },
+  { id: "durban-station", name: "Durban Station", label: "Durban Station, Durban, KwaZulu-Natal", category: "Rail station", source: "pulse" },
+  { id: "bloemfontein-cbd", name: "Bloemfontein CBD", label: "Bloemfontein, Free State", category: "City centre", source: "pulse" },
+  { id: "gqeberha-cbd", name: "Gqeberha CBD", label: "Gqeberha, Eastern Cape", category: "City centre", source: "pulse" },
+  { id: "mbombela-cbd", name: "Mbombela CBD", label: "Mbombela, Mpumalanga", category: "City centre", source: "pulse" },
+  { id: "polokwane-cbd", name: "Polokwane CBD", label: "Polokwane, Limpopo", category: "City centre", source: "pulse" },
+  { id: "kimberley-cbd", name: "Kimberley CBD", label: "Kimberley, Northern Cape", category: "City centre", source: "pulse" },
+  { id: "mahikeng-cbd", name: "Mahikeng CBD", label: "Mahikeng, North West", category: "City centre", source: "pulse" },
 ];
 
 const normalize = (value: string) =>
@@ -320,12 +303,6 @@ export const DestinationSearch = ({
           limit: "6",
           language: "en",
           types: "poi,address,place,locality,neighborhood,district",
-          bbox: [
-            GAUTENG_BBOX.minLng,
-            GAUTENG_BBOX.minLat,
-            GAUTENG_BBOX.maxLng,
-            GAUTENG_BBOX.maxLat,
-          ].join(","),
         });
 
         if (currentLocation) {
@@ -390,11 +367,8 @@ export const DestinationSearch = ({
       ? recentPlaces
           .filter(
             (place) =>
-              isWithinGautengMvpBounds(place) &&
-              (
-                normalize(place.name).includes(query) ||
-                normalize(place.label).includes(query)
-              ),
+              normalize(place.name).includes(query) ||
+              normalize(place.label).includes(query),
           )
           .map((place) => ({ ...place, source: "recent" as const }))
       : [];
@@ -403,11 +377,8 @@ export const DestinationSearch = ({
       ? favoritePlaces
           .filter(
             (place) =>
-              isWithinGautengMvpBounds(place) &&
-              (
-                normalize(place.name).includes(query) ||
-                normalize(place.label).includes(query)
-              ),
+              normalize(place.name).includes(query) ||
+              normalize(place.label).includes(query),
           )
           .map((place) => ({ ...place, source: "favorite" as const }))
       : [];
