@@ -608,7 +608,9 @@ const directGautrainCandidates = (
       timeStatus: "unverified",
       evidenceStatus:
         "published-service-membership",
-      selectable: fare !== null,
+      selectable:
+        fare !== null &&
+        !accessRequired,
     });
   }
 
