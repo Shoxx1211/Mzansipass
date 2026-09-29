@@ -2008,7 +2008,7 @@ const App = () => {
 
                           <div className="mt-6 grid grid-cols-2 gap-x-5 gap-y-5 sm:grid-cols-4">
                             <div>
-                              <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/28">
+                              <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/30">
                                 Distance
                               </p>
                               <p className="mt-1.5 text-lg font-black text-white">
@@ -2017,7 +2017,7 @@ const App = () => {
                             </div>
 
                             <div>
-                              <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/28">
+                              <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/30">
                                 Time
                               </p>
                               <p className="mt-1.5 text-lg font-black text-white">
@@ -2028,7 +2028,7 @@ const App = () => {
                             </div>
 
                             <div>
-                              <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/28">
+                              <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/30">
                                 Fare
                               </p>
                               <p className={`mt-1.5 text-lg font-black ${estimatedFare !== null ? "text-emerald-300" : "text-amber-200"}`}>
@@ -2039,7 +2039,7 @@ const App = () => {
                             </div>
 
                             <div>
-                              <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/28">
+                              <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/30">
                                 Legs
                               </p>
                               <p className="mt-1.5 text-lg font-black text-white">
