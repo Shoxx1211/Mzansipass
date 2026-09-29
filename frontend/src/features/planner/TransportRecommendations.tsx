@@ -634,6 +634,18 @@ const RecommendationCard: React.FC<{
       recommendation.selectable ===
       false;
 
+    const displayBadges =
+      (recommendation.badges ?? []).filter(
+        (badge) =>
+          ![
+            "OFFICIAL_SERVICE",
+            "OFFICIAL_GIS",
+            "PUBLISHED_CONNECTION",
+            "CONFIGURED_DATA",
+            "ROAD_ROUTE",
+          ].includes(badge),
+      );
+
     const fareSupportingText =
       getFareSupportingText(
         recommendation,
@@ -722,10 +734,9 @@ const RecommendationCard: React.FC<{
           </div>
 
           {/* BADGES */}
-          {!!recommendation
-            .badges?.length && (
+          {!!displayBadges.length && (
             <div className="mt-4 flex flex-wrap gap-2">
-              {recommendation.badges.map(
+              {displayBadges.map(
                 (badge) => (
                   <span
                     key={badge}
