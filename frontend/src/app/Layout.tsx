@@ -35,7 +35,7 @@ const NAV_ITEMS: NavItem[] = [
   {
     id: "home",
     label: "Home",
-    description: "Plan your journey",
+    description: "The rhythm of movement",
   },
   {
     id: "navigate",
@@ -53,6 +53,23 @@ const NAV_ITEMS: NavItem[] = [
 // SIMPLE SVG ICONS
 // Using SVG instead of emoji prevents encoding problems.
 // ======================================================
+
+const PulseMark = () => (
+  <svg
+    width="21"
+    height="21"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M2 12h4l2.2-4.2 3.1 8.4 2.7-5.2 2 1H22" />
+    <circle cx="22" cy="12" r="1" fill="currentColor" stroke="none" />
+  </svg>
+);
 
 const HomeIcon = ({ }: { active?: boolean }) => (
   <svg
@@ -219,8 +236,8 @@ const Header: React.FC<{
                 <ArrowLeftIcon />
               </button>
             ) : (
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-emerald-400 text-sm font-black text-[#031019] shadow-[0_8px_30px_rgba(34,211,238,0.16)]">
-                P
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-emerald-400 text-[#031019] shadow-[0_8px_30px_rgba(34,211,238,0.16)]">
+                <PulseMark />
               </div>
             )}
 
@@ -232,7 +249,7 @@ const Header: React.FC<{
 
                 {productHome && (
                   <span className="hidden rounded-full bg-white/[0.055] px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-white/35 sm:inline">
-                    Gauteng
+                    South Africa
                   </span>
                 )}
               </div>
