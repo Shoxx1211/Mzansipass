@@ -265,6 +265,10 @@ const getFareSupportingText = (
     return "Broad guide, not a taxi association fare. Actual costs depend on rank and transfers.";
   }
 
+  if (recommendation.fareEstimateRange?.basis === "observed") {
+    return "Based on confirmed fares saved on this device; this is still an estimate.";
+  }
+
   if (
     recommendation.fareStatus ===
       "unverified" &&
