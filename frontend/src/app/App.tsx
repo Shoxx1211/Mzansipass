@@ -418,10 +418,6 @@ const App = () => {
   const [selectedRecommendation, setSelectedRecommendation] =
     useState<RecommendationType | null>(null);
 
-  const [networkEstimates, setNetworkEstimates] = useState<
-    Partial<Record<TransitNetwork, number>>
-  >({});
-
   const [routePlan, setRoutePlan] =
     useState<RoutePlanSummary>(EMPTY_ROUTE_PLAN);
 
@@ -639,7 +635,6 @@ const App = () => {
     setNetwork(null);
     setSelectedRecommendation(null);
     setRecommendations([]);
-    setNetworkEstimates({});
     setRoutePlan(EMPTY_ROUTE_PLAN);
     setPlanningStep("destination");
     setError(null);
@@ -676,8 +671,7 @@ const App = () => {
       // the old coordinates must not be reused for the new text.
       setResolvedDestination(null);
       setRecommendations([]);
-      setNetworkEstimates({});
-      setRoutePlan(EMPTY_ROUTE_PLAN);
+        setRoutePlan(EMPTY_ROUTE_PLAN);
       setSelectedRecommendation(null);
       setNetwork(null);
       setEstimatedFare(null);
@@ -736,7 +730,6 @@ const App = () => {
     setNetwork(null);
     setSelectedRecommendation(null);
     setRecommendations([]);
-    setNetworkEstimates({});
     setRoutePlan(EMPTY_ROUTE_PLAN);
     setError(null);
     setPlanningStep("transport");
@@ -1105,83 +1098,64 @@ const App = () => {
           .sort((a, b) => b.score - a.score)
           .slice(0, 8);
 
-        const estimates: Partial<Record<TransitNetwork, number>> = {};
+        // Fare pricing is per option, NEVER a shared operator-wide cache:
+        // two taxi or bus candidates may have different distances.
+        const enrichedRecommendations = await Promise.all(
+          combinedRecommendations.map(async (rec): Promise<RecommendationType> => {
+            const hasMultipleLegs = (rec.journeyLegs?.length ?? 0) > 1;
+            if (hasMultipleLegs) return rec;
 
-        // Fare calculations are now limited to route-fit recommendations, and
-        // use the network leg distance rather than blindly applying the whole
-        // Mapbox road distance to every transport system.
-        const farePairs = await Promise.all(
-          combinedRecommendations.map(async (recommendation) => {
-            const networkName = recommendation.mode as TransitNetwork;
-
-            // Evidence-only recommendations must never be priced
-            // using Mapbox's road-driving distance.
-            if (
-              recommendation.journeyLegs?.length &&
-                recommendation.journeyLegs.length > 1 ||
-              recommendation.fareStatus ===
-                "unverified" ||
-              (
-                recommendation.fareStatus ===
-                  "verified" &&
-                recommendation.estimatedFare !==
-                  null
-              )
-            ) {
-              return [
-                networkName,
-                null,
-              ] as const;
+            // No current stop/timetable evidence: do not synthesize a fare.
+            if (rec.mode !== "Taxi" && rec.fareStatus === "unverified") {
+              return rec;
             }
-            const fareDistance =
-              recommendation.serviceDistanceKm ?? nextRoutePlan.distanceKm;
+            if (rec.fareStatus === "verified" && rec.estimatedFare !== null) {
+              return rec;
+            }
+            const serviceKm = rec.serviceDistanceKm;
+            if (serviceKm === undefined || !Number.isFinite(serviceKm) || serviceKm <= 0) {
+              return rec;
+            }
 
-            if (!fareDistance || fareDistance <= 0) {
-              return [networkName, null] as const;
+            // A coordinate-only baseline does not prove taxi road length.
+            if (rec.mode === "Taxi" && rec.id === "road-fallback:taxi" &&
+                nextRoutePlan.source !== "mapbox-road") {
+              return rec;
             }
 
             try {
               const fareResult = await FareEngine.computeFinalFare({
-                network: networkName,
-                distance: fareDistance,
+                network: rec.mode,
+                distance: serviceKm,
               });
 
-              return [networkName, fareResult.fare] as const;
-            } catch (fareError) {
-              console.warn(
-                `Fare estimate failed for ${networkName}:`,
-                fareError,
-              );
+              const observedGuide =
+                rec.mode === "Taxi" && fareResult.source === "learned"
+                  ? {
+                      minimum: Math.max(5, Math.round(fareResult.fare * 0.85)),
+                      maximum: Math.ceil(fareResult.fare * 1.15),
+                      basis: "observed" as const,
+                    }
+                  : null;
 
-              return [networkName, null] as const;
+              return {
+                ...rec,
+                estimatedFare: fareResult.fare,
+                fareStatus: "estimated",
+                ...(observedGuide ? { fareEstimateRange: observedGuide } : {}),
+                journeyLegs: rec.journeyLegs?.map((leg) =>
+                  leg.mode === "taxi"
+                    ? { ...leg, fare: fareResult.fare, fareStatus: "estimated" as const }
+                    : leg,
+                ),
+              };
+            } catch {
+              return rec;
             }
           }),
         );
 
-        for (const [networkName, fare] of farePairs) {
-          if (fare !== null && Number.isFinite(fare)) {
-            estimates[networkName] = fare;
-          }
-        }
-
         if (cancelled) return;
-
-        setNetworkEstimates(estimates);
-
-        // Prefer the distance-derived FareEngine amount when it exists,
-        // but keep the recommendation engine's own estimate as fallback.
-        const enrichedRecommendations = combinedRecommendations.map((rec) => {
-          const calculatedFare = estimates[rec.mode as TransitNetwork];
-
-          if (calculatedFare === undefined) {
-            return rec;
-          }
-
-          return {
-            ...rec,
-            estimatedFare: calculatedFare,
-          };
-        });
 
         setRecommendations(enrichedRecommendations);
 
@@ -1195,8 +1169,7 @@ const App = () => {
 
         if (!cancelled) {
           setRecommendations([]);
-          setNetworkEstimates({});
-          setError(
+                setError(
             "Pulse could not build this journey right now. Check your connection and try again.",
           );
         }
@@ -1320,7 +1293,7 @@ const App = () => {
       ? allPaidLegsEstimated
         ? enrichedLegs.reduce((sum, leg) => sum + (leg.fare ?? 0), 0)
         : null
-      : networkEstimates[selectedNetwork] ?? rec.estimatedFare;
+      : rec.estimatedFare;
 
     setSelectedRecommendation({
       ...rec,
@@ -1340,7 +1313,7 @@ const App = () => {
     setPlanningStep("fare");
     setError(null);
   },
-  [networkEstimates, plannerOrigin],
+  [plannerOrigin],
 );
 
   // ====================================================
