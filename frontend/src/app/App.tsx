@@ -2325,8 +2325,8 @@ const App = () => {
                           enableVoiceSearch={true}
                           showRecentSearches={true}
                           showFavorites={true}
-                          userHome={user?.homeArea}
-                          userWork={user?.workArea}
+                          userHome={undefined}
+                          userWork={undefined}
                           currentLocation={plannerOrigin}
                           onDestinationResolved={handleDestinationResolved}
                         />
