@@ -1948,8 +1948,119 @@ const App = () => {
                       </div>
                     )}
 
+                    {activeJourneyLeg && (
+                      <div className="premium-glass compact-card p-4 sm:p-5">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-cyan-200/70">
+                              Current transport · {activeJourneyLegIndex + 1} of {trackedJourneyLegs.length}
+                            </p>
+                            <h3 className="mt-1 text-xl font-black text-white">
+                              {activeJourneyLeg.label}
+                            </h3>
+                            <p className="mt-1 text-xs text-white/45">
+                              {activeJourneyLeg.from ?? "Start"} → {activeJourneyLeg.to ?? destination}
+                            </p>
+                          </div>
+                          <span className="rounded-full bg-white/[0.06] px-3 py-1.5 text-[11px] font-bold text-white/75">
+                            {activeJourneyLeg.estimatedFare !== null && activeJourneyLeg.estimatedFare !== undefined
+                              ? `About R${activeJourneyLeg.estimatedFare.toFixed(2)}`
+                              : "Fare to confirm"}
+                          </span>
+                        </div>
+
+                        {nextJourneyLeg && (
+                          <div className="mt-4 border-t border-white/10 pt-4">
+                            <p className="text-sm font-semibold text-white/80">
+                              Next: {nextJourneyLeg.label}
+                            </p>
+                            {activeJourneyLeg.plannedDistanceKm !== null &&
+                              activeJourneyLeg.plannedDistanceKm !== undefined && (
+                                <p className="mt-1 text-xs leading-5 text-white/45">
+                                  Transfer guidance: around {activeJourneyLeg.plannedDistanceKm.toFixed(1)} km from the start
+                                  of this leg (approximate straight-line planning distance, not a verified road or rail distance).
+                                </p>
+                              )}
+
+                            {nearSuggestedTransfer && !showLegChangeForm && (
+                              <p className="mt-3 rounded-xl bg-cyan-300/10 px-3 py-2 text-sm font-bold text-cyan-100">
+                                Still on {activeJourneyLeg.label}, or have you changed to {nextJourneyLeg.label}?
+                              </p>
+                            )}
+
+                            {!showLegChangeForm ? (
+                              <div className="mt-3 flex flex-wrap gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setShowLegChangeForm(true);
+                                    setLegChangeFare("");
+                                  }}
+                                  className="min-h-11 flex-1 rounded-xl bg-cyan-300 px-4 text-sm font-black text-slate-950"
+                                >
+                                  I've changed transport
+                                </button>
+                                {nearSuggestedTransfer && (
+                                  <button
+                                    type="button"
+                                    onClick={() => setRemindAfterDistanceKm(
+                                      (currentTrip.distance ?? 0) +
+                                      Math.max(3, (activeJourneyLeg.plannedDistanceKm ?? 0) * 0.25),
+                                    )}
+                                    className="min-h-11 rounded-xl bg-white/10 px-3 text-xs font-bold text-white"
+                                  >
+                                    Still on this mode
+                                  </button>
+                                )}
+                              </div>
+                            ) : (
+                              <div className="mt-3 space-y-3 rounded-2xl bg-white/[0.045] p-3">
+                                <p className="text-sm font-bold text-white">
+                                  Confirm change to {nextJourneyLeg.label}
+                                </p>
+                                <label className="block text-xs text-white/55">
+                                  What did {activeJourneyLeg.label} cost? (optional)
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    max="1000"
+                                    step="0.5"
+                                    inputMode="decimal"
+                                    value={legChangeFare}
+                                    onChange={(event) => setLegChangeFare(event.target.value)}
+                                    placeholder="e.g. 20"
+                                    className="mt-1 block h-11 w-full rounded-xl border border-white/10 bg-black/25 px-3 text-sm text-white"
+                                  />
+                                </label>
+                                <div className="flex gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={confirmLegChange}
+                                    className="min-h-11 flex-1 rounded-xl bg-emerald-300 px-3 text-sm font-black text-slate-950"
+                                  >
+                                    Confirm switch
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => setShowLegChangeForm(false)}
+                                    className="min-h-11 rounded-xl bg-white/10 px-3 text-sm font-bold text-white"
+                                  >
+                                    Cancel
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                            <p className="mt-3 text-[10px] text-white/35">
+                              This is a reminder, not automatic mode detection. Confirm when safe, not while driving.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     <TripTracker
-                      network={network}
+                      network={activeJourneyLeg?.operator ??
+                        (activeJourneyLeg?.mode === "taxi" ? "Taxi" : network)}
                       destination={destination}
                       distance={currentTrip.distance || 0}
                       duration={duration}
@@ -2344,6 +2455,79 @@ const App = () => {
                         </div>
                       </div>
 
+                      {verifyTrip.legs && verifyTrip.legs.length > 1 && (
+                        <div className="mt-6 space-y-3 border-t border-white/10 pt-5">
+                          <h3 className="text-sm font-black text-white">What each ride cost</h3>
+                          <p className="text-xs leading-5 text-white/45">
+                            Confirm fares for each part of the journey. Leave one blank if you don't remember.
+                          </p>
+                          {verifyTrip.legs.map((leg, index) => {
+                            const measuredKm =
+                              leg.endDistanceKm === undefined
+                                ? null
+                                : Math.max(0, leg.endDistanceKm - leg.startDistanceKm);
+                            return (
+                              <div key={`${leg.id}-${index}`} className="rounded-xl bg-white/[0.04] p-3">
+                                <div className="flex items-start justify-between gap-3">
+                                  <div>
+                                    <p className="text-sm font-bold text-white">{leg.label}</p>
+                                    <p className="mt-1 text-xs text-white/45">
+                                      {measuredKm !== null
+                                        ? `${measuredKm.toFixed(2)} km tracked`
+                                        : "Distance not recorded"}
+                                      {leg.estimatedFare !== null && leg.estimatedFare !== undefined
+                                        ? ` · About R${leg.estimatedFare.toFixed(2)} estimated`
+                                        : ""}
+                                    </p>
+                                  </div>
+                                  <div className="w-[118px] shrink-0">
+                                    <label className="text-[10px] text-white/45" htmlFor={`leg-fare-${index}`}>
+                                      Paid (R)
+                                    </label>
+                                    <input
+                                      id={`leg-fare-${index}`}
+                                      type="number"
+                                      min="0"
+                                      max="1000"
+                                      step="0.5"
+                                      inputMode="decimal"
+                                      value={leg.actualFare ?? ""}
+                                      onChange={(event) => {
+                                        const value = event.target.value;
+                                        const number = value === "" ? null : Number(value);
+                                        if (number !== null && (!Number.isFinite(number) || number < 0 || number > 1000)) return;
+                                        setVerifyTrip((previous) => {
+                                          if (!previous?.legs) return previous;
+                                          const legs = previous.legs.map((entry, entryIndex) =>
+                                            entryIndex === index ? { ...entry, actualFare: number } : entry,
+                                          );
+                                          const knownFares = legs
+                                            .map((entry) => entry.actualFare)
+                                            .filter((fare): fare is number => typeof fare === "number");
+                                          return {
+                                            ...previous,
+                                            legs,
+                                            fare: knownFares.reduce((sum, fare) => sum + fare, 0),
+                                          };
+                                        });
+                                      }}
+                                      placeholder="--"
+                                      className="mt-1 h-11 w-full rounded-lg border border-white/10 bg-black/25 px-3 text-sm text-white"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                          <p className="text-right text-sm font-black text-emerald-200">
+                            Recorded fares: R{verifyTrip.legs
+                              .reduce((sum, leg) => sum + (leg.actualFare ?? 0), 0)
+                              .toFixed(2)}
+                          </p>
+                        </div>
+                      )}
+
+                      {(!verifyTrip.legs || verifyTrip.legs.length <= 1) && (
                       <div className="mt-6 space-y-2">
                         <label className="text-xs font-bold uppercase tracking-widest text-white/40">
                           Actual fare paid (optional)
@@ -2368,6 +2552,7 @@ const App = () => {
                           If Pulse did not have a verified fare, enter what you actually paid.
                         </p>
                       </div>
+                      )}
 
                       <button
                         type="button"
@@ -2410,7 +2595,7 @@ const App = () => {
                     <div className="grid gap-3 sm:grid-cols-3">
                       <div className="glass rounded-3xl bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 p-4 sm:col-span-2">
                         <p className="text-xs uppercase tracking-widest text-white/40">
-                          Total spend
+                          Recorded spend
                         </p>
                         <p className="mt-1 text-3xl font-black text-white">
                           R
@@ -2454,7 +2639,7 @@ const App = () => {
 
                               {trip.destination && (
                                 <p className="mt-0.5 text-xs text-white/40">
-                                  ðŸ“ {trip.destination}
+                                  {trip.destination}
                                 </p>
                               )}
                             </div>
@@ -2464,6 +2649,30 @@ const App = () => {
                             </p>
                           </div>
 
+                          {trip.legs && trip.legs.length > 1 && (
+                            <div className="mt-3 space-y-1.5 rounded-2xl bg-white/[0.035] p-3">
+                              <p className="text-[10px] font-bold uppercase tracking-wider text-white/45">
+                                {trip.legs.length} transport legs · total journey
+                              </p>
+                              {trip.legs.map((leg, index) => (
+                                <div key={`${leg.id}-${index}`} className="flex items-center justify-between gap-3 text-xs">
+                                  <span className="min-w-0 truncate text-white/65">
+                                    {leg.label} · {Math.max(0, (leg.endDistanceKm ?? leg.startDistanceKm) - leg.startDistanceKm).toFixed(1)} km
+                                  </span>
+                                  <span className="shrink-0 font-bold text-white/85">
+                                    {leg.actualFare === undefined || leg.actualFare === null
+                                      ? "Not recorded"
+                                      : `R${leg.actualFare.toFixed(2)}`}
+                                  </span>
+                                </div>
+                              ))}
+                              {trip.legs.some((leg) => leg.actualFare === null || leg.actualFare === undefined) && (
+                                <p className="pt-1 text-[10px] text-amber-200/60">
+                                  Total includes recorded fares only; some legs are unconfirmed.
+                                </p>
+                              )}
+                            </div>
+                          )}
                           <p className="mt-2 text-xs text-white/35">
                             {new Date(trip.startTime).toLocaleString()}
                           </p>
