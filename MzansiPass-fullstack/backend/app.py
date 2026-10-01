@@ -2,23 +2,31 @@ import os
 import uuid
 import math
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
+from hashlib import sha256
+import re
+import secrets
 
-from flask import Flask, request, jsonify, abort
+from flask import Flask, request, jsonify, abort, make_response
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_jwt_extended import (
     JWTManager,
     create_access_token,
+    create_refresh_token,
+    set_refresh_cookies,
+    unset_jwt_cookies,
     jwt_required,
-    get_jwt_identity
+    get_jwt_identity,
+    get_jwt
 )
 
 from config import Config
 from models import (
     db, bcrypt,
     User, Card, Trip, Transaction,
-    UserRole, TripStatus, TransactionType
+    UserRole, TripStatus, TransactionType,
+    RevokedAuthToken, AuthLoginThrottle
 )
 
 # Agency / Provider apps
@@ -34,13 +42,40 @@ from agency.trips import agency_trips_bp
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+    for key in ("SECRET_KEY", "JWT_SECRET_KEY", "SQLALCHEMY_DATABASE_URI"):
+        if not app.config.get(key) or len(str(app.config[key])) < 24 and key != "SQLALCHEMY_DATABASE_URI":
+            raise RuntimeError(f"Configure {key} securely before starting Pulse authentication")
 
     # Core extensions
     db.init_app(app)
     bcrypt.init_app(app)
     Migrate(app, db)
-    JWTManager(app)
-    CORS(app)
+    jwt = JWTManager(app)
+    allowed_origins = [
+        item.strip()
+        for item in os.environ.get(
+            "PULSE_ALLOWED_ORIGINS",
+            "https://localhost:5173,http://localhost:5173",
+        ).split(",") if item.strip()
+    ]
+    CORS(
+        app,
+        origins=allowed_origins,
+        supports_credentials=True,
+        allow_headers=["Content-Type", "Authorization", "X-CSRF-TOKEN"],
+    )
+
+    @jwt.token_in_blocklist_loader
+    def is_revoked(_header, jwt_payload):
+        return db.session.query(RevokedAuthToken.id).filter_by(
+            jti=jwt_payload.get("jti"),
+        ).first() is not None
+
+    # Development bootstrap for EMPTY pilot databases only. On deployed
+    # databases, apply a reviewed schema migration instead of auto-create.
+    if os.getenv("PULSE_BOOTSTRAP_DB") == "1":
+        with app.app_context():
+            db.create_all()
 
     # Register provider / agency apps
     app.register_blueprint(agency_auth_bp, url_prefix="/agency")
@@ -59,54 +94,169 @@ def create_app():
         })
 
     # =====================================================
-    # AUTH (PASSENGERS)
+    # PASSENGER AUTHENTICATION
+    # Password hashes: Flask-Bcrypt. Refresh: HttpOnly/SameSite cookie,
+    # CSRF-protected and rotated. Access: short-lived JWT in JS memory.
     # =====================================================
-    @app.route("/auth/register", methods=["POST"])
-    def register():
-        data = request.get_json() or {}
-        email = data.get("email")
-        password = data.get("password")
+    def public_user(user):
+        return {
+            "id": str(user.id),
+            "email": user.email,
+            "name": user.name or user.email.split("@")[0],
+            "role": "passenger",
+        }
 
-        if not email or not password:
-            abort(400, "Email and password required")
-
-        if User.query.filter_by(email=email).first():
-            abort(409, "User already exists")
-
-        user = User(
-            email=email,
-            name=data.get("name", ""),
-            role=UserRole.passenger
+    def issue_tokens(user, old_refresh=None):
+        if old_refresh is not None:
+            db.session.add(RevokedAuthToken(
+                jti=old_refresh["jti"],
+                expires_at=datetime.utcfromtimestamp(old_refresh["exp"]),
+            ))
+            db.session.commit()
+        claims = {"role": "passenger"}
+        response = jsonify({
+            "user": public_user(user),
+            "access_token": create_access_token(
+                identity=str(user.id),
+                additional_claims=claims,
+            ),
+        })
+        set_refresh_cookies(
+            response,
+            create_refresh_token(
+                identity=str(user.id),
+                additional_claims=claims,
+            ),
         )
-        user.set_password(password)
+        response.headers["Cache-Control"] = "no-store"
+        return response
 
-        db.session.add(user)
+    def throttle_key(email):
+        origin = request.remote_addr or "unknown"
+        return sha256(f"{origin}|{email}".encode("utf-8")).hexdigest()
+
+    def is_login_locked(key):
+        record = db.session.get(AuthLoginThrottle, key)
+        if record is None:
+            return False
+        return bool(record.locked_until and record.locked_until > datetime.utcnow())
+
+    def failed_login(key):
+        now = datetime.utcnow()
+        record = db.session.get(AuthLoginThrottle, key)
+        if record is None:
+            record = AuthLoginThrottle(
+                key_hash=key, attempts=0, window_started_at=now,
+            )
+            db.session.add(record)
+        if record.window_started_at < now - timedelta(minutes=15):
+            record.attempts = 0
+            record.window_started_at = now
+            record.locked_until = None
+        record.attempts += 1
+        if record.attempts >= 6:
+            record.locked_until = now + timedelta(minutes=15)
         db.session.commit()
 
-        return jsonify({"msg": "account_created"}), 201
+    @app.route("/auth/register", methods=["POST"])
+    def register():
+        data = request.get_json(silent=True) or {}
+        email = str(data.get("email", "")).strip().lower()
+        password = data.get("password")
+        if (
+            not re.fullmatch(r"[^@\\s]+@[^@\\s]+\\.[^@\\s]+", email)
+            or len(email) > 180
+            or not isinstance(password, str)
+            or len(password) < 12
+            or len(password) > 128
+        ):
+            return jsonify({
+                "message": "Use a valid email and a password of 12–128 characters.",
+            }), 400
+        if User.query.filter_by(email=email).first():
+            return jsonify({"message": "This email already has an account."}), 409
+        user = User(
+            email=email,
+            name=email.split("@")[0][:120],
+            role=UserRole.user,
+        )
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+        return issue_tokens(user), 201
 
     @app.route("/auth/login", methods=["POST"])
     def login():
-        data = request.get_json() or {}
-        user = User.query.filter_by(email=data.get("email")).first()
+        data = request.get_json(silent=True) or {}
+        email = str(data.get("email", "")).strip().lower()[:180]
+        password = data.get("password")
+        key = throttle_key(email)
+        if is_login_locked(key):
+            return jsonify({"message": "Too many attempts. Try again later."}), 429
+        if not isinstance(password, str):
+            failed_login(key)
+            return jsonify({"message": "Invalid email or password."}), 401
+        user = User.query.filter_by(email=email).first()
+        if not user or not user.check_password(password):
+            failed_login(key)
+            return jsonify({"message": "Invalid email or password."}), 401
+        record = db.session.get(AuthLoginThrottle, key)
+        if record:
+            db.session.delete(record)
+            db.session.commit()
+        return issue_tokens(user)
 
-        if not user or not user.check_password(data.get("password")):
-            abort(401, "Invalid credentials")
+    @app.route("/auth/refresh", methods=["POST"])
+    @jwt_required(refresh=True, locations=["cookies"])
+    def refresh():
+        token = get_jwt()
+        if token.get("role") != "passenger":
+            return jsonify({"message": "Invalid session."}), 403
+        user = db.session.get(User, int(get_jwt_identity()))
+        if not user:
+            return jsonify({"message": "Session expired."}), 401
+        return issue_tokens(user, old_refresh=token)
 
-        token = create_access_token(identity={
-            "id": user.id,
-            "role": user.role.value
-        })
+    @app.route("/auth/me", methods=["GET"])
+    @jwt_required(locations=["headers"])
+    def me():
+        if get_jwt().get("role") != "passenger":
+            return jsonify({"message": "Passenger access required."}), 403
+        user = db.session.get(User, int(get_jwt_identity()))
+        if not user:
+            return jsonify({"message": "Account not found."}), 404
+        return jsonify({"user": public_user(user)})
 
-        return jsonify({
-            "access_token": token,
-            "user": {
-                "id": user.id,
-                "email": user.email,
-                "balance": user.balance,
-                "role": user.role.value
-            }
-        })
+    @app.route("/auth/logout", methods=["POST"])
+    @jwt_required(refresh=True, locations=["cookies"])
+    def logout():
+        token = get_jwt()
+        db.session.add(RevokedAuthToken(
+            jti=token["jti"],
+            expires_at=datetime.utcfromtimestamp(token["exp"]),
+        ))
+        db.session.commit()
+        response = jsonify({"message": "Signed out."})
+        unset_jwt_cookies(response)
+        response.headers["Cache-Control"] = "no-store"
+        return response
+
+    @app.route("/auth/delete", methods=["POST"])
+    @jwt_required(locations=["headers"])
+    def delete_account():
+        user = db.session.get(User, int(get_jwt_identity()))
+        password = (request.get_json(silent=True) or {}).get("password")
+        if not user or not isinstance(password, str) or not user.check_password(password):
+            return jsonify({"message": "Password confirmation required."}), 403
+        # Do not orphan commuter finance data.
+        Transaction.query.filter_by(user_id=user.id).delete()
+        Trip.query.filter_by(user_id=user.id).delete()
+        Card.query.filter_by(user_id=user.id).delete()
+        db.session.delete(user)
+        db.session.commit()
+        response = jsonify({"message": "Account deleted."})
+        unset_jwt_cookies(response)
+        return response
 
     # =====================================================
     # CARDS (PASSENGER)
@@ -114,7 +264,7 @@ def create_app():
     @app.route("/cards", methods=["GET"])
     @jwt_required()
     def list_cards():
-        user_id = get_jwt_identity()["id"]
+        user_id = int(get_jwt_identity())
         cards = Card.query.filter_by(user_id=user_id).all()
 
         return jsonify([{
@@ -349,4 +499,4 @@ def create_app():
 app = create_app()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=False)
