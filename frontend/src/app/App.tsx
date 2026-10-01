@@ -50,6 +50,11 @@ import {
 import Session from "../utils/session";
 import Storage from "../utils/storage";
 import { AuthApi, type PassengerAccount } from "../services/authApi";
+import {
+  confirmMultimodalSwitch,
+  finishMultimodalJourney,
+  getMultimodalTotals,
+} from "../services/multimodalJourney";
 
 // ======================================================
 // TYPES
@@ -1423,29 +1428,18 @@ const App = () => {
     const completedAt = Date.now();
     const distanceAtSwitch = Math.max(0, currentTrip.distance ?? 0);
 
-    setCurrentTrip((previous) => ({
-      ...previous,
-      legs: (previous.legs ?? []).map((leg, index) => {
-        if (index === activeJourneyLegIndex) {
-          return {
-            ...leg,
-            endDistanceKm: distanceAtSwitch,
-            endedAt: completedAt,
-            ...(entered !== null ? { actualFare: entered } : {}),
-          };
-        }
-
-        if (index === activeJourneyLegIndex + 1) {
-          return {
-            ...leg,
-            startedAt: completedAt,
-            startDistanceKm: distanceAtSwitch,
-          };
-        }
-
-        return leg;
-      }),
-    }));
+    try {
+      const changedLegs = confirmMultimodalSwitch(
+        currentTrip.legs ?? [],
+        distanceAtSwitch,
+        completedAt,
+        entered,
+      );
+      setCurrentTrip((previous) => ({ ...previous, legs: changedLegs }));
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Could not confirm transfer.");
+      return;
+    }
     setLegChangeFare("");
     setShowLegChangeForm(false);
     setRemindAfterDistanceKm(0);
@@ -1687,17 +1681,13 @@ const App = () => {
 
     const totalDistanceKm = stats?.distance ?? currentTrip.distance ?? 0;
     const finishedAt = Date.now();
-    const completedLegs = (currentTrip.legs ?? []).map((leg) =>
-      leg.endedAt === undefined && leg.startedAt > 0
-        ? { ...leg, endDistanceKm: totalDistanceKm, endedAt: finishedAt }
-        : leg,
+    const completedLegs = finishMultimodalJourney(
+      currentTrip.legs ?? [],
+      totalDistanceKm,
+      finishedAt,
     );
-    const recordedLegFares = completedLegs
-      .map((leg) => leg.actualFare)
-      .filter((fare): fare is number => typeof fare === "number");
-    const fare = recordedLegFares.length
-      ? recordedLegFares.reduce((sum, amount) => sum + amount, 0)
-      : estimatedFare ?? 0;
+    const ledger = getMultimodalTotals(completedLegs);
+    const fare = ledger.recordedFare;
 
     const completedTrip: TripData = {
       ...(currentTrip as TripData),
@@ -1754,18 +1744,11 @@ const App = () => {
       }
     }
 
-    const knownLegFares = (verifyTrip.legs ?? [])
-      .map((leg) => leg.actualFare)
-      .filter((fare): fare is number => typeof fare === "number");
-
+    const totals = getMultimodalTotals(verifyTrip.legs ?? []);
     if (verifyTrip.legs?.length) {
-      if (knownLegFares.length) {
-        finalFare = knownLegFares.reduce((sum, fare) => sum + fare, 0);
-      } else if (verifyTrip.legs.length > 1) {
-        // No confirmed modal fares: never silently save a whole-journey
-        // estimate as actual spending.
-        finalFare = 0;
-      }
+      // Only confirmed payments count as spending. No future/unboarded leg
+      // is included; unconfirmed fares remain separately flagged.
+      finalFare = totals.recordedFare;
     }
 
     const isMultiModal = (verifyTrip.legs?.length ?? 0) > 1;
