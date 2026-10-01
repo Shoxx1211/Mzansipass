@@ -292,3 +292,13 @@ class RevokedAuthToken(db.Model):
     jti = db.Column(db.String(64), unique=True, nullable=False, index=True)
     expires_at = db.Column(db.DateTime, nullable=False, index=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+
+class AuthLoginThrottle(db.Model):
+    """Persistent login-attempt counter. No plaintext email or IP stored."""
+    __tablename__ = "auth_login_throttles"
+
+    key_hash = db.Column(db.String(64), primary_key=True)
+    attempts = db.Column(db.Integer, nullable=False, default=0)
+    window_started_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    locked_until = db.Column(db.DateTime, nullable=True)
