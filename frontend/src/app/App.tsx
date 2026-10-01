@@ -1720,10 +1720,41 @@ const App = () => {
       }
     }
 
+    const isMultiModal = (verifyTrip.legs?.length ?? 0) > 1;
+    const hasConfirmedSingleFare =
+      !isMultiModal &&
+      actualFare.trim() !== "" &&
+      finalFare > 0;
+
     const finalTrip: TripData = {
       ...verifyTrip,
       fare: finalFare,
+      legs:
+        hasConfirmedSingleFare && verifyTrip.legs?.length === 1
+          ? [
+              {
+                ...verifyTrip.legs[0],
+                actualFare: finalFare,
+              },
+            ]
+          : verifyTrip.legs,
     };
+
+    // Train habits only after user confirmation. For multimodal trips,
+    // training on the whole amount as a single operator would corrupt fares.
+    if (
+      hasConfirmedSingleFare &&
+      finalTrip.startLocation &&
+      finalTrip.endLocation
+    ) {
+      HabitEngine.learn(
+        finalTrip.network,
+        finalTrip.startLocation,
+        finalTrip.endLocation,
+        finalFare,
+        finalTrip.duration,
+      );
+    }
 
     for (const leg of finalTrip.legs ?? []) {
       const observedDistance =
@@ -1790,22 +1821,6 @@ const App = () => {
   // ====================================================
   // HABIT LEARNING
   // ====================================================
-
-  useEffect(() => {
-    if (
-      verifyTrip?.network &&
-      verifyTrip.startLocation &&
-      verifyTrip.endLocation
-    ) {
-      HabitEngine.learn(
-        verifyTrip.network,
-        verifyTrip.startLocation,
-        verifyTrip.endLocation,
-        verifyTrip.fare,
-        verifyTrip.duration,
-      );
-    }
-  }, [verifyTrip]);
 
   // ====================================================
   // LOAD USER / HISTORY
