@@ -164,7 +164,7 @@ def create_app():
         email = str(data.get("email", "")).strip().lower()
         password = data.get("password")
         if (
-            not re.fullmatch(r"[^@\\s]+@[^@\\s]+\\.[^@\\s]+", email)
+            not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email)
             or len(email) > 180
             or not isinstance(password, str)
             or len(password) < 12
