@@ -218,7 +218,8 @@ const Header: React.FC<{
   subtitle?: string;
   showBack?: boolean;
   onBack?: () => void;
-}> = ({ title, subtitle, showBack, onBack }) => {
+  onGoHome: () => void;
+}> = ({ title, subtitle, showBack, onBack, onGoHome }) => {
   const productHome = title === "Pulse Transit";
 
   return (
@@ -236,16 +237,29 @@ const Header: React.FC<{
                 <ArrowLeftIcon />
               </button>
             ) : (
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-emerald-400 text-[#031019] shadow-[0_8px_30px_rgba(34,211,238,0.16)]">
+              <button
+                type="button"
+                onClick={onGoHome}
+                title="Go to Home"
+                aria-label="Pulse — go to Home"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-emerald-400 text-[#031019] shadow-[0_8px_30px_rgba(34,211,238,0.16)] transition active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
+              >
                 <PulseMark />
-              </div>
+              </button>
             )}
 
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h1 className="truncate text-[15px] font-black tracking-[-0.02em] text-white sm:text-base">
-                  {productHome ? "Pulse" : title}
-                </h1>
+                <button
+                  type="button"
+                  onClick={onGoHome}
+                  aria-label="Pulse — go to Home"
+                  className="min-w-0 rounded-lg text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300"
+                >
+                  <h1 className="truncate text-[15px] font-black tracking-[-0.02em] text-white sm:text-base">
+                    {productHome ? "Pulse" : title}
+                  </h1>
+                </button>
 
                 {productHome && (
                   <span className="hidden rounded-full bg-white/[0.055] px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-white/35 sm:inline">
@@ -308,6 +322,7 @@ export const Layout = memo<LayoutProps>(
                 : currentTabInfo?.label)
             }
             subtitle={subtitle || currentTabInfo?.description}
+            onGoHome={() => onNavClick("home")}
             showBack={showBackButton}
             onBack={onBack}
           />
