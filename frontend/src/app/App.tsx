@@ -1940,7 +1940,17 @@ const App = () => {
 
   return (
     <>
-      <Layout activeTab={activeTab} onNavClick={setActiveTab}>
+      <Layout
+        activeTab={activeTab}
+        onNavClick={(tab) => {
+          setActiveTab(tab);
+          // Logo/Home always returns to destination search unless a trip is
+          // running or awaiting the user's fare confirmation.
+          if (tab === "home" && tripState !== TripState.ACTIVE && !verifyTrip) {
+            setPlanningStep("destination");
+          }
+        }}
+      >
         <div className="mx-auto w-full max-w-6xl">
           <div
             className="relative z-10 min-h-[100dvh] space-y-8 pb-36 pt-2"
