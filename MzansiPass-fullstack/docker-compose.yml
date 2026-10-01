@@ -21,7 +21,7 @@ services:
       db:
         condition: service_healthy
     env_file:
-      - ./backend/.env.example
+      - ./backend/.env
     volumes:
       - ./backend:/app
     ports:
@@ -34,6 +34,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.dev   # ⬅ DEV MODE
       # dockerfile: Dockerfile     # ⬅ PROD MODE
+    environment:
+      PULSE_BACKEND_PROXY_TARGET: http://backend:5000
     ports:
       - "5173:5173"
     depends_on:
