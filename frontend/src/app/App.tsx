@@ -1953,6 +1953,25 @@ const App = () => {
       await AuthApi.deleteAccount(password);
       Storage.clear(user.email, "history");
       Session.clearAll();
+      // Clear device-side location traces, destination selections and fare
+      // learning along with the server account. No raw GPS history remains.
+      for (const key of [
+        "pulse_recent_destinations_v1",
+        "pulse_favorite_destinations_v1",
+        "pulse_selected_destination_v1",
+        "pulse_fare_learning_v2",
+        "pulse_active_trip_v2",
+        "pulse_last_location_v2",
+        "pulse_tracking_state_v2",
+        "pulse_offline_queue",
+      ]) {
+        try {
+          localStorage.removeItem(key);
+          sessionStorage.removeItem(key);
+        } catch {
+          // Best-effort device storage cleanup.
+        }
+      }
       setHistory([]);
       resetAllTripState();
       setUser(null);
