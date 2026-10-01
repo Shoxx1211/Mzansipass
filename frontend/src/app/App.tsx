@@ -82,6 +82,7 @@ interface MapboxDirectionsResponse {
 }
 
 interface SavedActiveTrip {
+  userId: string;
   currentTrip: Partial<TripData>;
   tripState: TripState;
   network: TransitNetwork | null;
@@ -398,6 +399,7 @@ const App = () => {
 
   const [user, setUser] = useState<PassengerAccount | null>(null);
   const [authChecking, setAuthChecking] = useState(true);
+  const [pendingRecovery, setPendingRecovery] = useState<SavedActiveTrip | null>(null);
   const [accountError, setAccountError] = useState<string | null>(null);
   const [accountBusy, setAccountBusy] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>("home");
@@ -1874,7 +1876,50 @@ const App = () => {
       return;
     }
     setHistory(Storage.load<TripData[]>(user.email, "history") ?? []);
+    const saved = Session.load<SavedActiveTrip>("active_trip");
+    if (saved && saved.userId === user.id &&
+        saved.tripState === TripState.ACTIVE && saved.currentTrip.startTime) {
+      setPendingRecovery(saved);
+    } else {
+      setPendingRecovery(null);
+      if (saved) Session.clear("active_trip");
+    }
   }, [user]);
+
+  const resumeSavedJourney = useCallback(async () => {
+    if (!pendingRecovery || accountBusy) return;
+    setAccountBusy(true);
+    setAccountError(null);
+    try {
+      const restored = BackgroundTracker.restoreTrip();
+      if (!restored) {
+        throw new Error("The saved GPS trip is unavailable. Start a new trip.");
+      }
+      await BackgroundTracker.resume();
+      setCurrentTrip(pendingRecovery.currentTrip);
+      setDestination(pendingRecovery.destination);
+      setNetwork(pendingRecovery.network);
+      setDuration(Math.max(0, pendingRecovery.duration));
+      setTripState(TripState.ACTIVE);
+      setLastTripGpsUpdate(Date.now());
+      setPendingRecovery(null);
+      setActiveTab("home");
+    } catch (error) {
+      setAccountError(error instanceof Error ? error.message : "Trip recovery failed.");
+    } finally {
+      setAccountBusy(false);
+    }
+  }, [pendingRecovery, accountBusy]);
+
+  const discardSavedJourney = useCallback(() => {
+    setPendingRecovery(null);
+    Session.clear("active_trip");
+    try {
+      BackgroundTracker.clearStoredTrip();
+    } catch {
+      // A running tracker is never destroyed silently.
+    }
+  }, []);
 
   const signOut = useCallback(async () => {
     if (tripState === TripState.ACTIVE || verifyTrip) {
@@ -1931,7 +1976,9 @@ const App = () => {
       return;
     }
 
+    if (!user) return;
     const session: SavedActiveTrip = {
+      userId: user.id,
       currentTrip,
       tripState,
       network,
@@ -1940,7 +1987,7 @@ const App = () => {
     };
 
     Session.save("active_trip", session);
-  }, [currentTrip, destination, duration, network, tripState]);
+  }, [currentTrip, destination, duration, network, tripState, user]);
 
   // ====================================================
   // GEMINI NAVIGATOR TAB
@@ -2004,6 +2051,34 @@ const App = () => {
 
             {activeTab === "home" && (
               <>
+                {/* RECOVER A TRIP AFTER A VERIFIED ACCOUNT SESSION */}
+                {pendingRecovery && (
+                  <div className="premium-glass compact-card mt-5 p-5">
+                    <p className="text-xs font-bold uppercase tracking-widest text-emerald-200">
+                      Journey saved
+                    </p>
+                    <h2 className="mt-2 text-lg font-black text-white">
+                      Resume your journey to {pendingRecovery.destination}?
+                    </h2>
+                    <p className="mt-1 text-xs text-white/45">
+                      Your last GPS trip was interrupted. Pulse won't restart tracking without your permission.
+                    </p>
+                    {accountError && <p role="alert" className="mt-2 text-xs text-red-200">{accountError}</p>}
+                    <div className="mt-4 flex gap-3">
+                      <button type="button" disabled={accountBusy}
+                        onClick={() => void resumeSavedJourney()}
+                        className="min-h-11 flex-1 rounded-xl bg-cyan-300 px-4 text-sm font-black text-slate-950 disabled:opacity-40">
+                        Resume trip
+                      </button>
+                      <button type="button" disabled={accountBusy}
+                        onClick={discardSavedJourney}
+                        className="min-h-11 rounded-xl bg-white/10 px-4 text-sm font-bold text-white/80">
+                        Discard
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {/* HERO */}
 
                 {tripState !== TripState.ACTIVE && !verifyTrip && (
