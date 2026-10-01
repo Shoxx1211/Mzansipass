@@ -14,7 +14,7 @@ interface SessionResponse {
   access_token: string;
 }
 
-const BASE = (import.meta.env.VITE_AUTH_API_BASE_URL || "/api").replace(/\/$/, "");
+const BASE = (import.meta.env["VITE_AUTH_API_BASE_URL"] || "/api").replace(/\/$/, "");
 let accessToken: string | null = null;
 
 const cookie = (name: string): string | null => {
