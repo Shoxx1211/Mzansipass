@@ -1231,36 +1231,72 @@ const App = () => {
     const originalLegs = rec.journeyLegs ?? [];
 
     const enrichedLegs = await Promise.all(
-      originalLegs.map(async (leg) => {
-        if (leg.mode === "walk" || leg.fare !== null && leg.fare !== undefined) {
-          return leg;
+      originalLegs.map(async (leg, index) => {
+        let pricedLeg = leg;
+
+        // Only estimate a road distance when the stop has coordinates.
+        // Never treat the straight-line gap as the road journey.
+        if (leg.mode === "taxi" && MAPBOX_TOKEN) {
+          const originPoint = leg.fromLocation ??
+            (index === 0 ? plannerOrigin : null);
+          const endpoint = leg.toLocation;
+
+          if (originPoint && endpoint) {
+            try {
+              const road = await getMapboxRoadBaseline(originPoint, {
+                id: `transfer:${leg.id}`,
+                name: leg.to ?? "Transfer point",
+                label: leg.to ?? "Transfer point",
+                lat: endpoint.lat,
+                lng: endpoint.lng,
+                source: "pulse",
+              });
+
+              if (road?.distanceKm !== null &&
+                  road?.distanceKm !== undefined &&
+                  road.distanceKm > 0) {
+                pricedLeg = {
+                  ...leg,
+                  distanceKm: road.distanceKm,
+                  distanceSource: "road",
+                };
+              }
+            } catch {
+              // Preserve the tentative route fit if road routing is offline.
+            }
+          }
+        }
+
+        if (pricedLeg.mode === "walk" ||
+            pricedLeg.fare !== null && pricedLeg.fare !== undefined) {
+          return pricedLeg;
         }
 
         const legNetwork: TransitNetwork | null =
-          leg.mode === "taxi" ? "Taxi" : leg.operator ?? null;
+          pricedLeg.mode === "taxi" ? "Taxi" : pricedLeg.operator ?? null;
 
         if (
           !legNetwork ||
-          leg.distanceKm === null ||
-          leg.distanceKm === undefined ||
-          !Number.isFinite(leg.distanceKm) ||
-          leg.distanceKm <= 0
+          pricedLeg.distanceKm === null ||
+          pricedLeg.distanceKm === undefined ||
+          !Number.isFinite(pricedLeg.distanceKm) ||
+          pricedLeg.distanceKm <= 0
         ) {
-          return leg;
+          return pricedLeg;
         }
 
         try {
           const estimate = await FareEngine.computeFinalFare({
             network: legNetwork,
-            distance: leg.distanceKm,
+            distance: pricedLeg.distanceKm,
           });
           return {
-            ...leg,
+            ...pricedLeg,
             fare: estimate.fare,
             fareStatus: "estimated" as const,
           };
         } catch {
-          return leg;
+          return pricedLeg;
         }
       }),
     );
@@ -1296,7 +1332,7 @@ const App = () => {
     setPlanningStep("fare");
     setError(null);
   },
-  [networkEstimates],
+  [networkEstimates, plannerOrigin],
 );
 
   // ====================================================
@@ -1542,6 +1578,8 @@ const App = () => {
             ...(leg.from ? { from: leg.from } : {}),
             ...(leg.to ? { to: leg.to } : {}),
             plannedDistanceKm: leg.distanceKm ?? null,
+            distanceSource: leg.distanceSource ??
+              (leg.mode === "taxi" ? "straight" : "unknown"),
             startDistanceKm: 0,
             startedAt: index === 0 ? startedAt : 0,
             estimatedFare: legEstimate,
@@ -2037,8 +2075,11 @@ const App = () => {
                             {activeJourneyLeg.plannedDistanceKm !== null &&
                               activeJourneyLeg.plannedDistanceKm !== undefined && (
                                 <p className="mt-1 text-xs leading-5 text-white/45">
-                                  Transfer guidance: around {activeJourneyLeg.plannedDistanceKm.toFixed(1)} km from the start
-                                  of this leg (approximate straight-line planning distance, not a verified road or rail distance).
+                                  {activeJourneyLeg.distanceSource === "road"
+                                    ? "Approximate road distance to change: "
+                                    : "Approximate straight-line distance to next stop: "}
+                                  {activeJourneyLeg.plannedDistanceKm.toFixed(1)} km.
+                                  {" "}GPS-tracked on this mode: {activeLegDistanceKm.toFixed(1)} km.
                                 </p>
                               )}
 
