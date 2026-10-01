@@ -783,6 +783,8 @@ const aReYengRoadAccessCandidates = (
           from: "Origin",
           to:
             accessStop.stop.name,
+          toLocation: accessStop.stop.location,
+          distanceSource: "straight",
           distanceKm:
             roundKm(
               accessStop.distanceKm,
@@ -1018,6 +1020,8 @@ const tshwaneBusCandidates = (
                 from: "Origin",
                 to:
                   "Official departure point",
+                toLocation: accessTerminal.terminal.location,
+                distanceSource: "straight",
                 distanceKm:
                   roundKm(
                     accessTerminal.distanceKm,
@@ -1238,6 +1242,8 @@ const gautrainRoadAccessCandidates = (
                 from: "Origin",
                 to:
                   originMatch.station.name,
+                toLocation: originMatch.station.location,
+                distanceSource: "straight",
                 distanceKm:
                   roundKm(
                     originMatch.distanceKm,
@@ -1297,7 +1303,10 @@ const gautrainRoadAccessCandidates = (
                   "Taxi",
                 from:
                   destinationMatch.station.name,
+                fromLocation: destinationMatch.station.location,
                 to: "Destination",
+                toLocation: destination,
+                distanceSource: "straight",
                 distanceKm:
                   roundKm(
                     destinationMatch.distanceKm,
