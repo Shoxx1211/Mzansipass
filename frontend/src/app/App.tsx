@@ -1075,7 +1075,8 @@ const App = () => {
           baseRecommendations.some(
             (recommendation) =>
               recommendation.mode ===
-              "Taxi",
+              "Taxi" &&
+              recommendation.selectable !== false,
           ) ||
           discoveryRecommendations.some(
             (recommendation) =>
@@ -1099,17 +1100,20 @@ const App = () => {
                 ),
               );
 
-        const combinedRecommendations = [
+        const rankedRecommendations = [
           ...baseRecommendations,
           ...discoveryRecommendations.filter(
             (recommendation) => !recommendationIds.has(recommendation.id),
           ),
-          ...(roadFallback
-            ? [roadFallback]
-            : []),
-        ]
-          .sort((a, b) => b.score - a.score)
-          .slice(0, 8);
+          ...(roadFallback ? [roadFallback] : []),
+        ].sort((a, b) => b.score - a.score);
+
+        const combinedRecommendations = rankedRecommendations.slice(0, 10);
+        // The taxi road possibility is useful even without an indexed route:
+        // retain it instead of losing it to many GIS-only candidates.
+        if (roadFallback && !combinedRecommendations.some((rec) => rec.id === roadFallback.id)) {
+          combinedRecommendations[combinedRecommendations.length - 1] = roadFallback;
+        }
 
         // Fare pricing is per option, NEVER a shared operator-wide cache:
         // two taxi or bus candidates may have different distances.
