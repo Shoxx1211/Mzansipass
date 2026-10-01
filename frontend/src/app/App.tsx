@@ -30,7 +30,7 @@ import {
 } from "../types";
 
 import { DestinationEngine } from "../services/destinationEngine";
-import { FareEngine } from "../services/fareService";
+import { FareEngine, getTaxiFareGuide } from "../services/fareService";
 import { HabitEngine } from "../services/habitEngine";
 import { RecommendationEngine } from "../services/recommendationEngine";
 import { JourneyDiscoveryEngine } from "../services/journeyDiscoveryEngine";
@@ -215,6 +215,9 @@ const buildRoadFallbackRecommendation = (
     return null;
   }
 
+  // Early fare guide from broad, locally configured bands, NOT a quote.
+  const taxiGuide = getTaxiFareGuide(routePlan.distanceKm);
+
   const estimatedTime =
     routePlan.roadDurationSeconds !== null &&
     Number.isFinite(
@@ -234,7 +237,10 @@ const buildRoadFallbackRecommendation = (
     id: "road-fallback:taxi",
     mode: "Taxi",
     score: 45,
-    estimatedFare: null,
+    estimatedFare: taxiGuide?.midpoint ?? null,
+    fareEstimateRange: taxiGuide
+      ? { minimum: taxiGuide.minimum, maximum: taxiGuide.maximum, basis: "provisional-taxi" }
+      : undefined,
     estimatedTime,
     estimatedTravelTime:
       estimatedTime,
@@ -246,7 +252,7 @@ const buildRoadFallbackRecommendation = (
     subtitle:
       "Taxi / road connection available",
     reason:
-      "Pulse can confirm a road connection to this destination. The exact minibus-taxi rank, vehicle change, route code and fare are not verified yet, so confirm those details locally before boarding.",
+      "This is an indicative minibus-taxi cost band based on provisional distance groups, not an association's published fare. A mapped road is not proof of a direct taxi route. Confirm the actual route, taxi changes and fare at the rank.",
     badges: [
       "ROAD_ROUTE",
       "FARE_VERIFY",
@@ -255,7 +261,7 @@ const buildRoadFallbackRecommendation = (
     confidence: 0.55,
     dataQuality: "limited",
     direct: true,
-    fareStatus: "unverified",
+    fareStatus: taxiGuide ? "estimated" : "unverified",
     timeStatus:
       estimatedTime === null
         ? "unverified"
@@ -272,9 +278,9 @@ const buildRoadFallbackRecommendation = (
         to: "Destination",
         distanceKm:
           routePlan.distanceKm,
-        fare: null,
+        fare: taxiGuide?.midpoint ?? null,
         fareStatus:
-          "unverified",
+          taxiGuide ? "estimated" : "unverified",
         evidence:
           "estimated",
       },
@@ -1111,6 +1117,8 @@ const App = () => {
             // Evidence-only recommendations must never be priced
             // using Mapbox's road-driving distance.
             if (
+              recommendation.journeyLegs?.length &&
+                recommendation.journeyLegs.length > 1 ||
               recommendation.fareStatus ===
                 "unverified" ||
               (
