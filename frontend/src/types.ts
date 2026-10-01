@@ -390,6 +390,12 @@ export interface TransportRecommendation {
   routeCodes?: string[];
   transferStops?: string[];
   journeyLegs?: JourneyLeg[];
+  /** Broad illustrative price guidance, not a published fare. */
+  fareEstimateRange?: {
+    minimum: number;
+    maximum: number;
+    basis: "provisional-taxi" | "observed";
+  };
   publishedFareRange?: {
     currency: string;
     minimum: number;
