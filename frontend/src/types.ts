@@ -223,6 +223,24 @@ export interface PlannedTrip {
   reminderSent?: boolean;
 }
 
+export interface TrackedJourneyLeg {
+  id: string;
+  label: string;
+  mode: JourneyLeg["mode"];
+  operator?: TransitNetwork;
+  from?: string;
+  to?: string;
+  /** Advisory planning distance; not a confirmed taxi/rail route distance. */
+  plannedDistanceKm?: number | null;
+  startDistanceKm: number;
+  endDistanceKm?: number;
+  startedAt: number;
+  endedAt?: number;
+  estimatedFare?: number | null;
+  actualFare?: number | null;
+  fareEstimateSource?: "learned" | "configured" | "published" | "unknown";
+}
+
 // ======================================================
 // 🚕 TRIP DATA
 // ======================================================
@@ -236,6 +254,8 @@ export interface TripData {
   estimatedFare?: number;
   actualFare?: number;
   fare: number;
+  /** Recorded modal legs for the full door-to-door journey. */
+  legs?: TrackedJourneyLeg[];
   fareAccuracy?: number;
   startLocation?: Location;
   endLocation?: Location;
