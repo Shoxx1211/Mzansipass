@@ -163,6 +163,36 @@ const parseCoordinateDestination = (
   };
 };
 
+const getSoshanguveBlock = (query: string): string | null => {
+  if (!/soshanguve|\\bblock\\s+/i.test(query)) return null;
+  const value = query.trim().toLowerCase();
+  const match =
+    value.match(/soshanguve\\s+(?:block\\s+)?([a-z]{1,3})(?:\\b|$)/) ??
+    value.match(/\\bblock\\s+([a-z]{1,3})(?:\\s+soshanguve)?\\b/);
+  return match?.[1]?.toUpperCase() ?? null;
+};
+
+const isLeeParkQuery = (query: string): boolean =>
+  /\\blee\\s*park\\b/i.test(query);
+
+const matchesSoshanguveBlock = (
+  place: DestinationPlace,
+  block: string,
+): boolean => {
+  const label = `${place.name} ${place.label}`.toLowerCase();
+  if (!label.includes("soshanguve")) return false;
+  const words = label.replace(/[^a-z0-9]+/g, " ").split(" ");
+  return words.includes(block.toLowerCase());
+};
+
+const matchesLeePark = (place: DestinationPlace): boolean => {
+  const label = `${place.name} ${place.label}`.toLowerCase();
+  return (
+    (label.includes("attie pelzer") && label.includes("494")) ||
+    (label.includes("lee park") && label.includes("elardus"))
+  );
+};
+
 const normalize = (value: string) =>
   value
     .trim()
@@ -291,6 +321,13 @@ export const DestinationSearch = ({
 
   useEffect(() => {
     const query = destination.trim();
+    const block = getSoshanguveBlock(query);
+    const leePark = isLeeParkQuery(query);
+    const requestedQuery = leePark
+      ? "494 Attie Pelzer Street, Elarduspark, Pretoria, South Africa"
+      : block
+        ? `Soshanguve Block ${block}, Pretoria, Gauteng, South Africa`
+        : query;
     setSearchError(null);
     setActiveIndex(-1);
 
@@ -321,7 +358,7 @@ export const DestinationSearch = ({
         }
 
         const response = await fetch(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?${params.toString()}`,
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(requestedQuery)}.json?${params.toString()}`,
           { signal: controller.signal },
         );
 
@@ -332,27 +369,68 @@ export const DestinationSearch = ({
         const data = (await response.json()) as MapboxResponse;
         if (requestId !== requestIdRef.current) return;
 
-        const places = (data.features ?? [])
-          .map((feature): DestinationPlace | null => {
-            if (!feature.center || feature.center.length < 2) return null;
+        const mapFeatures = (features: MapboxFeature[]): DestinationPlace[] =>
+          features
+            .map((feature): DestinationPlace | null => {
+              if (!feature.center || feature.center.length < 2) return null;
+              const fullName = feature.place_name ?? feature.text ?? query;
+              const verifiedLee = leePark &&
+                (fullName.toLowerCase().includes("attie pelzer") &&
+                 fullName.includes("494") ||
+                 fullName.toLowerCase().includes("lee park") &&
+                 fullName.toLowerCase().includes("elardus"));
+              const verifiedBlock = block &&
+                fullName.toLowerCase().includes("soshanguve") &&
+                fullName.toLowerCase().replace(/[^a-z0-9]+/g, " ").split(" ").includes(block.toLowerCase());
 
-            return {
-              id: feature.id,
-              // Address results must retain the street number and full street;
-              // feature.text alone often drops the house number.
-              name: feature.place_type?.includes("address")
-                ? (feature.place_name ?? feature.text ?? query)
-                : (feature.text ?? feature.place_name ?? query),
-              label: feature.place_name ?? feature.text ?? query,
-              lng: feature.center[0],
-              lat: feature.center[1],
-              category: feature.properties?.category ?? feature.place_type?.[0],
-              source: "mapbox",
-            };
-          })
-          .filter((place): place is DestinationPlace => place !== null);
+              const place: DestinationPlace = {
+                id: feature.id,
+                name: verifiedLee
+                  ? "Lee Park, Elardus Park"
+                  : verifiedBlock
+                    ? `Soshanguve Block ${block}`
+                    : feature.place_type?.includes("address")
+                      ? fullName
+                      : (feature.text ?? fullName),
+                label: verifiedLee
+                  ? `Lee Park · 494 Attie Pelzer Street, Elardus Park, Pretoria · ${fullName}`
+                  : verifiedBlock
+                    ? `Soshanguve Block ${block}, Tshwane, Gauteng · ${fullName}`
+                    : fullName,
+                lng: feature.center[0],
+                lat: feature.center[1],
+                category: feature.properties?.category ?? feature.place_type?.[0],
+                source: "mapbox",
+              };
+              if (leePark && !matchesLeePark(place)) return null;
+              if (block && !matchesSoshanguveBlock(place, block)) return null;
+              return place;
+            })
+            .filter((place): place is DestinationPlace => place !== null);
 
+        let places = mapFeatures(data.features ?? []);
+
+        // A second targeted spelling is useful because block names are not
+        // uniformly indexed by commercial geocoders.
+        if (block && places.length === 0) {
+          const retryQuery = `Soshanguve ${block}, Gauteng, South Africa`;
+          const retry = await fetch(
+            `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(retryQuery)}.json?${params.toString()}`,
+            { signal: controller.signal },
+          );
+          if (retry.ok) {
+            const retryData = (await retry.json()) as MapboxResponse;
+            places = mapFeatures(retryData.features ?? []);
+          }
+        }
+
+        if (requestId !== requestIdRef.current) return;
         setRemoteSuggestions(places);
+        if ((leePark || block) && places.length === 0) {
+          setSearchError(
+            "Exact locality not located yet. Try its street address, or paste precise GPS coordinates; Pulse will not substitute a generic Pretoria/Soshanguve pin.",
+          );
+        }
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") return;
 
@@ -482,6 +560,20 @@ export const DestinationSearch = ({
     const query = destination.trim();
     if (!query || loading) return;
 
+    const block = getSoshanguveBlock(query);
+    const leePark = isLeeParkQuery(query);
+    const requiresPreciseMatch = Boolean(block || leePark || /^\\d+\\s+\\S+/.test(query));
+    const verifiedSuggestion = suggestions.find((place) =>
+      place.lat !== undefined &&
+      place.lng !== undefined &&
+      (block
+        ? matchesSoshanguveBlock(place, block)
+        : leePark
+          ? matchesLeePark(place)
+          : place.source === "mapbox" &&
+            /^\\d+/.test(place.label.trim())),
+    );
+
     const coordinatePlace = parseCoordinateDestination(query);
     if (coordinatePlace) {
       selectPlace(coordinatePlace, true);
@@ -493,6 +585,19 @@ export const DestinationSearch = ({
         normalize(place.name) === normalize(query) ||
         normalize(place.label) === normalize(query),
     );
+
+    if (requiresPreciseMatch && !verifiedSuggestion) {
+      setSearchError(
+        "Please choose a precise matching address or block from the suggestions, or enter latitude, longitude. Pulse won't silently route you to a city centre.",
+      );
+      setIsOpen(true);
+      return;
+    }
+
+    if (verifiedSuggestion) {
+      selectPlace(verifiedSuggestion, true);
+      return;
+    }
 
     if (exact) {
       selectPlace(exact, true);
