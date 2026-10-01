@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from hashlib import sha256
 import re
 import secrets
+from hmac import compare_digest
 
 from flask import Flask, request, jsonify, abort, make_response
 from flask_cors import CORS
@@ -214,9 +215,27 @@ def create_app():
             db.session.commit()
         return issue_tokens(user)
 
+    def refresh_csrf_is_valid():
+        # Defense in depth: old Flask-JWT combinations may not enforce CSRF
+        # when token locations are overridden on the decorator. Check the
+        # rotating signed token claim and the browser's readable CSRF cookie.
+        signed_csrf = str(get_jwt().get("csrf") or "")
+        supplied_csrf = request.headers.get("X-CSRF-TOKEN", "")
+        cookie_csrf = request.cookies.get(
+            app.config.get("JWT_REFRESH_CSRF_COOKIE_NAME", "pulse_refresh_csrf"),
+            "",
+        )
+        return bool(
+            signed_csrf and supplied_csrf and cookie_csrf
+            and compare_digest(signed_csrf, supplied_csrf)
+            and compare_digest(signed_csrf, cookie_csrf)
+        )
+
     @app.route("/auth/refresh", methods=["POST"])
     @jwt_required(refresh=True, locations=["cookies"])
     def refresh():
+        if not refresh_csrf_is_valid():
+            return jsonify({"message": "Invalid refresh CSRF token."}), 403
         token = get_jwt()
         if token.get("role") != "passenger":
             return jsonify({"message": "Invalid session."}), 403
@@ -238,6 +257,8 @@ def create_app():
     @app.route("/auth/logout", methods=["POST"])
     @jwt_required(refresh=True, locations=["cookies"])
     def logout():
+        if not refresh_csrf_is_valid():
+            return jsonify({"message": "Invalid sign-out CSRF token."}), 403
         token = get_jwt()
         db.session.add(RevokedAuthToken(
             jti=token["jti"],
