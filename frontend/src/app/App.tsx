@@ -1266,6 +1266,11 @@ const App = () => {
           return pricedLeg;
         }
 
+        // No verified access road = no defensible taxi distance fare.
+        if (pricedLeg.mode === "taxi" && pricedLeg.distanceSource !== "road") {
+          return pricedLeg;
+        }
+
         const legNetwork: TransitNetwork | null =
           pricedLeg.mode === "taxi" ? "Taxi" : pricedLeg.operator ?? null;
 
@@ -1724,7 +1729,10 @@ const App = () => {
       return;
     }
 
-    let finalFare = verifyTrip.fare;
+    // An unconfirmed estimate must not become recorded spending.
+    let finalFare = verifyTrip.legs && verifyTrip.legs.length > 1
+      ? verifyTrip.fare
+      : 0;
 
     if (actualFare.trim()) {
       const parsedFare = Number.parseFloat(actualFare);
