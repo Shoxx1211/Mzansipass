@@ -562,7 +562,7 @@ export const DestinationSearch = ({
 
     const block = getSoshanguveBlock(query);
     const leePark = isLeeParkQuery(query);
-    const requiresPreciseMatch = Boolean(block || leePark || /^\\d+\\s+\\S+/.test(query));
+    const requiresPreciseMatch = Boolean(block || leePark || /^\d+\s+\S+/.test(query));
     const verifiedSuggestion = suggestions.find((place) =>
       place.lat !== undefined &&
       place.lng !== undefined &&
@@ -571,7 +571,7 @@ export const DestinationSearch = ({
         : leePark
           ? matchesLeePark(place)
           : place.source === "mapbox" &&
-            /^\\d+/.test(place.label.trim())),
+            /^\d+/.test(place.label.trim())),
     );
 
     const coordinatePlace = parseCoordinateDestination(query);
