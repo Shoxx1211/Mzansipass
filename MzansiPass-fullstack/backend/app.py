@@ -86,6 +86,19 @@ def create_app():
         with app.app_context():
             db.create_all()
 
+    @app.before_request
+    def disable_unpiloted_money_routes():
+        # This beta validates commuter identities and trip tracking. It is
+        # NOT a live payment/NFC wallet launch. Prevent premature financial
+        # operations until a separately audited launch explicitly enables them.
+        if os.getenv("PULSE_ENABLE_PAYMENT_ROUTES", "false").lower() != "true":
+            if request.path.startswith((
+                "/cards", "/nfc/", "/topup/", "/payment/verify/",
+            )):
+                return jsonify({
+                    "message": "Payments and NFC are not enabled in this commuter beta.",
+                }), 403
+
     # Register provider / agency apps
     app.register_blueprint(agency_auth_bp, url_prefix="/agency")
     app.register_blueprint(dashboard_bp, url_prefix="/agency")
