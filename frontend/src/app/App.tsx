@@ -49,6 +49,7 @@ import {
 
 import Session from "../utils/session";
 import Storage from "../utils/storage";
+import { AuthApi, type PassengerAccount } from "../services/authApi";
 
 // ======================================================
 // TYPES
@@ -390,7 +391,10 @@ const App = () => {
   // AUTH / NAVIGATION
   // ====================================================
 
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<PassengerAccount | null>(null);
+  const [authChecking, setAuthChecking] = useState(true);
+  const [accountError, setAccountError] = useState<string | null>(null);
+  const [accountBusy, setAccountBusy] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>("home");
 
   // ====================================================
@@ -1871,31 +1875,72 @@ const App = () => {
   // ====================================================
 
   useEffect(() => {
-    const savedUser = Session.load("user");
-
-    if (savedUser) {
-      setUser(savedUser);
-    }
+    let active = true;
+    // Old demo login records are intentionally invalid. Only a verified
+    // backend refresh cookie can restore the commuter session.
+    Session.clear("user");
+    void AuthApi.restore()
+      .then((account) => {
+        if (active) setUser(account);
+      })
+      .finally(() => {
+        if (active) setAuthChecking(false);
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {
     if (!user) {
+      setHistory([]);
       return;
     }
-
-    Session.save("user", user);
-
-    if (user.email) {
-      const savedHistory = Storage.load<TripData[]>(
-        user.email,
-        "history",
-      );
-
-      if (savedHistory) {
-        setHistory(savedHistory);
-      }
-    }
+    setHistory(Storage.load<TripData[]>(user.email, "history") ?? []);
   }, [user]);
+
+  const signOut = useCallback(async () => {
+    if (tripState === TripState.ACTIVE || verifyTrip) {
+      setAccountError("Finish and save your journey before signing out.");
+      return;
+    }
+    setAccountBusy(true);
+    setAccountError(null);
+    try {
+      await AuthApi.signOut();
+      setUser(null);
+      resetAllTripState();
+      setActiveTab("home");
+    } catch (error) {
+      setAccountError(error instanceof Error ? error.message : "Could not sign out.");
+    } finally {
+      setAccountBusy(false);
+    }
+  }, [tripState, verifyTrip, resetAllTripState]);
+
+  const deleteMyAccount = useCallback(async () => {
+    if (!user || accountBusy || tripState === TripState.ACTIVE || verifyTrip) return;
+    const password = window.prompt(
+      "To permanently delete your Pulse account, enter your password:",
+    );
+    if (password === null || !password) return;
+    if (!window.confirm("Delete this account and its local journey history? This cannot be undone.")) return;
+    setAccountBusy(true);
+    setAccountError(null);
+    try {
+      await AuthApi.deleteAccount(password);
+      Storage.clear(user.email, "history");
+      Session.clearAll();
+      setHistory([]);
+      resetAllTripState();
+      setUser(null);
+      setActiveTab("home");
+    } catch (error) {
+      setAccountError(error instanceof Error ? error.message : "Could not delete account.");
+    } finally {
+      setAccountBusy(false);
+    }
+  }, [user, accountBusy, tripState, verifyTrip, resetAllTripState]);
 
   // ====================================================
   // SAVE ACTIVE TRIP
@@ -1936,8 +1981,19 @@ const App = () => {
   // AUTH SCREEN
   // ====================================================
 
+  if (authChecking) {
+    return (
+      <div className="flex min-h-[100dvh] items-center justify-center bg-[#040917] text-sm font-semibold text-cyan-200" role="status">
+        Restoring your secure Pulse session…
+      </div>
+    );
+  }
+
   if (!user) {
-    return <AuthScreen onLogin={setUser} />;
+    return <AuthScreen onLogin={(account) => {
+      setUser(account);
+      Session.clear("user");
+    }} />;
   }
 
   // ====================================================
@@ -2703,6 +2759,23 @@ const App = () => {
                   <h1 className="mt-1 text-3xl font-black text-white">
                     Travel stats
                   </h1>
+                </div>
+                <div className="premium-glass-soft rounded-2xl p-4">
+                  <p className="text-sm font-bold text-white">{user.email}</p>
+                  <p className="mt-1 text-xs text-white/45">
+                    Account verified by Pulse. Journey history is still stored on this device during the technical pilot.
+                  </p>
+                  {accountError && <p role="alert" className="mt-2 text-xs text-red-200">{accountError}</p>}
+                  <div className="mt-3 flex flex-wrap gap-3">
+                    <button type="button" disabled={accountBusy || tripState === TripState.ACTIVE || Boolean(verifyTrip)}
+                      onClick={() => void signOut()} className="rounded-xl bg-white/10 px-4 py-2 text-xs font-bold text-white disabled:opacity-40">
+                      Sign out
+                    </button>
+                    <button type="button" disabled={accountBusy || tripState === TripState.ACTIVE || Boolean(verifyTrip)}
+                      onClick={() => void deleteMyAccount()} className="rounded-xl bg-red-300/10 px-4 py-2 text-xs font-bold text-red-200 disabled:opacity-40">
+                      Delete my account
+                    </button>
+                  </div>
                 </div>
 
                 {history.length === 0 ? (
