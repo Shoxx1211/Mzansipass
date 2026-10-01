@@ -26,6 +26,7 @@ import {
   type TransitNetwork,
   type TransportRecommendation as RecommendationType,
   type TripData,
+  type TrackedJourneyLeg,
 } from "../types";
 
 import { DestinationEngine } from "../services/destinationEngine";
@@ -429,6 +430,9 @@ const App = () => {
   const [history, setHistory] = useState<TripData[]>([]);
   const [verifyTrip, setVerifyTrip] = useState<TripData | null>(null);
   const [actualFare, setActualFare] = useState("");
+  const [legChangeFare, setLegChangeFare] = useState("");
+  const [showLegChangeForm, setShowLegChangeForm] = useState(false);
+  const [remindAfterDistanceKm, setRemindAfterDistanceKm] = useState(0);
 
   const [lastTripGpsUpdate, setLastTripGpsUpdate] = useState<number | null>(
     null,
@@ -482,6 +486,29 @@ const App = () => {
     import.meta.env.DEV && developmentOriginOverride
       ? developmentOriginOverride
       : location.location;
+
+  const trackedJourneyLegs = currentTrip.legs ?? [];
+  const activeJourneyLegIndex = trackedJourneyLegs.findIndex(
+    (leg) => leg.endedAt === undefined,
+  );
+  const activeJourneyLeg =
+    activeJourneyLegIndex >= 0
+      ? trackedJourneyLegs[activeJourneyLegIndex]
+      : null;
+  const nextJourneyLeg =
+    activeJourneyLegIndex >= 0
+      ? trackedJourneyLegs[activeJourneyLegIndex + 1] ?? null
+      : null;
+  const activeLegDistanceKm = activeJourneyLeg
+    ? Math.max(0, (currentTrip.distance ?? 0) - activeJourneyLeg.startDistanceKm)
+    : 0;
+  const nearSuggestedTransfer =
+    nextJourneyLeg !== null &&
+    activeJourneyLeg !== null &&
+    typeof activeJourneyLeg.plannedDistanceKm === "number" &&
+    activeJourneyLeg.plannedDistanceKm > 0 &&
+    activeLegDistanceKm >= activeJourneyLeg.plannedDistanceKm * 0.9 &&
+    (currentTrip.distance ?? 0) >= remindAfterDistanceKm;
 
   const plannerOriginIsTest =
     import.meta.env.DEV && developmentOriginOverride !== null;
@@ -616,6 +643,9 @@ const App = () => {
   const resetAllTripState = useCallback(() => {
     setVerifyTrip(null);
     setActualFare("");
+    setLegChangeFare("");
+    setShowLegChangeForm(false);
+    setRemindAfterDistanceKm(0);
     setCurrentTrip({});
     setDuration(0);
     setLiveSpeed(0);
@@ -1286,6 +1316,60 @@ const App = () => {
     };
   }, [tripState]);
 
+  const confirmLegChange = useCallback(() => {
+    if (!nextJourneyLeg || !activeJourneyLeg) return;
+
+    const entered =
+      legChangeFare.trim() === ""
+        ? null
+        : Number(legChangeFare);
+
+    if (
+      entered !== null &&
+      (!Number.isFinite(entered) || entered < 0 || entered > 1000)
+    ) {
+      setError("Enter a valid fare between R0 and R1 000, or leave it blank.");
+      return;
+    }
+
+    const completedAt = Date.now();
+    const distanceAtSwitch = Math.max(0, currentTrip.distance ?? 0);
+
+    setCurrentTrip((previous) => ({
+      ...previous,
+      legs: (previous.legs ?? []).map((leg, index) => {
+        if (index === activeJourneyLegIndex) {
+          return {
+            ...leg,
+            endDistanceKm: distanceAtSwitch,
+            endedAt: completedAt,
+            ...(entered !== null ? { actualFare: entered } : {}),
+          };
+        }
+
+        if (index === activeJourneyLegIndex + 1) {
+          return {
+            ...leg,
+            startedAt: completedAt,
+            startDistanceKm: distanceAtSwitch,
+          };
+        }
+
+        return leg;
+      }),
+    }));
+    setLegChangeFare("");
+    setShowLegChangeForm(false);
+    setRemindAfterDistanceKm(0);
+    setError(null);
+  }, [
+    nextJourneyLeg,
+    activeJourneyLeg,
+    activeJourneyLegIndex,
+    legChangeFare,
+    currentTrip.distance,
+  ]);
+
   // ====================================================
   // START TRIP
   // ====================================================
@@ -1354,9 +1438,81 @@ const App = () => {
       const trackerLocation = BackgroundTracker.getLastKnownLocation();
       const startedAt = trackerTrip?.startedAt ?? Date.now();
 
+      const plannedLegs = selectedRecommendation?.journeyLegs?.length
+        ? selectedRecommendation.journeyLegs
+        : [
+            {
+              id: "single-mode",
+              mode: network === "Taxi" ? "taxi" as const : "bus" as const,
+              label: network,
+              operator: network,
+              from: "Origin",
+              to: destination.trim(),
+              distanceKm: routePlan.distanceKm,
+              fare: estimatedFare,
+            },
+          ];
+
+      // Existing published fares take priority; otherwise estimates use the
+      // local observed-fare cache, then configured provisional bands.
+      const initialLegs: TrackedJourneyLeg[] = await Promise.all(
+        plannedLegs.map(async (leg, index) => {
+          const modeNetwork: TransitNetwork | null =
+            leg.mode === "taxi"
+              ? "Taxi"
+              : leg.operator ?? null;
+
+          let legEstimate =
+            leg.fare !== null && leg.fare !== undefined
+              ? leg.fare
+              : null;
+          let estimateSource: TrackedJourneyLeg["fareEstimateSource"] =
+            legEstimate !== null ? "published" : "unknown";
+
+          if (
+            legEstimate === null &&
+            modeNetwork &&
+            leg.distanceKm !== null &&
+            leg.distanceKm !== undefined &&
+            Number.isFinite(leg.distanceKm) &&
+            leg.distanceKm > 0
+          ) {
+            try {
+              const estimate = await FareEngine.computeFinalFare({
+                network: modeNetwork,
+                distance: leg.distanceKm,
+              });
+              legEstimate = estimate.fare;
+              estimateSource = estimate.source;
+            } catch {
+              // We do not invent a fare without enough data.
+            }
+          }
+
+          return {
+            id: leg.id,
+            label: leg.label,
+            mode: leg.mode,
+            ...(leg.operator ? { operator: leg.operator } : {}),
+            ...(leg.from ? { from: leg.from } : {}),
+            ...(leg.to ? { to: leg.to } : {}),
+            plannedDistanceKm: leg.distanceKm ?? null,
+            startDistanceKm: 0,
+            startedAt: index === 0 ? startedAt : 0,
+            estimatedFare: legEstimate,
+            fareEstimateSource: estimateSource,
+          };
+        }),
+      );
+
+      setLegChangeFare("");
+      setShowLegChangeForm(false);
+      setRemindAfterDistanceKm(0);
+
       setCurrentTrip({
         id: startedAt.toString(),
         network,
+        legs: initialLegs,
         destination: destination.trim(),
         startTime: startedAt,
         distance: trackerTrip ? trackerTrip.totalDistance / 1000 : 0,
@@ -1388,6 +1544,9 @@ const App = () => {
     location,
     network,
     plannerOrigin,
+    selectedRecommendation,
+    routePlan.distanceKm,
+    estimatedFare,
   ]);
 
   // ====================================================
@@ -1436,11 +1595,24 @@ const App = () => {
       ? toLocation(finalTrackerLocation)
       : location.location ?? currentTrip.lastTrackedLocation;
 
-    const fare = estimatedFare ?? 0;
+    const totalDistanceKm = stats?.distance ?? currentTrip.distance ?? 0;
+    const finishedAt = Date.now();
+    const completedLegs = (currentTrip.legs ?? []).map((leg) =>
+      leg.endedAt === undefined
+        ? { ...leg, endDistanceKm: totalDistanceKm, endedAt: finishedAt }
+        : leg,
+    );
+    const recordedLegFares = completedLegs
+      .map((leg) => leg.actualFare)
+      .filter((fare): fare is number => typeof fare === "number");
+    const fare = recordedLegFares.length
+      ? recordedLegFares.reduce((sum, amount) => sum + amount, 0)
+      : estimatedFare ?? 0;
 
     const completedTrip: TripData = {
       ...(currentTrip as TripData),
-      endTime: Date.now(),
+      legs: completedLegs,
+      endTime: finishedAt,
       duration: stats?.duration ?? duration,
       distance: stats?.distance ?? currentTrip.distance ?? 0,
       avgSpeed: stats?.avgSpeed ?? currentTrip.avgSpeed ?? 0,
@@ -1489,10 +1661,48 @@ const App = () => {
       }
     }
 
+    const knownLegFares = (verifyTrip.legs ?? [])
+      .map((leg) => leg.actualFare)
+      .filter((fare): fare is number => typeof fare === "number");
+
+    if (verifyTrip.legs?.length) {
+      if (knownLegFares.length) {
+        finalFare = knownLegFares.reduce((sum, fare) => sum + fare, 0);
+      } else if (verifyTrip.legs.length > 1) {
+        // No confirmed modal fares: never silently save a whole-journey
+        // estimate as actual spending.
+        finalFare = 0;
+      }
+    }
+
     const finalTrip: TripData = {
       ...verifyTrip,
       fare: finalFare,
     };
+
+    for (const leg of finalTrip.legs ?? []) {
+      const observedDistance =
+        leg.endDistanceKm !== undefined
+          ? leg.endDistanceKm - leg.startDistanceKm
+          : 0;
+      const networkForLearning = leg.operator ??
+        (leg.mode === "taxi" ? "Taxi" : null);
+
+      if (
+        networkForLearning &&
+        leg.actualFare !== null &&
+        leg.actualFare !== undefined &&
+        leg.actualFare > 0 &&
+        observedDistance > 0.05
+      ) {
+        FareEngine.learnFare(
+          leg.estimatedFare ?? 0,
+          leg.actualFare,
+          networkForLearning,
+          observedDistance,
+        );
+      }
+    }
 
     setHistory((previous) => {
       const updated = [finalTrip, ...previous];
