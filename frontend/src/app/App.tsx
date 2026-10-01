@@ -1221,31 +1221,76 @@ const App = () => {
   // ====================================================
 
  const handleSelectRecommendation = useCallback(
-  (rec: RecommendationType) => {
+  async (rec: RecommendationType) => {
     if (rec.selectable === false) {
-      setError(
-        "Pulse found useful public-transport evidence for this option, but the journey still needs enough fare, timing or transfer evidence before it can be started as a tracked trip.",
-      );
-
+      setError("This route needs more timetable or stop information before tracking can start.");
       return;
     }
 
-    const selectedNetwork =
-      rec.mode as TransitNetwork;
+    const selectedNetwork = rec.mode as TransitNetwork;
+    const originalLegs = rec.journeyLegs ?? [];
 
-    const recalculatedFare =
-      networkEstimates[selectedNetwork];
+    const enrichedLegs = await Promise.all(
+      originalLegs.map(async (leg) => {
+        if (leg.mode === "walk" || leg.fare !== null && leg.fare !== undefined) {
+          return leg;
+        }
 
-    const finalFare =
-      recalculatedFare ??
-      rec.estimatedFare;
+        const legNetwork: TransitNetwork | null =
+          leg.mode === "taxi" ? "Taxi" : leg.operator ?? null;
 
-    setSelectedRecommendation(rec);
+        if (
+          !legNetwork ||
+          leg.distanceKm === null ||
+          leg.distanceKm === undefined ||
+          !Number.isFinite(leg.distanceKm) ||
+          leg.distanceKm <= 0
+        ) {
+          return leg;
+        }
+
+        try {
+          const estimate = await FareEngine.computeFinalFare({
+            network: legNetwork,
+            distance: leg.distanceKm,
+          });
+          return {
+            ...leg,
+            fare: estimate.fare,
+            fareStatus: "estimated" as const,
+          };
+        } catch {
+          return leg;
+        }
+      }),
+    );
+
+    const hasMultimodalLegs = enrichedLegs.length > 1;
+    const allPaidLegsEstimated = enrichedLegs.every(
+      (leg) =>
+        leg.mode === "walk" ||
+        leg.fare !== null && leg.fare !== undefined,
+    );
+
+    const totalEstimatedFare = hasMultimodalLegs
+      ? allPaidLegsEstimated
+        ? enrichedLegs.reduce((sum, leg) => sum + (leg.fare ?? 0), 0)
+        : null
+      : networkEstimates[selectedNetwork] ?? rec.estimatedFare;
+
+    setSelectedRecommendation({
+      ...rec,
+      journeyLegs: enrichedLegs.length ? enrichedLegs : rec.journeyLegs,
+      estimatedFare: totalEstimatedFare,
+      fareStatus:
+        totalEstimatedFare !== null && hasMultimodalLegs
+          ? "estimated"
+          : rec.fareStatus,
+    });
     setNetwork(selectedNetwork);
     setEstimatedFare(
-      finalFare !== null &&
-      Number.isFinite(finalFare)
-        ? finalFare
+      totalEstimatedFare !== null && Number.isFinite(totalEstimatedFare)
+        ? totalEstimatedFare
         : null,
     );
     setPlanningStep("fare");
@@ -2299,7 +2344,9 @@ const App = () => {
                                         <span className="rounded-full bg-white/[0.05] px-2.5 py-1 text-[10px] font-semibold text-white/45">
                                           {leg.fare !== undefined &&
                                           leg.fare !== null
-                                            ? `R${leg.fare.toFixed(2)}`
+                                            ? leg.fareStatus === "estimated"
+                                              ? `About R${leg.fare.toFixed(2)}`
+                                              : `R${leg.fare.toFixed(2)}`
                                             : "Fare to confirm"}
                                         </span>
                                       </div>
