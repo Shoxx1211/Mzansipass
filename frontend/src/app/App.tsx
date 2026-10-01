@@ -1080,8 +1080,8 @@ const App = () => {
           ) ||
           discoveryRecommendations.some(
             (recommendation) =>
-              recommendation.mode ===
-              "Taxi",
+              recommendation.mode === "Taxi" &&
+              recommendation.selectable !== false,
           );
 
         const roadFallback =
