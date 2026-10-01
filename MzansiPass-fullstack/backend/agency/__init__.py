@@ -11,7 +11,7 @@ This file should:
 """
 
 from .trips import agency_trips_bp
-from .dashboard import agency_dashboard_bp
+from .dashboard import dashboard_bp as agency_dashboard_bp
 
 
 def register_agency_blueprints(app):
