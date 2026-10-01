@@ -232,6 +232,7 @@ export interface TrackedJourneyLeg {
   to?: string;
   /** Advisory planning distance; not a confirmed taxi/rail route distance. */
   plannedDistanceKm?: number | null;
+  distanceSource?: "road" | "straight" | "unknown";
   startDistanceKm: number;
   endDistanceKm?: number;
   startedAt: number;
@@ -318,6 +319,9 @@ export interface JourneyLeg {
   from?: string;
   to?: string;
   distanceKm?: number | null;
+  fromLocation?: Location;
+  toLocation?: Location;
+  distanceSource?: "road" | "straight" | "unknown";
   fare?: number | null;
   fareStatus?: "verified" | "estimated" | "unverified";
   evidence?: "published" | "official-gis" | "road-access" | "estimated";
