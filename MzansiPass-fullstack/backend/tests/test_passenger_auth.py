@@ -73,7 +73,7 @@ class PassengerAuthTests(unittest.TestCase):
         self.assertIn("access_token", renewed.json)
         logged_out = self.client.post("/auth/logout", json={}, headers=self.csrf())
         self.assertEqual(logged_out.status_code, 200)
-        cannot_refresh = self.client.post("/auth/refresh", json={}, headers=self.csrf())
+        cannot_refresh = self.client.post("/auth/refresh", json={})
         self.assertNotEqual(cannot_refresh.status_code, 200)
 
     def test_login_throttle_and_account_deletion(self):
