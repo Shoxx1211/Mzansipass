@@ -206,6 +206,7 @@ const straightLineDistanceKm = (
 
 const buildRoadFallbackRecommendation = (
   routePlan: RoutePlanSummary,
+  fareGuideIsApplicable: boolean,
 ): RecommendationType | null => {
   if (
     routePlan.distanceKm === null ||
@@ -216,7 +217,10 @@ const buildRoadFallbackRecommendation = (
   }
 
   // Early fare guide from broad, locally configured bands, NOT a quote.
-  const taxiGuide = getTaxiFareGuide(routePlan.distanceKm);
+  const taxiGuide =
+    routePlan.source === "mapbox-road" && fareGuideIsApplicable
+      ? getTaxiFareGuide(routePlan.distanceKm)
+      : null;
 
   const estimatedTime =
     routePlan.roadDurationSeconds !== null &&
@@ -671,7 +675,7 @@ const App = () => {
       // the old coordinates must not be reused for the new text.
       setResolvedDestination(null);
       setRecommendations([]);
-        setRoutePlan(EMPTY_ROUTE_PLAN);
+      setRoutePlan(EMPTY_ROUTE_PLAN);
       setSelectedRecommendation(null);
       setNetwork(null);
       setEstimatedFare(null);
@@ -1084,6 +1088,15 @@ const App = () => {
             ? null
             : buildRoadFallbackRecommendation(
                 nextRoutePlan,
+                // Current seed taxi bands are a GAUTENG pilot guide; do not
+                // pretend we have local price data across all nine provinces.
+                Boolean(
+                  destinationLocation &&
+                  [origin, destinationLocation].every((point) =>
+                    point.lat >= -26.95 && point.lat <= -24.95 &&
+                    point.lng >= 27.1 && point.lng <= 29.5,
+                  ),
+                ),
               );
 
         const combinedRecommendations = [
@@ -1169,7 +1182,7 @@ const App = () => {
 
         if (!cancelled) {
           setRecommendations([]);
-                setError(
+          setError(
             "Pulse could not build this journey right now. Check your connection and try again.",
           );
         }
