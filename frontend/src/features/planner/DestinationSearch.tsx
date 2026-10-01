@@ -147,7 +147,7 @@ const parseCoordinateDestination = (
   input: string,
 ): DestinationPlace | null => {
   // Latitude, longitude typed/pasted directly by a commuter.
-  const match = input.trim().match(/^(-?\\d{1,2}(?:\\.\\d+)?)\\s*,\\s*(-?\\d{1,3}(?:\\.\\d+)?)$/);
+  const match = input.trim().match(/^(-?[0-9]{1,2}(?:[.][0-9]+)?)[ ]*,[ ]*(-?[0-9]{1,3}(?:[.][0-9]+)?)$/);
   if (!match) return null;
   const lat = Number(match[1]);
   const lng = Number(match[2]);
