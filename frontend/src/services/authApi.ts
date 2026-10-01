@@ -80,11 +80,9 @@ export const AuthApi = {
     }
   },
   async signOut(): Promise<void> {
-    try {
-      await post<{ message: string }>("logout", undefined, true);
-    } finally {
-      accessToken = null;
-    }
+    // Do not claim a successful server logout when cookie revocation failed.
+    await post<{ message: string }>("logout", undefined, true);
+    accessToken = null;
   },
   async deleteAccount(password: string): Promise<void> {
     if (!accessToken) throw new Error("Please sign in again.");
