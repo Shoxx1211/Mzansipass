@@ -143,6 +143,26 @@ const PULSE_DESTINATIONS: DestinationPlace[] = [
   { id: "marabastad", name: "Marabastad", label: "Marabastad transport hub, Pretoria, Gauteng", lat: -25.73937, lng: 28.17351, category: "Taxi & transport hub", source: "pulse" },
 ];
 
+const parseCoordinateDestination = (
+  input: string,
+): DestinationPlace | null => {
+  // Latitude, longitude typed/pasted directly by a commuter.
+  const match = input.trim().match(/^(-?\\d{1,2}(?:\\.\\d+)?)\\s*,\\s*(-?\\d{1,3}(?:\\.\\d+)?)$/);
+  if (!match) return null;
+  const lat = Number(match[1]);
+  const lng = Number(match[2]);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
+  return {
+    id: `coordinates:${lat.toFixed(6)},${lng.toFixed(6)}`,
+    name: `${lat.toFixed(6)}, ${lng.toFixed(6)}`,
+    label: `Pinned location · ${lat.toFixed(6)}, ${lng.toFixed(6)}`,
+    lat,
+    lng,
+    category: "Coordinates",
+    source: "manual",
+  };
+};
+
 const normalize = (value: string) =>
   value
     .trim()
@@ -318,7 +338,11 @@ export const DestinationSearch = ({
 
             return {
               id: feature.id,
-              name: feature.text ?? feature.place_name ?? query,
+              // Address results must retain the street number and full street;
+              // feature.text alone often drops the house number.
+              name: feature.place_type?.includes("address")
+                ? (feature.place_name ?? feature.text ?? query)
+                : (feature.text ?? feature.place_name ?? query),
               label: feature.place_name ?? feature.text ?? query,
               lng: feature.center[0],
               lat: feature.center[1],
@@ -457,6 +481,12 @@ export const DestinationSearch = ({
   const submitSearch = useCallback(() => {
     const query = destination.trim();
     if (!query || loading) return;
+
+    const coordinatePlace = parseCoordinateDestination(query);
+    if (coordinatePlace) {
+      selectPlace(coordinatePlace, true);
+      return;
+    }
 
     const exact = suggestions.find(
       (place) =>
@@ -641,7 +671,7 @@ export const DestinationSearch = ({
             }}
             onBlur={() => window.setTimeout(() => setIsOpen(false), 150)}
             onKeyDown={handleKeyDown}
-            placeholder="Where do you want to go?"
+            placeholder="Address, house number, place or coordinates"
             className="premium-glass-soft h-[60px] w-full rounded-[20px] pl-12 pr-20 text-base font-semibold text-white outline-none transition placeholder:text-white/30 focus:border-cyan-300/30 focus:ring-4 focus:ring-cyan-400/[0.05] sm:h-[62px] sm:text-lg"
             autoComplete="off"
             autoCorrect="off"
