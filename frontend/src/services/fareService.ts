@@ -8,6 +8,7 @@
 import type { TransitNetwork } from "../types";
 import {
   TRANSPORT_ZONES,
+  TAXI_FARE_ZONES,
   getFareForDistance,
   type TransportNetworkZone,
 } from "../data/transportZones";
@@ -198,6 +199,39 @@ const emptyBreakdown = (fare: number): FareBreakdown => ({
   paymentDiscount: 0,
   total: fare,
 });
+
+/**
+ * Provisional MINIBUS taxi guide, not a current association fare sheet.
+ * The original locally configured distance bands are seed assumptions.
+ * Do not use this as proof of a rank, a through route, or a fixed fare.
+ * A local observed-fare cache can supersede the midpoint via FareEngine.
+ */
+export const getTaxiFareGuide = (
+  distanceKm: number | null | undefined,
+): { minimum: number; maximum: number; midpoint: number } | null => {
+  if (
+    distanceKm === null ||
+    distanceKm === undefined ||
+    !Number.isFinite(distanceKm) ||
+    distanceKm <= 0
+  ) return null;
+
+  const band = TAXI_FARE_ZONES.find(
+    (zone) =>
+      distanceKm >= zone.fromDistance &&
+      distanceKm <= zone.toDistance,
+  );
+  if (!band) return null;
+
+  // Explicitly broad uncertainty: ticket prices vary by association/route.
+  const low = Math.max(5, Math.round((Math.min(band.peakFare, band.offPeakFare) * 0.8) / 5) * 5);
+  const high = Math.ceil((Math.max(band.peakFare, band.offPeakFare) * 1.3) / 5) * 5;
+  return {
+    minimum: low,
+    maximum: high,
+    midpoint: Math.round(((low + high) / 2) / 5) * 5,
+  };
+};
 
 export class FareEngine {
   static getTimeContext(date = new Date()): FareContext {
