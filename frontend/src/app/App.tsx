@@ -1681,7 +1681,7 @@ const App = () => {
     const totalDistanceKm = stats?.distance ?? currentTrip.distance ?? 0;
     const finishedAt = Date.now();
     const completedLegs = (currentTrip.legs ?? []).map((leg) =>
-      leg.endedAt === undefined
+      leg.endedAt === undefined && leg.startedAt > 0
         ? { ...leg, endDistanceKm: totalDistanceKm, endedAt: finishedAt }
         : leg,
     );
@@ -2575,7 +2575,9 @@ const App = () => {
                                   <div>
                                     <p className="text-sm font-bold text-white">{leg.label}</p>
                                     <p className="mt-1 text-xs text-white/45">
-                                      {measuredKm !== null
+                                      {leg.startedAt === 0
+                                      ? "Not boarded / not confirmed"
+                                      : measuredKm !== null
                                         ? `${measuredKm.toFixed(2)} km tracked`
                                         : "Distance not recorded"}
                                       {leg.estimatedFare !== null && leg.estimatedFare !== undefined
@@ -2764,7 +2766,7 @@ const App = () => {
                                   </span>
                                   <span className="shrink-0 font-bold text-white/85">
                                     {leg.actualFare === undefined || leg.actualFare === null
-                                      ? "Not recorded"
+                                      ? (leg.startedAt === 0 ? "Not boarded" : "Not recorded")
                                       : `R${leg.actualFare.toFixed(2)}`}
                                   </span>
                                 </div>
