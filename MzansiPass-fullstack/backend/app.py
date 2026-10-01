@@ -42,9 +42,17 @@ from agency.trips import agency_trips_bp
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    for key in ("SECRET_KEY", "JWT_SECRET_KEY", "SQLALCHEMY_DATABASE_URI"):
-        if not app.config.get(key) or len(str(app.config[key])) < 24 and key != "SQLALCHEMY_DATABASE_URI":
-            raise RuntimeError(f"Configure {key} securely before starting Pulse authentication")
+    for key in ("SECRET_KEY", "JWT_SECRET_KEY"):
+        value = str(app.config.get(key) or "")
+        if (
+            len(value) < 32
+            or value.startswith(("CHANGE_ME", "change-", "jwt-secret"))
+        ):
+            raise RuntimeError(f"Generate a secure {key} before starting Pulse")
+    if app.config["SECRET_KEY"] == app.config["JWT_SECRET_KEY"]:
+        raise RuntimeError("SECRET_KEY and JWT_SECRET_KEY must be different")
+    if not app.config.get("SQLALCHEMY_DATABASE_URI"):
+        raise RuntimeError("Set DATABASE_URL before starting Pulse")
 
     # Core extensions
     db.init_app(app)
