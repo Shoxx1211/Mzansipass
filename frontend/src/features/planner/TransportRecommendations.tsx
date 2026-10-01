@@ -75,7 +75,7 @@ const SORT_OPTIONS: Array<{
   },
   {
     value: "cheapest",
-    label: "Lowest verified fare",
+    label: "Lowest estimated fare",
   },
   {
     value: "leastWalking",
@@ -197,6 +197,11 @@ const formatTime = (
 const formatFare = (
   recommendation: RecommendationType,
 ): string => {
+  if (recommendation.fareEstimateRange) {
+    const { minimum, maximum } = recommendation.fareEstimateRange;
+    return `${formatMoney(minimum)}–${formatMoney(maximum)}`;
+  }
+
   if (
     recommendation.fareStatus !== "unverified" &&
     recommendation.estimatedFare !== null &&
@@ -226,6 +231,10 @@ const formatFare = (
 const getFareHeading = (
   recommendation: RecommendationType,
 ): string => {
+  if (recommendation.fareEstimateRange) {
+    return "Taxi fare guide";
+  }
+
   if (
     recommendation.fareStatus !== "unverified" &&
     recommendation.estimatedFare !== null
@@ -252,6 +261,10 @@ const getTimeHeading = (
 const getFareSupportingText = (
   recommendation: RecommendationType,
 ): string | null => {
+  if (recommendation.fareEstimateRange?.basis === "provisional-taxi") {
+    return "Broad guide, not a taxi association fare. Actual costs depend on rank and transfers.";
+  }
+
   if (
     recommendation.fareStatus ===
       "unverified" &&
@@ -1095,18 +1108,24 @@ export const TransportRecommendation =
                 }
 
                 case "cheapest": {
-                  const aFare =
-                    a.estimatedFare ??
-                    Number.POSITIVE_INFINITY;
+                  // An unverified partial fare is not the price of an entire
+                  // multimodal journey. Unknown totals belong last.
+                  const completeFare = (rec: RecommendationType) =>
+                    rec.fareStatus !== "unverified" &&
+                    rec.estimatedFare !== null &&
+                    Number.isFinite(rec.estimatedFare) &&
+                    (!rec.journeyLegs || rec.journeyLegs.length <= 1 ||
+                      rec.journeyLegs.every((leg) =>
+                        leg.mode === "walk" ||
+                        leg.fare !== null && leg.fare !== undefined))
+                      ? rec.estimatedFare
+                      : Number.POSITIVE_INFINITY;
 
-                  const bFare =
-                    b.estimatedFare ??
-                    Number.POSITIVE_INFINITY;
-
-                  return (
-                    aFare -
-                    bFare
-                  );
+                  const aFare = completeFare(a);
+                  const bFare = completeFare(b);
+                  return aFare === bFare
+                    ? b.score - a.score
+                    : aFare - bFare;
                 }
 
                 case "leastWalking":
