@@ -164,16 +164,16 @@ const parseCoordinateDestination = (
 };
 
 const getSoshanguveBlock = (query: string): string | null => {
-  if (!/soshanguve|\\bblock\\s+/i.test(query)) return null;
+  if (!/soshanguve|\bblock\s+/i.test(query)) return null;
   const value = query.trim().toLowerCase();
   const match =
-    value.match(/soshanguve\\s+(?:block\\s+)?([a-z]{1,3})(?:\\b|$)/) ??
-    value.match(/\\bblock\\s+([a-z]{1,3})(?:\\s+soshanguve)?\\b/);
+    value.match(/soshanguve\s+(?:block\s+)?([a-z]{1,3})(?:\b|$)/) ??
+    value.match(/\bblock\s+([a-z]{1,3})(?:\s+soshanguve)?\b/);
   return match?.[1]?.toUpperCase() ?? null;
 };
 
 const isLeeParkQuery = (query: string): boolean =>
-  /\\blee\\s*park\\b/i.test(query);
+  /\blee\s*park\b/i.test(query);
 
 const matchesSoshanguveBlock = (
   place: DestinationPlace,
