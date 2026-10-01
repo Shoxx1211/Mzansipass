@@ -2457,7 +2457,9 @@ const App = () => {
                               </p>
                               <p className={`mt-1.5 text-lg font-black ${estimatedFare !== null ? "text-emerald-300" : "text-amber-200"}`}>
                                 {estimatedFare !== null
-                                  ? `R${estimatedFare.toFixed(2)}`
+                                  ? selectedRecommendation?.fareStatus === "estimated"
+                                    ? `About R${estimatedFare.toFixed(2)}`
+                                    : `R${estimatedFare.toFixed(2)}`
                                   : "Confirm"}
                               </p>
                             </div>
@@ -2519,7 +2521,9 @@ const App = () => {
 
                         <div className="text-left sm:text-right">
                           <p className="text-xs uppercase tracking-wider text-white/35">
-                            Estimated fare
+                            {verifyTrip.legs?.some((leg) => leg.actualFare !== null && leg.actualFare !== undefined)
+                              ? "Fares recorded"
+                              : "Estimated fare"}
                           </p>
                           <p className="mt-1 text-4xl font-black text-white">
                             {verifyTrip.fare > 0
