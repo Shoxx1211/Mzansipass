@@ -108,7 +108,10 @@ export class MetrobusEvidenceEngine {
     }
 
     // Dynamic import is reachable only in Vite DEV. This geometry remains local and gitignored.
-    const { default: runtime } = await import("../data/transit/gauteng/metrobus/metrobus-planner-runtime.json");
+    // This private dataset is intentionally local and gitignored while rights
+    // are reviewed. Never import it statically into commuter or CI builds.
+    const privateDevPath = "../data/transit/gauteng/metrobus/metrobus-planner-runtime.json";
+    const { default: runtime } = await import(/* @vite-ignore */ privateDevPath);
     if (runtime.passengerRoutingEnabled !== false ||
         runtime.sourceRightsCleared !== false ||
         runtime.currentOperationVerified !== false) {
