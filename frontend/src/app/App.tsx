@@ -1681,11 +1681,17 @@ const App = () => {
 
     const totalDistanceKm = stats?.distance ?? currentTrip.distance ?? 0;
     const finishedAt = Date.now();
-    const completedLegs = finishMultimodalJourney(
-      currentTrip.legs ?? [],
-      totalDistanceKm,
-      finishedAt,
-    );
+    let completedLegs = currentTrip.legs ?? [];
+    try {
+      completedLegs = finishMultimodalJourney(
+        completedLegs,
+        totalDistanceKm,
+        finishedAt,
+      );
+    } catch (gpsError) {
+      // An inconsistent final GPS point must not erase the completed trip.
+      console.warn("Final GPS reading invalid; preserving recorded legs:", gpsError);
+    }
     const ledger = getMultimodalTotals(completedLegs);
     const fare = ledger.recordedFare;
 
@@ -1727,31 +1733,19 @@ const App = () => {
       return;
     }
 
-    // An unconfirmed estimate must not become recorded spending.
-    let finalFare = verifyTrip.legs && verifyTrip.legs.length > 1
-      ? verifyTrip.fare
-      : 0;
+    const isMultiModal = (verifyTrip.legs?.length ?? 0) > 1;
+    const totals = getMultimodalTotals(verifyTrip.legs ?? []);
+    // Confirmed fares only: on multimodal journeys use the per-leg ledger.
+    // On single-mode journeys respect the user's confirmation input.
+    let finalFare = isMultiModal ? totals.recordedFare : 0;
 
-    if (actualFare.trim()) {
+    if (!isMultiModal && actualFare.trim()) {
       const parsedFare = Number.parseFloat(actualFare);
-
-      if (
-        Number.isFinite(parsedFare) &&
-        parsedFare > 0 &&
-        parsedFare <= 1000
-      ) {
+      if (Number.isFinite(parsedFare) && parsedFare > 0 && parsedFare <= 1000) {
         finalFare = parsedFare;
       }
     }
 
-    const totals = getMultimodalTotals(verifyTrip.legs ?? []);
-    if (verifyTrip.legs?.length) {
-      // Only confirmed payments count as spending. No future/unboarded leg
-      // is included; unconfirmed fares remain separately flagged.
-      finalFare = totals.recordedFare;
-    }
-
-    const isMultiModal = (verifyTrip.legs?.length ?? 0) > 1;
     const hasConfirmedSingleFare =
       !isMultiModal &&
       actualFare.trim() !== "" &&
