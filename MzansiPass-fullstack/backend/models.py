@@ -281,3 +281,14 @@ class Transaction(db.Model):
         db.Index("idx_transaction_agency_time", "agency_id", "created_at"),
         db.Index("idx_transaction_user_time", "user_id", "created_at"),
     )
+
+
+# Revoked refresh tokens: stored by JTI only, never the original cookie.
+# Use Flask-Migrate or controlled PULSE_BOOTSTRAP_DB for new pilot databases.
+class RevokedAuthToken(db.Model):
+    __tablename__ = "revoked_auth_tokens"
+
+    id = db.Column(db.Integer, primary_key=True)
+    jti = db.Column(db.String(64), unique=True, nullable=False, index=True)
+    expires_at = db.Column(db.DateTime, nullable=False, index=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
