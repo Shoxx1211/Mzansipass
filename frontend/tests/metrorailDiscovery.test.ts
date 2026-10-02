@@ -30,9 +30,17 @@ describe("PRASA Naledi–Johannesburg pilot corridor", () => {
     expect(options).toHaveLength(1);
     expect(options[0].routeName).toBe("Naledi → Park Station");
     expect(options[0].journeyLegs?.[0]?.mode).toBe("rail");
+    expect(options[0].selectable).toBe(true);
     expect(options[0].estimatedFare).toBeNull();
     expect(getCommuterFare(options[0]).value).toBe("Fare to confirm");
     expect(getBoardingHint(options[0])).toContain("Closest mapped rail stop:");
+  });
+
+  it("keeps longer access to rail from masquerading as a complete journey", () => {
+    const choices = discoverMetrorailCorridor(loc(-26.2678,27.8585),loc(-26.19767,28.04231));
+    expect(choices).toHaveLength(1);
+    expect(choices[0].selectable).toBe(false);
+    expect(choices[0].badges).toContain("ACCESS_REQUIRED");
   });
 
   it("does not call a different destination a direct PRASA trip", () => {
