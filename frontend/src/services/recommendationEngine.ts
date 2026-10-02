@@ -382,8 +382,10 @@ selectable: false,
           timeScore,
           routeFitScore,
 
+          // A published whole-network range is not this passenger's fare.
+          // Null prevents selecting a journey from displaying R0.
           estimatedFare:
-            0,
+            null,
 
           estimatedTime:
             null,
