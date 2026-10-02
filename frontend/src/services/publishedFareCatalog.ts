@@ -42,12 +42,11 @@ export function publishedReaVayaFare(
 
   // Use the official 2026/27 fare matrix already stored in the repository.
   const bands = reaVayaData.fareModel.bands as ReaVayaFareBand[];
+  // Upper bound is inclusive. Exact multiples (5,10,15...) remain in
+  // the preceding band, not rounded into the next one.
   const band = bands.find(row =>
-    serviceDistanceKm > row.lowerBoundKm ||
-    (row.lowerBoundKm === 0 && serviceDistanceKm > 0)
-  // Upper bound is inclusive. Exact multiples (5,10,15...) must remain in
-  // the preceding band, not be rounded up.
-  && (row.upperBoundKm === null || serviceDistanceKm <= row.upperBoundKm));
+    serviceDistanceKm > row.lowerBoundKm &&
+    (row.upperBoundKm === null || serviceDistanceKm <= row.upperBoundKm));
   if (!band) return null;
 
   return {
