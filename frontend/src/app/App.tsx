@@ -12,7 +12,8 @@ import {
   DestinationSearch,
   type DestinationPlace,
 } from "../features/planner/DestinationSearch";
-import { TransportRecommendation } from "../features/planner/TransportRecommendations";
+import { SimpleTransportOptions } from "../features/planner/SimpleTransportOptions";
+import { StartingPointPicker } from "../features/planner/StartingPointPicker";
 import {
   DevJourneyTestLab,
   type DevJourneyTestRequest,
@@ -420,6 +421,10 @@ const App = () => {
   // Active-trip tracking always continues to use the real GPS services.
   const [developmentOriginOverride, setDevelopmentOriginOverride] =
     useState<Location | null>(null);
+  // Explicitly chosen origins are for planning only. GPS trip tracking is separate.
+  const [manualOrigin, setManualOrigin] = useState<Location | null>(null);
+  const [manualOriginLabel, setManualOriginLabel] = useState("");
+  const [showOriginPicker, setShowOriginPicker] = useState(false);
 
   const [network, setNetwork] = useState<TransitNetwork | null>(null);
   const [estimatedFare, setEstimatedFare] = useState<number | null>(null);
@@ -499,10 +504,19 @@ const App = () => {
   // DERIVED VALUES
   // ====================================================
 
+  // A very broad browser fix (especially common on desktop) isn't good
+  // enough for choosing nearby taxi ranks or bus stops.
+  const livePlannerOrigin =
+    location.location &&
+    Number.isFinite(location.accuracy) &&
+    location.accuracy > 0 &&
+    location.accuracy <= 250
+      ? location.location
+      : null;
   const plannerOrigin =
     import.meta.env.DEV && developmentOriginOverride
       ? developmentOriginOverride
-      : location.location;
+      : manualOrigin ?? livePlannerOrigin;
 
   const trackedJourneyLegs = currentTrip.legs ?? [];
   const activeJourneyLegIndex = trackedJourneyLegs.findIndex(
@@ -600,38 +614,35 @@ const App = () => {
 
   const plannerGpsLabel = useMemo(() => {
     if (plannerOriginIsTest && plannerOrigin) {
-      return `Test origin · ${plannerOrigin.lat.toFixed(5)}, ${plannerOrigin.lng.toFixed(5)}`;
+      return "Test starting point";
     }
-
+    if (manualOrigin) {
+      return manualOriginLabel || "Chosen starting point";
+    }
     if (location.isLocating) {
-      return "Finding GPS";
+      return "Finding your location…";
     }
-
-    if (location.location) {
-      if (location.accuracy > 0) {
-        return `GPS ready · ±${Math.round(location.accuracy)} m`;
-      }
-
-      return "GPS ready";
+    if (location.location && location.accuracy > 250) {
+      return "Location too broad · ±" + Math.round(location.accuracy) + " m";
     }
-
+    if (livePlannerOrigin) {
+      return "Your current location";
+    }
     switch (location.status) {
-      case "denied":
-        return "Location blocked";
-      case "unavailable":
-        return "GPS unavailable";
-      case "timeout":
-        return "GPS timed out";
-      case "unsupported":
-        return "GPS unsupported";
-      default:
-        return "Waiting for GPS";
+      case "denied": return "Location blocked";
+      case "unavailable": return "Location unavailable";
+      case "timeout": return "Location timed out";
+      case "unsupported": return "Location unsupported";
+      default: return "Choose your starting point";
     }
   }, [
+    livePlannerOrigin,
     location.accuracy,
     location.isLocating,
     location.location,
     location.status,
+    manualOrigin,
+    manualOriginLabel,
     plannerOrigin,
     plannerOriginIsTest,
   ]);
@@ -646,6 +657,9 @@ const App = () => {
     setDestination("");
     setResolvedDestination(null);
     setDevelopmentOriginOverride(null);
+    setManualOrigin(null);
+    setManualOriginLabel("");
+    setShowOriginPicker(false);
     setEstimatedFare(null);
     setNetwork(null);
     setSelectedRecommendation(null);
@@ -878,9 +892,16 @@ const App = () => {
       // A commuter route without an origin is not useful.
       // In development, Journey Test Lab may provide a deterministic origin.
       if (!plannerOrigin) {
-        await location.requestCurrentLocation();
+        const fix = await location.requestCurrentLocation();
+        if (!Number.isFinite(fix.accuracy) ||
+            (fix.accuracy ?? 0) <= 0 || (fix.accuracy ?? Infinity) > 250) {
+          setShowOriginPicker(true);
+          setError("Location is too broad to find nearby stops. Choose your starting point.");
+          return;
+        }
       }
 
+      setShowOriginPicker(false);
       setPlanningStep("transport");
     } catch (locationError) {
       setError(
@@ -2098,67 +2119,15 @@ const App = () => {
                   </div>
                 )}
 
-                {/* HERO */}
-
-                {tripState !== TripState.ACTIVE && !verifyTrip && (
-                  <div className="pt-6 sm:pt-8">
-                    <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-                      <div className="max-w-3xl">
-                        <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.045] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-white/35">
-                          <span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />
-                          The rhythm of movement
-                        </div>
-
-                        <h1 className="mt-4 text-4xl font-black tracking-[-0.045em] text-white sm:text-5xl lg:text-6xl">
-                          Where to?
-                        </h1>
-
-                        <p className="mt-3 max-w-xl text-sm leading-6 text-white/45 sm:text-[15px]">
-                          Built for South Africa. Pulse brings supported taxi, rail and bus connections into one journey.
-                        </p>
-                      </div>
-
-                      <div
-                        className={`inline-flex w-fit items-center gap-2 rounded-full px-3 py-2 text-[11px] font-bold ${plannerGpsHealthy
-                          ? "bg-emerald-400/[0.08] text-emerald-200/80"
-                          : location.error
-                            ? "bg-amber-400/[0.08] text-amber-100/80"
-                            : "bg-white/[0.04] text-white/45"
-                        }`}
-                      >
-                        <span
-                          className={`h-2 w-2 rounded-full ${plannerGpsHealthy
-                            ? "bg-emerald-400"
-                            : location.isLocating
-                              ? "animate-pulse bg-cyan-400"
-                              : "bg-amber-400"
-                          }`}
-                        />
-                        <span>{plannerGpsLabel}</span>
-                      </div>
-                    </div>
-
-                    {location.error && !plannerOrigin && (
-                      <div className="mt-5 flex flex-col gap-3 rounded-2xl bg-amber-400/[0.06] p-4 sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                          <p className="text-sm font-semibold text-amber-100/90">
-                            Location needed
-                          </p>
-                          <p className="mt-1 text-xs leading-5 text-amber-100/55">
-                            {location.error}
-                          </p>
-                        </div>
-
-                        <button
-                          type="button"
-                          onClick={() => void retryPlannerLocation()}
-                          disabled={location.isLocating}
-                          className="min-h-10 shrink-0 rounded-xl bg-amber-300/10 px-4 text-sm font-bold text-amber-100 transition hover:bg-amber-300/15 disabled:opacity-50"
-                        >
-                          {location.isLocating ? "Finding GPS..." : "Try again"}
-                        </button>
-                      </div>
-                    )}
+                {/* A calm, single-purpose home screen */}
+                {tripState !== TripState.ACTIVE && !verifyTrip && planningStep === "destination" && (
+                  <div className="mx-auto max-w-2xl pt-6 sm:pt-10">
+                    <h1 className="text-4xl font-black tracking-tight text-white sm:text-5xl">
+                      Where to?
+                    </h1>
+                    <p className="mt-2 text-sm text-white/55">
+                      Find a taxi, train or bus for your trip.
+                    </p>
                   </div>
                 )}
 
@@ -2332,10 +2301,45 @@ const App = () => {
                       </div>
                     )}
 
-                    {/* STEP 1: DESTINATION */}
-
+                    {/* STEP 1: START + DESTINATION */}
                     {planningStep === "destination" && (
-                      <div className="space-y-4">
+                      <div className="mx-auto max-w-2xl space-y-3">
+                        {!showOriginPicker ? (
+                          <button type="button"
+                            onClick={() => setShowOriginPicker(true)}
+                            aria-label="Choose or change your starting point"
+                            className="flex min-h-[76px] w-full items-center gap-3 rounded-[22px] border border-white/10 bg-[#111f2d] p-4 text-left hover:border-cyan-300/30">
+                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-300/10 text-emerald-300">
+                              <span aria-hidden="true">●</span>
+                            </span>
+                            <span className="min-w-0 flex-1">
+                              <span className="block text-xs text-white/50">Starting from</span>
+                              <span className="mt-1 block truncate text-sm font-semibold text-white">{plannerGpsLabel}</span>
+                            </span>
+                            <span className="shrink-0 text-xs font-bold text-cyan-200">Change</span>
+                          </button>
+                        ) : (
+                          <StartingPointPicker
+                            onChoose={(point, name) => {
+                              setManualOrigin(point);
+                              setManualOriginLabel(name);
+                              setShowOriginPicker(false);
+                              setError(null);
+                            }}
+                            onCancel={() => setShowOriginPicker(false)}
+                            onRetryGps={() => {
+                              void retryPlannerLocation();
+                              setManualOrigin(null);
+                              setManualOriginLabel("");
+                              setShowOriginPicker(false);
+                            }}
+                          />
+                        )}
+                        {!plannerOrigin && !showOriginPicker && (
+                          <p className="px-2 text-xs text-amber-100/75">
+                            Pick a starting point, or try GPS again. Pulse needs a precise location to find nearby transport.
+                          </p>
+                        )}
                         <DestinationSearch
                           destination={destination}
                           setDestination={handleDestinationChange}
@@ -2349,120 +2353,33 @@ const App = () => {
                           currentLocation={plannerOrigin}
                           onDestinationResolved={handleDestinationResolved}
                         />
-
                         {SHOW_NETWORK_LAB && <DevJourneyTestLab onRun={handleDevelopmentJourneyTest} />}
                       </div>
                     )}
 
-                    {/* STEP 2: TRANSPORT */}
-
+                    {/* STEP 2: NEARBY TRANSPORT OPTIONS + FARES */}
                     {planningStep === "transport" && (
-                      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[290px_minmax(0,1fr)]">
-                        <aside className="xl:col-span-1">
-                          <div className="rounded-[28px] border border-white/[0.07] bg-[#09101d]/80 p-5 shadow-[0_18px_55px_rgba(0,0,0,0.20)] backdrop-blur-xl xl:sticky xl:top-20">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setPlanningStep("destination");
-                                setError(null);
-                              }}
-                              className="text-xs font-bold text-cyan-200/75 transition hover:text-cyan-100"
-                            >
-                              ← Change destination
-                            </button>
-
-                            <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.16em] text-white/30">
-                              Your trip
-                            </p>
-
-                            <h2 className="mt-2 text-2xl font-black tracking-[-0.03em] text-white">
-                              {destination}
-                            </h2>
-
-                            {resolvedDestination?.label &&
-                              resolvedDestination.label !== destination && (
-                                <p className="mt-2 line-clamp-2 text-xs leading-5 text-white/35">
-                                  {resolvedDestination.label}
-                                </p>
-                              )}
-
-                            <div className="mt-7 divide-y divide-white/[0.055]">
-                              <div className="flex items-end justify-between gap-4 py-4 first:pt-0">
-                                <div>
-                                  <p className="text-[9px] font-bold uppercase tracking-[0.13em] text-white/30">
-                                    {routePlan.source === "mapbox-road"
-                                      ? "Road distance"
-                                      : routePlan.source === "coordinate-estimate"
-                                        ? "Approx. distance"
-                                        : "Distance"}
-                                  </p>
-                                </div>
-                                <p className="text-xl font-black text-white">
-                                  {isPlanning
-                                    ? "…"
-                                    : formatDistance(routePlan.distanceKm)}
-                                </p>
-                              </div>
-
-                              <div className="flex items-end justify-between gap-4 py-4">
-                                <p className="text-[9px] font-bold uppercase tracking-[0.13em] text-white/30">
-                                  Journeys
-                                </p>
-                                <p className="text-xl font-black text-cyan-200">
-                                  {isPlanning ? "…" : recommendations.length}
-                                </p>
-                              </div>
-
-                              <div className="py-4 last:pb-0">
-                                <p className="text-[9px] font-bold uppercase tracking-[0.13em] text-white/30">
-                                  Starting from
-                                </p>
-                                <div className="mt-2 flex items-center justify-between gap-3">
-                                  <div className="flex min-w-0 items-center gap-2">
-                                    <span
-                                      className={`h-2 w-2 shrink-0 rounded-full ${plannerOrigin
-                                        ? plannerOriginIsTest
-                                          ? "bg-violet-300"
-                                          : "bg-emerald-400"
-                                        : "bg-amber-400"
-                                      }`}
-                                    />
-                                    <p className="truncate text-xs font-bold text-white/60">
-                                      {plannerGpsLabel}
-                                    </p>
-                                  </div>
-
-                                  {!plannerOrigin && (
-                                    <button
-                                      type="button"
-                                      onClick={() => void retryPlannerLocation()}
-                                      className="rounded-lg bg-white/[0.055] px-2.5 py-1.5 text-[10px] font-bold text-white/60"
-                                    >
-                                      Retry
-                                    </button>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-
-                            {routePlan.source === "coordinate-estimate" && (
-                              <p className="mt-5 rounded-2xl bg-amber-400/[0.055] px-3 py-2.5 text-[10px] leading-5 text-amber-100/55">
-                                Distance is approximate until a road route is available.
-                              </p>
-                            )}
-                          </div>
-                        </aside>
-
-                        <div className="min-w-0 xl:col-span-1">
-                          {SHOW_NETWORK_LAB && <UnifiedCoveragePanel report={unifiedCoverage} />}
-
-                          <TransportRecommendation
-                            recommendations={recommendations}
-                            selected={selectedRecommendation}
-                            onSelect={handleSelectRecommendation}
-                            isLoading={isPlanning}
-                          />
+                      <div className="mx-auto max-w-2xl space-y-5">
+                        <button type="button"
+                          onClick={() => { setPlanningStep("destination"); setError(null); }}
+                          className="min-h-11 text-sm font-semibold text-cyan-200">
+                          ← Change trip
+                        </button>
+                        <div>
+                          <h2 className="text-3xl font-black tracking-tight text-white">
+                            Your transport options
+                          </h2>
+                          <p className="mt-2 text-sm text-white/60">
+                            From {plannerGpsLabel}
+                          </p>
                         </div>
+                        {SHOW_NETWORK_LAB && <UnifiedCoveragePanel report={unifiedCoverage} />}
+                        <SimpleTransportOptions
+                          destination={resolvedDestination?.name ?? destination}
+                          recommendations={recommendations}
+                          isLoading={isPlanning}
+                          onSelect={handleSelectRecommendation}
+                        />
                       </div>
                     )}
 
