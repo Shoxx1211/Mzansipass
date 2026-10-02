@@ -59,6 +59,32 @@ export function PublishedFaresPanel({ operator }: { operator: string }) {
     </div>;
   }
 
+  if (operator === "Metrorail") {
+    return <div className="space-y-3 rounded-2xl border border-cyan-300/15 bg-cyan-300/[0.04] p-3">
+      <h4 className="text-sm font-bold text-white">PRASA Metrorail · train access & fares</h4>
+      <p className="text-xs leading-5 text-white/70">
+        The Johannesburg–Naledi rail corridor appears in the June 2026
+        parliamentary operational report. Pulse shows mapped stations and the
+        station order, but this does not verify a departure at each station today.
+      </p>
+      <p className="text-xs leading-5 text-white/70">
+        PRASA increased adult single fares from 1 August 2025, including a
+        R2.50 adjustment. That change is not a station-to-station fare table.
+        Ask for the specific ticket at your station before travelling.
+      </p>
+      <a href="https://www.sanews.gov.za/south-africa/metrorail-increases-train-fare"
+        target="_blank" rel="noopener noreferrer"
+        className="block min-h-9 py-2 text-xs font-semibold text-cyan-200 underline underline-offset-4">
+        View PRASA fare adjustment announcement ↗
+      </a>
+      <a href="https://www.parliament.gov.za/storage/app/media/Docs/atc/01ls62wgdnvbh5n2rt6vejrbpyvl7vngka.pdf"
+        target="_blank" rel="noopener noreferrer"
+        className="block min-h-9 py-2 text-xs font-semibold text-cyan-200 underline underline-offset-4">
+        View 2026 Gauteng service report ↗
+      </a>
+    </div>;
+  }
+
   if (operator === "Putco") {
     return <div className="space-y-2 rounded-2xl border border-white/10 bg-white/[0.03] p-3">
       <h4 className="text-sm font-bold text-white">PUTCO fares by zone</h4>
