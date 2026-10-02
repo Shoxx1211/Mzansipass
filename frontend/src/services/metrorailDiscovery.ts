@@ -127,7 +127,9 @@ export function discoverMetrorailCorridor(
       evidence: "published",
     }],
     evidenceStatus: "published-service-membership",
-    // The timetable, station calls and full fare still need confirmation.
-    selectable: false,
+    // A near-station passenger may choose to track the known rail corridor,
+    // but no live departure, exact fare or timetable is being asserted.
+    // Longer station access requires another leg before offering a start button.
+    selectable: !accessNeeded,
   }];
 }
