@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-10-02",
+  "operator": "PRASA Metrorail Gauteng",
+  "report": {
+    "date": "2026-06-10",
+    "url": "https://www.parliament.gov.za/storage/app/media/Docs/atc/01ls62wgdnvbh5n2rt6vejrbpyvl7vngka.pdf",
+    "description": "2026 parliamentary oversight summary of recovered Gauteng service corridors; does not validate live arrivals or all station calls."
+  },
+  "publishedStopOrder": {
+    "date": "2022-11-28",
+    "url": "https://www.sanews.gov.za/node/60945",
+    "description": "Government report identifying the Naledi–Johannesburg station sequence at its return to service. Individual 2026 station calls should be checked against current schedules."
+  },
+  "fareReference": {
+    "date": "2025-08-01",
+    "url": "https://www.sanews.gov.za/south-africa/metrorail-increases-train-fare",
+    "description": "PRASA single-fare increase reported (+R2.50); exact 2026 station-to-station matrix not published in this report.",
+    "exactFareMatrixAvailable": false
+  },
+  "coordinatesAttribution": "Coordinates adapted from OpenStreetMap displayed by Mapcarta, © OpenStreetMap contributors, ODbL. Coordinate links retained for attribution and QA.",
+  "statusRestrictions": {
+    "noServiceClaimFor": [
+      "Daveyton",
+      "Springs",
+      "Nigel",
+      "Oberholzer",
+      "Jikeleza",
+      "Midway–Vereeniging"
+    ],
+    "asOf": "2026-06-10",
+    "source": "2026 Parliament PRASA report"
+  },
+  "namedCorridorsReportedRecovered": [
+    "Johannesburg–Leralla",
+    "Germiston–Johannesburg",
+    "Johannesburg–Randfontein",
+    "Germiston–Kwesine",
+    "Pretoria–Mabopane",
+    "Pretoria–Pienaarspoort",
+    "Pretoria–Saulsville",
+    "Pretoria–De Wildt",
+    "Hercules–Koedoespoort",
+    "Mabopane–Belle Ombre",
+    "Pretoria–Kempton Park",
+    "Johannesburg–Midway (partial)"
+  ],
+  "pilotCorridors": [
+    {
+      "id": "jhb-naledi",
+      "label": "Naledi ↔ Johannesburg Park Station",
+      "operationEvidence": "reported-recovered-2026",
+      "orderedStopsEvidence": "reported-at-resumption-2022",
+      "passengerFareStatus": "not-published-per-journey",
+      "knownTimetable": false,
+      "liveArrival": false,
+      "notes": "Geometry below is mapped station points only, not rail track geometry. Do not compute distance-fare from straight lines.",
+      "stations": [
+        {
+          "id": "naledi-park-0",
+          "name": "Naledi",
+          "lat": -26.25794,
+          "lng": 27.82278,
+          "coordinateSourceUrl": "https://mapcarta.com/14289996"
+        },
+        {
+          "id": "naledi-park-1",
+          "name": "Merafe",
+          "lat": -26.26212,
+          "lng": 27.84665,
+          "coordinateSourceUrl": "https://mapcarta.com/14299740"
+        },
+        {
+          "id": "naledi-park-2",
+          "name": "Inhlazane",
+          "lat": -26.24946,
+          "lng": 27.86355,
+          "coordinateSourceUrl": "https://mapcarta.com/14335154"
+        },
+        {
+          "id": "naledi-park-3",
+          "name": "Ikwezi",
+          "lat": -26.2304,
+          "lng": 27.87712,
+          "coordinateSourceUrl": "https://mapcarta.com/14335566"
+        },
+        {
+          "id": "naledi-park-4",
+          "name": "Dube",
+          "lat": -26.2332,
+          "lng": 27.89242,
+          "coordinateSourceUrl": "https://mapcarta.com/14360940"
+        },
+        {
+          "id": "naledi-park-5",
+          "name": "Phomolong",
+          "lat": -26.22652,
+          "lng": 27.90901,
+          "coordinateSourceUrl": "https://mapcarta.com/14276524"
+        },
+        {
+          "id": "naledi-park-6",
+          "name": "Mzimhlophe",
+          "lat": -26.2232,
+          "lng": 27.92293,
+          "coordinateSourceUrl": "https://mapcarta.com/N4331156458"
+        },
+        {
+          "id": "naledi-park-7",
+          "name": "New Canada",
+          "lat": -26.21459,
+          "lng": 27.94261,
+          "coordinateSourceUrl": "https://mapcarta.com/N54974895"
+        },
+        {
+          "id": "naledi-park-8",
+          "name": "Longdale",
+          "lat": -26.19848,
+          "lng": 27.96339,
+          "coordinateSourceUrl": "https://mapcarta.com/14310230"
+        },
+        {
+          "id": "naledi-park-9",
+          "name": "Croesus",
+          "lat": -26.20184,
+          "lng": 27.97202,
+          "coordinateSourceUrl": "https://mapcarta.com/N247644603"
+        },
+        {
+          "id": "naledi-park-10",
+          "name": "Langlaagte",
+          "lat": -26.20191,
+          "lng": 27.99058,
+          "coordinateSourceUrl": "https://mapcarta.com/14314542"
+        },
+        {
+          "id": "naledi-park-11",
+          "name": "Braamfontein",
+          "lat": -26.19786,
+          "lng": 28.02325,
+          "coordinateSourceUrl": "https://mapcarta.com/N247644590"
+        },
+        {
+          "id": "naledi-park-12",
+          "name": "Park Station",
+          "lat": -26.19767,
+          "lng": 28.04231,
+          "coordinateSourceUrl": "https://mapcarta.com/N326084268"
+        }
+      ]
+    }
+  ]
+}
