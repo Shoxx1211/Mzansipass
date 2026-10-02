@@ -5,6 +5,7 @@ import { ArrowRight, BusFront, ChevronDown, ChevronUp, Footprints, MapPin, Train
 import type { TransportRecommendation as Recommendation, Location } from "../../types";
 import { PublishedFaresPanel } from "./PublishedFaresPanel";
 import { getNearbyModeHints } from "../../services/nearbyNetwork";
+import { completeOneWayFare, recurringTravelCost } from "../../services/commuterCost";
 
 type FareDisplay = { value: string; note: string };
 const money = (value: number): string =>
@@ -123,6 +124,8 @@ export function SimpleTransportOptions({
     </div>}
     {displayed.map(rec => {
       const fare = getCommuterFare(rec);
+      const completeFare = completeOneWayFare(rec);
+      const monthly = recurringTravelCost(completeFare, 22, 2);
       const active = expandedId === rec.id;
       const canStart = rec.selectable !== false;
       const type = modeType(rec.mode);
@@ -183,6 +186,11 @@ export function SimpleTransportOptions({
             </div>
           ) : <p className="text-sm text-white/70">Exact boarding and transfer steps have not been confirmed.</p>}
           <p className="text-xs leading-relaxed text-white/60">{rec.reason}</p>
+          {monthly !== null && <div className="rounded-xl bg-cyan-300/[0.07] px-3 py-3 text-xs leading-5 text-white/75">
+            <span className="font-bold text-white">Plan your monthly travel:</span>{" "}
+            About {money(monthly)} for 22 days × 2 trips, assuming the same
+            one-way fare in both directions. Changeable fares may affect the total.
+          </div>}
           {(rec.mode === "Rea Vaya" || rec.mode === "Putco") && (
             <PublishedFaresPanel operator={rec.mode} />
           )}
