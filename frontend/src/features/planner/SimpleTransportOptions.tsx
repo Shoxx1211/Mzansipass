@@ -2,7 +2,9 @@
 // discovery engines; this screen never manufactures a transport service or a fare.
 import { useMemo, useState } from "react";
 import { ArrowRight, BusFront, ChevronDown, ChevronUp, Footprints, MapPin, TrainFront, TramFront } from "lucide-react";
-import type { TransportRecommendation as Recommendation } from "../../types";
+import type { TransportRecommendation as Recommendation, Location } from "../../types";
+import { PublishedFaresPanel } from "./PublishedFaresPanel";
+import { getNearbyModeHints } from "../../services/nearbyNetwork";
 
 type FareDisplay = { value: string; note: string };
 const money = (value: number): string =>
@@ -24,9 +26,11 @@ export function getCommuterFare(rec: Recommendation): FareDisplay {
         value: money(rec.estimatedFare),
         note: accessUnresolved
           ? "Rail/bus leg only · getting there costs extra"
-          : rec.fareStatus === "verified"
-            ? "Published fare · check before travel"
-            : "Estimated fare · check before travel",
+          : rec.mode === "Taxi" && rec.evidenceStatus === "road-baseline"
+            ? "Road-based taxi guide · rank fare may differ"
+            : rec.fareStatus === "verified"
+              ? "Published fare · check before travel"
+              : "Estimated fare · check before travel",
       };
     }
   }
@@ -76,14 +80,17 @@ interface Props {
   destination: string;
   recommendations: Recommendation[];
   isLoading: boolean;
+  origin?: Location | null;
   onSelect: (recommendation: Recommendation) => void;
 }
 
 export function SimpleTransportOptions({
-  destination, recommendations, isLoading, onSelect,
+  destination, recommendations, isLoading, origin = null, onSelect,
 }: Props) {
   const [showAll, setShowAll] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [showNearby, setShowNearby] = useState(false);
+  const nearby = useMemo(() => getNearbyModeHints(origin), [origin]);
   const ordered = useMemo(
     () => [...recommendations].sort((a, b) => {
       // A verified startable journey is more useful than an area-only hint.
@@ -100,17 +107,20 @@ export function SimpleTransportOptions({
     </div>;
   }
 
-  if (!ordered.length) {
-    return <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
-      <h3 className="text-lg font-bold text-white">No confirmed options yet</h3>
-      <p className="mt-2 text-sm text-white/55">Try another nearby starting point or destination. We won't guess a route or price.</p>
-    </div>;
-  }
+  // Even with no matching journey, allow users to inspect nearby evidence.
+  // Nearby service coverage must not be treated as a priced journey.
+  const noMatchedJourney = ordered.length === 0;
 
   return <section aria-label="Transport options" className="space-y-3">
     <p className="px-1 text-sm text-white/60">
       Connections towards <span className="font-semibold text-white">{destination}</span>
     </p>
+    {noMatchedJourney && <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
+      <h3 className="text-lg font-bold text-white">No matching journey found</h3>
+      <p className="mt-2 text-sm text-white/55">
+        Try another starting point or destination. Services near you may be shown below.
+      </p>
+    </div>}
     {displayed.map(rec => {
       const fare = getCommuterFare(rec);
       const active = expandedId === rec.id;
@@ -173,12 +183,43 @@ export function SimpleTransportOptions({
             </div>
           ) : <p className="text-sm text-white/70">Exact boarding and transfer steps have not been confirmed.</p>}
           <p className="text-xs leading-relaxed text-white/60">{rec.reason}</p>
+          {(rec.mode === "Rea Vaya" || rec.mode === "Putco") && (
+            <PublishedFaresPanel operator={rec.mode} />
+          )}
           {!canStart && <p className="rounded-xl bg-amber-300/10 px-3 py-2 text-xs text-amber-100">
             Connection information only. Pulse cannot start this journey until the missing details are checked.
           </p>}
         </div>}
       </article>;
     })}
+    {nearby.length > 0 && (
+      <div className="rounded-[22px] border border-white/10 bg-[#111f2d]">
+        <button type="button" aria-expanded={showNearby} onClick={() => setShowNearby(v => !v)}
+          className="flex min-h-12 w-full items-center justify-between gap-3 px-4 text-left text-sm font-semibold text-white/85">
+          Other services around your starting point
+          {showNearby ? <ChevronUp size={17} /> : <ChevronDown size={17} />}
+        </button>
+        {showNearby && <div className="space-y-3 border-t border-white/10 px-4 py-4">
+          {nearby.map(hint => <div key={hint.id} className="space-y-1 rounded-xl bg-white/[0.035] p-3">
+            <div className="flex items-center justify-between gap-3">
+              <span className="font-semibold text-white">{hint.name}</span>
+              {hint.kilometres !== undefined && <span className="whitespace-nowrap text-xs text-cyan-200">
+                {hint.kilometres.toFixed(1)} km away*
+              </span>}
+            </div>
+            <p className="text-xs leading-5 text-white/60">{hint.detail}</p>
+            <a href={hint.sourceUrl} target="_blank" rel="noopener noreferrer"
+              className="inline-block py-1 text-xs text-cyan-200 underline underline-offset-4">
+              Official information ↗
+            </a>
+          </div>)}
+          <p className="text-[11px] text-white/45">
+            *Straight-line distance to a mapped point, not walking distance.
+            These are nearby networks, not proof that a direct service reaches your destination.
+          </p>
+        </div>}
+      </div>
+    )}
     {ordered.length > 5 && <button type="button" onClick={() => setShowAll(v => !v)}
       className="min-h-11 w-full rounded-xl border border-white/10 bg-white/[0.05] text-sm font-semibold text-cyan-100">
       {showAll ? "Show fewer options" : "See all " + ordered.length + " options"}
