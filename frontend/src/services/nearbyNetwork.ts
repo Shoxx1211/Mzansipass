@@ -4,11 +4,12 @@
 import brtStationsRaw from "../data/transit/gauteng/reavaya/brt-station-points.geojson?raw";
 import gautrainData from "../data/transit/gauteng/gautrain/stations.json";
 import type { Location } from "../types";
+import { nearestPrasaStation } from "./metrorailDiscovery";
 
 type PointFeature = { geometry?: { type?: string; coordinates?: number[] } };
 type BRTData = { features?: PointFeature[] };
 export type NearbyModeHint = {
-  id: "reavaya" | "putco" | "gautrain";
+  id: "reavaya" | "putco" | "gautrain" | "metrorail";
   name: string;
   detail: string;
   kilometres?: number;
@@ -71,6 +72,22 @@ export function getNearbyModeHints(
       kilometres: Math.round(nearestGautrain.km * 100) / 100,
       dataType: "mapped-stop",
       sourceUrl: "https://www.gautrain.co.za/routes",
+    });
+  }
+
+  // Include PRASA access in the same locality view as buses/taxis.
+  // This is a mapped station, not a prediction that a train is arriving.
+  const nearestMetrorail = nearestPrasaStation(origin);
+  if (nearestMetrorail && nearestMetrorail.accessKm <= 5) {
+    hints.push({
+      id: "metrorail", name: "PRASA Metrorail",
+      detail: "Nearest mapped Naledi–Park Station corridor stop: " +
+        nearestMetrorail.station.name +
+        ". Reaching the platform and train departure must be checked. " +
+        "Mapped distance is straight-line, not a walking route.",
+      kilometres: Math.round(nearestMetrorail.accessKm * 100) / 100,
+      dataType: "mapped-stop",
+      sourceUrl: "https://www.prasa.com/",
     });
   }
 
