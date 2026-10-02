@@ -638,23 +638,25 @@ export const GeminiNavigator: React.FC<GeminiNavigatorProps> = ({
             <button
               type="button"
               onClick={onClose}
-              aria-label="Close assistant"
+              aria-label="Back to trip planner"
               className="
-                w-9
-                h-9
-                rounded-full
+                min-h-11
+                rounded-xl
+                px-3
                 bg-white/10
                 flex
                 items-center
                 justify-center
-                text-white/70
+                text-sm
+                font-bold
+                text-white/85
                 hover:text-white
                 hover:bg-white/15
                 transition-all
                 active:scale-95
               "
             >
-              ✕
+              ← Home
             </button>
           </div>
         </div>
