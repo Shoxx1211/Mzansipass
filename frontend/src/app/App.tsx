@@ -37,6 +37,7 @@ import { HabitEngine } from "../services/habitEngine";
 import { RecommendationEngine } from "../services/recommendationEngine";
 import { JourneyDiscoveryEngine } from "../services/journeyDiscoveryEngine";
 import { discoverMetrorailCorridor } from "../services/metrorailDiscovery";
+import { mayUseLegacyFareEngine, hasUnresolvedReaVayaTransfer } from "../services/trackedFarePolicy";
 import { UnifiedCoverageEngine, type UnifiedCoverageReport } from "../services/unifiedCoverage";
 import { UnifiedCoveragePanel } from "../features/planner/UnifiedCoveragePanel";
 
@@ -1308,27 +1309,15 @@ const App = () => {
           return pricedLeg;
         }
 
-        // No verified access road = no defensible taxi distance fare.
-        if (pricedLeg.mode === "taxi" && pricedLeg.distanceSource !== "road") {
-          return pricedLeg;
-        }
-
-        const legNetwork: TransitNetwork | null =
-          pricedLeg.mode === "taxi" ? "Taxi" : pricedLeg.operator ?? null;
-
-        if (
-          !legNetwork ||
-          pricedLeg.distanceKm === null ||
-          pricedLeg.distanceKm === undefined ||
-          !Number.isFinite(pricedLeg.distanceKm) ||
-          pricedLeg.distanceKm <= 0
-        ) {
+        // A driver-route estimate is not a PRASA, PUTCO or Rea Vaya fare.
+        if (!mayUseLegacyFareEngine(pricedLeg, "Taxi") ||
+            pricedLeg.mode !== "taxi" || pricedLeg.distanceKm == null) {
           return pricedLeg;
         }
 
         try {
           const estimate = await FareEngine.computeFinalFare({
-            network: legNetwork,
+            network: "Taxi",
             distance: pricedLeg.distanceKm,
           });
           return {
@@ -1343,14 +1332,14 @@ const App = () => {
     );
 
     const hasMultimodalLegs = enrichedLegs.length > 1;
-    const allPaidLegsEstimated = enrichedLegs.every(
-      (leg) =>
-        leg.mode === "walk" ||
-        leg.fare !== null && leg.fare !== undefined,
-    );
+    const canSumLegs = enrichedLegs.every(
+      leg => leg.mode === "walk" ||
+        (leg.fare !== null && leg.fare !== undefined &&
+         leg.fareStatus !== "unverified"),
+    ) && !hasUnresolvedReaVayaTransfer(enrichedLegs);
 
     const totalEstimatedFare = hasMultimodalLegs
-      ? allPaidLegsEstimated
+      ? canSumLegs
         ? enrichedLegs.reduce((sum, leg) => sum + (leg.fare ?? 0), 0)
         : null
       : rec.estimatedFare;
@@ -1360,9 +1349,11 @@ const App = () => {
       journeyLegs: enrichedLegs.length ? enrichedLegs : rec.journeyLegs,
       estimatedFare: totalEstimatedFare,
       fareStatus:
-        totalEstimatedFare !== null && hasMultimodalLegs
-          ? "estimated"
-          : rec.fareStatus,
+        hasMultimodalLegs && totalEstimatedFare === null
+          ? "unverified"
+          : hasMultimodalLegs
+            ? "estimated"
+            : rec.fareStatus,
     });
     setNetwork(selectedNetwork);
     setEstimatedFare(
@@ -1609,13 +1600,9 @@ const App = () => {
           // journey may have a provisional taxi estimate, clearly labelled.
           if (
             legEstimate === null &&
-            modeNetwork === "Taxi" &&
-            leg.mode === "taxi" &&
-            leg.distanceSource === "road" &&
+            mayUseLegacyFareEngine(leg, modeNetwork) &&
             leg.distanceKm !== null &&
-            leg.distanceKm !== undefined &&
-            Number.isFinite(leg.distanceKm) &&
-            leg.distanceKm > 0
+            leg.distanceKm !== undefined
           ) {
             try {
               const estimate = await FareEngine.computeFinalFare({
