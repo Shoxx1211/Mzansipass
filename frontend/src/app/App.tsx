@@ -35,6 +35,7 @@ import { FareEngine, getTaxiFareGuide } from "../services/fareService";
 import { HabitEngine } from "../services/habitEngine";
 import { RecommendationEngine } from "../services/recommendationEngine";
 import { JourneyDiscoveryEngine } from "../services/journeyDiscoveryEngine";
+import { discoverMetrorailCorridor } from "../services/metrorailDiscovery";
 import { UnifiedCoverageEngine, type UnifiedCoverageReport } from "../services/unifiedCoverage";
 import { UnifiedCoveragePanel } from "../features/planner/UnifiedCoveragePanel";
 
@@ -1135,6 +1136,11 @@ const App = () => {
           ...baseRecommendations,
           ...discoveryRecommendations.filter(
             (recommendation) => !recommendationIds.has(recommendation.id),
+          ),
+          ...(
+            destinationLocation
+              ? discoverMetrorailCorridor(origin, destinationLocation)
+              : []
           ),
           ...(roadFallback ? [roadFallback] : []),
         ].sort((a, b) => b.score - a.score);
