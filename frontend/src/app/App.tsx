@@ -2901,7 +2901,12 @@ const App = () => {
 
       <GeminiNavigator
         isOpen={gemini.isOpen}
-        onClose={gemini.closeNavigator}
+        onClose={() => {
+          gemini.closeNavigator();
+          setActiveTab("home");
+          // Closing the assistant must land on the commuter's actual planner,
+          // not the now-hidden navigation tab.
+        }}
         query={gemini.query}
         setQuery={gemini.setQuery}
         response={gemini.response}
