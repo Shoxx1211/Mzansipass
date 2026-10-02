@@ -23,6 +23,7 @@ import { TripTracker } from "../features/trip/TripTracker";
 import {
   TripState,
   type Location,
+  type JourneyLeg,
   type TabType,
   type TransitNetwork,
   type TransportRecommendation as RecommendationType,
@@ -1517,18 +1518,32 @@ const App = () => {
         candidateOrigin?.accuracy ??
         Number.POSITIVE_INFINITY;
 
+      // Manual geocoding and the developer test lab are for journey planning,
+      // NEVER a substitute for a real GPS seed for live distance tracking.
       const canUsePlannerOrigin =
+        !manualOrigin && !plannerOriginIsTest &&
+        livePlannerOrigin !== null &&
+        candidateOrigin === livePlannerOrigin &&
         candidateOrigin !== null &&
-        candidateOrigin !== undefined &&
         Number.isFinite(candidateOrigin.lat) &&
         Number.isFinite(candidateOrigin.lng) &&
         candidateAgeMs <= 2 * 60 * 1000 &&
-        candidateAccuracy <= 1500;
+        candidateAccuracy > 0 &&
+        candidateAccuracy <= 250;
 
       const freshOrigin =
         canUsePlannerOrigin && candidateOrigin
           ? candidateOrigin
           : await location.requestCurrentLocation();
+
+      if (!Number.isFinite(freshOrigin.accuracy) ||
+          (freshOrigin.accuracy ?? 0) <= 0 ||
+          (freshOrigin.accuracy ?? Infinity) > 250) {
+        throw new Error(
+          "Live journey tracking needs an accurate phone GPS fix. " +
+          "Try again outdoors with location enabled. You can still review the route on this device.",
+        );
+      }
 
       const trackerSeed: TrackerLocation = {
         lat: freshOrigin.lat,
@@ -1548,18 +1563,27 @@ const App = () => {
       const trackerLocation = BackgroundTracker.getLastKnownLocation();
       const startedAt = trackerTrip?.startedAt ?? Date.now();
 
-      const plannedLegs = selectedRecommendation?.journeyLegs?.length
+      const plannedLegs: JourneyLeg[] = selectedRecommendation?.journeyLegs?.length
         ? selectedRecommendation.journeyLegs
         : [
             {
               id: "single-mode",
-              mode: network === "Taxi" ? "taxi" as const : "bus" as const,
-              label: network,
-              operator: network,
+              mode: network === "Taxi" ? "taxi"
+                : network === "Metrorail" || network === "Gautrain" ? "rail" : "bus",
+              label: network ?? "Public transport",
+              ...(network ? { operator: network } : {}),
               from: "Origin",
               to: destination.trim(),
-              distanceKm: routePlan.distanceKm,
+              // Mapbox driving distance is NOT an actual rail/bus service length.
+              distanceKm: network === "Taxi" && routePlan.source === "mapbox-road"
+                ? routePlan.distanceKm
+                : null,
+              distanceSource: network === "Taxi" && routePlan.source === "mapbox-road"
+                ? "road" : "unknown",
               fare: estimatedFare,
+              fareStatus: selectedRecommendation?.fareStatus === "verified" ? "verified"
+                : selectedRecommendation?.fareStatus === "estimated" ? "estimated"
+                : "unverified",
             },
           ];
 
@@ -1577,11 +1601,17 @@ const App = () => {
               ? leg.fare
               : null;
           let estimateSource: TrackedJourneyLeg["fareEstimateSource"] =
-            legEstimate !== null ? "published" : "unknown";
+            legEstimate === null ? "unknown"
+              : leg.fareStatus === "verified" ? "published" : "configured";
 
+          // The configured generic per-km fare calculation does not belong
+          // on buses/trains (including Rea Vaya / PRASA). A measured road
+          // journey may have a provisional taxi estimate, clearly labelled.
           if (
             legEstimate === null &&
-            modeNetwork &&
+            modeNetwork === "Taxi" &&
+            leg.mode === "taxi" &&
+            leg.distanceSource === "road" &&
             leg.distanceKm !== null &&
             leg.distanceKm !== undefined &&
             Number.isFinite(leg.distanceKm) &&
@@ -1656,8 +1686,12 @@ const App = () => {
     location,
     network,
     plannerOrigin,
+    manualOrigin,
+    plannerOriginIsTest,
+    livePlannerOrigin,
     selectedRecommendation,
     routePlan.distanceKm,
+    routePlan.source,
     estimatedFare,
   ]);
 
