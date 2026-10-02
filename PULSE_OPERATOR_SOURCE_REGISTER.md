@@ -18,14 +18,23 @@ Never infer a minibus taxi association service from a driving path; never presen
 | PUTCO Soshanguve | https://putco.co.za/smartap/ | Local official fare table transcribed into putco/soshanguve/fares.json effective 1 Jun 2026 | Explicit Soshanguve zone-pair lookup; do not reuse for Soweto | Zone names, codes and transfers available, but no route geometry |
 | Gautrain | https://www.gautrain.co.za/commuter/farecalc | Official online fare calculator and official Sept 2026 fare bulletin | Station-to-station matrix in repository; station access fare requires its own evidence | Official named stations, train service lines, partial buses |
 | A Re Yeng | https://www.tshwane.gov.za | Existing municipal route GIS normalization | Use municipality-published tariff if source date matches; no universal R/km from road distance | Routes, stops and some terminals; trip-time validation pending |
-| PRASA Metrorail | https://www.prasa.com/ | Not yet an updated operator stop-sequence + dated fare import for Soweto corridors | Fare unavailable until sourced | Don't equate mapped historic stations with current operations |
+| PRASA Metrorail | https://www.parliament.gov.za/storage/app/media/Docs/atc/01ls62wgdnvbh5n2rt6vejrbpyvl7vngka.pdf | June 2026 parliamentary report lists Johannesburg–Naledi and other resumed lines. The Naledi–Park station order comes from the Nov 2022 reopening bulletin, **not** a verified Oct 2026 stopping timetable. | Aug 2025 PRASA fare adjustments documented, but no authoritative pairwise current station fare matrix imported; **no fixed price invented**. | New `metrorail/gauteng-pilot-2026.json`: 13 sourced, geolocated station points with OSM attribution. `metrorailDiscovery.ts` only matches both ends to that one corridor; additional reported corridors require geolocated ordered stop data. |
 | Minibus taxis | Local taxi associations; SANTACO updates where specific association route is documented | No comprehensive and current association boarding-place / destination fare table loaded | Per-route published or pilot-observed fare only, tagged with date and association. Road-distance bands are explicitly non-official guidance | Road access is not proof a minibus-taxi service exists |
+
+## Implemented 2 October 2026 milestone
+
+- `services/metrorailDiscovery.ts`: destination-aware Naledi–Park rail station matches and nearest mapped station near a Soweto origin; not a live service promise.
+- `data/transit/gauteng/metrorail/interchanges-2026.json`: mapped New Canada PRASA↔Rea Vaya and Park Station PRASA↔Rea Vaya/Gautrain transfer landmarks. An interchange is not a published through-ticket.
+- `services/multimodalFareQuote.ts`: ticket-product-level fare ledger: Rea Vaya uses a published **passenger journey** distance only; it can treat two bus legs as one fare group **only with validated continuity**. PUTCO checks the correct service-area zone pairing; PRASA and unknown taxi fare produce an incomplete total rather than fake zeros or a generic bus price.
+- `services/trackedFarePolicy.ts`: the old general distance-fare approximation is confined to road-backed taxi guidance. No generic Rea Vaya, PUTCO, Gautrain or PRASA R/km lookup in the selection or GPS-tracking paths.
+- The commuter-facing two-screen UI remains uncluttered; supporting operator links and fare information appear under the expandable journey cards.
+- **Remaining gaps:** exact current train-by-station timetables, new PRASA pairwise ticket matrix, station entrances vs walking paths, Rea Vaya direction/stop-order/onboard trip length, current PUTCO Soweto zoning document extraction and association taxi fare lists.
 
 ## Next data-ingestion operations (not complete yet)
 1. Download and transcribe **2026 final PUTCO Soweto fare notice PDF** linked from the official SmartTap page. Validate each zone name, ticket code, cash rate and 10/12/44/52-trip product. Record all values' last-valid date and citation URL. Source was available but PDF content could not be retrieved through current automated environment; do not silently substitute older values.
 2. Map PUTCO's official Soweto zone definitions to actual geographic boarding stops from operator/City of Johannesburg licensed GIS; QA stop-to-zone assignment on the street.
 3. Link Rea Vaya route-direction, stop order and measured onboard distance for tap-in/out. Only then present one precise fare for a specific commuter's journey rather than a whole-system range.
-4. Build an operator-independent transfer graph and one-ticket fare engine. Cost = sum of paid journeys including access and egress, not sum of every Rea Vaya bus leg if part of one continuing fare.
+4. Extend the new paid-ticket fare ledger with source-confirmed operator-to-operator transfer **walk paths**, directional schedules, PRASA current zone ticket prices and source-specific payment products. The pricing core now exists; full door-to-door automatic data matching does not.
 5. In the 2-screen UI, return only origin-to-destination routes; separately list mapped near-start operator possibilities when no confirmed connecting service is known.
 6. Test representative routes with passengers for Soweto/Johannesburg/Boksburg, including origin GPS confidence, service applicability, transfer sites, actual receipts and fare evidence.
 7. Review publisher licensing, attribution, download automation and updated tariff schedules before large-scale redistribution. Publication on the web does **not** automatically mean permanent freshness or reuse rights.
@@ -35,6 +44,9 @@ Never infer a minibus taxi association service from a driving path; never presen
 - Rea Vaya transfer rules: continuous vs station exit/re-entry.
 - PUTCO Soshanguve zone-pairs only; never substitute Soweto.
 - Soweto → Boksburg: don't suggest a PUTCO through-ride just because of a generic Joburg radius.
+- PRASA Naledi–Park station-point discovery uses June 2026 service evidence, mapped OSM station positions and Nov 2022 stop order with dated warnings; Boksburg must not appear as a direct stop on that corridor.
+- One Rea Vaya paid journey covering verified 4 km + 9 km counts as the **13 km band**, not two full tickets, only when transfer continuity is verified.
+- Unknown PRASA fares keep the overall multimodal total null even if Rea Vaya's ticket is priced.
 - High location uncertainty: do not claim a nearby boarding point.
 - Closing AI navigation: return to home, never a blank tab.
 
