@@ -9,7 +9,18 @@
  */
 import type { Location, TransportRecommendation } from "../types";
 import pilotData from "../data/transit/gauteng/metrorail/gauteng-pilot-2026.json";
-import { earthDistanceKm } from "./nearbyNetwork";
+// Kept self-contained: nearbyNetwork imports this module for PRASA visibility.
+const earthDistanceKm = (
+  a: Pick<Location, "lat" | "lng">,
+  b: Pick<Location, "lat" | "lng">,
+): number => {
+  const rad = (v: number) => v * Math.PI / 180;
+  const phi = rad(b.lat - a.lat);
+  const lambda = rad(b.lng - a.lng);
+  const h = Math.sin(phi / 2) ** 2 +
+    Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(lambda / 2) ** 2;
+  return 6371.0088 * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(Math.max(0, 1-h)));
+};
 
 const corridor = pilotData.pilotCorridors[0];
 export type PilotMetrorailStation = (typeof corridor.stations)[number];
