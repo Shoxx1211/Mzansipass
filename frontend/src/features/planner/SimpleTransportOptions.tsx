@@ -93,7 +93,7 @@ export function SimpleTransportOptions({
 }: Props) {
   const [showAll, setShowAll] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [showNearby, setShowNearby] = useState(false);
+  const [showNearby, setShowNearby] = useState<boolean | null>(null);
   const nearby = useMemo(() => getNearbyModeHints(origin), [origin]);
   const ordered = useMemo(
     () => [...recommendations].sort((a, b) => {
@@ -104,6 +104,9 @@ export function SimpleTransportOptions({
     [recommendations],
   );
   const displayed = showAll ? ordered : ordered.slice(0, 5);
+  // If few destination-matching services exist, reveal nearby alternatives
+  // automatically while letting the commuter hide them.
+  const nearbyOpen = showNearby ?? ordered.length <= 1;
 
   if (isLoading) {
     return <div role="status" className="rounded-3xl border border-white/10 bg-white/[0.04] p-8 text-center text-sm text-white/70">
@@ -205,12 +208,12 @@ export function SimpleTransportOptions({
     })}
     {nearby.length > 0 && (
       <div className="rounded-[22px] border border-white/10 bg-[#111f2d]">
-        <button type="button" aria-expanded={showNearby} onClick={() => setShowNearby(v => !v)}
+        <button type="button" aria-expanded={nearbyOpen} onClick={() => setShowNearby(!nearbyOpen)}
           className="flex min-h-12 w-full items-center justify-between gap-3 px-4 text-left text-sm font-semibold text-white/85">
           Other services around your starting point
-          {showNearby ? <ChevronUp size={17} /> : <ChevronDown size={17} />}
+          {nearbyOpen ? <ChevronUp size={17} /> : <ChevronDown size={17} />}
         </button>
-        {showNearby && <div className="space-y-3 border-t border-white/10 px-4 py-4">
+        {nearbyOpen && <div className="space-y-3 border-t border-white/10 px-4 py-4">
           {nearby.map(hint => <div key={hint.id} className="space-y-1 rounded-xl bg-white/[0.035] p-3">
             <div className="flex items-center justify-between gap-3">
               <span className="font-semibold text-white">{hint.name}</span>
