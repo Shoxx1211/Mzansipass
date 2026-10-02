@@ -103,6 +103,8 @@ interface SpeechRecognitionLike {
   interimResults: boolean;
   maxAlternatives: number;
   start: () => void;
+  stop: () => void;
+  abort?: () => void;
   onresult: ((event: SpeechRecognitionEventLike) => void) | null;
   onerror: (() => void) | null;
   onend: (() => void) | null;
@@ -300,6 +302,8 @@ export const DestinationSearch = ({
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const requestIdRef = useRef(0);
+  const activeRecognitionRef = useRef<SpeechRecognitionLike | null>(null);
+  const voiceTimerRef = useRef<number | null>(null);
 
   const mapboxToken = import.meta.env["VITE_MAPBOX_TOKEN"]?.trim() ?? "";
 
@@ -671,19 +675,53 @@ export const DestinationSearch = ({
     [continueToRoute, persistResolvedPlace, setDestination],
   );
 
+  // Browser recognition may never report a result or onend on some devices.
+  // Keep voice optional, stoppable and strictly time-limited.
+  const clearVoiceTimer = useCallback(() => {
+    if (voiceTimerRef.current !== null) {
+      window.clearTimeout(voiceTimerRef.current);
+      voiceTimerRef.current = null;
+    }
+  }, []);
+
+  const stopVoiceSearch = useCallback(() => {
+    clearVoiceTimer();
+    try {
+      activeRecognitionRef.current?.stop();
+    } catch {
+      // Recognition might already have ended.
+    }
+    activeRecognitionRef.current = null;
+    setIsVoiceListening(false);
+  }, [clearVoiceTimer]);
+
+  useEffect(() => () => {
+    clearVoiceTimer();
+    if (activeRecognitionRef.current) {
+      // Prevent state changes in an unmounted component.
+      activeRecognitionRef.current.onend = null;
+      activeRecognitionRef.current.onerror = null;
+      activeRecognitionRef.current.onresult = null;
+      activeRecognitionRef.current.abort?.();
+      activeRecognitionRef.current = null;
+    }
+  }, [clearVoiceTimer]);
+
   const startVoiceSearch = useCallback(() => {
     if (!enableVoiceSearch || typeof window === "undefined") return;
+    if (activeRecognitionRef.current) {
+      stopVoiceSearch();
+      return;
+    }
 
     const browserWindow = window as typeof window & {
       SpeechRecognition?: SpeechRecognitionConstructor;
       webkitSpeechRecognition?: SpeechRecognitionConstructor;
     };
-
     const Recognition =
       browserWindow.SpeechRecognition ?? browserWindow.webkitSpeechRecognition;
-
     if (!Recognition) {
-      setSearchError("Voice search is not supported by this browser.");
+      setSearchError("Voice search isn't available here. Type your destination instead.");
       return;
     }
 
@@ -691,28 +729,40 @@ export const DestinationSearch = ({
     recognition.lang = "en-ZA";
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
-
     recognition.onresult = (event) => {
       const transcript = event.results?.[0]?.[0]?.transcript;
       if (!transcript) return;
+      clearVoiceTimer();
       setDestination(transcript.trim());
       setSelectedPlace(null);
       setIsOpen(true);
       window.setTimeout(() => inputRef.current?.focus(), 0);
     };
-
     recognition.onerror = () => {
-      setSearchError(
-        "Pulse could not hear that clearly. Please try again or type your destination.",
-      );
+      clearVoiceTimer();
+      setSearchError("Couldn't hear that clearly. Try again or type your destination.");
+      activeRecognitionRef.current = null;
+      setIsVoiceListening(false);
     };
-
-    recognition.onend = () => setIsVoiceListening(false);
-
-    setIsVoiceListening(true);
-    setSearchError(null);
-    recognition.start();
-  }, [enableVoiceSearch, setDestination]);
+    recognition.onend = () => {
+      clearVoiceTimer();
+      activeRecognitionRef.current = null;
+      setIsVoiceListening(false);
+    };
+    try {
+      recognition.start();
+      activeRecognitionRef.current = recognition;
+      setIsVoiceListening(true);
+      setSearchError(null);
+      voiceTimerRef.current = window.setTimeout(() => {
+        setSearchError("Still listening? Try again or type your destination.");
+        stopVoiceSearch();
+      }, 10_000);
+    } catch {
+      setSearchError("Microphone unavailable. You can type your destination.");
+      setIsVoiceListening(false);
+    }
+  }, [clearVoiceTimer, enableVoiceSearch, setDestination, stopVoiceSearch]);
 
   const handleKeyDown = useCallback(
     (event: ReactKeyboardEvent<HTMLInputElement>) => {
@@ -776,7 +826,7 @@ export const DestinationSearch = ({
             }}
             onBlur={() => window.setTimeout(() => setIsOpen(false), 150)}
             onKeyDown={handleKeyDown}
-            placeholder="Address, house number, place or coordinates"
+            placeholder="Where are you going?"
             className="premium-glass-soft h-[60px] w-full rounded-[20px] pl-12 pr-20 text-base font-semibold text-white outline-none transition placeholder:text-white/30 focus:border-cyan-300/30 focus:ring-4 focus:ring-cyan-400/[0.05] sm:h-[62px] sm:text-lg"
             autoComplete="off"
             autoCorrect="off"
@@ -801,11 +851,10 @@ export const DestinationSearch = ({
             {enableVoiceSearch && (
               <button
                 type="button"
-                onClick={startVoiceSearch}
-                disabled={isVoiceListening}
+                onClick={isVoiceListening ? stopVoiceSearch : startVoiceSearch}
                 className="flex h-9 w-9 items-center justify-center rounded-xl text-white/50 transition hover:bg-white/[0.08] hover:text-white disabled:opacity-50"
-                aria-label={isVoiceListening ? "Listening" : "Search destination by voice"}
-                title={isVoiceListening ? "Listening..." : "Voice search"}
+                aria-label={isVoiceListening ? "Stop listening" : "Search destination by voice"}
+                title={isVoiceListening ? "Stop listening" : "Voice search"}
               >
                 {isVoiceListening ? <Spinner /> : <MicrophoneIcon />}
               </button>
