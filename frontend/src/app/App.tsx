@@ -2376,6 +2376,7 @@ const App = () => {
                         <SimpleTransportOptions
                           destination={resolvedDestination?.name ?? destination}
                           recommendations={recommendations}
+                          origin={plannerOrigin}
                           isLoading={isPlanning}
                           onSelect={handleSelectRecommendation}
                         />
