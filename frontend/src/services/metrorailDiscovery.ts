@@ -9,6 +9,7 @@
  */
 import type { Location, TransportRecommendation } from "../types";
 import pilotData from "../data/transit/gauteng/metrorail/gauteng-pilot-2026.json";
+import interchangeData from "../data/transit/gauteng/metrorail/interchanges-2026.json";
 // Kept self-contained: nearbyNetwork imports this module for PRASA visibility.
 const earthDistanceKm = (
   a: Pick<Location, "lat" | "lng">,
@@ -45,6 +46,16 @@ export function nearestPrasaStation(point: Pick<Location,"lat"|"lng">): NearestP
   return best;
 }
 
+export function getPrasaInterchangeHints(stationName: string): string[] {
+  const node = interchangeData.interchanges.find(item =>
+    item.prasaStation === stationName);
+  if (!node) return [];
+  return node.connections.map(connection => (
+    connection.operator + " at " + connection.stop +
+    (connection.routeCodes.length ? " (routes " + connection.routeCodes.join(", ") + ")" : "")
+  ));
+}
+
 const MAX_ORIGIN_ACCESS_KM = 6;
 const MAX_DESTINATION_EGRESS_KM = 3;
 
@@ -62,6 +73,10 @@ export function discoverMetrorailCorridor(
   const originName = start.station.name;
   const destinationName = end.station.name;
   const accessNeeded = start.accessKm > 1 || end.accessKm > 1;
+  const interchangeHints = Array.from(new Set([
+    ...getPrasaInterchangeHints(originName),
+    ...getPrasaInterchangeHints(destinationName),
+  ]));
 
   return [{
     id: "metrorail:naledi-park:" + start.station.id + ":" + end.station.id,
@@ -85,14 +100,18 @@ export function discoverMetrorailCorridor(
       end.accessKm.toFixed(1) +
       " km. Real walking/connecting journeys may be longer. " +
       (accessNeeded ? "Plan transport to or from the station separately. " : "") +
-      "Current stop-by-stop departures, transfer compatibility and the station-specific passenger fare are not established.",
+      "Current stop-by-stop departures, transfer compatibility and the station-specific passenger fare are not established." +
+      (interchangeHints.length
+        ? " Nearby interchange landmarks: " + interchangeHints.join("; ") +
+          ". Check actual bus departures and pay for separate operator tickets as needed."
+        : ""),
     badges: ["OFFICIAL_SERVICE", "FARE_VERIFY", ...(accessNeeded ? ["ACCESS_REQUIRED"] : [])],
     color: "#35C7D8",
     confidence: 0.65,
     dataQuality: "limited",
     direct: !accessNeeded,
     routeCodes: ["PRASA Naledi–Park Station"],
-    transferStops: [],
+    transferStops: interchangeHints,
     journeyLegs: [{
       id: "prasa-naledi-park-rail",
       mode: "rail",
