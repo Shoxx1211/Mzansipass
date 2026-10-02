@@ -647,7 +647,6 @@ const App = () => {
     plannerOriginIsTest,
   ]);
 
-  const plannerGpsHealthy = Boolean(plannerOrigin);
 
   // ====================================================
   // RESET HELPERS
