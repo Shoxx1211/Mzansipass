@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-10-02",
+  "note": "Mapped physical interchanges (not end-to-end service guarantee). Other operator ticket required unless an official integrated fare rule is documented.",
+  "interchanges": [
+    {
+      "prasaStation": "New Canada",
+      "connections": [
+        {
+          "operator": "Rea Vaya",
+          "stop": "New Canada Bus Station",
+          "routeCodes": [
+            "T3",
+            "C6"
+          ],
+          "location": {
+            "lat": -26.21581,
+            "lng": 27.94336
+          },
+          "sourceUrls": [
+            "https://mapcarta.com/W547630304",
+            "https://movinggauteng.co.za/routes/527b685de8b71db74e000077/library_gardens%20station-thokoza%20park%20station"
+          ],
+          "status": "physical-proximity-verified-other-service-schedule-not-live"
+        }
+      ]
+    },
+    {
+      "prasaStation": "Park Station",
+      "connections": [
+        {
+          "operator": "Rea Vaya",
+          "stop": "Park Station (Rea Vaya)",
+          "routeCodes": [
+            "T3",
+            "F11",
+            "F12"
+          ],
+          "sourceUrls": [
+            "https://joburg.org.za/media_/Newsroom/Pages/2026-News-Articles/Rea-Vaya-rolls-out-buses-to-support-Bafana-Bafana.aspx",
+            "https://movinggauteng.co.za/stops/5255397e54abff4c5b000067/park_station"
+          ],
+          "status": "named-interchange-current-operator-departure-not-live"
+        },
+        {
+          "operator": "Gautrain",
+          "stop": "Gautrain Johannesburg Park Station",
+          "routeCodes": [],
+          "sourceUrls": [
+            "https://www.gautrain.co.za/commuter/stationinfo?stationName=Park"
+          ],
+          "status": "named-co-located-station-separate-ticket"
+        }
+      ]
+    }
+  ]
+}
