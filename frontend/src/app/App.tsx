@@ -1606,7 +1606,7 @@ const App = () => {
           ) {
             try {
               const estimate = await FareEngine.computeFinalFare({
-                network: modeNetwork,
+                network: "Taxi",
                 distance: leg.distanceKm,
               });
               legEstimate = estimate.fare;
