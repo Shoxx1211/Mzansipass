@@ -65,6 +65,9 @@ export function getBoardingHint(rec: Recommendation): string {
   if (rec.evidenceStatus === "published-service-area" || !rec.nearestStop?.trim()) {
     return "Boarding point to confirm";
   }
+  if (rec.mode === "Metrorail") {
+    return "Closest mapped rail stop: " + rec.nearestStop;
+  }
   return "Board near " + rec.nearestStop;
 }
 
@@ -150,7 +153,7 @@ export function SimpleTransportOptions({
             {rec.direct === false && <p className="mt-2 text-xs font-semibold text-cyan-200">Includes a change of transport</p>}
             {rec.walkingDistance > 0 && Number.isFinite(rec.walkingDistance) &&
               <p className="mt-1 flex items-center gap-1 text-xs text-white/50">
-                <Footprints size={14} aria-hidden="true"/> About {rec.walkingDistance.toFixed(1)} km total walking/access estimate
+                <Footprints size={14} aria-hidden="true"/> About {rec.walkingDistance.toFixed(1)} km direct access distance*
               </p>}
           </div>
         </div>
@@ -191,7 +194,7 @@ export function SimpleTransportOptions({
             About {money(monthly)} for 22 days × 2 trips, assuming the same
             one-way fare in both directions. Changeable fares may affect the total.
           </div>}
-          {(rec.mode === "Rea Vaya" || rec.mode === "Putco") && (
+          {(rec.mode === "Rea Vaya" || rec.mode === "Putco" || rec.mode === "Metrorail") && (
             <PublishedFaresPanel operator={rec.mode} />
           )}
           {!canStart && <p className="rounded-xl bg-amber-300/10 px-3 py-2 text-xs text-amber-100">
