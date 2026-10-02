@@ -1904,14 +1904,24 @@ const putcoServiceAreaCandidates = (
       originInPretoria
     );
 
+  // Official PUTCO's Soweto commuter-service description covers Johannesburg
+  // and northern suburbs, not every town within a broad 20 km Joburg circle.
+  // In particular Boksburg/Ekurhuleni must not become a PUTCO match solely
+  // through a coarse metropolitan radius.
+  const onJohannesburgOrNorthCorridor = (point: Location): boolean =>
+    point.lat >= -26.24 && point.lat <= -25.98 &&
+    point.lng >= 27.92 && point.lng <= 28.18;
+
   const sowetoMatch =
     (
       originInSoweto &&
-      destinationInJohannesburg
+      destinationInJohannesburg &&
+      onJohannesburgOrNorthCorridor(destination)
     ) ||
     (
       destinationInSoweto &&
-      originInJohannesburg
+      originInJohannesburg &&
+      onJohannesburgOrNorthCorridor(origin)
     );
 
   if (
