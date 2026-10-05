@@ -134,6 +134,7 @@ const matchesForPoint = (
   point: Pick<Location, "lat" | "lng">,
   maxKm: number,
 ): Match[] => {
+  if (!Number.isFinite(point.lat) || !Number.isFinite(point.lng)) return [];
   // Keep only the nearest station on each corridor. Without this, a commuter
   // near Soweto can receive several near-identical options for neighbouring
   // stations on the same train line.
