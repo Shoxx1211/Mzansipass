@@ -61,112 +61,128 @@
           "name": "Naledi",
           "lat": -26.25794,
           "lng": 27.82278,
-          "coordinateSourceUrl": "https://mapcarta.com/14289996"
+          "coordinateSourceUrl": "https://mapcarta.com/14289996",
+          "scheduledMinutesFromStart": 0
         },
         {
           "id": "naledi-park-1",
           "name": "Merafe",
           "lat": -26.26212,
           "lng": 27.84665,
-          "coordinateSourceUrl": "https://mapcarta.com/14299740"
+          "coordinateSourceUrl": "https://mapcarta.com/14299740",
+          "scheduledMinutesFromStart": 3
         },
         {
           "id": "naledi-park-2",
           "name": "Inhlazane",
           "lat": -26.24946,
           "lng": 27.86355,
-          "coordinateSourceUrl": "https://mapcarta.com/14335154"
+          "coordinateSourceUrl": "https://mapcarta.com/14335154",
+          "scheduledMinutesFromStart": 8
         },
         {
           "id": "naledi-park-3",
           "name": "Ikwezi",
           "lat": -26.2304,
           "lng": 27.87712,
-          "coordinateSourceUrl": "https://mapcarta.com/14335566"
+          "coordinateSourceUrl": "https://mapcarta.com/14335566",
+          "scheduledMinutesFromStart": 13
         },
         {
           "id": "naledi-park-4",
           "name": "Dube",
           "lat": -26.2332,
           "lng": 27.89242,
-          "coordinateSourceUrl": "https://mapcarta.com/14360940"
+          "coordinateSourceUrl": "https://mapcarta.com/14360940",
+          "scheduledMinutesFromStart": 17
         },
         {
           "id": "naledi-park-5a",
           "name": "Phefeni",
           "lat": -26.2351,
           "lng": 27.90482,
-          "coordinateSourceUrl": "https://mapcarta.com/14276682"
+          "coordinateSourceUrl": "https://mapcarta.com/14276682",
+          "scheduledMinutesFromStart": 19
         },
         {
           "id": "naledi-park-5",
           "name": "Phomolong",
           "lat": -26.22652,
           "lng": 27.90901,
-          "coordinateSourceUrl": "https://mapcarta.com/14276524"
+          "coordinateSourceUrl": "https://mapcarta.com/14276524",
+          "scheduledMinutesFromStart": 21
         },
         {
           "id": "naledi-park-6",
           "name": "Mzimhlophe",
           "lat": -26.2232,
           "lng": 27.92293,
-          "coordinateSourceUrl": "https://mapcarta.com/N4331156458"
+          "coordinateSourceUrl": "https://mapcarta.com/N4331156458",
+          "scheduledMinutesFromStart": 23
         },
         {
           "id": "naledi-park-7",
           "name": "New Canada",
           "lat": -26.21459,
           "lng": 27.94261,
-          "coordinateSourceUrl": "https://mapcarta.com/N54974895"
+          "coordinateSourceUrl": "https://mapcarta.com/N54974895",
+          "scheduledMinutesFromStart": 26
         },
         {
           "id": "naledi-park-8",
           "name": "Longdale",
           "lat": -26.19848,
           "lng": 27.96339,
-          "coordinateSourceUrl": "https://mapcarta.com/14310230"
+          "coordinateSourceUrl": "https://mapcarta.com/14310230",
+          "scheduledMinutesFromStart": 31
         },
         {
           "id": "naledi-park-9",
           "name": "Croesus",
           "lat": -26.20184,
           "lng": 27.97202,
-          "coordinateSourceUrl": "https://mapcarta.com/N247644603"
+          "coordinateSourceUrl": "https://mapcarta.com/N247644603",
+          "scheduledMinutesFromStart": 33
         },
         {
           "id": "naledi-park-10",
           "name": "Langlaagte",
           "lat": -26.20191,
           "lng": 27.99058,
-          "coordinateSourceUrl": "https://mapcarta.com/14314542"
+          "coordinateSourceUrl": "https://mapcarta.com/14314542",
+          "scheduledMinutesFromStart": 37
         },
         {
           "id": "naledi-park-10a",
           "name": "Grosvenor",
           "lat": -26.20285,
           "lng": 28.00539,
-          "coordinateSourceUrl": "https://mapcarta.com/N247644652"
+          "coordinateSourceUrl": "https://mapcarta.com/N247644652",
+          "scheduledMinutesFromStart": 40
         },
         {
           "id": "naledi-park-10b",
           "name": "Mayfair",
           "lat": -26.20428,
           "lng": 28.01383,
-          "coordinateSourceUrl": "https://mapcarta.com/N54981525"
+          "coordinateSourceUrl": "https://mapcarta.com/N54981525",
+          "scheduledMinutesFromStart": 42
         },
         {
           "id": "naledi-park-11",
           "name": "Braamfontein",
           "lat": -26.19786,
           "lng": 28.02325,
-          "coordinateSourceUrl": "https://mapcarta.com/N247644590"
+          "coordinateSourceUrl": "https://mapcarta.com/N247644590",
+          "scheduledMinutesFromStart": 45
         },
         {
           "id": "naledi-park-12",
           "name": "Park Station",
           "lat": -26.19767,
           "lng": 28.04231,
-          "coordinateSourceUrl": "https://mapcarta.com/N326084268"
+          "coordinateSourceUrl": "https://mapcarta.com/N326084268",
+          "scheduledMinutesFromStart": 50
         }
       ],
       "routeMetrics": {
@@ -188,6 +204,10 @@
         "publishedDistanceKm": 27.737,
         "publishedStopCount": 16,
         "description": "Current public Metrorail Gauteng timetable used for stop order and scheduled departures; not treated as live PRASA telemetry."
+      },
+      "scheduleTimingBasis": {
+        "type": "representative-published-weekday-schedule",
+        "note": "Minutes are derived from a published weekday timetable pattern for routing comparison, not a live ETA."
       }
     },
     {
@@ -222,30 +242,38 @@
           "name": "Park Station",
           "lat": -26.19767,
           "lng": 28.04231,
-          "coordinateSourceUrl": "https://mapcarta.com/N326084268"
+          "coordinateSourceUrl": "https://mapcarta.com/N326084268",
+          "scheduledMinutesFromStart": 0
         },
         {
           "id": "jhb-germiston-1",
           "name": "Jeppe",
           "lat": -26.20389,
           "lng": 28.06339,
-          "coordinateSourceUrl": "https://mapcarta.com/N247644692"
+          "coordinateSourceUrl": "https://mapcarta.com/N247644692",
+          "scheduledMinutesFromStart": 7
         },
         {
           "id": "jhb-germiston-2",
           "name": "Driehoek",
           "lat": -26.21363,
           "lng": 28.14932,
-          "coordinateSourceUrl": "https://mapcarta.com/14362014"
+          "coordinateSourceUrl": "https://mapcarta.com/14362014",
+          "scheduledMinutesFromStart": 24
         },
         {
           "id": "jhb-germiston-3",
           "name": "Germiston",
           "lat": -26.2098,
           "lng": 28.16768,
-          "coordinateSourceUrl": "https://mapcarta.com/N7055183232"
+          "coordinateSourceUrl": "https://mapcarta.com/N7055183232",
+          "scheduledMinutesFromStart": 32
         }
-      ]
+      ],
+      "scheduleTimingBasis": {
+        "type": "representative-published-weekday-schedule",
+        "note": "Minutes are derived from a published weekday timetable pattern for routing comparison, not a live ETA."
+      }
     }
   ],
   "currentPublicTimetableEvidence": {
