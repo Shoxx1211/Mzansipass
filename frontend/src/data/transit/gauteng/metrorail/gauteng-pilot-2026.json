@@ -54,7 +54,7 @@
       "passengerFareStatus": "not-published-per-journey",
       "knownTimetable": false,
       "liveArrival": false,
-      "notes": "Geometry below is mapped station points only, not rail track geometry. Do not compute distance-fare from straight lines.",
+      "notes": "2026 Parliament reports Naledi–Johannesburg recovered with 16 active stations, ~27.37 km and 50 min travel time. Current public Metrorail timetable lists 16 stops; OSM-derived points are used for access matching, not platform-door precision.",
       "stations": [
         {
           "id": "naledi-park-0",
@@ -90,6 +90,13 @@
           "lat": -26.2332,
           "lng": 27.89242,
           "coordinateSourceUrl": "https://mapcarta.com/14360940"
+        },
+        {
+          "id": "naledi-park-5a",
+          "name": "Phefeni",
+          "lat": -26.2351,
+          "lng": 27.90482,
+          "coordinateSourceUrl": "https://mapcarta.com/14276682"
         },
         {
           "id": "naledi-park-5",
@@ -134,6 +141,20 @@
           "coordinateSourceUrl": "https://mapcarta.com/14314542"
         },
         {
+          "id": "naledi-park-10a",
+          "name": "Grosvenor",
+          "lat": -26.20285,
+          "lng": 28.00539,
+          "coordinateSourceUrl": "https://mapcarta.com/N247644652"
+        },
+        {
+          "id": "naledi-park-10b",
+          "name": "Mayfair",
+          "lat": -26.20428,
+          "lng": 28.01383,
+          "coordinateSourceUrl": "https://mapcarta.com/N54981525"
+        },
+        {
           "id": "naledi-park-11",
           "name": "Braamfontein",
           "lat": -26.19786,
@@ -147,7 +168,27 @@
           "lng": 28.04231,
           "coordinateSourceUrl": "https://mapcarta.com/N326084268"
         }
-      ]
+      ],
+      "routeMetrics": {
+        "sourceAuthority": "Parliamentary PRASA oversight report",
+        "sourceDate": "2026-06-10",
+        "sourceUrl": "https://www.parliament.gov.za/storage/app/media/Docs/atc/01ls62wgdnvbh5n2rt6vejrbpyvl7vngka.pdf",
+        "distanceKm": 27.37,
+        "scheduledTravelMinutes": 50,
+        "activeStationsReported": 16,
+        "inactiveStationsReported": 0,
+        "peakFrequencyDescription": "30–60 min",
+        "offPeakFrequencyDescription": "60–100 min"
+      },
+      "publicTimetableSource": {
+        "publisher": "Moving Gauteng",
+        "routeUrl": "https://movinggauteng.co.za/routes/524417eb86302abb27000081/naledi-park_station",
+        "timetableUrl": "https://movinggauteng.co.za/timetables/524417eb86302abb27000081/naledi-park_station",
+        "checkedOn": "2026-10-05",
+        "publishedDistanceKm": 27.737,
+        "publishedStopCount": 16,
+        "description": "Current public Metrorail Gauteng timetable used for stop order and scheduled departures; not treated as live PRASA telemetry."
+      }
     },
     {
       "id": "jhb-germiston",
