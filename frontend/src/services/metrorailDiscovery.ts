@@ -134,14 +134,21 @@ const matchesForPoint = (
   point: Pick<Location, "lat" | "lng">,
   maxKm: number,
 ): Match[] => {
-  const matches: Match[] = [];
+  // Keep only the nearest station on each corridor. Without this, a commuter
+  // near Soweto can receive several near-identical options for neighbouring
+  // stations on the same train line.
+  const bestByCorridor = new Map<string, Match>();
   for (const corridor of corridors) {
     for (const station of corridor.stations) {
       const accessKm = earthDistanceKm(point, station);
-      if (accessKm <= maxKm) matches.push({ corridor, station, accessKm });
+      if (accessKm > maxKm) continue;
+      const current = bestByCorridor.get(corridor.id);
+      if (!current || accessKm < current.accessKm) {
+        bestByCorridor.set(corridor.id, { corridor, station, accessKm });
+      }
     }
   }
-  return matches.sort((a, b) => a.accessKm - b.accessKm);
+  return [...bestByCorridor.values()].sort((a, b) => a.accessKm - b.accessKm);
 };
 
 const timetableMinutes = (
@@ -443,8 +450,8 @@ export function discoverMetrorailCorridor(
   origin: Location,
   destination: Location,
 ): TransportRecommendation[] {
-  const starts = matchesForPoint(origin, MAX_ORIGIN_ACCESS_KM).slice(0, 6);
-  const ends = matchesForPoint(destination, MAX_DESTINATION_EGRESS_KM).slice(0, 6);
+  const starts = matchesForPoint(origin, MAX_ORIGIN_ACCESS_KM);
+  const ends = matchesForPoint(destination, MAX_DESTINATION_EGRESS_KM);
   if (!starts.length || !ends.length) return [];
 
   const recommendations: TransportRecommendation[] = [];
