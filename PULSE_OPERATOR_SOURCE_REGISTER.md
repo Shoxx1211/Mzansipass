@@ -1,5 +1,5 @@
 # Pulse — Gauteng published transport source register
-Last reviewed: 2026-10-02 | Phase: operator-source-first planning pilot
+Last reviewed: 2026-10-05 | Phase: operator-source-first planning pilot
 
 ## Product contract
 Pulse should return the available operator route candidates **near the passenger's chosen origin that actually connect to the destination**, including validated transfers, each leg's service distance, source-dated ticket fare and total cost. Keep the default UI to two calm screens; show provenance under "See steps" or "See connection".
@@ -29,6 +29,17 @@ Never infer a minibus taxi association service from a driving path; never presen
 - `services/trackedFarePolicy.ts`: the old general distance-fare approximation is confined to road-backed taxi guidance. No generic Rea Vaya, PUTCO, Gautrain or PRASA R/km lookup in the selection or GPS-tracking paths.
 - The commuter-facing two-screen UI remains uncluttered; supporting operator links and fare information appear under the expandable journey cards.
 - **Remaining gaps:** exact current train-by-station timetables, new PRASA pairwise ticket matrix, station entrances vs walking paths, Rea Vaya direction/stop-order/onboard trip length, current PUTCO Soweto zoning document extraction and association taxi fare lists.
+
+## Implemented 5 October 2026 rail expansion
+
+- Expanded PRASA/Metrorail from the original Naledi–Park pilot to a **two-corridor graph** by adding Johannesburg Park Station ↔ Germiston.
+- PRASA's 10 June 2026 parliamentary operating report is the service-status anchor: Naledi–Johannesburg is reported at about **27.37 km / 50 min** and Germiston–Johannesburg at about **13.85 km / 32 min**.
+- Current public Metrorail Gauteng schedules from Moving Gauteng are used as dated timetable evidence for stop order and scheduled comparison only; Pulse does **not** call them live train telemetry.
+- Naledi ↔ Park is aligned to the currently published 16-stop pattern: Naledi, Merafe, Inhlazane, Ikwezi, Dube, Phefeni, Phomolong, Mzimhlophe, New Canada, Longdale, Croesus, Langlaagte, Grosvenor, Mayfair, Braamfontein, Park Station.
+- Park ↔ Germiston currently models Park Station, Jeppe, Driehoek and Germiston, with published weekday timetable offsets.
+- `metrorailDiscovery.ts` now joins PRASA corridors at a shared rail station. A Soweto/Naledi-origin passenger can therefore receive a rail plan **Naledi → Park Station → Germiston**, with the change stated explicitly instead of being presented as a direct train.
+- Precise PRASA fares remain unresolved because PRASA's public July 2025 adjustment notice states the increase and zone/distance basis but does not publish the authoritative current station-pair matrix in a reusable table. Pulse keeps that ticket line unknown instead of inventing a price.
+- CI now executes the **entire frontend Vitest suite**, including PRASA corridor/transfer and fare-safety tests.
 
 ## Next data-ingestion operations (not complete yet)
 1. Download and transcribe **2026 final PUTCO Soweto fare notice PDF** linked from the official SmartTap page. Validate each zone name, ticket code, cash rate and 10/12/44/52-trip product. Record all values' last-valid date and citation URL. Source was available but PDF content could not be retrieved through current automated environment; do not silently substitute older values.
