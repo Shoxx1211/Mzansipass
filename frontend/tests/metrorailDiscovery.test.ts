@@ -5,12 +5,13 @@ import { getCommuterFare, getBoardingHint } from "../src/features/planner/Simple
 
 const loc = (lat:number,lng:number)=>({lat,lng,accuracy:20,timestamp:0});
 
-describe("PRASA Naledi–Johannesburg pilot corridor", () => {
+describe("PRASA Gauteng pilot corridor graph", () => {
   const stations = metrorailStations();
-  it("retains a sourced ordered 13-station stop list", () => {
-    expect(stations).toHaveLength(13);
+  it("retains the expanded sourced set of unique pilot stations", () => {
+    expect(stations).toHaveLength(19);
     expect(stations[0].name).toBe("Naledi");
-    expect(stations[stations.length - 1].name).toBe("Park Station");
+    expect(stations.some((station) => station.name === "Park Station")).toBe(true);
+    expect(stations.some((station) => station.name === "Germiston")).toBe(true);
     for (const s of stations) {
       expect(Number.isFinite(s.lat)).toBe(true);
       expect(Number.isFinite(s.lng)).toBe(true);
