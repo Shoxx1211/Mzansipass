@@ -144,11 +144,7 @@ const matchesForPoint = (
   return matches.sort((a, b) => a.accessKm - b.accessKm);
 };
 
-const stationIndex = (corridor: Corridor, stationName: string): number =>
-  corridor.stations.findIndex((station) => station.name === stationName);
-
 const timetableMinutes = (
-  corridor: Corridor,
   from: Station,
   to: Station,
 ): number | null => {
@@ -220,7 +216,7 @@ const makeDirectRecommendation = (
     return null;
   }
 
-  const minutes = timetableMinutes(start.corridor, start.station, end.station);
+  const minutes = timetableMinutes(start.station, end.station);
   const accessNeeded =
     start.accessKm > EASY_ACCESS_KM || end.accessKm > EASY_ACCESS_KM;
   const interchangeHints = Array.from(
@@ -308,12 +304,10 @@ const makeTransferRecommendation = (
       const b = end.corridor.stations.find((station) => station.name === name);
       if (!a || !b) return null;
       const firstMinutes = timetableMinutes(
-        start.corridor,
         start.station,
         a,
       );
       const secondMinutes = timetableMinutes(
-        end.corridor,
         b,
         end.station,
       );
