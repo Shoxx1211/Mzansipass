@@ -148,6 +148,80 @@
           "coordinateSourceUrl": "https://mapcarta.com/N326084268"
         }
       ]
+    },
+    {
+      "id": "jhb-germiston",
+      "label": "Johannesburg Park Station ↔ Germiston",
+      "operationEvidence": "reported-recovered-2026",
+      "orderedStopsEvidence": "public-2026-timetable",
+      "passengerFareStatus": "zone-tariff-known-exact-station-fare-not-authoritative",
+      "knownTimetable": true,
+      "liveArrival": false,
+      "routeMetrics": {
+        "sourceAuthority": "Parliamentary PRASA oversight report",
+        "sourceDate": "2026-06-10",
+        "sourceUrl": "https://www.parliament.gov.za/storage/app/media/Docs/atc/01ls62wgdnvbh5n2rt6vejrbpyvl7vngka.pdf",
+        "distanceKm": 13.85,
+        "scheduledTravelMinutes": 32,
+        "activeStationsReported": 2,
+        "inactiveStationsReported": 8,
+        "peakFrequencyMinutes": 40,
+        "offPeakFrequencyMinutes": 80
+      },
+      "timetableSource": {
+        "publisher": "Moving Gauteng",
+        "sourceUrl": "https://movinggauteng.co.za/timetables/5458cfc9695e038406799148",
+        "checkedOn": "2026-10-05",
+        "description": "Public Metrorail Gauteng timetable showing Park Station, Jeppe, Driehoek and Germiston. Pulse treats this as published timetable evidence, not live train tracking."
+      },
+      "notes": "2026 PRASA oversight data reports Germiston–Johannesburg recovered with ~13.85 km and 32 min travel time. Stop order below follows a current public Metrorail Gauteng timetable. Coordinates are OSM-based QA points, not platform entrances.",
+      "stations": [
+        {
+          "id": "jhb-germiston-0",
+          "name": "Park Station",
+          "lat": -26.19767,
+          "lng": 28.04231,
+          "coordinateSourceUrl": "https://mapcarta.com/N326084268"
+        },
+        {
+          "id": "jhb-germiston-1",
+          "name": "Jeppe",
+          "lat": -26.20389,
+          "lng": 28.06339,
+          "coordinateSourceUrl": "https://mapcarta.com/N247644692"
+        },
+        {
+          "id": "jhb-germiston-2",
+          "name": "Driehoek",
+          "lat": -26.21363,
+          "lng": 28.14932,
+          "coordinateSourceUrl": "https://mapcarta.com/14362014"
+        },
+        {
+          "id": "jhb-germiston-3",
+          "name": "Germiston",
+          "lat": -26.2098,
+          "lng": 28.16768,
+          "coordinateSourceUrl": "https://mapcarta.com/N7055183232"
+        }
+      ]
     }
-  ]
+  ],
+  "currentPublicTimetableEvidence": {
+    "checkedOn": "2026-10-05",
+    "source": "Moving Gauteng",
+    "nalediPark": {
+      "routeUrl": "https://movinggauteng.co.za/routes/524417eb86302abb27000081/naledi-park_station",
+      "timetableUrl": "https://movinggauteng.co.za/timetables/524417eb86302abb27000081/naledi-park_station",
+      "publishedDistanceKm": 27.737,
+      "publishedStopCount": 16
+    },
+    "parkGermiston": {
+      "routeUrl": "https://movinggauteng.co.za/routes/5458cfc9695e038406799148/park_station-germiston",
+      "timetableUrl": "https://movinggauteng.co.za/timetables/5458cfc9695e038406799148",
+      "publishedDistanceKm": 13.832728380430916,
+      "publishedStopCount": 4
+    },
+    "caveat": "Moving Gauteng is a public transport information publisher, not PRASA's official live operations feed. Pulse labels these timetables as published schedules and keeps live status separate."
+  }
 }
