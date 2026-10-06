@@ -23,6 +23,8 @@ import {
   type MouseEvent as ReactMouseEvent,
 } from "react";
 
+import { searchMapboxPlaces, soshanguveBlock, matchesBlock } from "../../services/mapboxSearch";
+
 interface Location {
   lat: number;
   lng: number;
@@ -61,21 +63,6 @@ interface DestinationSearchProps {
 
   // Optional now; App.tsx can use this later to receive destination coordinates directly.
   onDestinationResolved?: (place: DestinationPlace) => void;
-}
-
-interface MapboxFeature {
-  id: string;
-  text?: string;
-  place_name?: string;
-  center?: [number, number];
-  place_type?: string[];
-  properties?: {
-    category?: string;
-  };
-}
-
-interface MapboxResponse {
-  features?: MapboxFeature[];
 }
 
 interface StoredDestination {
@@ -165,27 +152,12 @@ const parseCoordinateDestination = (
   };
 };
 
-const getSoshanguveBlock = (query: string): string | null => {
-  if (!/soshanguve|\bblock\s+/i.test(query)) return null;
-  const value = query.trim().toLowerCase();
-  const match =
-    value.match(/soshanguve\s+(?:block\s+)?([a-z]{1,3})(?:\b|$)/) ??
-    value.match(/\bblock\s+([a-z]{1,3})(?:\s+soshanguve)?\b/);
-  return match?.[1]?.toUpperCase() ?? null;
-};
+const getSoshanguveBlock = soshanguveBlock;
 
 const isLeeParkQuery = (query: string): boolean =>
   /\blee\s*park\b/i.test(query);
 
-const matchesSoshanguveBlock = (
-  place: DestinationPlace,
-  block: string,
-): boolean => {
-  const label = `${place.name} ${place.label}`.toLowerCase();
-  if (!label.includes("soshanguve")) return false;
-  const words = label.replace(/[^a-z0-9]+/g, " ").split(" ");
-  return words.includes(block.toLowerCase());
-};
+const matchesSoshanguveBlock = matchesBlock;
 
 const matchesLeePark = (place: DestinationPlace): boolean => {
   const label = `${place.name} ${place.label}`.toLowerCase();
@@ -334,6 +306,8 @@ export const DestinationSearch = ({
         : query;
     setSearchError(null);
     setActiveIndex(-1);
+    setRemoteSuggestions([]);
+    const requestId = ++requestIdRef.current;
 
     if (query.length < 2 || !mapboxToken) {
       setRemoteSuggestions([]);
@@ -342,90 +316,26 @@ export const DestinationSearch = ({
     }
 
     const controller = new AbortController();
-    const requestId = ++requestIdRef.current;
+    setIsSearchingPlaces(true);
 
     const timer = window.setTimeout(async () => {
       setIsSearchingPlaces(true);
 
       try {
-        const params = new URLSearchParams({
-          access_token: mapboxToken,
-          country: "za",
-          autocomplete: "true",
-          limit: "6",
-          language: "en",
-          types: "poi,address,place,locality,neighborhood,district",
+        let places: DestinationPlace[] = await searchMapboxPlaces(requestedQuery, {
+          token: mapboxToken,
+          proximity: currentLocation,
+          signal: controller.signal,
         });
-
-        if (currentLocation) {
-          params.set("proximity", `${currentLocation.lng},${currentLocation.lat}`);
+        if (leePark) {
+          places = places.filter(matchesLeePark).map((place) => ({
+            ...place,
+            name: "Lee Park, Elardus Park",
+            label: `Lee Park · 494 Attie Pelzer Street, Elardus Park, Pretoria · ${place.label}`,
+          }));
         }
-
-        const response = await fetch(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(requestedQuery)}.json?${params.toString()}`,
-          { signal: controller.signal },
-        );
-
-        if (!response.ok) {
-          throw new Error(`Place search failed (${response.status})`);
-        }
-
-        const data = (await response.json()) as MapboxResponse;
-        if (requestId !== requestIdRef.current) return;
-
-        const mapFeatures = (features: MapboxFeature[]): DestinationPlace[] =>
-          features
-            .map((feature): DestinationPlace | null => {
-              if (!feature.center || feature.center.length < 2) return null;
-              const fullName = feature.place_name ?? feature.text ?? query;
-              const verifiedLee = leePark &&
-                (fullName.toLowerCase().includes("attie pelzer") &&
-                 fullName.includes("494") ||
-                 fullName.toLowerCase().includes("lee park") &&
-                 fullName.toLowerCase().includes("elardus"));
-              const verifiedBlock = block &&
-                fullName.toLowerCase().includes("soshanguve") &&
-                fullName.toLowerCase().replace(/[^a-z0-9]+/g, " ").split(" ").includes(block.toLowerCase());
-
-              const place: DestinationPlace = {
-                id: feature.id,
-                name: verifiedLee
-                  ? "Lee Park, Elardus Park"
-                  : verifiedBlock
-                    ? `Soshanguve Block ${block}`
-                    : feature.place_type?.includes("address")
-                      ? fullName
-                      : (feature.text ?? fullName),
-                label: verifiedLee
-                  ? `Lee Park · 494 Attie Pelzer Street, Elardus Park, Pretoria · ${fullName}`
-                  : verifiedBlock
-                    ? `Soshanguve Block ${block}, Tshwane, Gauteng · ${fullName}`
-                    : fullName,
-                lng: feature.center[0],
-                lat: feature.center[1],
-                category: feature.properties?.category ?? feature.place_type?.[0],
-                source: "mapbox",
-              };
-              if (leePark && !matchesLeePark(place)) return null;
-              if (block && !matchesSoshanguveBlock(place, block)) return null;
-              return place;
-            })
-            .filter((place): place is DestinationPlace => place !== null);
-
-        let places = mapFeatures(data.features ?? []);
-
-        // A second targeted spelling is useful because block names are not
-        // uniformly indexed by commercial geocoders.
-        if (block && places.length === 0) {
-          const retryQuery = `Soshanguve ${block}, Gauteng, South Africa`;
-          const retry = await fetch(
-            `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(retryQuery)}.json?${params.toString()}`,
-            { signal: controller.signal },
-          );
-          if (retry.ok) {
-            const retryData = (await retry.json()) as MapboxResponse;
-            places = mapFeatures(retryData.features ?? []);
-          }
+        if (block) {
+          places = places.filter((place) => matchesSoshanguveBlock(place, block));
         }
 
         if (requestId !== requestIdRef.current) return;
@@ -438,10 +348,11 @@ export const DestinationSearch = ({
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") return;
 
+        if (requestId !== requestIdRef.current) return;
         console.error("Destination autocomplete failed:", error);
         setRemoteSuggestions([]);
         setSearchError(
-          "Live place search is temporarily unavailable. You can still type a destination and continue.",
+          error instanceof Error ? error.message : "Live place search is temporarily unavailable. Please try again.",
         );
       } finally {
         if (requestId === requestIdRef.current) {
@@ -453,6 +364,7 @@ export const DestinationSearch = ({
     return () => {
       window.clearTimeout(timer);
       controller.abort();
+      ++requestIdRef.current;
     };
   }, [currentLocation, destination, mapboxToken]);
 
@@ -484,8 +396,8 @@ export const DestinationSearch = ({
 
     return [
       ...favoriteMatches,
-      ...localSuggestions,
       ...remoteSuggestions,
+      ...localSuggestions.filter((place) => !mapboxToken || (place.lat !== undefined && place.lng !== undefined)),
       ...recentMatches,
     ]
       .filter((place) => {
@@ -501,6 +413,7 @@ export const DestinationSearch = ({
     localSuggestions,
     recentPlaces,
     remoteSuggestions,
+    mapboxToken,
     showFavorites,
     showRecentSearches,
   ]);
@@ -575,7 +488,7 @@ export const DestinationSearch = ({
         : leePark
           ? matchesLeePark(place)
           : place.source === "mapbox" &&
-            /^\d+/.test(place.label.trim())),
+            (normalize(place.name) === normalize(query) || normalize(place.label) === normalize(query))),
     );
 
     const coordinatePlace = parseCoordinateDestination(query);
@@ -608,6 +521,14 @@ export const DestinationSearch = ({
       return;
     }
 
+    if (mapboxToken) {
+      setSearchError(isSearchingPlaces
+        ? "Finding your destination. Please wait, then choose a matching result."
+        : "Choose a matching location from the suggestions, or enter latitude, longitude for an unlisted place.");
+      setIsOpen(true);
+      return;
+    }
+
     // Never reuse coordinates from a previous destination for free text.
     setSelectedPlace(null);
     try {
@@ -618,7 +539,7 @@ export const DestinationSearch = ({
 
     setIsOpen(false);
     onSearch();
-  }, [destination, loading, onSearch, selectPlace, suggestions]);
+  }, [destination, loading, onSearch, selectPlace, suggestions, mapboxToken, isSearchingPlaces]);
 
   const isFavorite = useCallback(
     (place: DestinationPlace) =>
@@ -816,6 +737,8 @@ export const DestinationSearch = ({
             type="text"
             value={destination}
             onChange={(event) => {
+              ++requestIdRef.current;
+              setRemoteSuggestions([]);
               setDestination(event.target.value);
               setSelectedPlace(null);
               setSearchError(null);
