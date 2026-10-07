@@ -11,8 +11,13 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY")
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
-    if SQLALCHEMY_DATABASE_URI and SQLALCHEMY_DATABASE_URI.startswith("postgres://"):
-        SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI.replace("postgres://", "postgresql://", 1)
+    # Match requirements.txt explicitly: SQLAlchemy 2.1 changed the default
+    # PostgreSQL driver to psycopg (v3), but this app installs psycopg2.
+    if SQLALCHEMY_DATABASE_URI:
+        for prefix in ("postgres://", "postgresql://"):
+            if SQLALCHEMY_DATABASE_URI.startswith(prefix):
+                SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://" + SQLALCHEMY_DATABASE_URI[len(prefix):]
+                break
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     JWT_TOKEN_LOCATION = ["headers", "cookies"]
