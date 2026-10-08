@@ -12,8 +12,15 @@
 // - Never silently claim that Base64 obfuscation is secure encryption
 
 import { App } from "@capacitor/app";
-import { Capacitor } from "@capacitor/core";
+import { Capacitor, registerPlugin } from "@capacitor/core";
 import { Geolocation } from "@capacitor/geolocation";
+import type {
+  BackgroundGeolocationPlugin,
+  Location as BackgroundGeolocationPosition,
+} from "@capacitor-community/background-geolocation";
+
+const BackgroundGeolocation =
+  registerPlugin<BackgroundGeolocationPlugin>("BackgroundGeolocation");
 
 type CapacitorPosition = Awaited<
   ReturnType<typeof Geolocation.getCurrentPosition>
@@ -331,6 +338,7 @@ const mapTrackerError = (error: unknown): BackgroundTrackerError => {
 
   if (
     code === "1" ||
+    code === "not_authorized" ||
     code.includes("permission") ||
     message.includes("permission") ||
     message.includes("denied")
@@ -376,6 +384,7 @@ const mapTrackerError = (error: unknown): BackgroundTrackerError => {
 
 class BackgroundTrackerService {
   private watchId: string | null = null;
+  private watchKind: "native-background" | "capacitor" | null = null;
   private subscribers = new Set<LocationSubscriber>();
   private tripSubscribers = new Set<TripSubscriber>();
 
@@ -457,14 +466,15 @@ class BackgroundTrackerService {
   }
 
   /**
-   * @capacitor/geolocation provides the location watcher used here.
-   * This service records app background/foreground state, but whether
-   * the operating system continues delivering GPS while suspended is
-   * platform-dependent. A dedicated background-location solution is
-   * required for guaranteed always-on tracking after suspension.
+   * Native Pulse builds use @capacitor-community/background-geolocation
+   * for active journeys. Android keeps a foreground location service alive
+   * while the screen is locked or the commuter uses another app.
+   *
+   * Browser/PWA builds still fall back to the normal Capacitor/web watcher,
+   * because browsers cannot guarantee GPS callbacks after suspension.
    */
   get guaranteedBackgroundTracking(): boolean {
-    return false;
+    return Capacitor.isNativePlatform() && this.config.backgroundEnabled;
   }
 
   // ====================================================
@@ -983,7 +993,50 @@ class BackgroundTrackerService {
     const activeConfig = this.getActiveConfig();
 
     try {
-      this.watchId = await Geolocation.watchPosition(
+      if (Capacitor.isNativePlatform() && activeConfig.backgroundEnabled) {
+        const id = await BackgroundGeolocation.addWatcher(
+          {
+            backgroundTitle: "Pulse journey in progress",
+            backgroundMessage:
+              "Pulse is tracking your journey in the background. End the journey in Pulse to stop tracking.",
+            requestPermissions: true,
+            stale: false,
+            distanceFilter: Math.max(
+              GPS_FILTERS.minDistanceMeters,
+              Math.round(activeConfig.distanceFilter)
+            ),
+          },
+          (position, error) => {
+            if (error) {
+              const mapped = mapTrackerError(error);
+              console.error(
+                "❌ Pulse background GPS error:",
+                mapped.code,
+                mapped.message
+              );
+              return;
+            }
+
+            if (!position || !this.currentTrip?.active) return;
+
+            try {
+              const location = this.formatBackgroundPosition(position);
+              this.processLocation(location);
+            } catch (processingError) {
+              console.warn(
+                "Ignored invalid background GPS reading:",
+                processingError
+              );
+            }
+          }
+        );
+
+        this.watchId = id;
+        this.watchKind = "native-background";
+        return;
+      }
+
+      const id = await Geolocation.watchPosition(
         {
           enableHighAccuracy: activeConfig.highAccuracy,
           timeout: 15000,
@@ -1007,7 +1060,13 @@ class BackgroundTrackerService {
           }
         }
       );
+
+      this.watchId = id;
+      this.watchKind = "capacitor";
     } catch (error) {
+      this.watchId = null;
+      this.watchKind = null;
+
       throw new BackgroundTrackerError(
         "WATCH_FAILED",
         "Pulse could not start continuous location tracking.",
@@ -1018,12 +1077,18 @@ class BackgroundTrackerService {
 
   private async clearWatcher(): Promise<void> {
     const id = this.watchId;
+    const kind = this.watchKind;
     this.watchId = null;
+    this.watchKind = null;
 
     if (!id) return;
 
     try {
-      await Geolocation.clearWatch({ id });
+      if (kind === "native-background") {
+        await BackgroundGeolocation.removeWatcher({ id });
+      } else {
+        await Geolocation.clearWatch({ id });
+      }
     } catch (error) {
       console.warn("Could not clear location watcher cleanly:", error);
     }
@@ -1032,6 +1097,40 @@ class BackgroundTrackerService {
   // ====================================================
   // POSITION FORMATTING
   // ====================================================
+
+  private formatBackgroundPosition(
+    position: BackgroundGeolocationPosition
+  ): TrackerLocation {
+    const latitude = position.latitude;
+    const longitude = position.longitude;
+
+    if (!isValidCoordinate(latitude, longitude)) {
+      throw new BackgroundTrackerError(
+        "POSITION_UNAVAILABLE",
+        "Pulse received an invalid background location reading."
+      );
+    }
+
+    const reportedSpeed =
+      position.speed !== null &&
+      position.speed !== undefined &&
+      Number.isFinite(position.speed)
+        ? Math.max(0, position.speed * 3.6)
+        : undefined;
+
+    return {
+      lat: latitude,
+      lng: longitude,
+      accuracy: Math.max(0, finiteOr(position.accuracy, 999)),
+      speed: reportedSpeed ?? 0,
+      reportedSpeed,
+      heading: finiteOr(position.bearing, 0),
+      altitude: finiteOr(position.altitude, 0),
+      timestamp: finiteOr(position.time, now()),
+      isBackground: this.isInBackground,
+      batteryImpact: this.lastBatteryLevel,
+    };
+  }
 
   private formatPosition(position: CapacitorPosition): TrackerLocation {
     const latitude = position.coords.latitude;
