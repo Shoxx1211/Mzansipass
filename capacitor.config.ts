@@ -15,6 +15,10 @@ const config: CapacitorConfig = {
   },
 
   android: {
+    // Required by @capacitor-community/background-geolocation so Android
+    // continues delivering native location callbacks after the WebView has
+    // been backgrounded for several minutes.
+    useLegacyBridge: true,
     allowMixedContent: true,
     minWebViewVersion: 70,
     webContentsDebuggingEnabled: process.env.NODE_ENV === 'development',
