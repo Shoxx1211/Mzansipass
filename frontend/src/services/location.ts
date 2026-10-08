@@ -12,6 +12,9 @@
 // - Location caching
 // - Distance calculations
 
+import { Capacitor } from "@capacitor/core";
+
+import { BackgroundTracker, BackgroundTrackerError } from "./backgroundTracker";
 import type { Location } from "../types";
 
 // ======================================================
@@ -156,6 +159,10 @@ if (typeof window !== "undefined") {
 // ======================================================
 
 export const isLocationSupported = (): boolean => {
+  if (Capacitor.isNativePlatform()) {
+    return true;
+  }
+
   return (
     typeof navigator !== "undefined" &&
     "geolocation" in navigator
@@ -185,6 +192,12 @@ export const getLocationPermissionState =
   async (): Promise<
     PermissionState | "unsupported"
   > => {
+    // The native background-geolocation plugin owns Android permission prompts.
+    // Browser Permissions API state is not authoritative inside a Capacitor app.
+    if (Capacitor.isNativePlatform()) {
+      return "unsupported";
+    }
+
     if (typeof navigator === "undefined") {
       return "unsupported";
     }
@@ -230,6 +243,49 @@ export const getLocationPermissionState =
 export const getCurrentLocation = (
   options?: LocationOptions
 ): Promise<Location> => {
+  if (Capacitor.isNativePlatform()) {
+    return (async () => {
+      try {
+        const native = await BackgroundTracker.getDevicePosition();
+        const location: Location = {
+          lat: native.lat,
+          lng: native.lng,
+          accuracy: native.accuracy,
+          speed: native.speed,
+          heading: native.heading,
+          altitude: native.altitude,
+          timestamp: native.timestamp || Date.now(),
+        };
+
+        updateState(location);
+        lastKnownLocation = location;
+        lastUpdateTime = Date.now();
+
+        return location;
+      } catch (error) {
+        if (error instanceof BackgroundTrackerError) {
+          const code: LocationErrorCode =
+            error.code === "PERMISSION_DENIED"
+              ? "PERMISSION_DENIED"
+              : error.code === "TIMEOUT"
+                ? "TIMEOUT"
+                : error.code === "NOT_SUPPORTED"
+                  ? "NOT_SUPPORTED"
+                  : error.code === "POSITION_UNAVAILABLE"
+                    ? "POSITION_UNAVAILABLE"
+                    : "UNKNOWN";
+
+          throw new LocationServiceError(code, error.message);
+        }
+
+        throw new LocationServiceError(
+          "UNKNOWN",
+          "Pulse could not determine your location. Please try again.",
+        );
+      }
+    })();
+  }
+
   return new Promise((resolve, reject) => {
     if (!isLocationSupported()) {
       reject(

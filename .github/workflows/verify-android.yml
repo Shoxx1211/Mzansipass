@@ -10,6 +10,8 @@ jobs:
   android-build:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
 
     steps:
       - name: Check out repository
@@ -30,6 +32,14 @@ jobs:
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm ci
+
+      - name: Verify Android place-search configuration
+        shell: bash
+        run: |
+          case "$VITE_MAPBOX_TOKEN" in
+            pk.*) echo "Mapbox public token available for Android place search." ;;
+            *) echo "::error::Set the GitHub Actions secret VITE_MAPBOX_TOKEN to the same public pk. token used by the Render beta."; exit 1 ;;
+          esac
 
       - name: Build Pulse frontend
         run: npm run build

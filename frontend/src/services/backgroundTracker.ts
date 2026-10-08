@@ -958,6 +958,17 @@ class BackgroundTrackerService {
   }
 
   /**
+   * Acquire one fresh device position for foreground planner use.
+   *
+   * On native Android this uses the same BackgroundGeolocation plugin that
+   * powers the proven trip tracker, avoiding WebView navigator.geolocation.
+   * It does not start or mutate a trip session.
+   */
+  async getDevicePosition(): Promise<TrackerLocation> {
+    return this.getInitialPosition();
+  }
+
+  /**
    * Explicitly starts a fresh trip, discarding any restored-but-not-running trip.
    */
   async startNewTrip(): Promise<void> {
