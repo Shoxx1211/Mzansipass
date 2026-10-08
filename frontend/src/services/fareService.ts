@@ -233,6 +233,158 @@ export const getTaxiFareGuide = (
   };
 };
 
+export type OperatorFareGuide = {
+  minimum: number;
+  maximum: number;
+  midpoint: number;
+  basis:
+    | "provisional-taxi"
+    | "operator-estimate"
+    | "published-range";
+};
+
+/**
+ * 2026/27 City of Tshwane AFC single-trip bands. The City publishes the same
+ * bands for Tshwane Bus Services and A Re Yeng and defines the band distance
+ * as straight-line distance. These values apply from 1 July 2026 to 30 June 2027.
+ */
+const TSHWANE_2026_27_FARES = [
+  { maxKm: 8, fare: 14 },
+  { maxKm: 14, fare: 20 },
+  { maxKm: 21, fare: 24.5 },
+  { maxKm: 29, fare: 27 },
+  { maxKm: 38, fare: 31 },
+  { maxKm: 48, fare: 33 },
+  { maxKm: Number.POSITIVE_INFINITY, fare: 36.5 },
+] as const;
+
+const roundMoney = (value: number): number =>
+  Math.round(value * 100) / 100;
+
+/**
+ * Give every supported operator a useful commuter-facing estimate without
+ * pretending a broad guide is an exact ticket quote.
+ *
+ * Exact published fares already attached to a recommendation always win.
+ * This helper is only the fallback used when the route engine cannot prove
+ * a stop-to-stop fare yet.
+ */
+export const getOperatorFareGuide = (
+  network: TransitNetwork,
+  distanceKm: number | null | undefined,
+): OperatorFareGuide | null => {
+  const hasDistance =
+    typeof distanceKm === "number" &&
+    Number.isFinite(distanceKm) &&
+    distanceKm > 0;
+
+  if (network === "Taxi") {
+    const taxi = getTaxiFareGuide(distanceKm);
+    return taxi
+      ? { ...taxi, basis: "provisional-taxi" }
+      : null;
+  }
+
+  if (network === "A Re Yeng" || network === "Tshwane Bus Service") {
+    if (!hasDistance) {
+      return {
+        minimum: 14,
+        maximum: 36.5,
+        midpoint: 24.5,
+        basis: "published-range",
+      };
+    }
+
+    const band =
+      TSHWANE_2026_27_FARES.find((item) => distanceKm! <= item.maxKm) ??
+      TSHWANE_2026_27_FARES[TSHWANE_2026_27_FARES.length - 1];
+    return {
+      minimum: band.fare,
+      maximum: band.fare,
+      midpoint: band.fare,
+      basis: "operator-estimate",
+    };
+  }
+
+  // Gautrain's current 1 September 2026 pay-as-you-go matrix spans R30–R258.
+  // Direct station-pair matches normally carry the exact published fare; this
+  // range is only used when the station pair is not yet resolved.
+  if (network === "Gautrain") {
+    return {
+      minimum: 30,
+      maximum: 258,
+      midpoint: 79,
+      basis: "published-range",
+    };
+  }
+
+  // Rea Vaya's official 2026/27 journey bands span R10 off-peak to R28.50
+  // peak. Route-specific published ranges attached by the Rea Vaya engine
+  // take priority over this network fallback.
+  if (network === "Rea Vaya") {
+    return {
+      minimum: 10,
+      maximum: 28.5,
+      midpoint: 19.5,
+      basis: "published-range",
+    };
+  }
+
+  // PUTCO is zone/ticket-code priced rather than a universal per-km service.
+  // Until Pulse resolves a passenger's exact zone pair, keep a deliberately
+  // broad estimate instead of presenting a made-up exact fare.
+  if (network === "Putco") {
+    return {
+      minimum: 20,
+      maximum: 60,
+      midpoint: 40,
+      basis: "operator-estimate",
+    };
+  }
+
+  // Current PRASA/Metrorail exact station-pair fares are not yet normalised in
+  // Pulse. Use the configured Gauteng pilot bands as an explicitly provisional
+  // estimate, never as a published fare.
+  if (network === "Metrorail") {
+    if (hasDistance) {
+      const zone = getNetworkZone("Metrorail");
+      const fare = zone
+        ? getFareForDistance(zone, distanceKm!, thisFareContext().isPeak)
+        : null;
+      if (fare !== null) {
+        const spread = 0.15;
+        return {
+          minimum: roundMoney(fare * (1 - spread)),
+          maximum: roundMoney(fare * (1 + spread)),
+          midpoint: roundMoney(fare),
+          basis: "operator-estimate",
+        };
+      }
+    }
+    return {
+      minimum: 9,
+      maximum: 35,
+      midpoint: 22,
+      basis: "operator-estimate",
+    };
+  }
+
+  return null;
+};
+
+const thisFareContext = (): FareContext => {
+  const hour = new Date().getHours();
+  const day = new Date().getDay();
+  return {
+    isPeak:
+      (hour >= PEAK_HOURS.morning.start && hour <= PEAK_HOURS.morning.end) ||
+      (hour >= PEAK_HOURS.evening.start && hour <= PEAK_HOURS.evening.end),
+    isNight: hour >= 20 || hour <= 4,
+    isWeekend: day === 0 || day === 6,
+    demandMultiplier: 1,
+  };
+};
+
 export class FareEngine {
   static getTimeContext(date = new Date()): FareContext {
     const hour = date.getHours();

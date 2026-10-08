@@ -22,42 +22,53 @@ export function getCommuterFare(rec: Recommendation): FareDisplay {
   const accessUnresolved = rec.badges?.includes("ACCESS_REQUIRED") ?? false;
   const partial = hasUnpricedLeg || accessUnresolved;
   if (rec.fareStatus !== "unverified" && isValidFare(rec.estimatedFare)) {
-    if (!hasUnpricedLeg) {
-      return {
-        value: money(rec.estimatedFare),
-        note: accessUnresolved
-          ? "Rail/bus leg only · getting there costs extra"
-          : rec.mode === "Taxi" && rec.evidenceStatus === "road-baseline"
-            ? "Road-based taxi guide · rank fare may differ"
+    return {
+      value:
+        rec.fareStatus === "verified"
+          ? money(rec.estimatedFare)
+          : "About " + money(rec.estimatedFare),
+      note:
+        rec.mode === "Taxi" && rec.evidenceStatus === "road-baseline"
+          ? "Road-based taxi estimate · rank fare may differ"
+          : partial
+            ? "Estimated trip fare · individual connection fares may vary"
             : rec.fareStatus === "verified"
               ? "Published fare · check before travel"
               : "Estimated fare · check before travel",
-      };
-    }
+    };
   }
 
-  // Provisional guides must never be presented as a confirmed trip price.
+  // Ranges are guidance, never a claim that Pulse knows the exact ticket price.
   if (rec.fareEstimateRange &&
       isValidFare(rec.fareEstimateRange.minimum) &&
-      isValidFare(rec.fareEstimateRange.maximum) &&
-      !partial) {
+      isValidFare(rec.fareEstimateRange.maximum)) {
     return {
-      value: money(rec.fareEstimateRange.minimum) + "–" + money(rec.fareEstimateRange.maximum),
-      note: "Taxi guide only · ask at the rank",
+      value:
+        money(rec.fareEstimateRange.minimum) +
+        "–" +
+        money(rec.fareEstimateRange.maximum),
+      note:
+        rec.fareEstimateRange.basis === "provisional-taxi"
+          ? "Taxi estimate · rank fare may differ"
+          : rec.fareEstimateRange.basis === "published-range"
+            ? "Published operator range · exact trip may differ"
+            : "Pulse fare estimate · check before travel",
     };
   }
   if (rec.publishedFareRange &&
       isValidFare(rec.publishedFareRange.minimum) &&
       isValidFare(rec.publishedFareRange.maximum) &&
-      !hasUnpricedLeg) {
+      true) {
     return {
       value: money(rec.publishedFareRange.minimum) + "–" + money(rec.publishedFareRange.maximum),
       note: "Published fare bands · not your total",
     };
   }
   return {
-    value: "Fare to confirm",
-    note: partial ? "Some connections have no confirmed price" : "Ask before boarding",
+    value: "Estimate unavailable",
+    note: partial
+      ? "Pulse has not priced every connection yet"
+      : "Check the operator fare before boarding",
   };
 }
 
@@ -186,7 +197,7 @@ export function SimpleTransportOptions({
                   {leg.mode === "walk" ? "Walk" :
                     isValidFare(leg.fare) && leg.fareStatus !== "unverified" ?
                       (leg.fareStatus === "verified" ? "" : "About ") + money(leg.fare) :
-                      "Fare to confirm"}
+                      isValidFare(rec.estimatedFare) ? "Included in trip estimate" : "Estimate unavailable"}
                 </p>
               </div>
             </div>

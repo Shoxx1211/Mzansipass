@@ -31,16 +31,13 @@ interface NavItem {
 // NAVIGATION
 // ======================================================
 
+// Keep beta navigation deliberately small. The AI navigator remains implemented
+// in the codebase and can be restored to the tab bar when that product phase starts.
 const NAV_ITEMS: NavItem[] = [
   {
     id: "home",
     label: "Home",
     description: "The rhythm of movement",
-  },
-  {
-    id: "navigate",
-    label: "Navigate",
-    description: "AI assistant",
   },
   {
     id: "stats",
@@ -86,23 +83,6 @@ const HomeIcon = ({ }: { active?: boolean }) => (
     <path d="M3 10.5 12 3l9 7.5" />
     <path d="M5 9.5V21h14V9.5" />
     <path d="M9 21v-6h6v6" />
-  </svg>
-);
-
-const NavigateIcon = () => (
-  <svg
-    width="22"
-    height="22"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <circle cx="12" cy="12" r="9" />
-    <path d="m15.5 8.5-2.3 5.2-5.2 2.3 2.3-5.2 5.2-2.3Z" />
   </svg>
 );
 
@@ -155,12 +135,7 @@ const NavButton: React.FC<{
 }> = memo(({ item, isActive, onClick }) => {
   const [isPressed, setIsPressed] = useState(false);
 
-  const Icon =
-    item.id === "home"
-      ? HomeIcon
-      : item.id === "navigate"
-        ? NavigateIcon
-        : StatsIcon;
+  const Icon = item.id === "home" ? HomeIcon : StatsIcon;
 
   return (
     <button

@@ -394,7 +394,11 @@ export interface TransportRecommendation {
   fareEstimateRange?: {
     minimum: number;
     maximum: number;
-    basis: "provisional-taxi" | "observed";
+    basis:
+      | "provisional-taxi"
+      | "observed"
+      | "operator-estimate"
+      | "published-range";
   };
   publishedFareRange?: {
     currency: string;

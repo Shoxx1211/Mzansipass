@@ -32,7 +32,7 @@ import {
 } from "../types";
 
 import { DestinationEngine } from "../services/destinationEngine";
-import { FareEngine, getTaxiFareGuide } from "../services/fareService";
+import { FareEngine, getOperatorFareGuide, getTaxiFareGuide } from "../services/fareService";
 import { HabitEngine } from "../services/habitEngine";
 import { RecommendationEngine } from "../services/recommendationEngine";
 import { JourneyDiscoveryEngine } from "../services/journeyDiscoveryEngine";
@@ -1158,60 +1158,128 @@ const App = () => {
           combinedRecommendations[combinedRecommendations.length - 1] = roadFallback;
         }
 
-        // Fare pricing is per option, NEVER a shared operator-wide cache:
-        // two taxi or bus candidates may have different distances.
+        // Every supported operator should give the commuter useful price guidance.
+        // Exact published fares win; otherwise Pulse clearly labels a broad amount/range
+        // as an estimate instead of falling back to "fare to confirm".
+        const planningDistanceKm =
+          destinationLocation
+            ? straightLineDistanceKm(origin, destinationLocation)
+            : nextRoutePlan.distanceKm;
+
         const enrichedRecommendations = await Promise.all(
           combinedRecommendations.map(async (rec): Promise<RecommendationType> => {
-            const hasMultipleLegs = (rec.journeyLegs?.length ?? 0) > 1;
-            if (hasMultipleLegs) return rec;
-
-            // No current stop/timetable evidence: do not synthesize a fare.
-            if (rec.mode !== "Taxi" && rec.fareStatus === "unverified") {
-              return rec;
-            }
             if (rec.fareStatus === "verified" && rec.estimatedFare !== null) {
               return rec;
             }
-            const serviceKm = rec.serviceDistanceKm;
-            if (serviceKm === undefined || !Number.isFinite(serviceKm) || serviceKm <= 0) {
-              return rec;
-            }
 
-            // A coordinate-only baseline does not prove taxi road length.
-            if (rec.mode === "Taxi" && rec.id === "road-fallback:taxi" &&
-                nextRoutePlan.source !== "mapbox-road") {
-              return rec;
-            }
-
-            try {
-              const fareResult = await FareEngine.computeFinalFare({
-                network: rec.mode,
-                distance: serviceKm,
-              });
-
-              const observedGuide =
-                rec.mode === "Taxi" && fareResult.source === "learned"
-                  ? {
-                      minimum: Math.max(5, Math.round(fareResult.fare * 0.85)),
-                      maximum: Math.ceil(fareResult.fare * 1.15),
-                      basis: "observed" as const,
-                    }
-                  : null;
-
+            if (
+              rec.publishedFareRange &&
+              Number.isFinite(rec.publishedFareRange.minimum) &&
+              Number.isFinite(rec.publishedFareRange.maximum)
+            ) {
+              const minimum = rec.publishedFareRange.minimum;
+              const maximum = rec.publishedFareRange.maximum;
               return {
                 ...rec,
-                estimatedFare: fareResult.fare,
+                estimatedFare: Math.round(((minimum + maximum) / 2) * 100) / 100,
                 fareStatus: "estimated",
-                ...(observedGuide ? { fareEstimateRange: observedGuide } : {}),
-                journeyLegs: rec.journeyLegs?.map((leg) =>
-                  leg.mode === "taxi"
-                    ? { ...leg, fare: fareResult.fare, fareStatus: "estimated" as const }
-                    : leg,
-                ),
+                fareEstimateRange: {
+                  minimum,
+                  maximum,
+                  basis: "published-range",
+                },
               };
-            } catch {
-              return rec;
             }
+
+            const enrichedLegs = await Promise.all(
+              (rec.journeyLegs ?? []).map(async (leg) => {
+                if (
+                  leg.mode === "walk" ||
+                  (
+                    leg.fare !== null &&
+                    leg.fare !== undefined &&
+                    leg.fareStatus !== "unverified"
+                  )
+                ) {
+                  return leg;
+                }
+
+                const legNetwork: TransitNetwork =
+                  leg.mode === "taxi"
+                    ? "Taxi"
+                    : leg.operator ?? rec.mode;
+
+                const legDistanceKm =
+                  leg.distanceKm ??
+                  (
+                    (rec.journeyLegs?.length ?? 0) <= 1
+                      ? rec.serviceDistanceKm ?? planningDistanceKm
+                      : null
+                  );
+
+                const guide = getOperatorFareGuide(
+                  legNetwork,
+                  legDistanceKm,
+                );
+
+                return guide
+                  ? {
+                      ...leg,
+                      fare: guide.midpoint,
+                      fareStatus: "estimated" as const,
+                    }
+                  : leg;
+              }),
+            );
+
+            const paidLegs = enrichedLegs.filter((leg) => leg.mode !== "walk");
+            const canSumEstimatedLegs =
+              paidLegs.length > 0 &&
+              paidLegs.every(
+                (leg) =>
+                  leg.fare !== null &&
+                  leg.fare !== undefined &&
+                  Number.isFinite(leg.fare) &&
+                  leg.fareStatus !== "unverified",
+              ) &&
+              !hasUnresolvedReaVayaTransfer(enrichedLegs);
+
+            if (canSumEstimatedLegs) {
+              const total = paidLegs.reduce(
+                (sum, leg) => sum + (leg.fare ?? 0),
+                0,
+              );
+              return {
+                ...rec,
+                journeyLegs: enrichedLegs,
+                estimatedFare: Math.round(total * 100) / 100,
+                fareStatus: "estimated",
+              };
+            }
+
+            const guide = getOperatorFareGuide(
+              rec.mode,
+              rec.serviceDistanceKm ?? planningDistanceKm,
+            );
+
+            if (!guide) {
+              return {
+                ...rec,
+                journeyLegs: enrichedLegs.length ? enrichedLegs : rec.journeyLegs,
+              };
+            }
+
+            return {
+              ...rec,
+              journeyLegs: enrichedLegs.length ? enrichedLegs : rec.journeyLegs,
+              estimatedFare: guide.midpoint,
+              fareStatus: "estimated",
+              fareEstimateRange: {
+                minimum: guide.minimum,
+                maximum: guide.maximum,
+                basis: guide.basis,
+              },
+            };
           }),
         );
 
@@ -1345,7 +1413,7 @@ const App = () => {
     const totalEstimatedFare = hasMultimodalLegs
       ? canSumLegs
         ? enrichedLegs.reduce((sum, leg) => sum + (leg.fare ?? 0), 0)
-        : null
+        : rec.estimatedFare
       : rec.estimatedFare;
 
     setSelectedRecommendation({
@@ -1353,11 +1421,9 @@ const App = () => {
       journeyLegs: enrichedLegs.length ? enrichedLegs : rec.journeyLegs,
       estimatedFare: totalEstimatedFare,
       fareStatus:
-        hasMultimodalLegs && totalEstimatedFare === null
-          ? "unverified"
-          : hasMultimodalLegs
-            ? "estimated"
-            : rec.fareStatus,
+        hasMultimodalLegs && totalEstimatedFare !== null
+          ? "estimated"
+          : rec.fareStatus,
     });
     setNetwork(selectedNetwork);
     setEstimatedFare(
@@ -2205,7 +2271,9 @@ const App = () => {
                           <span className="rounded-full bg-white/[0.06] px-3 py-1.5 text-[11px] font-bold text-white/75">
                             {activeJourneyLeg.estimatedFare !== null && activeJourneyLeg.estimatedFare !== undefined
                               ? `About R${activeJourneyLeg.estimatedFare.toFixed(2)}`
-                              : "Fare to confirm"}
+                              : estimatedFare !== null
+                                ? "Included in trip estimate"
+                                : "Estimate unavailable"}
                           </span>
                         </div>
 
@@ -2494,7 +2562,9 @@ const App = () => {
                                             ? leg.fareStatus === "estimated"
                                               ? `About R${leg.fare.toFixed(2)}`
                                               : `R${leg.fare.toFixed(2)}`
-                                            : "Fare to confirm"}
+                                            : estimatedFare !== null
+                                              ? "Included in trip estimate"
+                                              : "Estimate unavailable"}
                                         </span>
                                       </div>
                                     </div>
