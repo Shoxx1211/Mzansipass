@@ -17,31 +17,60 @@ const isValidFare = (fare: number | null | undefined): fare is number =>
 /** Don't display a train-leg fare as the full price of an unfinished commute. */
 export function getCommuterFare(rec: Recommendation): FareDisplay {
   const legs = rec.journeyLegs ?? [];
-  const hasUnpricedLeg = legs.some(leg =>
-    leg.mode !== "walk" && (!isValidFare(leg.fare) || leg.fareStatus === "unverified"));
+  const paidLegs = legs.filter((leg) => leg.mode !== "walk");
+  const hasUnpricedLeg = paidLegs.some(
+    (leg) => !isValidFare(leg.fare) || leg.fareStatus === "unverified",
+  );
   const accessUnresolved = rec.badges?.includes("ACCESS_REQUIRED") ?? false;
   const partial = hasUnpricedLeg || accessUnresolved;
-  if (rec.fareStatus !== "unverified" && isValidFare(rec.estimatedFare)) {
+
+  // Never show a known rail/bus leg as though it were the full price of a
+  // multimodal journey with an unresolved paid connection.
+  if (
+    rec.fareStatus !== "unverified" &&
+    isValidFare(rec.estimatedFare) &&
+    !hasUnpricedLeg
+  ) {
     return {
       value:
         rec.fareStatus === "verified"
           ? money(rec.estimatedFare)
           : "About " + money(rec.estimatedFare),
-      note:
-        rec.mode === "Taxi" && rec.evidenceStatus === "road-baseline"
-          ? "Road-based taxi estimate · rank fare may differ"
-          : partial
-            ? "Estimated trip fare · individual connection fares may vary"
-            : rec.fareStatus === "verified"
-              ? "Published fare · check before travel"
-              : "Estimated fare · check before travel",
+      note: accessUnresolved
+        ? "Rail/bus leg only · getting there costs extra"
+        : rec.mode === "Taxi" && rec.evidenceStatus === "road-baseline"
+          ? "Road-based taxi guide · rank fare may differ"
+          : rec.fareStatus === "verified"
+            ? "Published fare · check before travel"
+            : "Estimated fare · check before travel",
     };
   }
 
-  // Ranges are guidance, never a claim that Pulse knows the exact ticket price.
-  if (rec.fareEstimateRange &&
-      isValidFare(rec.fareEstimateRange.minimum) &&
-      isValidFare(rec.fareEstimateRange.maximum)) {
+  // Recommendation-level ranges can represent the full journey only when
+  // there is no unresolved access leg. Rea Vaya is the exception where a
+  // published network fare band may cover connected legs as one paid journey.
+  const sameOperatorPaidLegs =
+    paidLegs.length > 0 &&
+    paidLegs.every(
+      (leg) =>
+        leg.operator === rec.mode ||
+        (rec.mode === "Rea Vaya" && leg.operator === "Rea Vaya"),
+    );
+
+  const rangeCanRepresentWholeTrip =
+    !partial ||
+    (
+      rec.fareEstimateRange?.basis === "published-range" &&
+      !accessUnresolved &&
+      sameOperatorPaidLegs
+    );
+
+  if (
+    rec.fareEstimateRange &&
+    isValidFare(rec.fareEstimateRange.minimum) &&
+    isValidFare(rec.fareEstimateRange.maximum) &&
+    rangeCanRepresentWholeTrip
+  ) {
     return {
       value:
         money(rec.fareEstimateRange.minimum) +
@@ -49,26 +78,33 @@ export function getCommuterFare(rec: Recommendation): FareDisplay {
         money(rec.fareEstimateRange.maximum),
       note:
         rec.fareEstimateRange.basis === "provisional-taxi"
-          ? "Taxi estimate · rank fare may differ"
+          ? "Taxi guide only · rank fare may differ"
           : rec.fareEstimateRange.basis === "published-range"
             ? "Published operator range · exact trip may differ"
             : "Pulse fare estimate · check before travel",
     };
   }
-  if (rec.publishedFareRange &&
-      isValidFare(rec.publishedFareRange.minimum) &&
-      isValidFare(rec.publishedFareRange.maximum) &&
-      true) {
+
+  if (
+    rec.publishedFareRange &&
+    isValidFare(rec.publishedFareRange.minimum) &&
+    isValidFare(rec.publishedFareRange.maximum) &&
+    !hasUnpricedLeg
+  ) {
     return {
-      value: money(rec.publishedFareRange.minimum) + "–" + money(rec.publishedFareRange.maximum),
+      value:
+        money(rec.publishedFareRange.minimum) +
+        "–" +
+        money(rec.publishedFareRange.maximum),
       note: "Published fare bands · not your total",
     };
   }
+
   return {
-    value: "Estimate unavailable",
+    value: "Fare to confirm",
     note: partial
-      ? "Pulse has not priced every connection yet"
-      : "Check the operator fare before boarding",
+      ? "Some connections have no confirmed price"
+      : "Ask before boarding",
   };
 }
 
