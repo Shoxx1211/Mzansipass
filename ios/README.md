@@ -6,6 +6,7 @@ mode are configured. Physical-device background tracking still needs testing.
 
 From the repository root: `npm ci`, `npm --prefix frontend ci`, then
 `npm run build:ios` and `npm run cap:ios`. Use Xcode 26 or newer.
+Install CocoaPods on the Mac before syncing. CocoaPods is used because the tracking plugin’s Swift Package Manager manifest targets Capacitor 7.
 Set the same public `VITE_MAPBOX_TOKEN` used for Android before the build.
 
 The iOS workflow builds an unsigned **simulator app**, not an installable IPA.
