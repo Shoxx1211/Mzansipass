@@ -280,9 +280,17 @@ export const getOperatorFareGuide = (
 
   if (network === "Taxi") {
     const taxi = getTaxiFareGuide(distanceKm);
-    return taxi
-      ? { ...taxi, basis: "provisional-taxi" }
-      : null;
+    if (taxi) return { ...taxi, basis: "provisional-taxi" };
+    // Missing distance still gets a broad pilot guide. Beyond the seeded
+    // bands, scale the longest-distance band as a provisional estimate.
+    const last = TAXI_FARE_ZONES[TAXI_FARE_ZONES.length - 1];
+    const scale = hasDistance ? Math.max(1, distanceKm! / last.toDistance) : 1;
+    const minimum = hasDistance
+      ? Math.floor(last.offPeakFare * 0.8 * scale / 5) * 5
+      : Math.floor(Math.min(...TAXI_FARE_ZONES.map(band => band.offPeakFare)) * 0.8 / 5) * 5;
+    const maximum = Math.ceil(last.peakFare * 1.3 * scale / 5) * 5;
+    return { minimum, maximum, midpoint: Math.round((minimum + maximum) / 10) * 5,
+      basis: "provisional-taxi" };
   }
 
   if (network === "A Re Yeng" || network === "Tshwane Bus Service") {

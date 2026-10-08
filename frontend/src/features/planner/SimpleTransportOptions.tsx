@@ -1,5 +1,6 @@
 // Pulse's commuter-first comparison screen. Route evidence comes from the existing
-// discovery engines; this screen never manufactures a transport service or a fare.
+// discovery engines; provisional fare guides remain separate from route evidence.
+import { getOperatorFareGuide } from "../../services/fareService";
 import { useMemo, useState } from "react";
 import { ArrowRight, BusFront, ChevronDown, ChevronUp, Footprints, MapPin, TrainFront, TramFront } from "lucide-react";
 import type { TransportRecommendation as Recommendation, Location } from "../../types";
@@ -100,11 +101,24 @@ export function getCommuterFare(rec: Recommendation): FareDisplay {
     };
   }
 
+  // Last-resort numeric guidance also covers stale/unverified recommendations.
+  // Price each paid leg so a known rail fare is never presented as the total.
+  const estimates = paidLegs.length ? paidLegs.map(leg => {
+    if (isValidFare(leg.fare) && leg.fareStatus !== "unverified") {
+      return { minimum: leg.fare, maximum: leg.fare };
+    }
+    return getOperatorFareGuide(
+      leg.mode === "taxi" ? "Taxi" : leg.operator ?? rec.mode,
+      leg.distanceKm ?? (paidLegs.length === 1 ? rec.serviceDistanceKm : null),
+    )!;
+  }) : [getOperatorFareGuide(rec.mode, rec.serviceDistanceKm)!];
+  const minimum = estimates.reduce((sum, fare) => sum + fare.minimum, 0);
+  const maximum = estimates.reduce((sum, fare) => sum + fare.maximum, 0);
   return {
-    value: "Fare to confirm",
-    note: partial
-      ? "Some connections have no confirmed price"
-      : "Ask before boarding",
+    value: "Est. " + money(minimum) + "–" + money(maximum),
+    note: accessUnresolved
+      ? "Estimated listed legs · getting there costs extra"
+      : "Provisional fare estimate · actual fare may vary",
   };
 }
 
@@ -233,7 +247,7 @@ export function SimpleTransportOptions({
                   {leg.mode === "walk" ? "Walk" :
                     isValidFare(leg.fare) && leg.fareStatus !== "unverified" ?
                       (leg.fareStatus === "verified" ? "" : "About ") + money(leg.fare) :
-                      isValidFare(rec.estimatedFare) ? "Included in trip estimate" : "Estimate unavailable"}
+                      "Est. " + money(getOperatorFareGuide(leg.mode === "taxi" ? "Taxi" : leg.operator ?? rec.mode, leg.distanceKm)?.midpoint ?? 0)}
                 </p>
               </div>
             </div>

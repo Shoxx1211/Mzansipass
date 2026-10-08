@@ -390,7 +390,7 @@ const formatBadge = (
     ROAD_ROUTE:
       "Road route",
     FARE_VERIFY:
-      "Fare to confirm",
+      "Estimated fare",
     CONFIGURED_DATA:
       "Configured data",
   };

@@ -40,7 +40,7 @@ describe("commuter fare truthfulness", () => {
     expect(result.note).toContain("getting there costs extra");
   });
 
-  it("does not sum a multi-mode journey with an unknown taxi fare", () => {
+  it("estimates the unknown taxi leg and includes the known train fare", () => {
     const result = getCommuterFare({
       ...rail,
       fareStatus: "estimated",
@@ -50,8 +50,8 @@ describe("commuter fare truthfulness", () => {
         ...(rail.journeyLegs ?? []),
       ],
     });
-    expect(result.value).toBe("Fare to confirm");
-    expect(result.note).toContain("no confirmed price");
+    expect(result.value).toBe("Est. R64–R164");
+    expect(result.note).toContain("Provisional fare estimate");
   });
 
   it("shows provisional taxi fare bands as guides, not published prices", () => {
@@ -69,5 +69,26 @@ describe("commuter fare truthfulness", () => {
       ...rail, evidenceStatus: "published-service-area",
     })).toBe("Boarding point to confirm");
     expect(getBoardingHint(rail)).toBe("Board near Park Station");
+  });
+});
+
+
+describe("numeric fallback for every operator", () => {
+  for (const mode of ["Taxi", "Gautrain", "Rea Vaya", "A Re Yeng", "Tshwane Bus Service", "Metrorail", "Putco"] as const) {
+    for (const distance of [undefined, 0, NaN, 12, 150]) {
+      it(`${mode} gives numeric guidance at distance ${distance}`, () => {
+        const result = getCommuterFare({ ...rail, mode, estimatedFare: null,
+          fareStatus: "unverified", journeyLegs: [], serviceDistanceKm: distance });
+        expect(result.value).toMatch(/R[0-9]/);
+        expect(result.value).not.toMatch(/NaN|Infinity|confirm/);
+      });
+    }
+  }
+  it("prices an unverified taxi leg even when its recommendation has a range", () => {
+    const result = getCommuterFare({ ...rail, mode: "Taxi", estimatedFare: 20,
+      fareStatus: "estimated", serviceDistanceKm: 8,
+      fareEstimateRange: {minimum: 10, maximum: 20, basis: "provisional-taxi"},
+      journeyLegs: [{id: "taxi", mode: "taxi", label: "Taxi", fare: null, fareStatus: "unverified", distanceKm: 8}] });
+    expect(result.value).toBe("Est. R10–R20");
   });
 });
