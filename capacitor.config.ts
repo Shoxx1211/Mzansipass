@@ -25,10 +25,10 @@ const config: CapacitorConfig = {
   },
 
   ios: {
-    scheme: 'Pulse Transit',
+    scheme: 'App',
     contentInset: 'automatic',
     allowsLinkPreview: true,
-    limitsNavigationsToAppBoundDomains: true,
+    limitsNavigationsToAppBoundDomains: false,
     webContentsDebuggingEnabled: process.env.NODE_ENV === 'development',
   },
 

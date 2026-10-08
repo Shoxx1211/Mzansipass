@@ -1,0 +1,58 @@
+name: Verify Pulse iOS
+
+on:
+  push:
+    branches: [pulse-mvp-integration]
+    paths:
+      - 'ios/**'
+      - 'frontend/**'
+      - 'package*.json'
+      - 'capacitor.config.ts'
+      - '.github/workflows/verify-ios.yml'
+  workflow_dispatch:
+
+jobs:
+  ios-simulator:
+    runs-on: macos-15
+    timeout-minutes: 25
+    env:
+      VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+      - name: Select Xcode 26
+        run: |
+          XCODE_PATH=$(find /Applications -maxdepth 1 -name 'Xcode_26*.app' | sort | tail -1)
+          test -n "$XCODE_PATH"
+          sudo xcode-select -s "$XCODE_PATH/Contents/Developer"
+          xcodebuild -version
+      - run: npm ci
+      - run: npm ci
+        working-directory: frontend
+      - name: Verify place-search configuration
+        run: |
+          case "$VITE_MAPBOX_TOKEN" in
+            pk.*) echo "Mapbox public token available." ;;
+            *) echo "::error::Set VITE_MAPBOX_TOKEN before building."; exit 1 ;;
+          esac
+      - run: npm run build:ios
+      - name: Build iPhone simulator app
+        run: >-
+          xcodebuild -project ios/App/App.xcodeproj -scheme App
+          -configuration Debug -sdk iphonesimulator
+          -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath ios/DerivedData
+          CODE_SIGNING_ALLOWED=NO build
+      - name: Upload simulator build (not installable on an iPhone)
+        uses: actions/upload-artifact@v4
+        with:
+          name: pulse-ios-simulator
+          path: ios/DerivedData/Build/Products/Debug-iphonesimulator/App.app
+          if-no-files-found: error
+          retention-days: 14

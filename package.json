@@ -11,12 +11,15 @@
     "build": "cd frontend && npm run build",
     "start": "node dist/server/index.js",
     "cap:sync": "npx cap sync",
-    "cap:android": "npx cap open android"
+    "cap:android": "npx cap open android",
+    "cap:ios": "npx cap open ios",
+    "build:ios": "npm run build && npx cap sync ios"
   },
   "dependencies": {
     "@capacitor-community/background-geolocation": "^1.2.26",
     "@capacitor/android": "^8.3.1",
     "@capacitor/core": "^8.3.1",
+    "@capacitor/ios": "8.3.1",
     "@capacitor/keyboard": "^8.0.3",
     "@prisma/client": "^6.19.2",
     "bcrypt": "^6.0.0",
