@@ -11,7 +11,6 @@
 // - Minimise unnecessary localStorage writes
 // - Never silently claim that Base64 obfuscation is secure encryption
 
-import { App } from "@capacitor/app";
 import { Capacitor, registerPlugin } from "@capacitor/core";
 import { Geolocation } from "@capacitor/geolocation";
 import type {
@@ -482,19 +481,23 @@ class BackgroundTrackerService {
   // ====================================================
 
   private setupAppStateListeners(): void {
-    if (!Capacitor.isNativePlatform()) return;
+    if (typeof document === "undefined") return;
 
-    void App.addListener("appStateChange", ({ isActive }) => {
+    const applyVisibilityState = (): void => {
       const timestamp = now();
       this.commitAppStateDuration(timestamp);
 
+      const isActive = document.visibilityState === "visible";
       this.isInBackground = !isActive;
       this.appStateChangedAt = timestamp;
 
       if (isActive) {
         console.log("📱 Pulse returned to foreground");
 
+        // The native background watcher should remain alive while the screen is
+        // locked. Only refresh a stale non-native watcher after returning.
         if (
+          !this.guaranteedBackgroundTracking &&
           this.isTracking &&
           this.currentTrip?.active &&
           timestamp - this.currentTrip.lastUpdate > GPS_FILTERS.staleWatcherMs
@@ -506,7 +509,9 @@ class BackgroundTrackerService {
       } else {
         console.log("📱 Pulse moved to background");
       }
-    });
+    };
+
+    document.addEventListener("visibilitychange", applyVisibilityState);
   }
 
   private commitAppStateDuration(timestamp = now()): void {
@@ -634,6 +639,13 @@ class BackgroundTrackerService {
   // ====================================================
 
   private async ensureLocationPermission(): Promise<void> {
+    // The native background plugin owns the Android permission request when the
+    // journey watcher starts. Avoid depending on @capacitor/geolocation being
+    // registered in the native shell just to begin a background journey.
+    if (Capacitor.isNativePlatform() && this.config.backgroundEnabled) {
+      return;
+    }
+
     if (!Capacitor.isNativePlatform()) {
       // On web/PWA, getCurrentPosition/watchPosition triggers the browser prompt.
       return;
@@ -679,6 +691,10 @@ class BackgroundTrackerService {
   private async getInitialPosition(): Promise<TrackerLocation> {
     const activeConfig = this.getActiveConfig();
 
+    if (Capacitor.isNativePlatform() && activeConfig.backgroundEnabled) {
+      return this.getNativeInitialPosition();
+    }
+
     try {
       const position = await Geolocation.getCurrentPosition({
         enableHighAccuracy: activeConfig.highAccuracy,
@@ -690,6 +706,79 @@ class BackgroundTrackerService {
     } catch (error) {
       throw mapTrackerError(error);
     }
+  }
+
+  private getNativeInitialPosition(): Promise<TrackerLocation> {
+    return new Promise((resolve, reject) => {
+      let watcherId: string | null = null;
+      let settled = false;
+
+      const cleanup = (): void => {
+        if (watcherId) {
+          void BackgroundGeolocation.removeWatcher({ id: watcherId }).catch(
+            () => undefined
+          );
+          watcherId = null;
+        }
+      };
+
+      const timeoutId = window.setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        reject(
+          new BackgroundTrackerError(
+            "TIMEOUT",
+            "Pulse could not get your location in time. Make sure Location/GPS is turned on and try again."
+          )
+        );
+      }, INITIAL_LOCATION_TIMEOUT_MS);
+
+      void BackgroundGeolocation.addWatcher(
+        {
+          requestPermissions: true,
+          stale: false,
+          distanceFilter: 0,
+        },
+        (position, error) => {
+          if (settled) return;
+
+          if (error) {
+            settled = true;
+            window.clearTimeout(timeoutId);
+            cleanup();
+            reject(mapTrackerError(error));
+            return;
+          }
+
+          if (!position) return;
+
+          try {
+            const location = this.formatBackgroundPosition(position);
+            settled = true;
+            window.clearTimeout(timeoutId);
+            cleanup();
+            resolve(location);
+          } catch (processingError) {
+            settled = true;
+            window.clearTimeout(timeoutId);
+            cleanup();
+            reject(mapTrackerError(processingError));
+          }
+        }
+      )
+        .then((id) => {
+          watcherId = id;
+          if (settled) cleanup();
+        })
+        .catch((error) => {
+          if (settled) return;
+          settled = true;
+          window.clearTimeout(timeoutId);
+          cleanup();
+          reject(mapTrackerError(error));
+        });
+    });
   }
 
   // ====================================================
