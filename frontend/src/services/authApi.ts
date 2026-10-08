@@ -49,7 +49,7 @@ const nativeCookie = async (name: string): Promise<string | null> => {
     const result = await CapacitorCookies.getCookies({
       url: NATIVE_BASE,
     });
-    return result.cookies?.[name] ?? null;
+    return (result as Record<string, string>)[name] ?? null;
   } catch {
     return null;
   }
