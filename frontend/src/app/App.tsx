@@ -496,10 +496,14 @@ const App = () => {
   // The background tracker still applies its own GPS validation and drift filters.
   useEffect(() => {
     BackgroundTracker.setConfig({
+      // Public-transport tracking does not need a 1.5s / 5m GPS firehose.
+      // A 10m movement filter keeps distance responsive while materially
+      // reducing native callbacks and battery use during long journeys.
       highAccuracy: true,
-      updateInterval: 1500,
-      distanceFilter: 5,
+      updateInterval: 3000,
+      distanceFilter: 10,
       batteryOptimized: false,
+      backgroundEnabled: true,
     });
   }, []);
 
