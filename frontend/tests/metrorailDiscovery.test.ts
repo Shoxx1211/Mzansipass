@@ -33,7 +33,7 @@ describe("PRASA Gauteng pilot corridor graph", () => {
     expect(options[0].journeyLegs?.[0]?.mode).toBe("rail");
     expect(options[0].selectable).toBe(true);
     expect(options[0].estimatedFare).toBeNull();
-    expect(getCommuterFare(options[0]).value).toBe("Fare to confirm");
+    expect(getCommuterFare(options[0]).value).toMatch(/^Est\. R\d/);
     expect(getBoardingHint(options[0])).toContain("Closest mapped rail stop:");
   });
 

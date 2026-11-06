@@ -13,6 +13,7 @@ import {
   type DestinationPlace,
 } from "../features/planner/DestinationSearch";
 import { SimpleTransportOptions } from "../features/planner/SimpleTransportOptions";
+import { NearbyTransportPanel } from "../features/planner/NearbyTransportPanel";
 import { StartingPointPicker } from "../features/planner/StartingPointPicker";
 import {
   DevJourneyTestLab,
@@ -54,6 +55,7 @@ import {
 import Session from "../utils/session";
 import Storage from "../utils/storage";
 import { AuthApi, type PassengerAccount } from "../services/authApi";
+import { GUEST_HISTORY_OWNER, GUEST_ID, mergeGuestTrips } from "../services/guestProfile";
 import {
   confirmMultimodalSwitch,
   finishMultimodalJourney,
@@ -402,6 +404,7 @@ const App = () => {
   // ====================================================
 
   const [user, setUser] = useState<PassengerAccount | null>(null);
+  const [isGuest, setIsGuest] = useState(false);
   const [authChecking, setAuthChecking] = useState(true);
   const [pendingRecovery, setPendingRecovery] = useState<SavedActiveTrip | null>(null);
   const [accountError, setAccountError] = useState<string | null>(null);
@@ -487,9 +490,9 @@ const App = () => {
     batteryOptimized: false,
     autoStart: false,
 
-    // Do not ask for location on the login screen.
-    // Once the user is authenticated, acquire ONE accurate origin fix.
-    autoLocate: Boolean(user),
+    // Do not ask for location on the welcome screen. Guests can use the same
+    // planner GPS flow without creating an account or sending identity data.
+    autoLocate: Boolean(user || isGuest),
   });
 
   // Tune active-trip tracking for a more responsive live speed display.
@@ -1927,15 +1930,14 @@ const App = () => {
     setHistory((previous) => {
       const updated = [finalTrip, ...previous];
 
-      if (user?.email) {
-        Storage.save(user.email, "history", updated);
-      }
+      const owner = user?.email ?? (isGuest ? GUEST_HISTORY_OWNER : null);
+      if (owner) Storage.save(owner, "history", updated);
 
       return updated;
     });
 
     resetAllTripState();
-  }, [actualFare, resetAllTripState, user, verifyTrip]);
+  }, [actualFare, isGuest, resetAllTripState, user, verifyTrip]);
 
   // ====================================================
   // FALLBACK DURATION TIMER
@@ -1975,6 +1977,12 @@ const App = () => {
     // Old demo login records are intentionally invalid. Only a verified
     // backend refresh cookie can restore the commuter session.
     Session.clear("user");
+    // Guest startup must work offline and must not contact the account API.
+    if (Session.load<boolean>("guest_mode") === true) {
+      setIsGuest(true);
+      setAuthChecking(false);
+      return;
+    }
     void AuthApi.restore()
       .then((account) => {
         if (active) setUser(account);
@@ -1988,20 +1996,55 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (!user) {
+    const owner = user?.email ?? (isGuest ? GUEST_HISTORY_OWNER : null);
+    const identityId = user?.id ?? (isGuest ? GUEST_ID : null);
+    if (!owner || !identityId) {
       setHistory([]);
+      setPendingRecovery(null);
       return;
     }
-    setHistory(Storage.load<TripData[]>(user.email, "history") ?? []);
+    setHistory(Storage.load<TripData[]>(owner, "history") ?? []);
     const saved = Session.load<SavedActiveTrip>("active_trip");
-    if (saved && saved.userId === user.id &&
+    if (saved && saved.userId === identityId &&
         saved.tripState === TripState.ACTIVE && saved.currentTrip.startTime) {
       setPendingRecovery(saved);
     } else {
       setPendingRecovery(null);
-      if (saved) Session.clear("active_trip");
+      // A different local profile's saved journey must not be destroyed just
+      // because this guest/account opened Pulse on the same device.
+      if (saved && saved.userId === identityId) Session.clear("active_trip");
     }
-  }, [user]);
+  }, [isGuest, user]);
+
+  const handleAccountLogin = useCallback((account: PassengerAccount) => {
+    const guestTrips = Storage.load<TripData[]>(GUEST_HISTORY_OWNER, "history") ?? [];
+    if (guestTrips.length > 0 && window.confirm(
+      `Import ${guestTrips.length} guest journey${guestTrips.length === 1 ? "" : "s"} into this account on this phone? Your guest history will stay separate if you choose Cancel.`,
+    )) {
+      const accountTrips = Storage.load<TripData[]>(account.email, "history") ?? [];
+      Storage.save(account.email, "history", mergeGuestTrips(accountTrips, guestTrips));
+      Storage.clear(GUEST_HISTORY_OWNER, "history");
+    }
+    Session.clear("guest_mode");
+    Session.clear("user");
+    setIsGuest(false);
+    setUser(account);
+  }, []);
+
+  const leaveGuestMode = useCallback(() => {
+    if (tripState === TripState.ACTIVE || verifyTrip || pendingRecovery) return;
+    Session.clear("guest_mode");
+    setIsGuest(false);
+    resetAllTripState();
+    setActiveTab("home");
+  }, [pendingRecovery, resetAllTripState, tripState, verifyTrip]);
+
+  const clearGuestHistory = useCallback(() => {
+    if (!isGuest || tripState === TripState.ACTIVE || verifyTrip || pendingRecovery) return;
+    if (!window.confirm("Erase all saved guest trips on this phone? This cannot be undone.")) return;
+    Storage.clear(GUEST_HISTORY_OWNER, "history");
+    setHistory([]);
+  }, [isGuest, pendingRecovery, tripState, verifyTrip]);
 
   const resumeSavedJourney = useCallback(async () => {
     if (!pendingRecovery || accountBusy) return;
@@ -2112,9 +2155,10 @@ const App = () => {
       return;
     }
 
-    if (!user) return;
+    const identityId = user?.id ?? (isGuest ? GUEST_ID : null);
+    if (!identityId) return;
     const session: SavedActiveTrip = {
-      userId: user.id,
+      userId: identityId,
       currentTrip,
       tripState,
       network,
@@ -2123,7 +2167,7 @@ const App = () => {
     };
 
     Session.save("active_trip", session);
-  }, [currentTrip, destination, duration, network, tripState, user]);
+  }, [currentTrip, destination, duration, isGuest, network, tripState, user]);
 
   // ====================================================
   // GEMINI NAVIGATOR TAB
@@ -2149,10 +2193,10 @@ const App = () => {
     );
   }
 
-  if (!user) {
-    return <AuthScreen onLogin={(account) => {
-      setUser(account);
-      Session.clear("user");
+  if (!user && !isGuest) {
+    return <AuthScreen onLogin={handleAccountLogin} onGuest={() => {
+      Session.save("guest_mode", true);
+      setIsGuest(true);
     }} />;
   }
 
@@ -2282,6 +2326,13 @@ const App = () => {
                             <p className="text-sm font-semibold text-white/80">
                               Next: {nextJourneyLeg.label}
                             </p>
+                            {(activeJourneyLeg.to || nextJourneyLeg.from) && (
+                              <p className="mt-2 rounded-xl bg-cyan-300/[0.07] px-3 py-2 text-xs leading-5 text-cyan-100/85">
+                                Possible change point: {activeJourneyLeg.to ?? "stop to confirm"}.
+                                {nextJourneyLeg.from ? ` Next boarding area: ${nextJourneyLeg.from}.` : ""}
+                                {" "}Check that your service stops here and confirm the actual walking connection before getting off.
+                              </p>
+                            )}
                             {activeJourneyLeg.plannedDistanceKm !== null &&
                               activeJourneyLeg.plannedDistanceKm !== undefined && (
                                 <p className="mt-1 text-xs leading-5 text-white/45">
@@ -2451,6 +2502,7 @@ const App = () => {
                           currentLocation={plannerOrigin}
                           onDestinationResolved={handleDestinationResolved}
                         />
+                        <NearbyTransportPanel origin={plannerOrigin} />
                         {SHOW_NETWORK_LAB && <DevJourneyTestLab onRun={handleDevelopmentJourneyTest} />}
                       </div>
                     )}
@@ -2850,20 +2902,37 @@ const App = () => {
                   </h1>
                 </div>
                 <div className="premium-glass-soft rounded-2xl p-4">
-                  <p className="text-sm font-bold text-white">{user.email}</p>
+                  <p className="text-sm font-bold text-white">{isGuest ? "Guest on this device" : user?.email}</p>
                   <p className="mt-1 text-xs text-white/45">
-                    Account verified by Pulse. Journey history is still stored on this device during the technical pilot.
+                    {isGuest
+                      ? "Your trips and statistics stay on this phone. No account is created, and uninstalling Pulse may erase this history. Sign in later to import these trips into your local account history."
+                      : "Account verified by Pulse. Journey history is still stored on this device during the technical pilot."}
                   </p>
                   {accountError && <p role="alert" className="mt-2 text-xs text-red-200">{accountError}</p>}
                   <div className="mt-3 flex flex-wrap gap-3">
-                    <button type="button" disabled={accountBusy || tripState === TripState.ACTIVE || Boolean(verifyTrip)}
-                      onClick={() => void signOut()} className="rounded-xl bg-white/10 px-4 py-2 text-xs font-bold text-white disabled:opacity-40">
-                      Sign out
-                    </button>
-                    <button type="button" disabled={accountBusy || tripState === TripState.ACTIVE || Boolean(verifyTrip)}
-                      onClick={() => void deleteMyAccount()} className="rounded-xl bg-red-300/10 px-4 py-2 text-xs font-bold text-red-200 disabled:opacity-40">
-                      Delete my account
-                    </button>
+                    {isGuest ? (
+                      <>
+                        <button type="button" disabled={tripState === TripState.ACTIVE || Boolean(verifyTrip) || Boolean(pendingRecovery)}
+                          onClick={leaveGuestMode} className="rounded-xl bg-emerald-300/15 px-4 py-2 text-xs font-bold text-emerald-100 disabled:opacity-40">
+                          Sign in or create an account
+                        </button>
+                        <button type="button" disabled={tripState === TripState.ACTIVE || Boolean(verifyTrip) || Boolean(pendingRecovery) || history.length === 0}
+                          onClick={clearGuestHistory} className="rounded-xl bg-red-300/10 px-4 py-2 text-xs font-bold text-red-200 disabled:opacity-40">
+                          Erase guest trip history
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button type="button" disabled={accountBusy || tripState === TripState.ACTIVE || Boolean(verifyTrip)}
+                          onClick={() => void signOut()} className="rounded-xl bg-white/10 px-4 py-2 text-xs font-bold text-white disabled:opacity-40">
+                          Sign out
+                        </button>
+                        <button type="button" disabled={accountBusy || tripState === TripState.ACTIVE || Boolean(verifyTrip)}
+                          onClick={() => void deleteMyAccount()} className="rounded-xl bg-red-300/10 px-4 py-2 text-xs font-bold text-red-200 disabled:opacity-40">
+                          Delete my account
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
 

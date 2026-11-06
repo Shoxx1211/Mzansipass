@@ -5,8 +5,9 @@ import { useMemo, useState } from "react";
 import { ArrowRight, BusFront, ChevronDown, ChevronUp, Footprints, MapPin, TrainFront, TramFront } from "lucide-react";
 import type { TransportRecommendation as Recommendation, Location } from "../../types";
 import { PublishedFaresPanel } from "./PublishedFaresPanel";
-import { getNearbyModeHints } from "../../services/nearbyNetwork";
+import { NearbyTransportPanel } from "./NearbyTransportPanel";
 import { completeOneWayFare, recurringTravelCost } from "../../services/commuterCost";
+import { getTransferGuidance } from "../../services/transferGuidance";
 
 type FareDisplay = { value: string; note: string };
 const money = (value: number): string =>
@@ -129,7 +130,7 @@ export function getBoardingHint(rec: Recommendation): string {
   if (rec.mode === "Metrorail") {
     return "Closest mapped rail stop: " + rec.nearestStop;
   }
-  return "Board near " + rec.nearestStop;
+  return "Mapped boarding candidate near " + rec.nearestStop + " · verify the service";
 }
 
 const humanMode = (mode: string): string =>
@@ -154,8 +155,6 @@ export function SimpleTransportOptions({
 }: Props) {
   const [showAll, setShowAll] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [showNearby, setShowNearby] = useState<boolean | null>(null);
-  const nearby = useMemo(() => getNearbyModeHints(origin), [origin]);
   const ordered = useMemo(
     () => [...recommendations].sort((a, b) => {
       // A verified startable journey is more useful than an area-only hint.
@@ -167,7 +166,6 @@ export function SimpleTransportOptions({
   const displayed = showAll ? ordered : ordered.slice(0, 5);
   // If few destination-matching services exist, reveal nearby alternatives
   // automatically while letting the commuter hide them.
-  const nearbyOpen = showNearby ?? ordered.length <= 1;
 
   if (isLoading) {
     return <div role="status" className="rounded-3xl border border-white/10 bg-white/[0.04] p-8 text-center text-sm text-white/70">
@@ -198,6 +196,7 @@ export function SimpleTransportOptions({
       const type = modeType(rec.mode);
       const Icon = type === "rail" ? TrainFront : type === "taxi" ? TramFront : BusFront;
       const legs = rec.journeyLegs ?? [];
+      const transfers = getTransferGuidance(rec);
       return <article key={rec.id} className="overflow-hidden rounded-[22px] border border-white/10 bg-[#111f2d] shadow-lg shadow-black/10">
         <div className="flex items-start gap-3 p-4 sm:p-5">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-cyan-400/10 text-cyan-200">
@@ -237,6 +236,13 @@ export function SimpleTransportOptions({
           </button>
         </div>
         {active && <div className="space-y-3 border-t border-white/10 bg-black/10 p-4 sm:p-5">
+          {transfers.length > 0 && <div className="space-y-2 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-3">
+            <p className="text-xs font-bold uppercase tracking-wider text-cyan-200">Where to change transport</p>
+            {transfers.map((transfer, index) => <div key={`${rec.id}-transfer-${index}`} className="space-y-1">
+              <p className="text-sm font-semibold text-white">{transfer.title}</p>
+              <p className="text-xs leading-5 text-white/65">{transfer.detail}</p>
+            </div>)}
+          </div>}
           {legs.length > 0 ? legs.map((leg, index) =>
             <div key={leg.id} className="flex items-start gap-3">
               <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-cyan-400/15 text-xs font-bold text-cyan-200">{index + 1}</span>
@@ -251,7 +257,7 @@ export function SimpleTransportOptions({
                 </p>
               </div>
             </div>
-          ) : <p className="text-sm text-white/70">Exact boarding and transfer steps have not been confirmed.</p>}
+          ) : <p className="text-sm text-white/70">Exact boarding and service direction have not been confirmed.</p>}
           <p className="text-xs leading-relaxed text-white/60">{rec.reason}</p>
           {monthly !== null && <div className="rounded-xl bg-cyan-300/[0.07] px-3 py-3 text-xs leading-5 text-white/75">
             <span className="font-bold text-white">Plan your monthly travel:</span>{" "}
@@ -267,34 +273,7 @@ export function SimpleTransportOptions({
         </div>}
       </article>;
     })}
-    {nearby.length > 0 && (
-      <div className="rounded-[22px] border border-white/10 bg-[#111f2d]">
-        <button type="button" aria-expanded={nearbyOpen} onClick={() => setShowNearby(!nearbyOpen)}
-          className="flex min-h-12 w-full items-center justify-between gap-3 px-4 text-left text-sm font-semibold text-white/85">
-          Other services around your starting point
-          {nearbyOpen ? <ChevronUp size={17} /> : <ChevronDown size={17} />}
-        </button>
-        {nearbyOpen && <div className="space-y-3 border-t border-white/10 px-4 py-4">
-          {nearby.map(hint => <div key={hint.id} className="space-y-1 rounded-xl bg-white/[0.035] p-3">
-            <div className="flex items-center justify-between gap-3">
-              <span className="font-semibold text-white">{hint.name}</span>
-              {hint.kilometres !== undefined && <span className="whitespace-nowrap text-xs text-cyan-200">
-                {hint.kilometres.toFixed(1)} km away*
-              </span>}
-            </div>
-            <p className="text-xs leading-5 text-white/60">{hint.detail}</p>
-            <a href={hint.sourceUrl} target="_blank" rel="noopener noreferrer"
-              className="inline-block py-1 text-xs text-cyan-200 underline underline-offset-4">
-              Official information ↗
-            </a>
-          </div>)}
-          <p className="text-[11px] text-white/45">
-            *Straight-line distance to a mapped point, not walking distance.
-            These are nearby networks, not proof that a direct service reaches your destination.
-          </p>
-        </div>}
-      </div>
-    )}
+    <NearbyTransportPanel origin={origin} title="Other services around your starting point" initiallyOpen={ordered.length <= 1} />
     {ordered.length > 5 && <button type="button" onClick={() => setShowAll(v => !v)}
       className="min-h-11 w-full rounded-xl border border-white/10 bg-white/[0.05] text-sm font-semibold text-cyan-100">
       {showAll ? "Show fewer options" : "See all " + ordered.length + " options"}

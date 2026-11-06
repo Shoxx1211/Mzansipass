@@ -3,9 +3,10 @@ import { AuthApi, type PassengerAccount } from "../../services/authApi";
 
 interface AuthScreenProps {
   onLogin: (user: PassengerAccount) => void;
+  onGuest: () => void;
 }
 
-const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
+const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin, onGuest }) => {
   const [mode, setMode] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -46,6 +47,18 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
         </div>
 
         <div className="premium-glass compact-card p-6 sm:p-7">
+          <button
+            type="button"
+            disabled={isLoading}
+            onClick={onGuest}
+            className="mb-5 min-h-12 w-full rounded-xl border border-emerald-300/40 bg-emerald-300/10 px-3 text-sm font-bold text-emerald-200 transition hover:bg-emerald-300/15 disabled:opacity-50"
+          >
+            Explore Pulse as a guest
+          </button>
+          <p className="mb-5 text-center text-xs leading-5 text-white/45">
+            Plan and track journeys without registering. Guest trips stay on this phone and can be lost if the app is removed.
+          </p>
+          <div className="mb-5 border-t border-white/10" aria-hidden="true" />
           <h2 className="text-xl font-black">
             {mode === "register" ? "Create your account" : "Welcome back"}
           </h2>

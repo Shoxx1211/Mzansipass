@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { discoverMetrorailCorridor } from "../src/services/metrorailDiscovery";
+import { getTransferGuidance } from "../src/services/transferGuidance";
 
 const loc = (lat: number, lng: number) => ({
   lat, lng, accuracy: 5, timestamp: 0,
@@ -30,6 +31,7 @@ describe("PRASA multi-corridor discovery", () => {
     expect(transfer).toBeDefined();
     expect(transfer?.journeyLegs).toHaveLength(2);
     expect(transfer?.transferStops?.[0]).toBe("Park Station");
+    expect(transfer && getTransferGuidance(transfer)[0]?.title).toContain("Park Station");
     expect(transfer?.estimatedTime).toBe(82);
     expect(transfer?.fareStatus).toBe("unverified");
   });

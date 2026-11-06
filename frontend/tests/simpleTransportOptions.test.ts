@@ -68,7 +68,7 @@ describe("commuter fare truthfulness", () => {
     expect(getBoardingHint({
       ...rail, evidenceStatus: "published-service-area",
     })).toBe("Boarding point to confirm");
-    expect(getBoardingHint(rail)).toBe("Board near Park Station");
+    expect(getBoardingHint(rail)).toContain("Mapped boarding candidate near Park Station");
   });
 });
 

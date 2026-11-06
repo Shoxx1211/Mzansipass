@@ -454,6 +454,7 @@ selectable: false,
             selectedRoutes,
 
           transferStops,
+          transferDetails: reaVayaResult.transfers,
 
           fareStatus:
             "unverified",

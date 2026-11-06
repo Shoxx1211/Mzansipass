@@ -389,6 +389,12 @@ export interface TransportRecommendation {
 
   routeCodes?: string[];
   transferStops?: string[];
+  /** Published route-to-route shared-stop evidence; not a verified instruction. */
+  transferDetails?: Array<{
+    fromRoute: string;
+    toRoute: string;
+    sharedStopLabels: string[];
+  }>;
   journeyLegs?: JourneyLeg[];
   /** Broad illustrative price guidance, not a published fare. */
   fareEstimateRange?: {
