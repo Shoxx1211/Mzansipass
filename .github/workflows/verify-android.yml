@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - pulse-mvp-integration
+      - feat/taxi-evidence-integration
   workflow_dispatch:
 
 jobs:
