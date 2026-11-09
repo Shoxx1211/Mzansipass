@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { earthDistanceKm, getNearbyModeHints } from "../src/services/nearbyNetwork";
+import { earthDistanceKm, getNearbyModeHints, mappedStopWalkingUrl } from "../src/services/nearbyNetwork";
 import {
   getOsmTaxiFacilities,
   nearbyMinibusRankCandidates,
@@ -23,6 +23,7 @@ describe("operator-backed nearby access", () => {
     expect(areyeng?.stopName).toBe("HECTOR PIETERSON");
     expect(areyeng?.kilometres).toBeLessThan(0.1);
     expect(areyeng?.detail).toContain("does not confirm a service call");
+    expect(areyeng?.point).toMatchObject({ lat: -25.681824823588176, lng: 28.183806999215573 });
   });
 
   it("does not suggest A Re Yeng as nearby in Johannesburg", () => {
@@ -40,6 +41,17 @@ describe("operator-backed nearby access", () => {
   it("returns no geographic claims without a valid origin", () => {
     expect(getNearbyModeHints(null)).toEqual([]);
     expect(getNearbyModeHints({ lat: Number.NaN, lng: 28, timestamp: 0 })).toEqual([]);
+  });
+
+  it("links only to mapped coordinates, leaving the commuter's GPS origin out of the URL", () => {
+    const link = mappedStopWalkingUrl({ lat: -25.68182, lng: 28.1838 });
+    const url = new URL(link!);
+    expect(url.hostname).toBe("www.google.com");
+    expect(url.searchParams.get("api")).toBe("1");
+    expect(url.searchParams.get("travelmode")).toBe("walking");
+    expect(url.searchParams.get("destination")).toBe("-25.68182,28.1838");
+    expect(url.searchParams.has("origin")).toBe(false);
+    expect(mappedStopWalkingUrl({ lat: Number.NaN, lng: 28.1838 })).toBeNull();
   });
 });
 

@@ -16,6 +16,8 @@ export type NearbyModeHint = {
   detail: string;
   stopName?: string;
   kilometres?: number;
+  /** Mapped location, NOT evidence that a service calls at this stop. */
+  point?: { lat: number; lng: number };
   dataType: "mapped-stop" | "mapped-facility" | "regional-service";
   sourceUrl: string;
   sourceLabel?: string;
@@ -23,6 +25,17 @@ export type NearbyModeHint = {
 };
 
 const brtStations = JSON.parse(brtStationsRaw) as BRTData;
+
+/** Open a walking map only for a named, mapped station; let Maps resolve the
+ * user's current origin rather than handing Pulse's GPS position to a URL. */
+export const mappedStopWalkingUrl = (point: { lat: number; lng: number }): string | null => {
+  if (!Number.isFinite(point.lat) || !Number.isFinite(point.lng) ||
+      Math.abs(point.lat) > 90 || Math.abs(point.lng) > 180) return null;
+  const params = new URLSearchParams({
+    api: "1", destination: `${point.lat},${point.lng}`, travelmode: "walking",
+  });
+  return `https://www.google.com/maps/dir/?${params.toString()}`;
+};
 
 export const earthDistanceKm = (
   a: Pick<Location, "lat" | "lng">,
@@ -71,17 +84,23 @@ export function getNearbyModeHints(
     });
   }
   let nearestBrt = Number.POSITIVE_INFINITY;
+  let nearestBrtPoint: { lat: number; lng: number } | null = null;
   for (const feature of brtStations.features ?? []) {
     const coord = feature.geometry?.coordinates;
     if (feature.geometry?.type !== "Point" || !coord ||
         !Number.isFinite(coord[0]) || !Number.isFinite(coord[1])) continue;
-    nearestBrt = Math.min(nearestBrt, earthDistanceKm(origin, { lng: coord[0], lat: coord[1] }));
+    const distance = earthDistanceKm(origin, { lng: coord[0], lat: coord[1] });
+    if (distance < nearestBrt) {
+      nearestBrt = distance;
+      nearestBrtPoint = { lat: coord[1], lng: coord[0] };
+    }
   }
   if (nearestBrt <= 2.5) {
     hints.push({
       id: "reavaya", name: "Rea Vaya",
       detail: "City-mapped BRT station point. The source has no station name or confirmed route calls; check the station sign and serving routes before boarding.",
       kilometres: Math.round(nearestBrt * 100) / 100,
+      ...(nearestBrtPoint ? { point: nearestBrtPoint } : {}),
       dataType: "mapped-stop",
       sourceUrl: "https://reavaya.org.za/rea-vaya-operating-routes/",
     });
@@ -103,13 +122,14 @@ export function getNearbyModeHints(
         (routeCodes.length ? `Nearby mapped route corridors: ${routeCodes.join(", ")}. ` : "") +
         "Route proximity does not confirm a service call, direction or departure.",
       kilometres: Math.round(nearestAreyeng.km * 100) / 100,
+      point: nearestAreyeng.stop.location,
       dataType: "mapped-stop",
       sourceUrl: "https://www.areyeng.co.za/routes-stops/a-re-yeng-bus-stations/",
     });
   }
 
   const nearestGautrain = gautrainData.stations
-    .map(st => ({ name: st.name, km: earthDistanceKm(origin, st.location) }))
+    .map(st => ({ name: st.name, location: st.location, km: earthDistanceKm(origin, st.location) }))
     .sort((a, b) => a.km - b.km)[0];
   // Beyond 5km, don't call Gautrain nearby; the journey planner can still
   // propose access transport to a distant station.
@@ -120,6 +140,7 @@ export function getNearbyModeHints(
       detail: "Nearest published station: " + nearestGautrain.name +
         ". Distance is straight-line, not a walking route.",
       kilometres: Math.round(nearestGautrain.km * 100) / 100,
+      point: nearestGautrain.location,
       dataType: "mapped-stop",
       sourceUrl: "https://www.gautrain.co.za/routes",
     });
@@ -137,6 +158,7 @@ export function getNearbyModeHints(
         "Reaching the platform and train departure must be checked. " +
         "Mapped distance is straight-line, not a walking route.",
       kilometres: Math.round(nearestMetrorail.accessKm * 100) / 100,
+      point: { lat: nearestMetrorail.station.lat, lng: nearestMetrorail.station.lng },
       dataType: "mapped-stop",
       sourceUrl: "https://www.prasa.com/",
     });

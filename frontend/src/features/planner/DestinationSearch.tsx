@@ -23,7 +23,7 @@ import {
   type MouseEvent as ReactMouseEvent,
 } from "react";
 
-import { searchMapboxPlaces, soshanguveBlock, matchesBlock } from "../../services/mapboxSearch";
+import { searchMapboxPlaces, townshipBlockQuery, matchesTownshipBlock } from "../../services/mapboxSearch";
 
 interface Location {
   lat: number;
@@ -152,12 +152,8 @@ const parseCoordinateDestination = (
   };
 };
 
-const getSoshanguveBlock = soshanguveBlock;
-
 const isLeeParkQuery = (query: string): boolean =>
   /\blee\s*park\b/i.test(query);
-
-const matchesSoshanguveBlock = matchesBlock;
 
 const matchesLeePark = (place: DestinationPlace): boolean => {
   const label = `${place.name} ${place.label}`.toLowerCase();
@@ -297,13 +293,11 @@ export const DestinationSearch = ({
 
   useEffect(() => {
     const query = destination.trim();
-    const block = getSoshanguveBlock(query);
+    const townshipBlock = townshipBlockQuery(query);
     const leePark = isLeeParkQuery(query);
     const requestedQuery = leePark
       ? "494 Attie Pelzer Street, Elarduspark, Pretoria, South Africa"
-      : block
-        ? `Soshanguve Block ${block}, Pretoria, Gauteng, South Africa`
-        : query;
+      : query;
     setSearchError(null);
     setActiveIndex(-1);
     setRemoteSuggestions([]);
@@ -334,15 +328,17 @@ export const DestinationSearch = ({
             label: `Lee Park · 494 Attie Pelzer Street, Elardus Park, Pretoria · ${place.label}`,
           }));
         }
-        if (block) {
-          places = places.filter((place) => matchesSoshanguveBlock(place, block));
+        if (townshipBlock) {
+          places = places.filter((place) => matchesTownshipBlock(place, townshipBlock));
         }
 
         if (requestId !== requestIdRef.current) return;
         setRemoteSuggestions(places);
-        if ((leePark || block) && places.length === 0) {
+        if ((leePark || townshipBlock) && places.length === 0) {
           setSearchError(
-            "Exact locality not located yet. Try its street address, or paste precise GPS coordinates; Pulse will not substitute a generic Pretoria/Soshanguve pin.",
+            townshipBlock
+              ? `${townshipBlock.township} Block ${townshipBlock.block} isn't located precisely in our map data yet. Try a known landmark or full street address there, or enter precise GPS coordinates. Pulse won't substitute a different street or town centre.`
+              : "Exact locality not located yet. Try its street address or precise GPS coordinates; Pulse will not substitute a generic Pretoria pin.",
           );
         }
       } catch (error) {
@@ -371,6 +367,7 @@ export const DestinationSearch = ({
   const suggestions = useMemo(() => {
     const query = normalize(destination);
     if (query.length < 2) return [];
+    const townshipBlock = townshipBlockQuery(destination);
 
     const recentMatches: DestinationPlace[] = showRecentSearches
       ? recentPlaces
@@ -401,6 +398,9 @@ export const DestinationSearch = ({
       ...recentMatches,
     ]
       .filter((place) => {
+        // A saved favourite or recent place must not bypass today's exact
+        // block check (including records picked from a previous APK).
+        if (townshipBlock && !matchesTownshipBlock(place, townshipBlock)) return false;
         const key = normalize(`${place.name}|${place.label}`);
         if (seen.has(key)) return false;
         seen.add(key);
@@ -477,14 +477,14 @@ export const DestinationSearch = ({
     const query = destination.trim();
     if (!query || loading) return;
 
-    const block = getSoshanguveBlock(query);
+    const townshipBlock = townshipBlockQuery(query);
     const leePark = isLeeParkQuery(query);
-    const requiresPreciseMatch = Boolean(block || leePark || /^\d+\s+\S+/.test(query));
+    const requiresPreciseMatch = Boolean(townshipBlock || leePark || /^\d+\s+\S+/.test(query));
     const verifiedSuggestion = suggestions.find((place) =>
       place.lat !== undefined &&
       place.lng !== undefined &&
-      (block
-        ? matchesSoshanguveBlock(place, block)
+      (townshipBlock
+        ? matchesTownshipBlock(place, townshipBlock)
         : leePark
           ? matchesLeePark(place)
           : place.source === "mapbox" &&
@@ -859,8 +859,9 @@ export const DestinationSearch = ({
                     No autocomplete matches yet
                   </p>
                   <p className="mt-1 text-xs leading-5 text-white/35">
-                    You can still use the destination you typed and Pulse will
-                    try to plan the route.
+                    {townshipBlockQuery(destination)
+                      ? "Pulse won't send you to a different block or street. Try an exact nearby landmark or GPS coordinates."
+                      : "Choose a precise location or coordinates before planning a route."}
                   </p>
                 </div>
               )}

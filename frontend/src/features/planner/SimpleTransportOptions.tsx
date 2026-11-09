@@ -236,6 +236,22 @@ export function SimpleTransportOptions({
           </button>
         </div>
         {active && <div className="space-y-3 border-t border-white/10 bg-black/10 p-4 sm:p-5">
+          <div className="rounded-xl border border-white/10 bg-white/[0.035] p-3">
+            <p className="text-xs font-bold uppercase tracking-wider text-cyan-200">Boarding and exit guidance</p>
+            <p className="mt-2 text-xs leading-5 text-white/70">
+              <span className="font-semibold text-white">Board near:</span>{" "}
+              {rec.nearestStop && rec.evidenceStatus !== "road-baseline" && rec.evidenceStatus !== "published-service-area"
+                ? `${rec.nearestStop} (mapped candidate)` : "Exact boarding point not confirmed"}
+            </p>
+            <p className="mt-1 text-xs leading-5 text-white/70">
+              <span className="font-semibold text-white">Get off near:</span>{" "}
+              {rec.destinationStop && rec.evidenceStatus !== "road-baseline" && rec.evidenceStatus !== "published-service-area"
+                ? `${rec.destinationStop} (mapped candidate)` : "Exact exit point not confirmed"}
+            </p>
+            <p className="mt-2 text-[11px] leading-4 text-amber-100/70">
+              Mapped points are not confirmed stops for this direction or live service. Verify the route signage and boarding bay before travelling.
+            </p>
+          </div>
           {transfers.length > 0 && <div className="space-y-2 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-3">
             <p className="text-xs font-bold uppercase tracking-wider text-cyan-200">Where to change transport</p>
             {transfers.map((transfer, index) => <div key={`${rec.id}-transfer-${index}`} className="space-y-1">

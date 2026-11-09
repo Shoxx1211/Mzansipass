@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { decodeMapboxFeatures, searchMapboxPlaces, soshanguveBlock } from "../src/services/mapboxSearch";
+import { decodeMapboxFeatures, searchMapboxPlaces, soshanguveBlock, townshipBlockQuery, matchesTownshipBlock } from "../src/services/mapboxSearch";
 
 const feature = (name: string, context = "Tshwane, Gauteng, South Africa", id = name) => ({
   geometry: { type: "Point", coordinates: [28.1, -25.5] },
@@ -35,6 +35,36 @@ describe("current Mapbox location search", () => {
   it("leaves an unindexed block unresolved instead of broadening to a city", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(response([feature("Pretoria")])));
     expect(await searchMapboxPlaces("Soshanguve block XX", { token: "pk.test" })).toEqual([]);
+  });
+
+  it("does not mistake Block Street for Mabopane Block U", async () => {
+    const fetcher = vi.fn()
+      .mockResolvedValueOnce(response([feature("Block Street", "Mabopane, Gauteng, South Africa")]))
+      .mockResolvedValueOnce(response([feature("Mabopane")]))
+      .mockResolvedValueOnce(response([feature("Block Street", "Mabopane, Gauteng, South Africa")]));
+    vi.stubGlobal("fetch", fetcher);
+    expect(await searchMapboxPlaces("Mabopane block u", { token: "pk.test" })).toEqual([]);
+    expect(fetcher).toHaveBeenCalledTimes(3);
+    expect(new URL(fetcher.mock.calls[0]![0] as string).searchParams.get("q"))
+      .toContain("Mabopane Block U");
+  });
+
+  it("accepts a genuinely named Mabopane block from an alternate geocoder spelling", async () => {
+    vi.stubGlobal("fetch", vi.fn()
+      .mockResolvedValueOnce(response([feature("Block Street", "Mabopane, Gauteng")]))
+      .mockResolvedValueOnce(response([feature("Mabopane U", "Gauteng")])));
+    expect((await searchMapboxPlaces("Block U Mabopane", { token: "pk.test" }))[0]?.name)
+      .toBe("Mabopane U");
+  });
+
+  it("detects block intent only for the correct locality", () => {
+    expect(townshipBlockQuery("Mabopane Block U"))
+      .toEqual({ township: "Mabopane", block: "U" });
+    expect(townshipBlockQuery("Block U Soshanguve"))
+      .toEqual({ township: "Soshanguve", block: "U" });
+    expect(townshipBlockQuery("Block U Mamelodi")).toBeNull();
+    expect(matchesTownshipBlock({ name: "Block Street", label: "Mabopane" },
+      { township: "Mabopane", block: "U" })).toBe(false);
   });
 
   it("does not reinterpret another township's block as Soshanguve", () => {

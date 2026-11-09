@@ -28,19 +28,41 @@ interface Feature {
   };
 }
 
-export const soshanguveBlock = (query: string): string | null => {
-  // "Block A, Mamelodi" must never become "Soshanguve Block A".
-  if (!/\bsoshanguve\b/i.test(query)) return null;
-  const match = query.match(/\bblock\s+([a-z]{1,3})\b/i)
-    ?? query.match(/\bsoshanguve\s+([a-z]{1,3})\b/i);
+export type TownshipBlock = { township: "Soshanguve" | "Mabopane"; block: string };
+
+/** Recognise named township blocks without treating a similarly named street as the block. */
+export const townshipBlockQuery = (query: string): TownshipBlock | null => {
+  const township = /\bsoshanguve\b/i.test(query) ? "Soshanguve"
+    : /\bmabopane\b/i.test(query) ? "Mabopane" : null;
+  if (!township) return null;
+  const match = query.match(/\b(?:block|blk)\s+([a-z]{1,3})\b/i)
+    ?? query.match(new RegExp(`\\b${township}\\s+([a-z]{1,3})\\b`, "i"));
   const block = match?.[1]?.toUpperCase();
-  return block && !["THE", "EXT", "CBD"].includes(block) ? block : null;
+  return block && !["THE", "EXT", "CBD", "ST", "RD"].includes(block)
+    ? { township, block } : null;
 };
 
-export const matchesBlock = (place: { name: string; label: string }, block: string): boolean => {
-  const words = `${place.name} ${place.label}`.toLowerCase().replace(/[^a-z0-9]+/g, " ").split(" ");
-  return words.includes("soshanguve") && words.includes(block.toLowerCase());
+export const matchesTownshipBlock = (
+  place: { name: string; label: string }, requested: TownshipBlock,
+): boolean => {
+  const words = `${place.name} ${place.label}`.toLowerCase().replace(/[^a-z0-9]+/g, " ");
+  const town = requested.township.toLowerCase();
+  const block = requested.block.toLowerCase();
+  // Both "Mabopane Block U" and a geocoder's "Mabopane U" area alias count.
+  // "Block Street, Mabopane" and a generic "Mabopane" pin do not.
+  return new RegExp(`\\b${town}\\b`).test(words) &&
+    (new RegExp(`\\b(?:block|blk)\\s+${block}\\b`).test(words) ||
+      new RegExp(`\\b${town}\\s+${block}\\b(?!\\s+(?:street|road|avenue))`).test(words));
 };
+
+// Keep the existing Soshanguve API for callers and historical tests.
+export const soshanguveBlock = (query: string): string | null => {
+  const requested = townshipBlockQuery(query);
+  return requested?.township === "Soshanguve" ? requested.block : null;
+};
+
+export const matchesBlock = (place: { name: string; label: string }, block: string): boolean =>
+  matchesTownshipBlock(place, { township: "Soshanguve", block });
 
 export const decodeMapboxFeatures = (features: Feature[]): MapboxPlace[] =>
   features.flatMap((feature) => {
@@ -86,21 +108,22 @@ export const searchMapboxPlaces = async (input: string, options: SearchOptions):
   if (query.length > 256 || query.split(/\s+/).length > 20 || query.includes(";")) {
     throw new Error("Use a shorter place name or street address.");
   }
-  const block = soshanguveBlock(query);
-  const queries = block ? [
-    `Soshanguve Block ${block}, Tshwane, Gauteng, South Africa`,
-    `Soshanguve ${block}, Gauteng, South Africa`,
+  const townshipBlock = townshipBlockQuery(query);
+  const queries = townshipBlock ? [
+    `${townshipBlock.township} Block ${townshipBlock.block}, Tshwane, Gauteng, South Africa`,
+    `${townshipBlock.township} ${townshipBlock.block}, Gauteng, South Africa`,
+    `Block ${townshipBlock.block}, ${townshipBlock.township}, Gauteng, South Africa`,
   ] : [query];
   let places: MapboxPlace[] = [];
   for (const spelling of queries) {
     places = await request("https://api.mapbox.com/search/geocode/v6/forward", spelling, options, true);
-    if (block) places = places.filter((place) => matchesBlock(place, block));
+    if (townshipBlock) places = places.filter((place) => matchesTownshipBlock(place, townshipBlock));
     if (places.length) break;
   }
   // POIs no longer come from the Geocoding API. Ask Search Box only when
   // addresses/areas found nothing, or when the user explicitly names a landmark.
   const landmark = /\b(station|hospital|clinic|mall|university|school|taxi\s+rank|airport|church)\b/i.test(query);
-  if (!block && query.length >= 3 && (!places.length || landmark)) {
+  if (!townshipBlock && query.length >= 3 && (!places.length || landmark)) {
     try {
       const pois = await request("https://api.mapbox.com/search/searchbox/v1/forward", query, options, false);
       places = [...pois, ...places];

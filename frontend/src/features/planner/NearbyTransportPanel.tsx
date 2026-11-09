@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { ChevronDown, ChevronUp, MapPin } from "lucide-react";
 import type { Location } from "../../types";
-import { getNearbyModeHints } from "../../services/nearbyNetwork";
+import { getNearbyModeHints, mappedStopWalkingUrl } from "../../services/nearbyNetwork";
 
 interface Props {
   origin: Location | null;
@@ -37,6 +37,12 @@ export function NearbyTransportPanel({
         </div>
         {hint.stopName && <p className="text-xs font-semibold text-emerald-200">{hint.stopName}</p>}
         <p className="text-xs leading-5 text-white/60">{hint.detail}</p>
+        {hint.dataType === "mapped-stop" && hint.stopName && hint.point && mappedStopWalkingUrl(hint.point) && (
+          <a href={mappedStopWalkingUrl(hint.point)!} target="_blank" rel="noopener noreferrer"
+            className="inline-block py-1 text-xs font-semibold text-emerald-200 underline underline-offset-4">
+            Walking directions to mapped stop ↗
+          </a>
+        )}
         <a href={hint.sourceUrl} target="_blank" rel="noopener noreferrer"
           className="inline-block py-1 text-xs text-cyan-200 underline underline-offset-4">
           {hint.sourceLabel ?? "Operator information"} ↗
@@ -50,6 +56,8 @@ export function NearbyTransportPanel({
         facility is not a verified taxi route or transfer point.
         The minibus rank directory is still being checked: no listing does
         not mean that taxis are unavailable in your area.
+        Walking directions open Google Maps on your phone and do not confirm
+        boarding access, route direction, or current service.
       </p>
     </div>}
   </section>;
