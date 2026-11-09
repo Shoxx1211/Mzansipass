@@ -1,14 +1,16 @@
 // frontend/src/utils/storage.ts
 
 const Storage = {
-  save: (user: string, key: string, data: unknown): void => {
+  save: (user: string, key: string, data: unknown): boolean => {
     try {
       localStorage.setItem(
         `pulse_${key}_${user}`,
         JSON.stringify(data)
       );
+      return true;
     } catch (error) {
       console.error(`Storage save failed for ${key}:`, error);
+      return false;
     }
   },
 

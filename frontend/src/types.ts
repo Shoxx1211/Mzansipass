@@ -255,6 +255,8 @@ export interface TripData {
   estimatedFare?: number;
   actualFare?: number;
   fare: number;
+  /** A provisional fare must never be presented as confirmed money paid. */
+  fareBasis?: "actual" | "estimated" | "mixed" | "unknown";
   /** Recorded modal legs for the full door-to-door journey. */
   legs?: TrackedJourneyLeg[];
   fareAccuracy?: number;

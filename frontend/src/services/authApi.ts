@@ -34,6 +34,8 @@ const NATIVE_BASE =
 const BASE = (IS_NATIVE ? NATIVE_BASE : WEB_BASE).replace(/\/$/, "");
 
 let accessToken: string | null = null;
+let restoreGeneration = 0;
+const RESTORE_TIMEOUT_MS = 5_000;
 
 const browserCookie = (name: string): string | null => {
   if (typeof document === "undefined") return null;
@@ -128,6 +130,7 @@ const nativePost = async <T>(
   payload?: Record<string, string>,
   useRefreshCsrf = false,
   authorization?: string,
+  timeoutMs = 45_000,
 ): Promise<T> => {
   const csrf = useRefreshCsrf ? await csrfCookie() : null;
 
@@ -142,8 +145,8 @@ const nativePost = async <T>(
         ...(authorization ? { Authorization: authorization } : {}),
       },
       data: payload ?? {},
-      connectTimeout: 45_000,
-      readTimeout: 45_000,
+      connectTimeout: timeoutMs,
+      readTimeout: timeoutMs,
     });
   } catch (error) {
     const detail =
@@ -177,19 +180,28 @@ const browserPost = async <T>(
   payload?: Record<string, string>,
   useRefreshCsrf = false,
   authorization?: string,
+  timeoutMs = 45_000,
 ): Promise<T> => {
   const csrf = useRefreshCsrf ? await csrfCookie() : null;
-  const response = await fetch(`${BASE}/auth/${path}`, {
-    method: "POST",
-    credentials: "include",
-    cache: "no-store",
-    headers: {
-      "Content-Type": "application/json",
-      ...(csrf ? { "X-CSRF-TOKEN": csrf } : {}),
-      ...(authorization ? { Authorization: authorization } : {}),
-    },
-    body: JSON.stringify(payload ?? {}),
-  });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  let response: Response;
+  try {
+    response = await fetch(`${BASE}/auth/${path}`, {
+      method: "POST",
+      credentials: "include",
+      cache: "no-store",
+      signal: controller.signal,
+      headers: {
+        "Content-Type": "application/json",
+        ...(csrf ? { "X-CSRF-TOKEN": csrf } : {}),
+        ...(authorization ? { Authorization: authorization } : {}),
+      },
+      body: JSON.stringify(payload ?? {}),
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!response.ok) {
     throw new Error(await errorMessage(response));
@@ -210,10 +222,11 @@ const post = async <T>(
   payload?: Record<string, string>,
   useRefreshCsrf = false,
   authorization?: string,
+  timeoutMs = 45_000,
 ): Promise<T> =>
   IS_NATIVE
-    ? nativePost<T>(path, payload, useRefreshCsrf, authorization)
-    : browserPost<T>(path, payload, useRefreshCsrf, authorization);
+    ? nativePost<T>(path, payload, useRefreshCsrf, authorization, timeoutMs)
+    : browserPost<T>(path, payload, useRefreshCsrf, authorization, timeoutMs);
 
 const remember = (data: SessionResponse): PassengerAccount => {
   if (!data.access_token || !data.user?.id || !data.user?.email) {
@@ -228,30 +241,47 @@ export const AuthApi = {
     return accessToken;
   },
 
+  /** Ignore an in-flight refresh when a commuter chooses to continue offline. */
+  cancelPendingRestore(): void {
+    restoreGeneration += 1;
+  },
+
+  /** Guest access has no credential associated with its local history. */
+  clearLocalAccess(): void {
+    restoreGeneration += 1;
+    accessToken = null;
+  },
+
   async signIn(email: string, password: string): Promise<PassengerAccount> {
+    restoreGeneration += 1;
     return remember(
       await post<SessionResponse>("login", { email, password }),
     );
   },
 
   async signUp(email: string, password: string): Promise<PassengerAccount> {
+    restoreGeneration += 1;
     return remember(
       await post<SessionResponse>("register", { email, password }),
     );
   },
 
   async restore(): Promise<PassengerAccount | null> {
+    const generation = ++restoreGeneration;
     try {
-      return remember(
-        await post<SessionResponse>("refresh", undefined, true),
+      const response = await post<SessionResponse>(
+        "refresh", undefined, true, undefined, RESTORE_TIMEOUT_MS,
       );
+      if (generation !== restoreGeneration) return null;
+      return remember(response);
     } catch {
-      accessToken = null;
+      if (generation === restoreGeneration) accessToken = null;
       return null;
     }
   },
 
   async signOut(): Promise<void> {
+    restoreGeneration += 1;
     await post<{ message: string }>("logout", undefined, true);
     accessToken = null;
   },

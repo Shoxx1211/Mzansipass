@@ -56,6 +56,7 @@ import Session from "../utils/session";
 import Storage from "../utils/storage";
 import { AuthApi, type PassengerAccount } from "../services/authApi";
 import { GUEST_HISTORY_OWNER, GUEST_ID, mergeGuestTrips } from "../services/guestProfile";
+import { finaliseTripFare, getCommuterSpendingStats, getTripCost } from "../services/spendingStats";
 import {
   confirmMultimodalSwitch,
   finishMultimodalJourney,
@@ -408,6 +409,7 @@ const App = () => {
   const [authChecking, setAuthChecking] = useState(true);
   const [pendingRecovery, setPendingRecovery] = useState<SavedActiveTrip | null>(null);
   const [accountError, setAccountError] = useState<string | null>(null);
+  const [storageNotice, setStorageNotice] = useState<string | null>(null);
   const [accountBusy, setAccountBusy] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>("home");
 
@@ -456,8 +458,10 @@ const App = () => {
   const [liveSpeed, setLiveSpeed] = useState(0);
   const [liveMaxSpeed, setLiveMaxSpeed] = useState(0);
   const [history, setHistory] = useState<TripData[]>([]);
+  const [statsAsOf, setStatsAsOf] = useState(Date.now());
   const [verifyTrip, setVerifyTrip] = useState<TripData | null>(null);
   const [actualFare, setActualFare] = useState("");
+  const [fareInputError, setFareInputError] = useState<string | null>(null);
   const [legChangeFare, setLegChangeFare] = useState("");
   const [showLegChangeForm, setShowLegChangeForm] = useState(false);
   const [remindAfterDistanceKm, setRemindAfterDistanceKm] = useState(0);
@@ -466,6 +470,21 @@ const App = () => {
     null,
   );
   const [gpsClock, setGpsClock] = useState(Date.now());
+
+  const spending = useMemo(() =>
+    getCommuterSpendingStats(history, new Date(statsAsOf)),
+  [history, statsAsOf]);
+
+  useEffect(() => {
+    setStorageNotice(null);
+  }, [user?.id, isGuest]);
+
+  useEffect(() => {
+    if (activeTab !== "stats") return;
+    setStatsAsOf(Date.now());
+    const timer = window.setInterval(() => setStatsAsOf(Date.now()), 60_000);
+    return () => window.clearInterval(timer);
+  }, [activeTab]);
 
   // ====================================================
   // UI STATE
@@ -682,6 +701,7 @@ const App = () => {
   const resetAllTripState = useCallback(() => {
     setVerifyTrip(null);
     setActualFare("");
+    setFareInputError(null);
     setLegChangeFare("");
     setShowLegChangeForm(false);
     setRemindAfterDistanceKm(0);
@@ -1715,6 +1735,7 @@ const App = () => {
         id: startedAt.toString(),
         network,
         legs: initialLegs,
+        ...(estimatedFare !== null ? { estimatedFare } : {}),
         destination: destination.trim(),
         startTime: startedAt,
         distance: trackerTrip ? trackerTrip.totalDistance / 1000 : 0,
@@ -1856,36 +1877,19 @@ const App = () => {
     }
 
     const isMultiModal = (verifyTrip.legs?.length ?? 0) > 1;
-    const totals = getMultimodalTotals(verifyTrip.legs ?? []);
-    // Confirmed fares only: on multimodal journeys use the per-leg ledger.
-    // On single-mode journeys respect the user's confirmation input.
-    let finalFare = isMultiModal ? totals.recordedFare : 0;
-
-    if (!isMultiModal && actualFare.trim()) {
-      const parsedFare = Number.parseFloat(actualFare);
-      if (Number.isFinite(parsedFare) && parsedFare > 0 && parsedFare <= 1000) {
-        finalFare = parsedFare;
-      }
+    if (!isMultiModal && actualFare.trim() &&
+        (!/^\d+(?:\.\d{1,2})?$/.test(actualFare.trim()) ||
+         Number(actualFare) <= 0 || Number(actualFare) > 1_000)) {
+      setFareInputError("Enter an amount between R0.01 and R1,000.00, or leave it blank to use the estimate.");
+      return;
     }
-
+    setFareInputError(null);
+    const finalTrip = finaliseTripFare(verifyTrip, actualFare);
+    const finalFare = finalTrip.fare;
     const hasConfirmedSingleFare =
       !isMultiModal &&
-      actualFare.trim() !== "" &&
-      finalFare > 0;
-
-    const finalTrip: TripData = {
-      ...verifyTrip,
-      fare: finalFare,
-      legs:
-        hasConfirmedSingleFare && verifyTrip.legs?.length === 1
-          ? [
-              {
-                ...verifyTrip.legs[0],
-                actualFare: finalFare,
-              },
-            ]
-          : verifyTrip.legs,
-    };
+      actualFare.trim() !== "" && finalTrip.actualFare === finalFare &&
+      finalTrip.fareBasis === "actual";
 
     // Train habits only after user confirmation. For multimodal trips,
     // training on the whole amount as a single operator would corrupt fares.
@@ -1927,17 +1931,16 @@ const App = () => {
       }
     }
 
-    setHistory((previous) => {
-      const updated = [finalTrip, ...previous];
-
-      const owner = user?.email ?? (isGuest ? GUEST_HISTORY_OWNER : null);
-      if (owner) Storage.save(owner, "history", updated);
-
-      return updated;
-    });
+    const updated = [finalTrip, ...history];
+    const owner = user?.email ?? (isGuest ? GUEST_HISTORY_OWNER : null);
+    const saved = owner ? Storage.save(owner, "history", updated) : false;
+    setHistory(updated);
+    setStorageNotice(saved
+      ? "Journey saved on this device. Your weekly and monthly totals have been updated."
+      : "This journey is visible now, but the phone could not save it. Free up device storage before closing Pulse.");
 
     resetAllTripState();
-  }, [actualFare, isGuest, resetAllTripState, user, verifyTrip]);
+  }, [actualFare, history, isGuest, resetAllTripState, user, verifyTrip]);
 
   // ====================================================
   // FALLBACK DURATION TIMER
@@ -1983,15 +1986,25 @@ const App = () => {
       setAuthChecking(false);
       return;
     }
+    // A cold or offline account server must never trap a commuter on the
+    // session-restoration screen. Guest and sign-in choices are also offered
+    // while the refresh is in progress.
+    const fallback = window.setTimeout(() => {
+      AuthApi.cancelPendingRestore();
+      if (active) setAuthChecking(false);
+    }, 5_500);
     void AuthApi.restore()
       .then((account) => {
         if (active) setUser(account);
       })
       .finally(() => {
+        window.clearTimeout(fallback);
         if (active) setAuthChecking(false);
       });
     return () => {
       active = false;
+      window.clearTimeout(fallback);
+      AuthApi.cancelPendingRestore();
     };
   }, []);
 
@@ -2017,18 +2030,30 @@ const App = () => {
   }, [isGuest, user]);
 
   const handleAccountLogin = useCallback((account: PassengerAccount) => {
+    AuthApi.cancelPendingRestore();
     const guestTrips = Storage.load<TripData[]>(GUEST_HISTORY_OWNER, "history") ?? [];
     if (guestTrips.length > 0 && window.confirm(
       `Import ${guestTrips.length} guest journey${guestTrips.length === 1 ? "" : "s"} into this account on this phone? Your guest history will stay separate if you choose Cancel.`,
     )) {
       const accountTrips = Storage.load<TripData[]>(account.email, "history") ?? [];
-      Storage.save(account.email, "history", mergeGuestTrips(accountTrips, guestTrips));
-      Storage.clear(GUEST_HISTORY_OWNER, "history");
+      if (Storage.save(account.email, "history", mergeGuestTrips(accountTrips, guestTrips))) {
+        Storage.clear(GUEST_HISTORY_OWNER, "history");
+      } else {
+        setAccountError("Your guest journeys could not be copied. The guest copy remains on this phone.");
+      }
     }
     Session.clear("guest_mode");
     Session.clear("user");
     setIsGuest(false);
     setUser(account);
+  }, []);
+
+  const enterGuestMode = useCallback(() => {
+    AuthApi.clearLocalAccess();
+    Session.save("guest_mode", true);
+    setUser(null);
+    setIsGuest(true);
+    setAuthChecking(false);
   }, []);
 
   const leaveGuestMode = useCallback(() => {
@@ -2187,17 +2212,27 @@ const App = () => {
 
   if (authChecking) {
     return (
-      <div className="flex min-h-[100dvh] items-center justify-center bg-[#040917] text-sm font-semibold text-cyan-200" role="status">
-        Restoring your secure Pulse session…
+      <div className="flex min-h-[100dvh] flex-col items-center justify-center gap-5 bg-[#040917] px-6 text-center text-sm text-cyan-200">
+        <p role="status">Checking your Pulse session…</p>
+        <p className="max-w-xs text-xs leading-5 text-white/55">
+          You can still plan journeys and keep trip history on this phone if the account server is unavailable.
+        </p>
+        <button type="button" onClick={enterGuestMode}
+          className="min-h-12 rounded-2xl bg-gradient-to-r from-cyan-300 to-emerald-300 px-6 font-bold text-slate-950">
+          Explore Pulse as a guest
+        </button>
+        <button type="button" onClick={() => {
+          AuthApi.cancelPendingRestore();
+          setAuthChecking(false);
+        }} className="min-h-11 px-5 font-semibold text-white/80 underline underline-offset-4">
+          Sign in instead
+        </button>
       </div>
     );
   }
 
   if (!user && !isGuest) {
-    return <AuthScreen onLogin={handleAccountLogin} onGuest={() => {
-      Session.save("guest_mode", true);
-      setIsGuest(true);
-    }} />;
+    return <AuthScreen onLogin={handleAccountLogin} onGuest={enterGuestMode} />;
   }
 
   // ====================================================
@@ -2225,6 +2260,10 @@ const App = () => {
               scrollBehavior: "smooth",
             }}
           >
+            {storageNotice?.includes("could not save") && <p role="alert"
+              className="rounded-2xl border border-amber-300/20 bg-amber-300/10 p-4 text-xs leading-5 text-amber-100">
+              {storageNotice}
+            </p>}
             {/* ==================================================
                 HOME TAB
             ================================================== */}
@@ -2864,6 +2903,7 @@ const App = () => {
 
                             if (value === "" || /^\d*\.?\d*$/.test(value)) {
                               setActualFare(value);
+                              setFareInputError(null);
                             }
                           }}
                           placeholder="Enter actual fare"
@@ -2871,8 +2911,9 @@ const App = () => {
                         />
 
                         <p className="text-[10px] text-white/30">
-                          If Pulse did not have a verified fare, enter what you actually paid.
+                          If left blank, Pulse saves the available fare estimate and labels it as estimated in Stats.
                         </p>
+                        {fareInputError && <p role="alert" className="text-xs text-amber-200">{fareInputError}</p>}
                       </div>
                       )}
 
@@ -2901,12 +2942,39 @@ const App = () => {
                     Travel stats
                   </h1>
                 </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="glass rounded-3xl bg-cyan-400/[0.08] p-4">
+                    <p className="text-xs font-bold uppercase tracking-wider text-white/50">This week</p>
+                    <p className="mt-2 text-3xl font-black text-white">R{spending.thisWeek.total.toFixed(2)}</p>
+                    <p className="mt-2 text-xs text-white/50">{spending.thisWeek.trips} saved journeys</p>
+                    <p className="mt-1 text-[11px] text-white/40">Last week: R{spending.lastWeek.total.toFixed(2)}</p>
+                  </div>
+                  <div className="glass rounded-3xl bg-emerald-400/[0.08] p-4">
+                    <p className="text-xs font-bold uppercase tracking-wider text-white/50">This month</p>
+                    <p className="mt-2 text-3xl font-black text-white">R{spending.thisMonth.total.toFixed(2)}</p>
+                    <p className="mt-2 text-xs text-white/50">{spending.thisMonth.trips} saved journeys</p>
+                    <p className="mt-1 text-[11px] text-white/40">Last month: R{spending.lastMonth.total.toFixed(2)}</p>
+                  </div>
+                </div>
+                <div className="rounded-2xl border border-cyan-300/10 bg-cyan-300/[0.05] p-4 text-xs leading-5 text-white/65">
+                  <p className="font-bold text-white/85">Spending recorded on this device</p>
+                  <p className="mt-1">
+                    Confirmed R{spending.thisMonth.confirmed.toFixed(2)} · Estimated R{spending.thisMonth.estimated.toFixed(2)} this month.
+                    {spending.thisMonth.missingFares > 0 && ` ${spending.thisMonth.missingFares} fare(s) still missing.`}
+                  </p>
+                  <p className="mt-1 text-white/45">
+                    Totals include labelled estimates where actual fares weren't entered. A new week starts Monday; months follow your phone's calendar.
+                  </p>
+                </div>
+                {storageNotice && <p role="status" className="rounded-2xl border border-white/10 bg-white/[0.06] p-3 text-xs text-cyan-100">
+                  {storageNotice}
+                </p>}
                 <div className="premium-glass-soft rounded-2xl p-4">
                   <p className="text-sm font-bold text-white">{isGuest ? "Guest on this device" : user?.email}</p>
                   <p className="mt-1 text-xs text-white/45">
                     {isGuest
                       ? "Your trips and statistics stay on this phone. No account is created, and uninstalling Pulse may erase this history. Sign in later to import these trips into your local account history."
-                      : "Account verified by Pulse. Journey history is still stored on this device during the technical pilot."}
+                      : "Account verified by Pulse. Journey history is still stored on this device during the technical pilot; it won't appear on another phone until cloud syncing is introduced."}
                   </p>
                   {accountError && <p role="alert" className="mt-2 text-xs text-red-200">{accountError}</p>}
                   <div className="mt-3 flex flex-wrap gap-3">
@@ -2951,17 +3019,13 @@ const App = () => {
                     <div className="grid gap-3 sm:grid-cols-3">
                       <div className="glass rounded-3xl bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 p-4 sm:col-span-2">
                         <p className="text-xs uppercase tracking-widest text-white/40">
-                          Recorded spend
+                          Total tracked costs
                         </p>
                         <p className="mt-1 text-3xl font-black text-white">
-                          R
-                          {history
-                            .reduce((sum, trip) => sum + (trip.fare || 0), 0)
-                            .toFixed(2)}
+                          R{spending.allTime.total.toFixed(2)}
                         </p>
                         <p className="mt-1 text-xs text-white/30">
-                          Across {history.length} completed trip
-                          {history.length === 1 ? "" : "s"}
+                          Confirmed R{spending.allTime.confirmed.toFixed(2)} · Estimated R{spending.allTime.estimated.toFixed(2)}
                         </p>
                       </div>
 
@@ -2970,12 +3034,7 @@ const App = () => {
                           Distance logged
                         </p>
                         <p className="mt-1 text-3xl font-black text-white">
-                          {history
-                            .reduce(
-                              (sum, trip) => sum + (trip.distance || 0),
-                              0,
-                            )
-                            .toFixed(1)}
+                          {spending.allTime.distanceKm.toFixed(1)}
                           <span className="ml-1 text-sm text-white/35">km</span>
                         </p>
                       </div>
@@ -3001,9 +3060,20 @@ const App = () => {
                             </div>
 
                             <p className="text-lg font-black text-emerald-300">
-                              R{(trip.fare || 0).toFixed(2)}
+                              R{getTripCost(trip).total.toFixed(2)}
                             </p>
                           </div>
+
+                          {getTripCost(trip).estimated > 0 && (
+                            <p className="mt-1 text-right text-[11px] font-semibold text-amber-200/80">
+                              Includes R{getTripCost(trip).estimated.toFixed(2)} estimated
+                            </p>
+                          )}
+                          {getTripCost(trip).missingFares > 0 && (
+                            <p className="mt-1 text-right text-[11px] text-amber-200/70">
+                              Some fare information is missing
+                            </p>
+                          )}
 
                           {trip.legs && trip.legs.length > 1 && (
                             <div className="mt-3 space-y-1.5 rounded-2xl bg-white/[0.035] p-3">
